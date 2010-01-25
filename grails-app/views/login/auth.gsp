@@ -16,8 +16,8 @@
 					<g:message code="register.form.type" />
 				</p>
 				<p class="centered_para">
-					<g:radioGroup name="lovesGrails" labels="[message(code:'register.type.student'),message(code:'register.type.staff'),message(code:'register.type.external')]" values="[1,2,3]" >
-						${it.radio} ${it.label}
+					<g:radioGroup name="lovesGrails" labels="['register.type.student', 'register.type.staff', 'register.type.external']" values="[1,2,3]" value="1">
+						${it.radio} <g:message code="${it.label}" />
 					</g:radioGroup>
 				</p>
 				<p class="submit">
