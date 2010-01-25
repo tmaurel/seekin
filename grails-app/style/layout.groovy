@@ -49,6 +49,29 @@ style = {
 		'float':'right',
 		'height':'30px'
 	)
+
+	
+	'#menu_cont #search_bar' (
+		'float':'right',
+		'width':'160px'
+	)
+
+	'#menu_cont #search_bar #search_field' (
+		'width':'120px',
+		'height':'18px',
+		'margin-top':'6px',
+		'padding-top':'4px',
+		'padding-left':'30px',
+		'padding-right':'10px',
+		'border':'0px none #fff',
+		'color':'#ccc',
+		'background':'transparent url(../images/skin/field_bg.png) no-repeat left'
+	)
+
+	'#menu_cont #search_bar #search_field:focus' (
+		'color':selectedColor,
+		'background-position':'right'
+	)
 	
 	'#menu .navigation li' (
 		'height':'40px',
@@ -100,9 +123,11 @@ style = {
 		)
 	
 	'#menu .navigation' (
+		'float':'left',
 		'margin':'0px',
 		'margin-left':'-1px',
-		'padding':'0px'
+		'padding':'0px',
+		'width':'786px'
 	)
 
 	'#menu' (
@@ -247,7 +272,12 @@ style = {
 	
 	'.boxed_form p' (
 		'clear':'both',
-		'min-height':'28px'
+		'min-height':'20px',
+		'padding':'4px'
+	)
+
+	'.centered_para' (
+		'text-align':'center'
 	)
 	
 	'#login_form' (

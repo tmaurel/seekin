@@ -7,20 +7,23 @@
 <body>
 	<div id="register_form" class="yui-skin-sam">
 		<gui:expandablePanel title="${message(code:'register.form.title')}" expanded="true" bounce="false">
-			Alexis suce des bites Alexis suce des bites Alexis suce des bites Alexis suce des bites Alexis suce des bites 
-		Alexis suce des bites Alexis suce des bites Alexis suce des bites Alexis suce des bites Alexis suce des bites 
-		Alexis suce des bites Alexis suce des bites Alexis suce des bites Alexis suce des bites Alexis suce des bites 
-		Alexis suce des bites Alexis suce des bites Alexis suce des bites Alexis suce des bites Alexis suce des bites 
-		Alexis suce des bites Alexis suce des bites Alexis suce des bites Alexis suce des bites Alexis suce des bites 
-		Alexis suce des bites Alexis suce des bites Alexis suce des bites Alexis suce des bites Alexis suce des bites 
-		Alexis suce des bites Alexis suce des bites Alexis suce des bites Alexis suce des bites Alexis suce des bites 
-		Alexis suce des bites Alexis suce des bites Alexis suce des bites Alexis suce des bites Alexis suce des bites 
-		Alexis suce des bites Alexis suce des bites Alexis suce des bites Alexis suce des bites Alexis suce des bites 
-		Alexis suce des bites Alexis suce des bites Alexis suce des bites Alexis suce des bites Alexis suce des bites 
-		Alexis suce des bites Alexis suce des bites Alexis suce des bites Alexis suce des bites Alexis suce des bites 
-		Alexis suce des bites Alexis suce des bites Alexis suce des bites Alexis suce des bites Alexis suce des bites 
-		Alexis suce des bites Alexis suce des bites Alexis suce des bites Alexis suce des bites Alexis suce des bites 
-
+			<form action='register' method='post' id='registerForm' class="boxed_form">	
+				<p>
+					<label for="r_username"><g:message code="register.form.enteryourname" /></label>
+					<g:textField name="r_username" />
+				</p>
+				<p class="centered_para">
+					<g:message code="register.form.type" />
+				</p>
+				<p class="centered_para">
+					<g:radioGroup name="lovesGrails" labels="[message(code:'register.type.student'),message(code:'register.type.staff'),message(code:'register.type.external')]" values="[1,2,3]" >
+						${it.radio} ${it.label}
+					</g:radioGroup>
+				</p>
+				<p class="submit">
+					<g:submitButton name="processRegister" value="${message(code:'register.form.submit')}" />
+				</p>
+			</form>
 		</gui:expandablePanel>
 	</div>
 	<div id="login_form" class="yui-skin-sam">	
@@ -32,35 +35,22 @@
 				</p>
 				<p>
 					<label for='j_username'><g:message code="login.label.username" /></label>
-					<input type='text' name='j_username' id='j_username' value='${request.remoteUser}' />
+					<g:textField  name='j_username' value='${request.remoteUser}' />
 				</p>
 				<p>
 					<label for='j_password'><g:message code="login.label.password" /></label>
-					<input type='password' name='j_password' id='j_password' />
+					<g:passwordField name='j_password' />
 				</p>
 				<p>
 					<label for='remember_me'><g:message code="login.label.rememberme" /></label>
-					<input type='checkbox' class='chk' name='_spring_security_remember_me' id='remember_me'
-					<g:if test='${hasCookie}'>checked='checked'</g:if> />
+					<g:checkBox class='chk' name='_spring_security_remember_me' value="${hasCookie}" />
 				</p>
 				<p class="submit">
 					<g:submitButton name="processLogin" value="${message(code:'login.form.submit')}" />
 				</p>
 			</form>
 		</gui:expandablePanel>
-	</div>
-	
-	<div id="news_box" class="yui-skin-sam">	
-		<gui:accordion fade="true">
-		    <gui:accordionElement title="Accordion element 1">
-		        Accordion element 1 content
-		    </gui:accordionElement>
-		    <gui:accordionElement title="Accordion element 2">
-		        <h3>Markup is fine in here</h3>
-		    </gui:accordionElement>
-		</gui:accordion>
-	</div>
-	
+	</div>	
 	
 	<script type='text/javascript'>
 	<!--

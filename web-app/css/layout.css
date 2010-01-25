@@ -1,5 +1,5 @@
 /*
-* last updated at 23:32:28
+* last updated at 02:07:38
 */
 html *{
     margin:0;
@@ -41,6 +41,25 @@ a img{
     float:right;
     height:30px;
 }
+#menu_cont #search_bar{
+    float:right;
+    width:160px;
+}
+#menu_cont #search_bar #search_field{
+    width:120px;
+    height:18px;
+    margin-top:6px;
+    padding-top:4px;
+    padding-left:30px;
+    padding-right:10px;
+    border:0px none #fff;
+    color:#ccc;
+    background:transparent url(../images/skin/field_bg.png) no-repeat left;
+}
+#menu_cont #search_bar #search_field:focus{
+    color:#163281;
+    background-position:right;
+}
 #menu .navigation li{
     height:40px;
     border:0px none #000;
@@ -76,9 +95,11 @@ a img{
     list-style-position:outside;
 }
 #menu .navigation{
+    float:left;
     margin:0px;
     margin-left:-1px;
     padding:0px;
+    width:786px;
 }
 #menu{
     margin-top:2px;
@@ -200,7 +221,11 @@ h2{
 }
 .boxed_form p{
     clear:both;
-    min-height:28px;
+    min-height:20px;
+    padding:4px;
+}
+.centered_para{
+    text-align:center;
 }
 #login_form{
     width:28%;
