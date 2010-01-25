@@ -13,6 +13,7 @@
         <div id="spinner" class="spinner" style="display:none;">
             <img src="${resource(dir:'images',file:'spinner.gif')}" alt="Spinner" />
         </div>	
+        <debugToolbar:renderMe/>
         <div id="header">
         	<div id="banner">
         		<div id="banner_cont">
