@@ -1,8 +1,8 @@
-package me.hcl.seekin
+package me.hcl.seekin.Profile
 
 import grails.test.*
 
-class BoxTagLibTests extends TagLibUnitTestCase {
+class StaffTests extends GrailsUnitTestCase {
     protected void setUp() {
         super.setUp()
     }

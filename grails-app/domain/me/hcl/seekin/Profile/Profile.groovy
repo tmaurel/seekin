@@ -1,9 +1,11 @@
 package me.hcl.seekin.Profile
 
+import me.hcl.seekin.Auth.User;
+
 /*
  * Profile class
  */
-class Profile {
+class Profile extends User {
 	
 	/** First name */
 	String firstName
