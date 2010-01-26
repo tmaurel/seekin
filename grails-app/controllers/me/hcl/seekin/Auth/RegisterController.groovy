@@ -24,7 +24,7 @@ class RegisterController {
 
 		// skip if already logged in
 		if (authenticateService.isLoggedIn()) {
-			redirect action: show
+			redirect uri: '/'
 			return
 		}
 
@@ -34,88 +34,9 @@ class RegisterController {
 			return [person: person]
 		}
 
-		redirect uri: '/'
 	}
 
-	/**
-	 * User Information page for current user.
-	 */
-	def show = {
 
-		
-	}
-
-	/**
-	 * Edit page for current user.
-	 */
-	def edit = {
-
-		def person
-		def user = authenticateService.userDomain()
-		if (user) {
-			person = User.get(user.id)
-		}
-
-		if (!person) {
-			flash.message = "[Illegal Access] User not found with id ${params.id}"
-			redirect action: index
-			return
-		}
-
-		[person: person]
-	}
-
-	/**
-	 * update action for current user's edit page
-	 */
-	def update = {
-
-		def person
-		def user = authenticateService.userDomain()
-		if (user) {
-			person = User.get(user.id)
-		}
-		else {
-			redirect action: index
-			return
-		}
-
-		if (!person) {
-			flash.message = "[Illegal Access] User not found with id ${params.id}"
-			redirect action: index, id: params.id
-			return
-		}
-
-		// if user want to change password. leave passwd field blank, passwd will not change.
-		if (params.passwd && params.passwd.length() > 0
-				&& params.repasswd && params.repasswd.length() > 0) {
-			if (params.passwd == params.repasswd) {
-				person.passwd = authenticateService.encodePassword(params.passwd)
-			}
-			else {
-				person.passwd = ''
-				flash.message = 'The passwords you entered do not match.'
-				render view: 'edit', model: [person: person]
-				return
-			}
-		}
-
-		person.userRealName = params.userRealName
-		person.email = params.email
-		if (params.emailShow) {
-			person.emailShow = true
-		}
-		else {
-			person.emailShow = false
-		}
-
-		if (person.save()) {
-			redirect action: show, id: person.id
-		}
-		else {
-			render view: 'edit', model: [person: person]
-		}
-	 }
 
 	/**
 	 * Person save action.
@@ -124,7 +45,7 @@ class RegisterController {
 
 		// skip if already logged in
 		if (authenticateService.isLoggedIn()) {
-			redirect action: show
+			redirect uri: '/'
 			return
 		}
 

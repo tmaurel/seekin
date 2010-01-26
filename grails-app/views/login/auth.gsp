@@ -7,10 +7,10 @@
 <body>
 	<div id="register_form" class="yui-skin-sam">
 		<gui:expandablePanel title="${message(code:'register.form.title')}" expanded="true" bounce="false">
-			<form action='register' method='post' id='registerForm' class="boxed_form">	
+			<g:form name="registerForm" url="[action:'index',controller:'register']" class="boxed_form">	
 				<p>
-					<label for="r_username"><g:message code="register.form.enteryourname" /></label>
-					<g:textField name="r_username" />
+					<label for="username"><g:message code="register.form.enteryourname" /></label>
+					<g:textField name="username" />
 				</p>
 				<p class="centered_para">
 					<g:message code="register.form.type" />
@@ -23,13 +23,12 @@
 				<p class="submit">
 					<g:submitButton name="processRegister" value="${message(code:'register.form.submit')}" />
 				</p>
-			</form>
+			</g:form>
 		</gui:expandablePanel>
 	</div>
 	<div id="login_form" class="yui-skin-sam">	
 		<gui:expandablePanel title="${message(code:'login.form.title')}" expanded="true" bounce="false">
-				
-	       	<form action='${postUrl}' method='post' id='loginForm' class="boxed_form">			
+			<g:form name="loginForm" action="${postUrl}" class="boxed_form">		
 				<p class='flash_message'>
 					<g:if test='${flash.message}'>${flash.message}</g:if>
 				</p>
@@ -48,7 +47,7 @@
 				<p class="submit">
 					<g:submitButton name="processLogin" value="${message(code:'login.form.submit')}" />
 				</p>
-			</form>
+			</g:form>
 		</gui:expandablePanel>
 	</div>	
 	
