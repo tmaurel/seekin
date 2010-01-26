@@ -19,7 +19,7 @@ class ProfileTests extends GrailsUnitTestCase {
     }
 	
 	/*
-	 * Method used to test the validation of instances and errord returned when the validation failed
+	 * Method used to test the validation of instances and errors returned when the validation failed
 	 */
 	void testValidation()
 	{		

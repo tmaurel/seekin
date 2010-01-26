@@ -5,7 +5,7 @@ import me.hcl.seekin.Auth.User;
 /*
  * Profile class
  */
-class Profile extends User {
+class Profile {
 	
 	/** First name */
 	String firstName
@@ -16,7 +16,7 @@ class Profile extends User {
 	/** Address */
 	String address
 	
-	/** phone number */
+	/** Phone number */
 	String phone
 	
 	/** Constraints used to check if an instance is correct */
