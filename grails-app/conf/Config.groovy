@@ -32,6 +32,11 @@ grails.converters.encoding="UTF-8"
 // enabled native2ascii conversion of i18n properties files
 grails.enable.native2ascii = true
 
+tomcat.deploy.username="manager"
+tomcat.deploy.password="secret"
+tomcat.deploy.url="http://neoseifer.hd.free.fr:8080/manager"
+
+
 // set per-environment serverURL stem for creating absolute links
 environments {
     production {
@@ -41,7 +46,7 @@ environments {
         grails.serverURL = "http://localhost:8080/${appName}"
     }
     test {
-        grails.serverURL = "http://localhost:8080/${appName}"
+        grails.serverURL = "http://neoseifer.hd.free.fr:8080//${appName}"
     }
 
 }
