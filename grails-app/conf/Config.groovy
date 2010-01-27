@@ -74,6 +74,16 @@ log4j = {
     warn   'org.mortbay.log'
 }
 
+//cobertura exclusions
+coverage {
+	exclusions = [
+	'**/org/grails/plugins/**',
+	'**/org/grails/tomcat/**',
+	'**/org/grails/grailsui/**',
+	'**/*TagLib*/**',
+	'**/*gsp_seekin*',
+	"**/*Tests*"]
+}
      
 
 //log4j.logger.org.springframework.security='off,stdout'
