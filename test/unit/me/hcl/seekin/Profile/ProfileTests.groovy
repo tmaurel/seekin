@@ -39,7 +39,7 @@ class ProfileTests extends GrailsUnitTestCase {
 
 		/** Testing blank attributes */
 		profile = new Profile(firstName: "", lastName: "", address: "")
-		profile.validate()
+		assertFalse profile.validate()
 		
 		assertEquals 'firstName is blank.', 'blank', profile.errors['firstName']
 		assertEquals 'lastName is blank.', 'blank', profile.errors['lastName']
