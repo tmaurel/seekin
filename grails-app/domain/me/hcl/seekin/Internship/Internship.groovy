@@ -19,6 +19,6 @@ class Internship {
 		subject(blank: false)
 		beginAt(nullable: false)
 		isApproval()
-		report()
+		report(nullable: true)
 	}
 }
