@@ -10,8 +10,8 @@ class InternshipControllerTests extends ControllerUnitTestCase {
     protected void tearDown() {
         super.tearDown()
     }
-
-    void testSomething() {
-
-    }
+	
+	void testSomething() {
+		
+	}
 }
