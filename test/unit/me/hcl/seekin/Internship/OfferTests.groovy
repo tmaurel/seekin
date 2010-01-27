@@ -8,7 +8,7 @@ import me.hcl.seekin.Util.Document;
  */
 class OfferTests extends GrailsUnitTestCase {
 	
-	/** attribute used to build a Profile instance */
+	/** attribute used to build a Offer instance */
 	def offer
 	
     protected void setUp() {

@@ -1,6 +1,7 @@
 package me.hcl.seekin.Profile
 
 import grails.test.*
+import me.hcl.seekin.Auth.User
 
 /**
  * ProfileTests class
@@ -28,7 +29,7 @@ class ProfileTests extends GrailsUnitTestCase {
 		mockForConstraintsTests(Profile)
 
 		/** Build a correct instance of Profile and test that the validation is correct */
-		profile = new Profile(firstName: "Mohammed", lastName: "Ben Boukeffa", address: "bled", phone: "0612345678")
+		profile = new Profile(user: new User(), firstName: "Mohammed", lastName: "Ben Boukeffa", address: "bled", phone: "0612345678")
 
 		assertTrue profile.validate()
 		

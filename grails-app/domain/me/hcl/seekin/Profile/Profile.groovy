@@ -7,6 +7,9 @@ import me.hcl.seekin.Auth.User;
  */
 class Profile {
 	
+	/** User which identified the profile */
+	User user
+	
 	/** First name */
 	String firstName
 	
@@ -18,6 +21,7 @@ class Profile {
 	
 	/** Phone number */
 	String phone
+	
 	
 	/** Constraints used to check if an instance is correct */
     static constraints = {
