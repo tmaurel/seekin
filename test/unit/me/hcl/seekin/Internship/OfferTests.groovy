@@ -25,7 +25,7 @@ class OfferTests extends GrailsUnitTestCase {
 		mockForConstraintsTests(Offer)
 		
 		/** Build a correct instance of offer and test that the validation is correct */
-		offer = new Offer(subject: "Selection of a dynamic language", description: "You need to select a dynamic language", beginAt: "2010/03/29", length: 26, status: "unavailable")
+		offer = new Offer(subject: "Selection of a dynamic language", description: "You need to select a dynamic language", beginAt: "2010/03/29", length: 26, status: "unavailable", file: new Document())
 		assertTrue offer.validate()
 		
 		/** Testing blank and nullable attributes */
