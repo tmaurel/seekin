@@ -23,11 +23,11 @@ class InternshipTests extends GrailsUnitTestCase {
 		mockForConstraintsTests(Internship)
 		
 		/** Build a correct instance of Internship and test that the validation is correct */
-		internship = new Internship(subject: "Testing dynamic languages", beginAt: "2010/03/28", isApproval: true)
+		internship = new Internship(subject: "Testing dynamic languages", beginAt: "2010/03/28", isApproval: true, report: new Report())
 		assertTrue internship.validate()
 		
 		/** Testing blank attributes */
-		internship = new Internship(subject: "", beginAt: "2010/03/28", isApproval: true)
+		internship = new Internship(subject: "", beginAt: "2010/03/28", isApproval: true, report: new Report())
 		assertFalse internship.validate()
 		assertEquals 'subject is blank.', 'blank', internship.errors['subject']
 		
