@@ -19,7 +19,7 @@ class FormationTests extends GrailsUnitTestCase {
         super.tearDown()
     }
 	
-	void testValidation() {		
+	void testConstraints() {		
 		
 		/** Add the dynamic method validate to our Formation class */
 		mockForConstraintsTests(Formation)

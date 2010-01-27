@@ -22,7 +22,7 @@ class ProfileTests extends GrailsUnitTestCase {
 	/*
 	 * Method used to test the validation of instances and errors returned when the validation failed
 	 */
-	void testValidation()
+	void testConstraints()
 	{		
 		
 		/** Add the dynamic method validate to our Profile class */

@@ -1,4 +1,4 @@
-package me.hcl.seekin.Utils
+package me.hcl.seekin.Util
 
 import javax.mail.MessagingException
 

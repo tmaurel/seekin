@@ -19,7 +19,7 @@ class OfferTests extends GrailsUnitTestCase {
         super.tearDown()
     }
 	
-	void testValidation() {		
+	void testConstraints() {		
 		
 		/** Add the dynamic method validate to our offer class */
 		mockForConstraintsTests(Offer)
