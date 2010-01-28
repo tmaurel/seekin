@@ -50,8 +50,8 @@ class UserController {
 
 	def show = {
 		def person = User.get(params.id)
-		if (!person) {
-			flash.message = "User not found with id $params.id"
+		if (person == null) {
+			flash.message = message(code:"user.notfound", args:["$params.id"])
 			redirect action: list
 			return
 		}
@@ -76,7 +76,7 @@ class UserController {
 			def authPrincipal = authenticateService.principal()
 			//avoid self-delete if the logged-in user is an admin
 			if (!(authPrincipal instanceof String) && authPrincipal.username == person.username) {
-				flash.message = "You can not delete yourself, please login as another admin and try again"
+				flash.message = message(code:"user.deleteyourself")
 			}
 			else {
 				//first, delete this person from People_Authorities table.
