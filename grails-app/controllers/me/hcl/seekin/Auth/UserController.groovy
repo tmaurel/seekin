@@ -31,7 +31,14 @@ class UserController {
 	def jcaptchaService
 	
 	def index = {
-		redirect action: auth, params: params
+		if (!isLoggedIn()) {
+			redirect action: auth, params: params
+		}
+		else
+		{
+			render "olol"
+			// TODO
+		}
 	}
 
 	def list = {

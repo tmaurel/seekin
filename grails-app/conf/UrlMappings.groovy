@@ -6,6 +6,6 @@ class UrlMappings {
 		  }
 	  }
 	  "500"(view:'/error')
-	  "/"(controller:"user", action="auth")
+	  "/"(controller:"user", action="index")
 	}
 }
