@@ -1,6 +1,4 @@
-import org.springframework.context.ApplicationContext
 import org.codehaus.groovy.grails.web.context.ServletContextHolder
-import org.codehaus.groovy.grails.web.servlet.GrailsApplicationAttributes
 import org.codehaus.groovy.grails.commons.GrailsApplication
 import grails.util.GrailsUtil
 
@@ -8,9 +6,11 @@ class BootStrap {
 
 	 def fixtureLoader
 	
+	 def navigationService
+	
      def init = { servletContext ->
-		def appContext = ServletContextHolder.getServletContext().getAttribute(GrailsApplicationAttributes.APPLICATION_CONTEXT) 
-		def navigationService = appContext.getBean("navigationService")
+
+
 
 		// Main Menu
 		navigationService.registerItem('menu', [controller:'user', action:'index', title:'home', id:'home'])
