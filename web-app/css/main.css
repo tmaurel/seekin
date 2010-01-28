@@ -1,7 +1,4 @@
-html * {
-    margin: 0;
-    /*padding: 0; SELECT NOT DISPLAYED CORRECTLY IN FIREFOX */
-}
+
 
 /* GENERAL */
 
@@ -11,23 +8,12 @@ html * {
     right: 0;
 }
 
-body {
-    background: #fff;
-    color: #333;
-    font: 11px verdana, arial, helvetica, sans-serif;
-}
 
-a:link, a:visited, a:hover {
-    color: #666;
-    font-weight: bold;
-    text-decoration: none;
-} 
 
 h1 {
     color: #006dba;
     font-weight: normal;
     font-size: 16px;
-    margin: .8em 0 .3em 0;
 }
 
 ul {
@@ -38,12 +24,8 @@ input, select, textarea {
     background-color: #fcfcfc;
     border: 1px solid #ccc;
     font: 11px verdana, arial, helvetica, sans-serif;
-    margin: 2px 0;
-    padding: 2px 4px;
 }
-select {
-   padding: 2px 2px 2px 0;
-}
+
 textarea {
 	width: 250px;
 	height: 150px;

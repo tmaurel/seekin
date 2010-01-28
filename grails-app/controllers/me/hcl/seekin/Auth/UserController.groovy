@@ -31,7 +31,7 @@ class UserController {
 	def jcaptchaService
 	
 	def index = {
-		redirect action: list, params: params
+		redirect action: auth, params: params
 	}
 
 	def list = {
