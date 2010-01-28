@@ -2,6 +2,16 @@ package me.hcl.seekin.Auth
 
 import me.hcl.seekin.Auth.User
 import me.hcl.seekin.Auth.Role
+import org.springframework.security.providers.UsernamePasswordAuthenticationToken as AuthToken
+
+import org.codehaus.groovy.grails.plugins.springsecurity.RedirectUtils
+import org.grails.plugins.springsecurity.service.AuthenticateService
+
+import org.springframework.security.AuthenticationTrustResolverImpl
+import org.springframework.security.DisabledException
+import org.springframework.security.context.SecurityContextHolder as SCH
+import org.springframework.security.ui.AbstractProcessingFilter
+import org.springframework.security.ui.webapp.AuthenticationProcessingFilter
 
 /**
  * User controller.
@@ -13,6 +23,13 @@ class UserController {
 	// the delete, save and update actions only accept POST requests
 	static Map allowedMethods = [delete: 'POST', save: 'POST', update: 'POST']
 
+	private final authenticationTrustResolver = new AuthenticationTrustResolverImpl()
+
+	def daoAuthenticationProvider
+	def emailerService
+	
+	def jcaptchaService
+	
 	def index = {
 		redirect action: list, params: params
 	}
@@ -160,5 +177,196 @@ class UserController {
 		}
 
 		return [person: person, roleMap: roleMap]
+	}
+	
+	
+	
+	
+	/* Based on LogoutController */ 
+	
+	/**
+	 * Index action. Redirects to the Spring security logout uri.
+	 */
+	def logout = {
+		// TODO  put any pre-logout code here
+		redirect(uri: '/j_spring_security_logout')
+	}
+	
+	
+	
+	
+	/* Based on LoginController */
+	
+	/**
+	 * Show the login page.
+	 */
+	def auth = {
+		
+		noCache response
+		def config = authenticateService.securityConfig.security
+		if (isLoggedIn()) {
+			redirect uri: '/'
+			return
+		}
+		
+		render view: 'auth', model: [postUrl: "${request.contextPath}${config.filterProcessesUrl}"]
+	}	
+	
+	/**
+	 * Show denied page.
+	 */
+	def accessDenied = {
+		if (isLoggedIn() && authenticationTrustResolver.isRememberMe(SCH.context?.authentication)) {
+			// have cookie but the page is guarded with IS_AUTHENTICATED_FULLY
+			redirect action: full, params: params
+		}
+	}
+	
+	/**
+	 * Login page for users with a remember-me cookie but accessing a IS_AUTHENTICATED_FULLY page.
+	 */
+	def full = {
+		render view: 'auth', params: params,
+		model: [hasCookie: authenticationTrustResolver.isRememberMe(SCH.context?.authentication)]
+	}
+	
+	/**
+	 * login failed
+	 */
+	def authFail = {
+		
+		def username = session[AuthenticationProcessingFilter.SPRING_SECURITY_LAST_USERNAME_KEY]
+		def msg = ''
+		def exception = session[AbstractProcessingFilter.SPRING_SECURITY_LAST_EXCEPTION_KEY]
+		if (exception) {
+			if (exception instanceof DisabledException) {
+				msg = message(code:"login.validation.disabled", args:["${username}"])
+			}
+			else {
+				msg = message(code:"login.validation.invalid", args:["${username}"])
+			}
+		}
+		
+		flash.message = msg
+		redirect action: auth, params: params
+	}
+	
+	/**
+	 * Check if logged in.
+	 */
+	private boolean isLoggedIn() {
+		return authenticateService.isLoggedIn()
+	}
+	
+	/** cache controls */
+	private void noCache(response) {
+		response.setHeader('Cache-Control', 'no-cache') // HTTP 1.1
+		response.addDateHeader('Expires', 0)
+		response.setDateHeader('max-age', 0)
+		response.setIntHeader ('Expires', -1) //prevents caching at the proxy server
+		response.addHeader('cache-Control', 'private') //IE5.x only
+	}
+	
+	
+	
+	
+	/* Based on RegisterController */
+	
+	/**
+	 * User Registration Top page.
+	 */
+	def register = {
+		
+		if(request.method == 'GET') { 		
+		
+			// skip if already logged in
+			if (authenticateService.isLoggedIn()) {
+				redirect uri: '/'
+				return
+			}
+			
+			if (session.id) {
+				def person = new User()
+				person.properties = params
+				return [person: person]
+			}
+		}
+		else if(request.method == 'POST') {
+			
+			// skip if already logged in
+			if (authenticateService.isLoggedIn()) {
+				redirect uri: '/'
+				return
+			}
+			
+			def person = new User()
+			person.properties = params
+			
+			def config = authenticateService.securityConfig
+			def defaultRole = config.security.defaultRole
+			
+			def role = Role.findByAuthority(defaultRole)
+			if (!role) {
+				person.passwd = ''
+				flash.message = 'Default Role not found.'
+				render view: 'register', model: [person: person]
+				return
+			}
+			
+			if(1)
+			{
+				person.passwd = ''
+				flash.message = 'Access code did not match.'
+				render view: 'register', model: [person: person]
+				return
+			}
+			
+			if (params.passwd != params.repasswd) {
+				person.passwd = ''
+				flash.message = 'The passwords you entered do not match.'
+				render view: 'register', model: [person: person]
+				return
+			}
+			
+			def pass = authenticateService.encodePassword(params.passwd)
+			person.passwd = pass
+			person.enabled = true
+			person.emailShow = true
+			person.description = ''
+			if (person.save()) {
+				role.addToPeople(person)
+				if (config.security.useMail) {
+					String emailContent = """You have signed up for an account at:
+	
+	 ${request.scheme}://${request.serverName}:${request.serverPort}${request.contextPath}
+	
+	 Here are the details of your account:
+	 -------------------------------------
+	 LoginName: ${person.username}
+	 Email: ${person.email}
+	 Full Name: ${person.userRealName}
+	 Password: ${params.passwd}
+	"""
+					
+					def email = [
+							to: [person.email], // 'to' expects a List, NOT a single email address
+							subject: "[${request.contextPath}] Account Signed Up",
+							text: emailContent // 'text' is the email body
+							]
+					emailerService.sendEmails([email])
+				}
+				
+				person.save(flush: true)
+				
+				def auth = new AuthToken(person.username, params.passwd)
+				def authtoken = daoAuthenticationProvider.authenticate(auth)
+				SCH.context.authentication = authtoken
+				redirect uri: '/'
+			}
+			else {
+				person.passwd = ''
+				render view: 'register', model: [person: person]
+			}
+		}
 	}
 }
