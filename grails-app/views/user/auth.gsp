@@ -7,7 +7,7 @@
 <body>
 	<div id="register_form" class="yui-skin-sam">
 		<gui:expandablePanel title="${message(code:'register.form.title')}" expanded="true" bounce="false">
-			<g:form name="registerForm" url="[action:'index',controller:'register']" class="boxed_form">	
+			<g:form name="registerForm" url="[action:'register',controller:'user']" class="boxed_form">	
 				<p>
 					<label for="username"><g:message code="register.form.enteryourname" /></label>
 					<g:textField name="username" />
@@ -28,7 +28,7 @@
 	</div>
 	<div id="login_form" class="yui-skin-sam">	
 		<gui:expandablePanel title="${message(code:'login.form.title')}" expanded="true" bounce="false">
-			<g:form name="loginForm" action="${postUrl}" class="boxed_form">		
+			<form name="loginForm" id="loginForm" method="post" action="${postUrl}" class="boxed_form">		
 				<p class='flash_message'>
 					<g:if test='${flash.message}'>${flash.message}</g:if>
 				</p>
@@ -47,7 +47,7 @@
 				<p class="submit">
 					<g:submitButton name="processLogin" value="${message(code:'login.form.submit')}" />
 				</p>
-			</g:form>
+			</form>
 		</gui:expandablePanel>
 	</div>	
 	

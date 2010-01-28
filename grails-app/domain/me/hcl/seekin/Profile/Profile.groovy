@@ -22,7 +22,6 @@ class Profile {
 	/** Phone number */
 	String phone
 	
-	
 	/** Constraints used to check if an instance is correct */
     static constraints = {
 		firstName(blank: false)

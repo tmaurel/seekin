@@ -14,4 +14,8 @@ security {
 	
 	defaultRole = "ROLE_USER"
 	
+	authenticationFailureUrl = "/user/authFail?login_error=1"
+	loginFormUrl = "/user/auth" 
+	errorPage = "/user/accessDenied"
+	
 }
