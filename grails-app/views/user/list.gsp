@@ -1,54 +1,60 @@
-<head>
-	<meta name="layout" content="main" />
-	<title>User List</title>
-</head>
 
-<body>
-
-	<div class="nav">
-		<span class="menuButton"><a class="home" href="${createLinkTo(dir:'')}">Home</a></span>
-		<span class="menuButton"><g:link class="create" action="create">New User</g:link></span>
-	</div>
-
-	<div class="body">
-		<h1>User List</h1>
-		<g:if test="${flash.message}">
-		<div class="message">${flash.message}</div>
-		</g:if>
-		<div class="list">
-			<table>
-			<thead>
-				<tr>
-					<g:sortableColumn property="id" title="Id" />
-					<g:sortableColumn property="username" title="Login Name" />
-					<g:sortableColumn property="userRealName" title="Full Name" />
-					<g:sortableColumn property="enabled" title="Enabled" />
-					<g:sortableColumn property="description" title="Description" />
-					<th>&nbsp;</th>
-				</tr>
-			</thead>
-			<tbody>
-			<g:each in="${personList}" status="i" var="person">
-				<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
-					<td>${person.id}</td>
-					<td>${person.username?.encodeAsHTML()}</td>
-					<td>${person.userRealName?.encodeAsHTML()}</td>
-					<td>${person.enabled?.encodeAsHTML()}</td>
-					<td>${person.description?.encodeAsHTML()}</td>
-					<td class="actionButtons">
-						<span class="actionButton">
-							<g:link action="show" id="${person.id}">Show</g:link>
-						</span>
-					</td>
-				</tr>
-			</g:each>
-			</tbody>
-			</table>
-		</div>
-
-		<div class="paginateButtons">
-			<g:paginate total="${me.hcl.seekin.Auth.User.count()}" />
-		</div>
-
-	</div>
-</body>
+<%@ page import="me.hcl.seekin.Auth.User" %>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta name="layout" content="main" />
+        <title><g:message code="user.list" default="User List" /></title>
+    </head>
+    <body>
+        <div class="nav">
+            <span class="menuButton"><a class="home" href="${createLinkTo(dir: '')}"><g:message code="navigation.menu.home" default="Home" /></a></span>
+            <span class="menuButton"><g:link class="create" action="create"><g:message code="user.new" default="New User" /></g:link></span>
+        </div>
+        <div class="body">
+            <h1><g:message code="user.list" default="User List" /></h1>
+            <g:if test="${flash.message}">
+            <div class="message"><g:message code="${flash.message}" args="${flash.args}" default="${flash.defaultMessage}" /></div>
+            </g:if>
+            <div class="list">
+                <table>
+                    <thead>
+                        <tr>
+                        
+                   	    <g:sortableColumn property="id" title="Id" titleKey="user.id" />
+                        
+                   	    <g:sortableColumn property="email" title="Email" titleKey="user.email" />
+                        
+                   	    <g:sortableColumn property="password" title="Password" titleKey="user.password" />
+                        
+                   	    <g:sortableColumn property="enabled" title="Enabled" titleKey="user.enabled" />
+                        
+                   	    <g:sortableColumn property="showEmail" title="Show Email" titleKey="user.showEmail" />
+                        
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <g:each in="${personList}" status="i" var="person">
+                        <tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
+                        
+                            <td><g:link action="show" id="${person.id}">${fieldValue(bean: person, field: "id")}</g:link></td>
+                        
+                            <td>${fieldValue(bean: person, field: "email")}</td>
+                        
+                            <td>${fieldValue(bean: person, field: "password")}</td>
+                        
+                            <td><g:formatBoolean boolean="${person.enabled}" /></td>
+                        
+                            <td><g:formatBoolean boolean="${person.showEmail}" /></td>
+                        
+                        </tr>
+                    </g:each>
+                    </tbody>
+                </table>
+            </div>
+            <div class="paginateButtons">
+                <g:paginate total="${personTotal}" />
+            </div>
+        </div>
+    </body>
+</html>

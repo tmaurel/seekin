@@ -42,17 +42,17 @@ class UserController {
 	}
 
 	def list = {
-		if (!params.max) {
-			params.max = 10
-		}
-		[personList: User.list(params)]
+		params.max = Math.min(params.max ? params.max.toInteger() : 10,  100)
+		[personList: User.list(params), personTotal: User.count()]
 	}
 
 	def show = {
 		def person = User.get(params.id)
-		if (person == null) {
-			flash.message = message(code:"user.notfound", args:["$params.id"])
-			redirect action: list
+		if (!person) {
+			flash.message = "user.not.found"
+			flash.args = [params.id]
+			flash.defaultMessage = "User not found with id ${params.id}"
+			redirect(action: "list")
 			return
 		}
 		List roleNames = []
@@ -76,28 +76,34 @@ class UserController {
 			def authPrincipal = authenticateService.principal()
 			//avoid self-delete if the logged-in user is an admin
 			if (!(authPrincipal instanceof String) && authPrincipal.username == person.username) {
-				flash.message = message(code:"user.deleteyourself")
+				flash.message = "You can not delete yourself, please login as another admin and try again"
 			}
 			else {
 				//first, delete this person from People_Authorities table.
 				Role.findAll().each { it.removeFromPeople(person) }
 				person.delete()
-				flash.message = "User $params.id deleted."
+				flash.message = "user.deleted"
+				flash.args = [params.id]
+				flash.defaultMessage = "User ${params.id} deleted"
+				redirect(action: "list")
 			}
 		}
 		else {
-			flash.message = "User not found with id $params.id"
+			flash.message = "user.not.deleted"
+			flash.args = [params.id]
+			flash.defaultMessage = "User ${params.id} could not be deleted"
+			redirect(action: "show", id: params.id)
 		}
-
-		redirect action: list
 	}
 
 	def edit = {
 
 		def person = User.get(params.id)
 		if (!person) {
-			flash.message = "User not found with id $params.id"
-			redirect action: list
+			flash.message = "user.not.found"
+			flash.args = [params.id]
+			flash.defaultMessage = "User not found with id ${params.id}"
+			redirect(action: "list")
 			return
 		}
 
@@ -111,8 +117,10 @@ class UserController {
 
 		def person = User.get(params.id)
 		if (!person) {
-			flash.message = "User not found with id $params.id"
-			redirect action: edit, id: params.id
+			flash.message = "user.not.found"
+			flash.args = [params.id]
+			flash.defaultMessage = "User not found with id ${params.id}"
+			redirect(action: "edit", id: params.id)
 			return
 		}
 
@@ -124,12 +132,15 @@ class UserController {
 			return
 		}
 
-		def oldPassword = person.passwd
+		def oldPassword = person.password
 		person.properties = params
-		if (!params.passwd.equals(oldPassword)) {
-			person.passwd = authenticateService.encodePassword(params.passwd)
+		if (!params.password.equals(oldPassword)) {
+			person.password = authenticateService.encodePassword(params.password)
 		}
 		if (person.save()) {
+			flash.message = "user.updated"
+			flash.args = [params.id]
+			flash.defaultMessage = "User ${params.id} updated"
 			Role.findAll().each { it.removeFromPeople(person) }
 			addRoles(person)
 			redirect action: show, id: person.id
@@ -150,8 +161,11 @@ class UserController {
 
 		def person = new User()
 		person.properties = params
-		person.passwd = authenticateService.encodePassword(params.passwd)
+		person.password = authenticateService.encodePassword(params.password)
 		if (person.save()) {
+			flash.message = "user.created"
+			flash.args = [person.id]
+			flash.defaultMessage = "User ${person.id} created"
 			addRoles(person)
 			redirect action: show, id: person.id
 		}
@@ -247,10 +261,10 @@ class UserController {
 		def exception = session[AbstractProcessingFilter.SPRING_SECURITY_LAST_EXCEPTION_KEY]
 		if (exception) {
 			if (exception instanceof DisabledException) {
-				msg = message(code:"login.validation.disabled", args:["${username}"])
+				msg = message(code:"user.login.validation.disabled", args:["${username}"])
 			}
 			else {
-				msg = message(code:"login.validation.invalid", args:["${username}"])
+				msg = message(code:"user.login.validation.invalid", args:["${username}"])
 			}
 		}
 		
@@ -314,29 +328,35 @@ class UserController {
 			
 			def role = Role.findByAuthority(defaultRole)
 			if (!role) {
-				person.passwd = ''
-				flash.message = 'Default Role not found.'
+				person.password = ''
+				flash.message = "user.default.role.not.found"
+				flash.args = [person.id]
+				flash.defaultMessage = "Default Role not found"
 				render view: 'register', model: [person: person]
 				return
 			}
 			
 			if(1)
 			{
-				person.passwd = ''
-				flash.message = 'Access code did not match.'
+				person.password = ''
+				flash.message = "user.code.dismatch"
+				flash.args = [person.id]
+				flash.defaultMessage = "Access code did not match"
 				render view: 'register', model: [person: person]
 				return
 			}
 			
-			if (params.passwd != params.repasswd) {
-				person.passwd = ''
-				flash.message = 'The passwords you entered do not match.'
+			if (params.password != params.repassword) {
+				person.password = ''
+				flash.message = "user.password.dismatch"
+				flash.args = [person.id]
+				flash.defaultMessage = "The passwords you entered do not match"
 				render view: 'register', model: [person: person]
 				return
 			}
 			
-			def pass = authenticateService.encodePassword(params.passwd)
-			person.passwd = pass
+			def pass = authenticateService.encodePassword(params.password)
+			person.password = pass
 			person.enabled = true
 			person.emailShow = true
 			person.description = ''
@@ -352,7 +372,7 @@ class UserController {
 	 LoginName: ${person.username}
 	 Email: ${person.email}
 	 Full Name: ${person.userRealName}
-	 Password: ${params.passwd}
+	 Password: ${params.password}
 	"""
 					
 					def email = [
@@ -365,13 +385,13 @@ class UserController {
 				
 				person.save(flush: true)
 				
-				def auth = new AuthToken(person.username, params.passwd)
+				def auth = new AuthToken(person.username, params.password)
 				def authtoken = daoAuthenticationProvider.authenticate(auth)
 				SCH.context.authentication = authtoken
 				redirect uri: '/'
 			}
 			else {
-				person.passwd = ''
+				person.password = ''
 				render view: 'register', model: [person: person]
 			}
 		}

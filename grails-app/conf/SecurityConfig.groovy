@@ -17,5 +17,7 @@ security {
 	authenticationFailureUrl = "/user/authFail?login_error=1"
 	loginFormUrl = "/user/auth" 
 	errorPage = "/user/accessDenied"
+	userName = "email"
+	password = "password"
 	
 }

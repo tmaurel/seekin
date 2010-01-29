@@ -1,13 +1,12 @@
-<%=packageName ? "package ${packageName}\n\n" : ''%>class ${className}Controller {
+<%=packageName ? "package ${packageName}\n\n" : ""%>class ${className}Controller {
 
+    def index = { redirect(action: "list", params: params) }
+
+    // the delete, save and update actions only accept POST requests
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
-    def index = {
-        redirect(action: "list", params: params)
-    }
-
     def list = {
-        params.max = Math.min(params.max ? params.int('max') : 10, 100)
+        params.max = Math.min(params.max ? params.max.toInteger() : 10,  100)
         [${propertyName}List: ${className}.list(params), ${propertyName}Total: ${className}.count()]
     }
 
@@ -19,8 +18,10 @@
 
     def save = {
         def ${propertyName} = new ${className}(params)
-        if (${propertyName}.save(flush: true)) {
-            flash.message = "\${message(code: 'default.created.message', args: [message(code: '${domainClass.propertyName}.label', default: '${className}'), ${propertyName}.id])}"
+        if (!${propertyName}.hasErrors() && ${propertyName}.save()) {
+            flash.message = "${domainClass.propertyName}.created"
+            flash.args = [${propertyName}.id]
+            flash.defaultMessage = "${className} \${${propertyName}.id} created"
             redirect(action: "show", id: ${propertyName}.id)
         }
         else {
@@ -31,18 +32,22 @@
     def show = {
         def ${propertyName} = ${className}.get(params.id)
         if (!${propertyName}) {
-            flash.message = "\${message(code: 'default.not.found.message', args: [message(code: '${domainClass.propertyName}.label', default: '${className}'), params.id])}"
+            flash.message = "${domainClass.propertyName}.not.found"
+            flash.args = [params.id]
+            flash.defaultMessage = "${className} not found with id \${params.id}"
             redirect(action: "list")
         }
         else {
-            [${propertyName}: ${propertyName}]
+            return [${propertyName}: ${propertyName}]
         }
     }
 
     def edit = {
         def ${propertyName} = ${className}.get(params.id)
         if (!${propertyName}) {
-            flash.message = "\${message(code: 'default.not.found.message', args: [message(code: '${domainClass.propertyName}.label', default: '${className}'), params.id])}"
+            flash.message = "${domainClass.propertyName}.not.found"
+            flash.args = [params.id]
+            flash.defaultMessage = "${className} not found with id \${params.id}"
             redirect(action: "list")
         }
         else {
@@ -56,15 +61,17 @@
             if (params.version) {
                 def version = params.version.toLong()
                 if (${propertyName}.version > version) {
-                    <% def lowerCaseName = grails.util.GrailsNameUtils.getPropertyName(className) %>
-                    ${propertyName}.errors.rejectValue("version", "default.optimistic.locking.failure", [message(code: '${domainClass.propertyName}.label', default: '${className}')] as Object[], "Another user has updated this ${className} while you were editing")
+                    <%  def lowerCaseName = grails.util.GrailsNameUtils.getPropertyName(className) %>
+                    ${propertyName}.errors.rejectValue("version", "${lowerCaseName}.optimistic.locking.failure", "Another user has updated this ${className} while you were editing")
                     render(view: "edit", model: [${propertyName}: ${propertyName}])
                     return
                 }
             }
             ${propertyName}.properties = params
-            if (!${propertyName}.hasErrors() && ${propertyName}.save(flush: true)) {
-                flash.message = "\${message(code: 'default.updated.message', args: [message(code: '${domainClass.propertyName}.label', default: '${className}'), ${propertyName}.id])}"
+            if (!${propertyName}.hasErrors() && ${propertyName}.save()) {
+                flash.message = "${domainClass.propertyName}.updated"
+                flash.args = [params.id]
+                flash.defaultMessage = "${className} \${params.id} updated"
                 redirect(action: "show", id: ${propertyName}.id)
             }
             else {
@@ -72,8 +79,10 @@
             }
         }
         else {
-            flash.message = "\${message(code: 'default.not.found.message', args: [message(code: '${domainClass.propertyName}.label', default: '${className}'), params.id])}"
-            redirect(action: "list")
+            flash.message = "${domainClass.propertyName}.not.found"
+            flash.args = [params.id]
+            flash.defaultMessage = "${className} not found with id \${params.id}"
+            redirect(action: "edit", id: params.id)
         }
     }
 
@@ -81,17 +90,23 @@
         def ${propertyName} = ${className}.get(params.id)
         if (${propertyName}) {
             try {
-                ${propertyName}.delete(flush: true)
-                flash.message = "\${message(code: 'default.deleted.message', args: [message(code: '${domainClass.propertyName}.label', default: '${className}'), params.id])}"
+                ${propertyName}.delete()
+                flash.message = "${domainClass.propertyName}.deleted"
+                flash.args = [params.id]
+                flash.defaultMessage = "${className} \${params.id} deleted"
                 redirect(action: "list")
             }
             catch (org.springframework.dao.DataIntegrityViolationException e) {
-                flash.message = "\${message(code: 'default.not.deleted.message', args: [message(code: '${domainClass.propertyName}.label', default: '${className}'), params.id])}"
+                flash.message = "${domainClass.propertyName}.not.deleted"
+                flash.args = [params.id]
+                flash.defaultMessage = "${className} \${params.id} could not be deleted"
                 redirect(action: "show", id: params.id)
             }
         }
         else {
-            flash.message = "\${message(code: 'default.not.found.message', args: [message(code: '${domainClass.propertyName}.label', default: '${className}'), params.id])}"
+            flash.message = "${domainClass.propertyName}.not.found"
+            flash.args = [params.id]
+            flash.defaultMessage = "${className} not found with id \${params.id}"
             redirect(action: "list")
         }
     }
