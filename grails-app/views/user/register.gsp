@@ -16,7 +16,7 @@
 		</div>
 		</g:hasErrors>
 
-		<g:form action="save">
+		<g:form action="register">
 		<div class="dialog">
 		<table>
 		<tbody>
@@ -29,9 +29,9 @@
 			</tr>
 
 			<tr class='prop'>
-				<td valign='top' class='name'><label for='passwd'>Password:</label></td>
+				<td valign='top' class='name'><label for='password'>Password:</label></td>
 				<td valign='top' class='value ${hasErrors(bean:person,field:'password','errors')}'>
-					<input type="password" name='passwd' value="${person?.password?.encodeAsHTML()}"/>
+					<input type="password" name='password' value="${person?.password?.encodeAsHTML()}"/>
 				</td>
 			</tr>
 
@@ -46,6 +46,7 @@
 				<td valign='bottom' class='name'><label for='code'>Enter Code: </label></td>
 				<td valign='top' class='name'>
 					<input type="text" name="captcha" size="8"/>
+                                        <img src="${createLink(action:'generateCaptcha')}" alt="Captcha" />
 				</td>
 			</tr>
 
@@ -55,7 +56,7 @@
 
 		<div class="buttons">
 			<span class="formButton">
-				<input class='save' type="submit" value="Create"></input>
+				<input class='save' type="submit" value="Create"/>
 			</span>
 		</div>
 
