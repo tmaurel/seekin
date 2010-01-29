@@ -1,11 +1,4 @@
 import me.hcl.seekin.Auth.User
-import org.codehaus.groovy.grails.web.context.ServletContextHolder
-import org.springframework.context.ApplicationContext
-import org.codehaus.groovy.grails.web.servlet.GrailsApplicationAttributes
-
-def appContext = ServletContextHolder.getServletContext().getAttribute(GrailsApplicationAttributes.APPLICATION_CONTEXT) 
-def authenticateService = appContext.getBean("authenticateService")
-
 
 include "roles"
 
