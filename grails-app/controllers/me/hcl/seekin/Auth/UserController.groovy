@@ -13,6 +13,12 @@ import org.springframework.security.context.SecurityContextHolder as SCH
 import org.springframework.security.ui.AbstractProcessingFilter
 import org.springframework.security.ui.webapp.AuthenticationProcessingFilter
 
+import java.awt.image.BufferedImage
+
+import nl.captcha.Captcha
+import nl.captcha.backgrounds.*
+import nl.captcha.servlet.CaptchaServletUtil
+
 /**
  * User controller.
  */
@@ -75,8 +81,11 @@ class UserController {
 		if (person) {
 			def authPrincipal = authenticateService.principal()
 			//avoid self-delete if the logged-in user is an admin
-			if (!(authPrincipal instanceof String) && authPrincipal.username == person.username) {
-				flash.message = "You can not delete yourself, please login as another admin and try again"
+			if (!(authPrincipal instanceof String) && authPrincipal.email == person.email) {
+                            flash.message = "user.not.deleted"
+                            flash.args = [params.id]
+                            flash.defaultMessage = "User ${params.id} could not be deleted"
+                            redirect(action: "show", id: params.id)
 			}
 			else {
 				//first, delete this person from People_Authorities table.
@@ -292,7 +301,22 @@ class UserController {
 	
 	
 	/* Based on RegisterController */
-	
+
+    	/**
+	 * Captcha generation
+	 */
+        def generateCaptcha = {
+            def captcha = new Captcha.Builder(200, 50)
+                .addText()
+                .gimp()
+                .addNoise()
+                .addBorder()
+                .build()
+            session.captcha = captcha
+            CaptchaServletUtil.writeImage(response, captcha.image)
+        }
+
+
 	/**
 	 * User Registration Top page.
 	 */
@@ -335,8 +359,8 @@ class UserController {
 				render view: 'register', model: [person: person]
 				return
 			}
-			
-			if(1)
+
+                        if (!session?.captcha?.isCorrect(params.captcha))
 			{
 				person.password = ''
 				flash.message = "user.code.dismatch"
@@ -345,7 +369,7 @@ class UserController {
 				render view: 'register', model: [person: person]
 				return
 			}
-			
+                     
 			if (params.password != params.repassword) {
 				person.password = ''
 				flash.message = "user.password.dismatch"
@@ -357,9 +381,8 @@ class UserController {
 			
 			def pass = authenticateService.encodePassword(params.password)
 			person.password = pass
-			person.enabled = true
-			person.emailShow = true
-			person.description = ''
+			person.enabled = false
+			person.showEmail = false
 			if (person.save()) {
 				role.addToPeople(person)
 				if (config.security.useMail) {
@@ -369,7 +392,6 @@ class UserController {
 	
 	 Here are the details of your account:
 	 -------------------------------------
-	 LoginName: ${person.username}
 	 Email: ${person.email}
 	 Full Name: ${person.userRealName}
 	 Password: ${params.password}
@@ -385,9 +407,9 @@ class UserController {
 				
 				person.save(flush: true)
 				
-				def auth = new AuthToken(person.username, params.password)
-				def authtoken = daoAuthenticationProvider.authenticate(auth)
-				SCH.context.authentication = authtoken
+//				def auth = new AuthToken(person.email, params.password)
+//				def authtoken = daoAuthenticationProvider.authenticate(auth)
+//				SCH.context.authentication = authtoken
 				redirect uri: '/'
 			}
 			else {
