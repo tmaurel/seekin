@@ -9,8 +9,8 @@
 		<gui:expandablePanel title="${message(code:'register.form.title')}" expanded="true" bounce="false">
 			<g:form name="registerForm" url="[action:'register',controller:'user']" class="boxed_form">	
 				<p>
-					<label for="username"><g:message code="register.form.enteryourname" /></label>
-					<g:textField name="username" />
+					<label for="username"><g:message code="register.form.enteryourmail" /></label>
+					<g:textField name="email" />
 				</p>
 				<p class="centered_para">
 					<g:message code="register.form.type" />
@@ -21,6 +21,7 @@
 					</g:radioGroup>
 				</p>
 				<p class="submit">
+                    <g:hiddenField name="fromHome" value="1" />
 					<g:submitButton name="processRegister" value="${message(code:'register.form.submit')}" />
 				</p>
 			</g:form>
