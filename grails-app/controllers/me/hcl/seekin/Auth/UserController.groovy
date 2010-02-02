@@ -84,7 +84,6 @@ class UserController {
 			if (!(authPrincipal instanceof String) && authPrincipal.email == person.email) {
                             flash.message = "user.not.deleted"
                             flash.args = [params.id]
-                            flash.defaultMessage = "User ${params.id} could not be deleted"
                             redirect(action: "show", id: params.id)
 			}
 			else {
@@ -93,14 +92,12 @@ class UserController {
 				person.delete()
 				flash.message = "user.deleted"
 				flash.args = [params.id]
-				flash.defaultMessage = "User ${params.id} deleted"
 				redirect(action: "list")
 			}
 		}
 		else {
 			flash.message = "user.not.deleted"
 			flash.args = [params.id]
-			flash.defaultMessage = "User ${params.id} could not be deleted"
 			redirect(action: "show", id: params.id)
 		}
 	}
@@ -111,7 +108,6 @@ class UserController {
 		if (!person) {
 			flash.message = "user.not.found"
 			flash.args = [params.id]
-			flash.defaultMessage = "User not found with id ${params.id}"
 			redirect(action: "list")
 			return
 		}
@@ -128,7 +124,6 @@ class UserController {
 		if (!person) {
 			flash.message = "user.not.found"
 			flash.args = [params.id]
-			flash.defaultMessage = "User not found with id ${params.id}"
 			redirect(action: "edit", id: params.id)
 			return
 		}
@@ -149,7 +144,6 @@ class UserController {
 		if (person.save()) {
 			flash.message = "user.updated"
 			flash.args = [params.id]
-			flash.defaultMessage = "User ${params.id} updated"
 			Role.findAll().each { it.removeFromPeople(person) }
 			addRoles(person)
 			redirect action: show, id: person.id
@@ -174,7 +168,6 @@ class UserController {
 		if (person.save()) {
 			flash.message = "user.created"
 			flash.args = [person.id]
-			flash.defaultMessage = "User ${person.id} created"
 			addRoles(person)
 			redirect action: show, id: person.id
 		}
@@ -356,7 +349,6 @@ class UserController {
 				person.password = ''
 				flash.message = "user.default.role.not.found"
 				flash.args = [person.id]
-				flash.defaultMessage = "Default Role not found"
 				render view: 'register', model: [person: person]
 				return
 			}
@@ -365,7 +357,6 @@ class UserController {
 			{
 				person.password = ''
 				flash.message = message(code:"user.code.dismatch")
-				flash.defaultMessage = "Access code did not match"
 				render view: 'register', model: [person: person]
 				return
 			}
@@ -373,7 +364,6 @@ class UserController {
 			if (params.password != params.repassword) {
 				person.password = ''
 				flash.message = message(code:"user.password.dismatch")
-				flash.defaultMessage = "The passwords you entered do not match"
 				render view: 'register', model: [person: person]
 				return
 			}
@@ -382,29 +372,29 @@ class UserController {
 			person.password = pass
 			person.enabled = false
 			person.showEmail = false
-			if (person.save()) {
-				role.addToPeople(person)
-				if (config.security.useMail) {
-					String emailContent = """You have signed up for an account at:
-	
-	 ${request.scheme}://${request.serverName}:${request.serverPort}${request.contextPath}
-	
-	 Here are the details of your account:
-	 -------------------------------------
-	 Email: ${person.email}
-	 Full Name: ${person.userRealName}
-	 Password: ${params.password}
-	"""
-					
-					def email = [
-							to: [person.email], // 'to' expects a List, NOT a single email address
-							subject: "[${request.contextPath}] Account Signed Up",
-							text: emailContent // 'text' is the email body
-							]
-					emailerService.sendEmails([email])
-				}
-				
-				person.save(flush: true)
+            //Construction of the lineBar included in the email with the good size
+            String lineBar = ""
+            message(code:"user.email.content.text2").size().times{lineBar += "-"}
+            if (person.save()) {
+                role.addToPeople(person)
+                if (config.security.useMail) {
+                    flash.message = message(code:"user.email.content.text1") + """
+
+                    ${request.scheme}://${request.serverName}:${request.serverPort}${request.contextPath}
+
+                    ${message(code:"user.email.content.text2")}
+                    ${lineBar}
+                    ${message(code:"user.email")}: ${person.email}"""
+
+                    def email = [
+                            to: [person.email], // 'to' expects a List, NOT a single email address
+                            subject: "[${request.contextPath}] "+ message(code:"user.email.subject"),
+                            text: flash.message // 'text' is the email body
+                            ]
+                    emailerService.sendEmails([email])
+                }
+                person.save(flush: true)
+
 				
 //				def auth = new AuthToken(person.email, params.password)
 //				def authtoken = daoAuthenticationProvider.authenticate(auth)
