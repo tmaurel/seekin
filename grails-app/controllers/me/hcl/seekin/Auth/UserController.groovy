@@ -321,9 +321,10 @@ class UserController {
 	 * User Registration Top page.
 	 */
 	def register = {
+            
 		
-		if(request.method == 'GET') { 		
-		
+		if(request.method == 'GET' || params.fromHome == "1") { 		
+
 			// skip if already logged in
 			if (authenticateService.isLoggedIn()) {
 				redirect uri: '/'
@@ -363,8 +364,7 @@ class UserController {
                         if (!session?.captcha?.isCorrect(params.captcha))
 			{
 				person.password = ''
-				flash.message = "user.code.dismatch"
-				flash.args = [person.id]
+				flash.message = message(code:"user.code.dismatch")
 				flash.defaultMessage = "Access code did not match"
 				render view: 'register', model: [person: person]
 				return
@@ -372,8 +372,7 @@ class UserController {
                      
 			if (params.password != params.repassword) {
 				person.password = ''
-				flash.message = "user.password.dismatch"
-				flash.args = [person.id]
+				flash.message = message(code:"user.password.dismatch")
 				flash.defaultMessage = "The passwords you entered do not match"
 				render view: 'register', model: [person: person]
 				return
