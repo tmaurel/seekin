@@ -1,6 +1,6 @@
 package me.hcl.seekin.Profile
 
-import me.hcl.seekin.Auth.User;
+import me.hcl.seekin.Auth.User
 
 /*
  * Profile class

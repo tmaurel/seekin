@@ -1,7 +1,11 @@
 package me.hcl.seekin.Profile
 
-class Student extends Profile {
+import me.hcl.seekin.Internship.Internship
 
+class Student extends Profile {
+	
+	static hasMany = [ internships : Internship ]
+	
     static constraints = {
     }
 }
