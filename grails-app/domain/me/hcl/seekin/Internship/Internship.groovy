@@ -13,16 +13,20 @@ class Internship {
 	
 	/** Indicate if the Internship is approved by Staff member */
 	Boolean isApproval
-	
+
+    /** Student who is concerned by the internship */
 	Student student
-	
+
+    /** Tutor who is member of the university */
 	Staff academicTutor
-	
+
+    /** Tutor who is member of the company which posts the internship */  
 	External companyTutor
 	
 	/** Report of the Internship */
 	Report report
-	
+
+    /** Convocation for the oral test of the internship */
 	Convocation convocation
 	
 	/** Constraints used to check if an instance is correct */

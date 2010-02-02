@@ -5,6 +5,7 @@ package me.hcl.seekin.Auth
  */
 class Role {
 
+    /** A role can be assigned to many users */ 
 	static hasMany = [people: User]
 
 	/** description */
@@ -12,6 +13,7 @@ class Role {
 	/** ROLE String */
 	String authority
 
+    /** Constraints used to check if an instance is correct */
 	static constraints = {
 		authority(blank: false, unique: true)
 		description()

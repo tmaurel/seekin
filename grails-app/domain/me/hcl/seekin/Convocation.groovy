@@ -2,6 +2,9 @@ package me.hcl.seekin
 
 import me.hcl.seekin.Internship.Internship
 
+/*
+ * Convocation contains information about the oral exam of the internship 
+ */
 class Convocation {
 	
 	/** Convocation date for oral exam */
@@ -12,7 +15,8 @@ class Convocation {
 	
 	/** Room where the oral exam will take place */
 	String room
-	
+
+    /** A convocation is attributed to an internship */
 	Internship internship
 	
 	/** Constraints used to check if an instance is correct */

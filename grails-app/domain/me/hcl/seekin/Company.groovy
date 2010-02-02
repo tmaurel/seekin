@@ -15,7 +15,8 @@ class Company {
 	
 	/** Phone number */
 	String phone
-	
+
+    /** A company may have many employees */
 	static hasMany = [ employees : External ]
 	
 	/** Constraints used to check if an instance is correct */
