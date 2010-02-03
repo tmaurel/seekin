@@ -21,7 +21,7 @@ class BootStrap {
 
 		// Load Fixtures
 		if (GrailsUtil.environment == GrailsApplication.ENV_DEVELOPMENT) {
-			fixtureLoader.load("roles","users")
+			fixtureLoader.load("roles","users","students","staffs","externals","companies")
 		}
 		
      }

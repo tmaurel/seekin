@@ -8,7 +8,7 @@ import me.hcl.seekin.Auth.User
 class Profile {
 	
 	/** User which identified the profile */
-	User user
+	static belongsTo = [ user :  User ]
 	
 	/** First name */
 	String firstName
