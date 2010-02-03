@@ -5,6 +5,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="layout" content="main" />
         <title><g:message code="${domainClass.propertyName}.list" default="${className} List" /></title>
+        <gui:resources components="dataTable"/>
     </head>
     <body>
         <div class="nav">
@@ -16,46 +17,47 @@
             <g:if test="\${flash.message}">
             <div class="message"><g:message code="\${flash.message}" args="\${flash.args}" default="\${flash.defaultMessage}" /></div>
             </g:if>
-            <div class="list">
-                <table>
-                    <thead>
-                        <tr>
+            <div class="yui-skin-sam">
+                <gui:dataTable
+                    id="dt_2"
+                    draggableColumns="true"
+                    columnDefs="[
                         <%  excludedProps = ["version",
-                                             Events.ONLOAD_EVENT,
-                                             Events.BEFORE_INSERT_EVENT,
-                                             Events.BEFORE_UPDATE_EVENT,
-                                             Events.BEFORE_DELETE_EVENT]
-                            props = domainClass.properties.findAll { !excludedProps.contains(it.name) && it.type != Set.class }
-                            Collections.sort(props, comparator.constructors[0].newInstance([domainClass] as Object[]))
-                            props.eachWithIndex { p, i ->
-                   	        if (i < 6) {
-                   	            if (p.isAssociation()) { %>
-                   	    <th><g:message code="${domainClass.propertyName}.${p.name}" default="${p.naturalName}" /></th>
-                   	    <%      } else { %>
-                   	    <g:sortableColumn property="${p.name}" title="${p.naturalName}" titleKey="${domainClass.propertyName}.${p.name}" />
-                        <%  }   }   } %>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    <g:each in="\${${propertyName}List}" status="i" var="${propertyName}">
-                        <tr class="\${(i % 2) == 0 ? 'odd' : 'even'}">
-                        <%  props.eachWithIndex { p, i ->
-                                if (i == 0) { %>
-                            <td><g:link action="show" id="\${${propertyName}.id}">\${fieldValue(bean: ${propertyName}, field: "${p.name}")}</g:link></td>
-                        <%      } else if (i < 6) {
-                                    if (p.type == Boolean.class || p.type == boolean.class) { %>
-                            <td><g:formatBoolean boolean="\${${propertyName}.${p.name}}" /></td>
-                        <%          } else if (p.type == Date.class || p.type == java.sql.Date.class || p.type == java.sql.Time.class || p.type == Calendar.class) { %>
-                            <td><g:formatDate date="\${${propertyName}.${p.name}}" /></td>
-                        <%          } else if (BigDecimal.class.isAssignableFrom(p.type)) { %>
-                            <td><g:formatNumber number="\${${propertyName}.${p.name}}" /></td>
-                        <%          } else { %>
-                            <td>\${fieldValue(bean: ${propertyName}, field: "${p.name}")}</td>
-                        <%  }   }   } %>
-                        </tr>
-                    </g:each>
-                    </tbody>
-                </table>
+                                       Events.ONLOAD_EVENT,
+                                       Events.BEFORE_INSERT_EVENT,
+                                       Events.BEFORE_UPDATE_EVENT,
+                                       Events.BEFORE_DELETE_EVENT]
+                      props = domainClass.properties.findAll { !excludedProps.contains(it.name) && it.type != Set.class }
+                      Collections.sort(props, comparator.constructors[0].newInstance([domainClass] as Object[]))
+                      size = props.size()
+                      props.eachWithIndex
+                      { p, i ->
+                          if (i < 6)
+                          {
+                              if (p.isAssociation())
+                              { %>
+                                  [key:'${domainClass.propertyName}.${p.name}', label:'${p.naturalName}']
+                           <% }
+                              else
+                              { %>
+                                  [key:'${p.name}', label:'${p.naturalName}']
+                           <% }
+                              if(i < size - 1)
+                              { %>
+                                  ,
+                           <% }
+                          }
+                     }  %>
+                    ]"
+                    controller="blabla"
+                    action="blabla"
+                    paginatorConfig="[
+                        template:'{PreviousPageLink} {PageLinks} {NextPageLink} {CurrentPageReport}',
+                        pageReportTemplate:'{totalRecords} total records'
+                    ]"
+                    
+                />
+
             </div>
             <div class="paginateButtons">
                 <g:paginate total="\${${propertyName}Total}" />
