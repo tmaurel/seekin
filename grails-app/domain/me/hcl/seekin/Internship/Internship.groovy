@@ -35,5 +35,9 @@ class Internship {
 		beginAt(nullable: false)
 		isApproval()
 		report(nullable: true)
+        student(nullable: false)
+        academicTutor(nullable: false)
+        companyTutor(nullable: false)
+        convocation(nullable: true)
 	}
 }

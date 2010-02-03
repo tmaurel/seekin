@@ -1,6 +1,7 @@
 package me.hcl.seekin
 
 import grails.test.*
+import me.hcl.seekin.Internship.Internship
 
 class ConvocationTests extends GrailsUnitTestCase {
 	
@@ -25,7 +26,7 @@ class ConvocationTests extends GrailsUnitTestCase {
 		mockForConstraintsTests(Convocation)
 		
 		/** Build a correct instance of Assignment and test that the validation is correct */
-		convocation = new Convocation(date: "2010/09/26", building: "D", room: "A113")
+		convocation = new Convocation(date: "2010/09/26", building: "D", room: "A113", internship: new Internship())
 		assertTrue convocation.validate()
 		
 		/** Testing blank attributes */

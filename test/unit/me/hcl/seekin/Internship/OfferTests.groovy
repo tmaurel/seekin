@@ -45,6 +45,7 @@ class OfferTests extends GrailsUnitTestCase {
 		assertEquals '0 is above range for length', 'range', offer.errors['length']
 		
 		assertEquals 'status is blank.', 'blank', offer.errors['status']
+        assertNull offer.errors['file']
 		
 	}
 }

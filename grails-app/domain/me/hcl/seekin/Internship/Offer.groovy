@@ -29,5 +29,6 @@ class Offer {
 		beginAt(nullable: false)
 		length(range: 1..52)
 		status(blank: false)
+        file(nullable: true)
     }
 }
