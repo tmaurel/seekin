@@ -12,6 +12,7 @@ class External extends Profile {
 	
     static constraints = {
 		company(nullable: true)
+		formerStudent(nullable: true)
 	}
   
 }
