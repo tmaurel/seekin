@@ -17,13 +17,12 @@ class Convocation {
 	String room
 
     /** A convocation is attributed to an internship */
-	Internship internship
+	static belongsTo = [ internship : Internship ]
 	
 	/** Constraints used to check if an instance is correct */
     static constraints = {
 		date(nullable: false)
 		building()
 		room()
-		internship(nullable: false)
 	}
 }

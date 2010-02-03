@@ -13,7 +13,7 @@ class Document {
 	
 	/** Constraints used to check if an instance is correct */
     static constraints = {
-		title(blank: false)
-		uri(blank: false)
+		title(nullable: false, blank: false)
+		uri(nullable: false, blank: false)
     }
 }
