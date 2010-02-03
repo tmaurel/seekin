@@ -36,11 +36,11 @@
                           {
                               if (p.isAssociation())
                               { %>
-                                  [key:'${domainClass.propertyName}.${p.name}', label:'${p.naturalName}']
+                                  [key:'${domainClass.propertyName}.${p.name}', sortable:true, resizeable: true, label:'${p.naturalName}']
                            <% }
                               else
                               { %>
-                                  [key:'${p.name}', label:'${p.naturalName}']
+                                  [key:'${p.name}', sortable:true, resizeable: true, label:'${p.naturalName}']
                            <% }
                               if(i < size - 1)
                               { %>
@@ -49,12 +49,14 @@
                           }
                      }  %>
                     ]"
-                    controller="blabla"
-                    action="blabla"
+                    controller="${domainClass.propertyName}"
+                    action="dataTableDataAsJSON"
                     paginatorConfig="[
                         template:'{PreviousPageLink} {PageLinks} {NextPageLink} {CurrentPageReport}',
                         pageReportTemplate:'{totalRecords} total records'
                     ]"
+                    rowExpansion="true"
+                    rowsPerPage="10"
                     
                 />
 

@@ -1,4 +1,7 @@
-<%=packageName ? "package ${packageName}\n\n" : ""%>class ${className}Controller {
+<%=packageName ? "package ${packageName}\n\n" : ""%>
+
+import grails.converters.JSON
+class ${className}Controller {
 
     def index = { redirect(action: "list", params: params) }
 
@@ -109,5 +112,16 @@
             flash.defaultMessage = "${className} not found with id \${params.id}"
             redirect(action: "list")
         }
+    }
+
+    def dataTableDataAsJSON = {
+        def list = []
+        response.setHeader("Cache-Control", "no-store")
+        def data = [
+                totalRecords: ${className}.count(),
+                results: ${className}.list(params)
+        ]
+        println data.results
+        render data as JSON
     }
 }
