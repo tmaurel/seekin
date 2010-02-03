@@ -1,6 +1,7 @@
 package me.hcl.seekin
 
 import me.hcl.seekin.Profile.External
+import me.hcl.seekin.Util.Address
 
 /*
  * Company identifies a company and groups contact information
@@ -11,7 +12,7 @@ class Company {
 	String name
 	
 	/** Address */
-	String address
+	Address address
 	
 	/** Phone number */
 	String phone

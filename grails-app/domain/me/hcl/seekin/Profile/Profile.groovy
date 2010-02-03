@@ -17,7 +17,7 @@ class Profile {
 	String lastName
 	
 	/** Address */
-	String address
+	Address address
 	
 	/** Phone number */
 	String phone
@@ -26,7 +26,7 @@ class Profile {
     static constraints = {
 		firstName(blank: false)
 		lastName(blank: false)
-		address(blank: false)
+		address(nullable: false)
 		phone(size: 10..10)
     }
 }

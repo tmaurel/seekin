@@ -2,6 +2,7 @@ package me.hcl.seekin.Profile
 
 import grails.test.*
 import me.hcl.seekin.Auth.User
+import me.hcl.seekin.Util.Address
 
 /**
  * ProfileTests class
@@ -29,21 +30,20 @@ class ProfileTests extends GrailsUnitTestCase {
 		mockForConstraintsTests(Profile)
 
 		/** Build a correct instance of Profile and test that the validation is correct */
-		profile = new Profile(user: new User(), firstName: "Mohammed", lastName: "Ben Boukeffa", address: "bled", phone: "0612345678")
+		profile = new Profile(user: new User(), firstName: "Mohammed", lastName: "Ben Boukeffa", address: new Address(), phone: "0612345678")
 
 		assertTrue profile.validate()
 		
 		/** Build an instance of Profile with a bad phone number format and test that the validation is false */
-		profile = new Profile(firstName: "Mohammed", lastName: "Ben Boukeffa", address: "bled", phone: "061234567")
+		profile = new Profile(firstName: "Mohammed", lastName: "Ben Boukeffa", address: new Address(), phone: "061234567")
 		
 		assertFalse profile.validate()
 
 		/** Testing blank attributes */
-		profile = new Profile(firstName: "", lastName: "", address: "")
+		profile = new Profile(firstName: "", lastName: "", address: new Address())
 		assertFalse profile.validate()
 		
 		assertEquals 'firstName is blank.', 'blank', profile.errors['firstName']
 		assertEquals 'lastName is blank.', 'blank', profile.errors['lastName']
-		assertEquals 'address is blank.', 'blank', profile.errors['address']
 	}
 }

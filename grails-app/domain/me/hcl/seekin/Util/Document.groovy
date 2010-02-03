@@ -1,5 +1,8 @@
 package me.hcl.seekin.Util
 
+/*
+ * Document which is identified by a title and have an uri
+ */
 class Document {
 	
 	/** Title of the document */
