@@ -1,6 +1,7 @@
 package me.hcl.seekin
 
 import grails.test.*
+import me.hcl.seekin.Util.Address
 
 /**
  * CompanyTests class
@@ -24,18 +25,16 @@ class CompanyTests extends GrailsUnitTestCase {
 		mockForConstraintsTests(Company)
 		
 		/** Build a correct instance of Company and test that the validation is correct */
-		company = new Company(name: "Mohammed", address: "bled", phone: "0612345678")
+		company = new Company(name: "Mohammed", address: new Address(), phone: "0612345678")
 		assertTrue company.validate()
 
 		/** Build an instance of Company with a bad phone number format and test that the validation is false */
-		company = new Company(name: "Mohammed", address: "bled", phone: "061234567")
+		company = new Company(name: "Mohammed", address: new Address(), phone: "061234567")
 		assertFalse company.validate()
 		
 		/** Testing blank attributes */
-		company = new Company(name: "", address: "")
+		company = new Company(name: "", address: new Address())
 		assertFalse company.validate()
 		assertEquals 'name is blank.', 'blank', company.errors['name']
-		assertEquals 'address is blank.', 'blank', company.errors['address']
-
     }
 }
