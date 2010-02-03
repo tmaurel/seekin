@@ -39,8 +39,14 @@ class UserController {
 	def emailerService
 	
 	def jcaptchaService
-	
+
+
+	/**
+	 * Default closure
+	 */
 	def index = {
+
+                // If the user isnt logged in, redirect to auth closure
 		if (!isLoggedIn()) {
 			redirect action: auth, params: params
 		}
@@ -50,24 +56,34 @@ class UserController {
 		}
 	}
 
+	/**
+	 * List all Users
+	 */
 	def list = {
 		params.max = Math.min(params.max ? params.max.toInteger() : 10,  100)
 		[personList: User.list(params), personTotal: User.count()]
 	}
 
+	/**
+	 * Show user details
+	 */
 	def show = {
+                // get the user using the url id
 		def person = User.get(params.id)
+                // if the user doesnt exit, show error message
 		if (!person) {
 			flash.message = "user.not.found"
 			flash.args = [params.id]
-			flash.defaultMessage = "User not found with id ${params.id}"
+                        // redirect to the list of users
 			redirect(action: "list")
 			return
 		}
+                // get all roles associated to the user
 		List roleNames = []
 		for (role in person.authorities) {
 			roleNames << role.authority
 		}
+                // sort user roles
 		roleNames.sort { n1, n2 ->
 			n1 <=> n2
 		}
@@ -248,26 +264,22 @@ class UserController {
 		}
 	}
 	
-	/**
-	 * Login page for users with a remember-me cookie but accessing a IS_AUTHENTICATED_FULLY page.
-	 */
-	def full = {
-		render view: 'auth', params: params,
-		model: [hasCookie: authenticationTrustResolver.isRememberMe(SCH.context?.authentication)]
-	}
 	
 	/**
-	 * login failed
+	 * Login failed
 	 */
 	def authFail = {
-		
+
+                // Get the username
 		def username = session[AuthenticationProcessingFilter.SPRING_SECURITY_LAST_USERNAME_KEY]
 		def msg = ''
+                // Get the reason why auth failed
 		def exception = session[AbstractProcessingFilter.SPRING_SECURITY_LAST_EXCEPTION_KEY]
 		if (exception) {
+                        // If the user has been disabled
 			if (exception instanceof DisabledException) {
 				msg = message(code:"user.login.validation.disabled", args:["${username}"])
-			}
+			} // If the login or password is wrong
 			else {
 				msg = message(code:"user.login.validation.invalid", args:["${username}"])
 			}
@@ -284,7 +296,9 @@ class UserController {
 		return authenticateService.isLoggedIn()
 	}
 	
-	/** cache controls */
+	/**
+         * Make sure the is no cache for the response
+         */
 	private void noCache(response) {
 		response.setHeader('Cache-Control', 'no-cache') // HTTP 1.1
 		response.addDateHeader('Expires', 0)
@@ -302,6 +316,8 @@ class UserController {
 	 * Captcha generation
 	 */
         def generateCaptcha = {
+            // Generate a captcha of 200px X 50px with gimp, noise and border
+            // And add the associated text to the current user session
             def captcha = new Captcha.Builder(200, 50)
                 .addText()
                 .gimp()
@@ -309,6 +325,7 @@ class UserController {
                 .addBorder()
                 .build()
             session.captcha = captcha
+            // Write the captcha
             CaptchaServletUtil.writeImage(response, captcha.image)
         }
 
@@ -355,7 +372,7 @@ class UserController {
                     person.profile.firstName = params.firstName
                     person.profile.lastName = params.lastName
                 
-
+                    // If u got to this form by a link or from homepage form
                     if(request.method == 'GET' || params.fromHome == "1")
                     {
                         return ret
@@ -366,7 +383,7 @@ class UserController {
                         def config = authenticateService.securityConfig
                         def defaultRole = config.security.defaultRole
 
-
+                        // Add all form data to the user profile
                         person.profile.firstName = params.firstName
                         person.profile.lastName = params.lastName
                         person.profile.address = new Address()
@@ -376,24 +393,23 @@ class UserController {
                         person.profile.phone = params.phone
                         person.profile.visible = params.visible
 
-                        println params
-
+                        // retrieve default role
                         def role = Role.findByAuthority(defaultRole)
                         if (!role)
                         {
                                 flash.message = "user.default.role.not.found"
                         }
-
+                        // check if the entered code matches the captcha image
                         if (!session?.captcha?.isCorrect(params.captcha))
                         {
                                 flash.message = message(code:"user.code.dismatch")
                         }
-
+                        // check if the password matches the repassword
                         if (params.password != params.repassword)
                         {
                                 flash.message = message(code:"user.password.dismatch")
                         }
-
+                        // encode the password for the insertion in database
                         def pass = authenticateService.encodePassword(params.password)
                         person.password = pass
                         person.enabled = false
@@ -403,11 +419,13 @@ class UserController {
                         String lineBar = ""
                         message(code:"user.email.content.text2").size().times{lineBar += "-"}
 
+                        // If everything went well
                         if (person.validate() && flash.message == null)
                         {
-
+                            // Check if the company as been specified
                             if(params.company != null)
                             {
+                                // If the company already exists in database
                                 def comp = Company.findByName(params.company)
                                 if(comp.size() == 1)
                                 {
@@ -416,9 +434,10 @@ class UserController {
 
                             }
 
-
+                            // Add default role to the user
                             role.addToPeople(person)
 
+                            // If we use confirmation mail
                             if (config.security.useMail)
                             {
                                 flash.message = message(code:"user.email.content.text1") + """

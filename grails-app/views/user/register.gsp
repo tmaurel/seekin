@@ -14,8 +14,8 @@
                                         <div class="flash_message">${flash.message}</div>
                                     </g:if>
                                     <g:hasErrors bean="${person}">
-                                        <div class="errors">
-                                                <g:renderErrors bean="${person}" as="list" />
+                                        <div class="flash_message">
+                                                <g:renderErrors bean="${person}" />
                                         </div>
                                     </g:hasErrors>
                                     <p>
