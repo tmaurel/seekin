@@ -1,11 +1,11 @@
 
 <%@ page import="me.hcl.seekin.Internship.Internship" %>
-<gui:resources components="dataTable"/>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="layout" content="main" />
         <title><g:message code="internship.list" default="Internship List" /></title>
+        <gui:resources components="dataTable"/>
     </head>
     <body>
         <div class="nav">
@@ -17,37 +17,48 @@
             <g:if test="${flash.message}">
             <div class="message"><g:message code="${flash.message}" args="${flash.args}" default="${flash.defaultMessage}" /></div>
             </g:if>
-            <div class="list">
-                        <tr>
+            <div class="yui-skin-sam">
+                <gui:dataTable
+                    id="dt_2"
+                    draggableColumns="true"
+                    columnDefs="[
                         
-                   	    <g:sortableColumn property="id" title="Id" titleKey="internship.id" />
-                        
-                   	    <g:sortableColumn property="subject" title="Subject" titleKey="internship.subject" />
-                        
-                   	    <g:sortableColumn property="beginAt" title="Begin At" titleKey="internship.beginAt" />
-                        
-                   	    <g:sortableColumn property="isApproval" title="Is Approval" titleKey="internship.isApproval" />
-                        
-                   	    <th><g:message code="internship.report" default="Report" /></th>
-                   	    
-                   	    <th><g:message code="internship.student" default="Student" /></th>
-                   	    
-                        </tr>
-                   <gui:dataTable
-                        id="dt_2"
-                        draggableColumns="true"
-                        columnDefs="[
-                            [key:'[id, subject, beginAt, isApproval, report, student, academicTutor, companyTutor, convocation]', sortable:true, resizeable: true, label:'ID' ]
-                        ]"
+                                  [key:'id', sortable:true, resizeable: true, label:'Id']
+                           
+                                  ,
+                           
+                                  [key:'subject', sortable:true, resizeable: true, label:'Subject']
+                           
+                                  ,
+                           
+                                  [key:'beginAt', sortable:true, resizeable: true, label:'Begin At']
+                           
+                                  ,
+                           
+                                  [key:'isApproval', sortable:true, resizeable: true, label:'Is Approval']
+                           
+                                  ,
+                           
+                                  [key:'internship.report', sortable:true, resizeable: true, label:'Report']
+                           
+                                  ,
+                           
+                                  [key:'internship.student', sortable:true, resizeable: true, label:'Student']
+                           
+                                  ,
+                           
+                    ]"
+                    controller="internship"
+                    action="dataTableDataAsJSON"
+                    paginatorConfig="[
+                        template:'{PreviousPageLink} {PageLinks} {NextPageLink} {CurrentPageReport}',
+                        pageReportTemplate:'{totalRecords} total records'
+                    ]"
+                    rowExpansion="true"
+                    rowsPerPage="10"
+                    
+                />
 
-                        paginatorConfig="[
-                            template:'{PreviousPageLink} {PageLinks} {NextPageLink} {CurrentPageReport}',
-                        ]"
-                        controller="internship" action="dataTableDataAsJSON"
-                        resultsList="results"
-                        rowExpansion="true"
-                        rowsPerPage="3"
-                    />
             </div>
             <div class="paginateButtons">
                 <g:paginate total="${internshipInstanceTotal}" />
