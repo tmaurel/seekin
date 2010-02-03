@@ -148,7 +148,7 @@ style = {
 		'height':'36px',
 		'left': '0px',
 		'bottom': '-1px',
-		'z-index':'1000000'
+		'z-index':'100000'
 	)
 
 	'#bar #bar_cont' (
@@ -253,8 +253,18 @@ style = {
 		'background-position': 'bottom right',
 		'background-repeat':'repeat-y'
 	)
+
+        '.yui-skin-sam .yui-ac' (
+                'margin':'0px',
+                'padding':'0px',
+                'clear':'none',
+                'width':'38%',
+		'margin-right':'5%',
+		'height':'16px',
+		'float':'right',
+        )
 	
-	'.boxed_form p input[type=\'text\'], .boxed_form p input[type=\'password\'], .boxed_form p input[type=\'checkbox\'], .boxed_form p select, .boxed_form p textarea ' (
+	'.boxed_form input[type=\'text\'], .boxed_form input[type=\'password\'], .boxed_form input[type=\'checkbox\'], .boxed_form select, .boxed_form textarea' (
 		'width':'38%',
 		'margin-right':'5%',
 		'height':'16px',
@@ -262,7 +272,20 @@ style = {
 		'border':'1px solid #808080'
 	)
 
-	'.boxed_form p input[type=\'checkbox\']' (
+	'.boxed_form img' (
+                'float':'right',
+                'margin-top':'10px',
+                'margin-bottom':'10px',
+                'margin-right':'5%',
+                'width':'200px',
+		'height':'50px'
+	)
+
+        ' .boxed_form select' (
+                'height':'20px'
+        )
+
+	'.boxed_form input[type=\'checkbox\']' (
 		'border':'0px none #000'
 	)
 
@@ -270,7 +293,7 @@ style = {
 		'text-align':'center'
 	)
 	
-	'.boxed_form p' (
+	'.boxed_form p, .boxed_form div' (
 		'clear':'both',
 		'min-height':'20px',
 		'padding':'4px'
@@ -290,9 +313,14 @@ style = {
 		'width':'70%',
 	)
 
-	'#news_box' (
+    	'#profile_form' (
 		'float':'left',
-		'width':'100%',
+		'width':'70%',
+	)
+
+	'#captcha_form' (
+		'float':'right',
+		'width':'28%',
 	)
 
 	'.yui-skin-sam' (
@@ -304,5 +332,24 @@ style = {
 		'margin-top':'-48px',
 		'margin-bottom':'50px'
 	)
+
+        '.yui-skin-sam .yui-cms-accordion .yui-cms-item.selected .bd' (
+                'overflow':'visible'
+        )
+
+        '.yui-skin-sam .yui-ac input' (
+                'width':'100%'
+        )
+
+        '.yui-skin-sam .yui-ac-container' (
+                'min-height':'1px'
+        )
+
+        '.yui-skin-sam .yui-ac-content' (
+               	'position':'relative',
+                'width':'90%',
+                'margin-top':'-5px'
+        )
+
 
 }

@@ -3,10 +3,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
         <title>seekin' - <g:layoutTitle /></title>
+        <g:layoutHead />
         <link rel="stylesheet" href="${resource(dir:'css',file:'layout.css')}" type="text/css" />
         <link rel="shortcut icon" href="${resource(dir:'images',file:'favicon.ico')}" type="image/x-icon" />
         <g:javascript library="application" />	
-        <g:layoutHead />
         <nav:resources/>	
     </head>
     <body>

@@ -2,6 +2,10 @@ package me.hcl.seekin.Auth
 
 import me.hcl.seekin.Auth.User
 import me.hcl.seekin.Auth.Role
+import me.hcl.seekin.Profile.*
+import me.hcl.seekin.Formation
+import me.hcl.seekin.Util.Address
+
 import org.springframework.security.providers.UsernamePasswordAuthenticationToken as AuthToken
 
 import org.codehaus.groovy.grails.plugins.springsecurity.RedirectUtils
@@ -42,8 +46,7 @@ class UserController {
 		}
 		else
 		{
-			render "olol"
-			// TODO
+			// TODO : Accueil Logged User
 		}
 	}
 
@@ -314,97 +317,139 @@ class UserController {
 	 * User Registration Top page.
 	 */
 	def register = {
-            
-		
-		if(request.method == 'GET' || params.fromHome == "1") { 		
 
-			// skip if already logged in
-			if (authenticateService.isLoggedIn()) {
-				redirect uri: '/'
-				return
-			}
-			
-			if (session.id) {
-				def person = new User()
-				person.properties = params
-				return [person: person]
-			}
-		}
-		else if(request.method == 'POST') {
-			
-			// skip if already logged in
-			if (authenticateService.isLoggedIn()) {
-				redirect uri: '/'
-				return
-			}
-			
-			def person = new User()
-			person.properties = params
-			
-			def config = authenticateService.securityConfig
-			def defaultRole = config.security.defaultRole
-			
-			def role = Role.findByAuthority(defaultRole)
-			if (!role) {
-				person.password = ''
-				flash.message = "user.default.role.not.found"
-				flash.args = [person.id]
-				render view: 'register', model: [person: person]
-				return
-			}
+                def person = new User()
+                def ret
+
+
+                // skip if already logged in
+                if (authenticateService.isLoggedIn()) {
+                        redirect uri: '/'
+                        return
+                }
+
+                if (session.id)
+                {
+                    person.email = params.email
+                    person.password = params.password
+
+                    // If User selected "Student"
+                    if(params.usertype == "1")
+                    {
+                        person.profile = new Student()
+                        ret = [person: person, profile: person.profile, usertype: params.usertype, formations:Formation.list()]
+                    } // If User selected "Staff"
+                    else if(params.usertype == "2")
+                    {
+                        person.profile = new Staff()
+                        ret = [person: person, profile: person.profile, usertype: params.usertype]
+                    } // If User selected "Other"
+                    else if(params.usertype == "3")
+                    {
+                        person.profile = new External()
+                        person.profile.formerStudent = params.formerStudent
+                        ret = [person: person, profile: person.profile, usertype: params.usertype, company: params.company]
+                    }
+                    else return;
+
+                    person.profile.firstName = params.firstName
+                    person.profile.lastName = params.lastName
+                
+
+                    if(request.method == 'GET' || params.fromHome == "1")
+                    {
+                        return ret
+                    }
+                    else if(request.method == 'POST')
+                    {
+
+                        def config = authenticateService.securityConfig
+                        def defaultRole = config.security.defaultRole
+
+
+                        person.profile.firstName = params.firstName
+                        person.profile.lastName = params.lastName
+                        person.profile.address = new Address()
+                        person.profile.address.street = params.street
+                        person.profile.address.town = params.town
+                        person.profile.address.zipCode = params.zipCode
+                        person.profile.phone = params.phone
+                        person.profile.visible = params.visible
+
+                        println params
+
+                        def role = Role.findByAuthority(defaultRole)
+                        if (!role)
+                        {
+                                flash.message = "user.default.role.not.found"
+                        }
 
                         if (!session?.captcha?.isCorrect(params.captcha))
-			{
-				person.password = ''
-				flash.message = message(code:"user.code.dismatch")
-				render view: 'register', model: [person: person]
-				return
-			}
-                     
-			if (params.password != params.repassword) {
-				person.password = ''
-				flash.message = message(code:"user.password.dismatch")
-				render view: 'register', model: [person: person]
-				return
-			}
-			
-			def pass = authenticateService.encodePassword(params.password)
-			person.password = pass
-			person.enabled = false
-			person.showEmail = false
-            //Construction of the lineBar included in the email with the good size
-            String lineBar = ""
-            message(code:"user.email.content.text2").size().times{lineBar += "-"}
-            if (person.save()) {
-                role.addToPeople(person)
-                if (config.security.useMail) {
-                    flash.message = message(code:"user.email.content.text1") + """
+                        {
+                                flash.message = message(code:"user.code.dismatch")
+                        }
 
-                    ${request.scheme}://${request.serverName}:${request.serverPort}${request.contextPath}
+                        if (params.password != params.repassword)
+                        {
+                                flash.message = message(code:"user.password.dismatch")
+                        }
 
-                    ${message(code:"user.email.content.text2")}
-                    ${lineBar}
-                    ${message(code:"user.email")}: ${person.email}"""
+                        def pass = authenticateService.encodePassword(params.password)
+                        person.password = pass
+                        person.enabled = false
+                        person.showEmail = false
 
-                    def email = [
-                            to: [person.email], // 'to' expects a List, NOT a single email address
-                            subject: "[${request.contextPath}] "+ message(code:"user.email.subject"),
-                            text: flash.message // 'text' is the email body
-                            ]
-                    emailerService.sendEmails([email])
-                }
-                person.save(flush: true)
+                        //Construction of the lineBar included in the email with the good size
+                        String lineBar = ""
+                        message(code:"user.email.content.text2").size().times{lineBar += "-"}
 
-				
-//				def auth = new AuthToken(person.email, params.password)
-//				def authtoken = daoAuthenticationProvider.authenticate(auth)
-//				SCH.context.authentication = authtoken
-				redirect uri: '/'
-			}
-			else {
-				person.password = ''
-				render view: 'register', model: [person: person]
-			}
-		}
+                        if (person.validate() && flash.message == null)
+                        {
+
+                            if(params.company != null)
+                            {
+                                def comp = Company.findByName(params.company)
+                                if(comp.size() == 1)
+                                {
+                                    // TODO : Link to Company or Create it
+                                }
+
+                            }
+
+
+                            role.addToPeople(person)
+
+                            if (config.security.useMail)
+                            {
+                                flash.message = message(code:"user.email.content.text1") + """
+
+                                ${request.scheme}://${request.serverName}:${request.serverPort}${request.contextPath}
+
+                                ${message(code:"user.email.content.text2")}
+                                ${lineBar}
+                                ${message(code:"user.email")}: ${person.email}"""
+
+                                def email = [
+                                        to: [person.email], // 'to' expects a List, NOT a single email address
+                                        subject: "[${request.contextPath}] "+ message(code:"user.email.subject"),
+                                        text: flash.message // 'text' is the email body
+                                        ]
+                                emailerService.sendEmails([email])
+                            }
+                            person.save(flush: true)
+
+
+//                          def auth = new AuthToken(person.email, params.password)
+//                          def authtoken = daoAuthenticationProvider.authenticate(auth)
+//                          SCH.context.authentication = authtoken
+                            redirect uri: '/'
+                        }
+                        else
+                        {
+                                person.password = ''
+                                return ret
+                        }
+                    }
+               }
 	}
 }

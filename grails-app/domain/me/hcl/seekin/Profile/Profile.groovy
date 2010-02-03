@@ -22,6 +22,9 @@ class Profile {
 	
 	/** Phone number */
 	String phone
+
+        /** Visible ? **/
+        Boolean visible
 	
 	/** Constraints used to check if an instance is correct */
     static constraints = {
@@ -29,5 +32,6 @@ class Profile {
 		lastName(blank: false)
 		address(nullable: false)
 		phone(size: 10..10)
+                visible(nullable: true)
     }
 }

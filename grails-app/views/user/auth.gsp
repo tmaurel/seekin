@@ -9,14 +9,22 @@
 		<gui:expandablePanel title="${message(code:'register.form.title')}" expanded="true" bounce="false">
 			<g:form name="registerForm" url="[action:'register',controller:'user']" class="boxed_form">	
 				<p>
-					<label for="username"><g:message code="register.form.enteryourmail" /></label>
+					<label for="email"><g:message code="register.form.enteryourmail" /></label>
 					<g:textField name="email" />
+				</p>
+                                <p>
+					<label for="firstName"><g:message code="profile.firstName" /></label>
+					<g:textField name="firstName" />
+				</p>
+                                <p>
+					<label for="lastName"><g:message code="profile.lastName" /></label>
+					<g:textField name="lastName" />
 				</p>
 				<p class="centered_para">
 					<g:message code="register.form.type" />
 				</p>
 				<p class="centered_para">
-					<g:radioGroup name="lovesGrails" labels="['register.type.student', 'register.type.staff', 'register.type.external']" values="[1,2,3]" value="1">
+					<g:radioGroup name="usertype" labels="['register.type.student', 'register.type.staff', 'register.type.external']" values="[1,2,3]" value="1">
 						${it.radio} <g:message code="${it.label}" />
 					</g:radioGroup>
 				</p>
@@ -30,9 +38,9 @@
 	<div id="login_form" class="yui-skin-sam">	
 		<gui:expandablePanel title="${message(code:'login.form.title')}" expanded="true" bounce="false">
 			<form name="loginForm" id="loginForm" method="post" action="${postUrl}" class="boxed_form">		
-				<p class='flash_message'>
-					<g:if test='${flash.message}'>${flash.message}</g:if>
-				</p>
+				<g:if test="${flash.message}">
+                                        <div class="flash_message">${flash.message}</div>
+                                    </g:if>
 				<p>
 					<label for='j_username'><g:message code="login.label.username" /></label>
 					<g:textField  name='j_username' value='${request.remoteUser}' />
