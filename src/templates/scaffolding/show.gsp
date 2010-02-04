@@ -12,7 +12,7 @@
         <h2><g:message code="${domainClass.propertyName}.show" /></h2>
         <g:form class="boxed_form" name="crud_panel">
             <g:if test="\${flash.message}">
-            <div class="message"><g:message code="\${flash.message}" args="\${flash.args}" default="\${flash.defaultMessage}" /></div>
+            <div class="flash_message"><g:message code="\${flash.message}" args="\${flash.args}" default="\${flash.defaultMessage}" /></div>
             </g:if>
             <g:hiddenField name="id" value="\${${propertyName}?.id}" />
                     <%  excludedProps = ["version",
@@ -25,6 +25,7 @@
                         props.each { p -> %>
                        <p>
                             <label><g:message code="${domainClass.propertyName}.${p.name}" default="${p.naturalName}" /></label>
+                            <span class="field_value">
                             <%  if (p.isEnum()) { %>
                             \${${propertyName}?.${p.name}?.encodeAsHTML()}
                             <%  } else if (p.oneToMany || p.manyToMany) { %>
@@ -44,7 +45,7 @@
                             <%  } else { %>
                             \${fieldValue(bean: ${propertyName}, field: "${p.name}")}
                             <%  } %>
-
+                            </span>
                         <%  } %>
                       </p>
                       <div class="submit yui-skin-sam">

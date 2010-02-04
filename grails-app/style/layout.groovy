@@ -307,6 +307,14 @@ style = {
 	'.centered_para' (
 		'text-align':'center'
 	)
+
+        '.field_value' (
+ 		'width':'50%',
+		'height':'18px',
+                'padding-left':'4px',
+		'float':'left',
+		'border':'1px solid #808080'
+        )
 	
 	'#login_form' (
 		'width':'28%',
@@ -363,5 +371,36 @@ style = {
             'margin-right':'auto',
             'width': '600px'
         )
+
+        '#create a' (
+            'background':'url(../images/icons/plus.png) 5% 30% no-repeat',
+            'padding-left':'2.25em'
+        )
+
+        '#list a' (
+            'background':'url(../images/icons/back.png) 5% 40% no-repeat',
+            'padding-left':'2.25em'
+        )
+
+        '#save button' (
+            'background':'url(../images/icons/save.png) 10% 40% no-repeat',
+            'padding-left':'2.25em'
+        )
+
+        '#edit button' (
+            'background':'url(../images/icons/edit.png) 10% 40% no-repeat',
+            'padding-left':'2.25em'
+        )
+
+        '#delete button' (
+            'background':'url(../images/icons/minus.png) 6% 40% no-repeat',
+            'padding-left':'2.25em'
+        )
+
+        '#update button' (
+            'background':'url(../images/icons/refresh.png) 6% 40% no-repeat',
+            'padding-left':'2.25em'
+        )
+
 
 }
