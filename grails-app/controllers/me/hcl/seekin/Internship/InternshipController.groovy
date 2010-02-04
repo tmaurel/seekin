@@ -117,13 +117,29 @@ class InternshipController {
     }
 
     def dataTableDataAsJSON = {
-        def list = []
+        def list = Internship.list(params)
+        def ret = []
         response.setHeader("Cache-Control", "no-store")
+
+        list.each {
+            ret << [
+               id:it.id,
+   subject:it.subject,
+   beginAt:it.beginAt?.toString(),
+   isApproval:it.isApproval,
+   report:[name:it.report?.id, link:g.createLink(controller: 'report', action: 'show', id:it.report?.id)],
+   student:[name:it.student?.id, link:g.createLink(controller: 'student', action: 'show', id:it.student?.id)],
+
+                urlID: it.id
+            ]
+        }
+
         def data = [
                 totalRecords: Internship.count(),
-                results: Internship.list(params)
+                results: ret
         ]
-        println data.results
+       
         render data as JSON
     }
+
 }

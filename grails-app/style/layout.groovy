@@ -12,7 +12,7 @@ style = {
 	)
 
 	'a img' (
-		'border':'1px solid #000'
+		'border':'0px none #000'
 	) 
 	
 	'#header' (
@@ -242,9 +242,11 @@ style = {
 	)
 	
 	'.boxed_form label' (
-		'width':'44%',
+		'width':'30%',
+                'min-width':'90px',
 		'margin-left':'5%',
 		'padding-right':'5%',
+                'margin-right':'5px',
 		'height':'20px',
 		'line-height':'20px',
 		'float':'left',
@@ -264,11 +266,10 @@ style = {
 		'float':'right',
         )
 	
-	'.boxed_form input[type=\'text\'], .boxed_form input[type=\'password\'], .boxed_form input[type=\'checkbox\'], .boxed_form select, .boxed_form textarea' (
-		'width':'38%',
-		'margin-right':'5%',
+	'.boxed_form input[type=\'text\'], .boxed_form input[type=\'password\'], .boxed_form input[type=\'checkbox\'], .boxed_form textarea' (
+		'width':'50%',		
 		'height':'16px',
-		'float':'right',
+		'float':'left',
 		'border':'1px solid #808080'
 	)
 
@@ -282,14 +283,18 @@ style = {
 	)
 
         ' .boxed_form select' (
-                'height':'20px'
+                'height':'20px',
+                'margin':'1px',
+                'max-width':'42%',
+		'float':'left',
+		'border':'1px solid #808080'
         )
 
 	'.boxed_form input[type=\'checkbox\']' (
 		'border':'0px none #000'
 	)
 
-	'.boxed_form p[class=\'submit\']' (
+	'.boxed_form .submit' (
 		'text-align':'center'
 	)
 	
@@ -351,5 +356,12 @@ style = {
                 'margin-top':'-5px'
         )
 
+        '#crud_panel' (
+            'margin-top':'20px',
+            'padding':'10px',
+            'margin-left':'auto',
+            'margin-right':'auto',
+            'width': '600px'
+        )
 
 }

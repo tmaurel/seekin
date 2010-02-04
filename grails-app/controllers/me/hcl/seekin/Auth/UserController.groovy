@@ -429,6 +429,8 @@ class UserController {
                                 def comp = Company.findByName(params.company)
                                 if(comp.size() == 1)
                                 {
+
+                                    println comp
                                     // TODO : Link to Company or Create it
                                 }
 
