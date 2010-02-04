@@ -44,7 +44,7 @@
                         template:'{PreviousPageLink} {PageLinks} {NextPageLink} {CurrentPageReport}',
                         pageReportTemplate:'{totalRecords} total records'
                     ]"
-                    rowExpansion="true"
+                    rowClickNavigation="true"
                     rowsPerPage="10"
                     
                 />

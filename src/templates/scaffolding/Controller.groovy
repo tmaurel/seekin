@@ -124,4 +124,5 @@ class ${className}Controller {
         println data.results
         render data as JSON
     }
+
 }

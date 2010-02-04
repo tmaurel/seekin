@@ -118,12 +118,68 @@ class AddressController {
 
     def dataTableDataAsJSON = {
         def list = []
+        //def list2 = []
+        def listCorrectProperties = []
+        def demoList = Address.list(params)
         response.setHeader("Cache-Control", "no-store")
+        def listName = new Address().metaClass.properties*.name
+        def listType = new Address().metaClass.properties*.type
+        def i = 0
+        listName.each {
+          if(listType[i].toString() != "class java.lang.Object" && listType[i].toString() != "interface org.springframework.validation.Errors" && listType[i].toString() != "interface groovy.lang.MetaClass" && listName[i].toString() != "class" && listName[i].toString() != "version") {
+            listCorrectProperties.add listName[i]
+          }
+          ++i
+        }
+        println listCorrectProperties
+
+        /*demoList.each {
+                list << [
+                        id: it.id,
+                        street: it.street,
+                        zipCode: it.zipCode,
+                        town: it.town,
+                        dataUrl: g.createLink(action:'show', id:"${it.id}")
+                ]
+            }
+        println list*/
+
+        demoList.each {
+                def hashMap = [:]
+                listCorrectProperties.each {it2 ->
+                  hashMap.put(it2, it."${it2}")
+                }
+                hashMap.put("dataUrl", g.createLink(action:'show', id:"${it.id}"))
+                list.add hashMap
+            }
+        println list
+
         def data = [
                 totalRecords: Address.count(),
-                results: Address.list(params)
+                results: list
         ]
         println data.results
         render data as JSON
     }
+
+    /*def dataTableDataAsJSON2 = {
+          def list = []
+          def list2 = []
+          def demoList = ${className}.list(params)
+          response.setHeader("Cache-Control", "no-store")
+
+          demoList.each {
+            def listTmp = new ${className}.metaClass.properties*.name
+            def hashMap = [:]
+            println listTmp
+          }
+
+          def data = [
+                  totalRecords: Address.count(),
+                  results: list
+          ]
+          println data.results
+          render data as JSON
+      }*/
+
 }
