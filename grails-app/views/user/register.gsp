@@ -64,12 +64,12 @@
                                             <g:textField name="street" value="${profile?.address?.street?.encodeAsHTML()}" />
                                     </p>
                                     <p>
-                                            <label for="town"><g:message code="address.city" /></label>
-                                            <g:textField name="town" value="${profile?.address?.town?.encodeAsHTML()}" />
-                                    </p>
-                                    <p>
                                             <label for="zipCode"><g:message code="address.zipcode" /></label>
                                             <g:textField name="zipCode" value="${profile?.address?.zipCode?.encodeAsHTML()}" />
+                                    </p>
+                                    <p>
+                                            <label for="town"><g:message code="address.city" /></label>
+                                            <g:textField name="town" value="${profile?.address?.town?.encodeAsHTML()}" />
                                     </p>
                                     <p>
                                             <label for="phone"><g:message code="profile.phone" /></label>
