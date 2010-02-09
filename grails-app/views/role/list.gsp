@@ -1,49 +1,51 @@
-<head>
-	<meta name="layout" content="main" />
-	<title>Role List</title>
-</head>
 
-<body>
+<%@ page import="me.hcl.seekin.Auth.Role" %>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta name="layout" content="main" />
+        <title><g:message code="role.list" /></title>
+        <gui:resources components="dataTable"/>
+        <g:javascript src="datatable.js" />
+        <g:YUIButtonRessource />
+    </head>
+    <body>
+      <h2><g:message code="role.list" /></h2>
+      <g:if test="${flash.message}">
+      <div class="flash_message"><g:message code="${flash.message}" args="${flash.args}" default="${flash.defaultMessage}" /></div>
+      </g:if>
+      <div class="yui-skin-sam" id="crud_panel">
+          <g:buildListButtons />
+          
+                        <g:set var="idInternationalized" value="${message(code:'role.id')}" />
+                 
+                        <g:set var="authorityInternationalized" value="${message(code:'role.authority')}" />
+                 
+                        <g:set var="descriptionInternationalized" value="${message(code:'role.description')}" />
+                 
+          <gui:dataTable
+              id="dt_2"
+              draggableColumns="true"
+              columnDefs="[
+                  
+                            [key: 'id', sortable: true, resizeable: true, label: idInternationalized],
+                     
+                            [key: 'authority', sortable: true, resizeable: true, label: authorityInternationalized],
+                     
+                            [key: 'description', sortable: true, resizeable: true, label: descriptionInternationalized],
+                     
+                  [key: 'urlID', sortable: false, resizeable: false, label:'Actions', formatter: 'adminPanelFormatter']
+              ]"
+              controller="role"
+              action="dataTableDataAsJSON"
+              paginatorConfig="[
+                  template:'{PreviousPageLink} {PageLinks} {NextPageLink} {CurrentPageReport}',
+                  pageReportTemplate:'{totalRecords} ' + message(code:'list.total.records')
+              ]"
+              rowExpansion="false"
+              rowsPerPage="10"
+          />
 
-	<div class="nav">
-		<span class="menuButton"><a class="home" href="${createLinkTo(dir:'')}">Home</a></span>
-		<span class="menuButton"><g:link class="create" action="create">New Role</g:link></span>
-	</div>
-
-	<div class="body">
-		<h1>Role List</h1>
-		<g:if test="${flash.message}">
-		<div class="message">${flash.message}</div>
-		</g:if>
-		<div class="list">
-			<table>
-			<thead>
-				<tr>
-					<g:sortableColumn property="id" title="ID" />
-					<g:sortableColumn property="authority" title="Role Name" />
-					<g:sortableColumn property="description" title="Description" />
-					<th>&nbsp;</th>
-				</tr>
-			</thead>
-			<tbody>
-			<g:each in="${authorityList}" status="i" var="authority">
-				<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
-					<td>${authority.id}</td>
-					<td>${authority.authority?.encodeAsHTML()}</td>
-					<td>${authority.description?.encodeAsHTML()}</td>
-					<td class="actionButtons">
-						<span class="actionButton">
-							<g:link action="show" id="${authority.id}">Show</g:link>
-						</span>
-					</td>
-				</tr>
-			</g:each>
-			</tbody>
-			</table>
-		</div>
-
-		<div class="paginateButtons">
-			<g:paginate total="${me.hcl.seekin.Auth.Role.count()}" />
-		</div>
-	</div>
-</body>
+        </div>
+    </body>
+</html>

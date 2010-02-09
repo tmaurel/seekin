@@ -1,6 +1,7 @@
 package me.hcl.seekin.Auth
 
 import me.hcl.seekin.Auth.Role
+import grails.converters.JSON
 
 
 /**
@@ -18,58 +19,58 @@ class RoleController {
 	}
 
 	/**
-	 * Display the list authority page.
+	 * Display the list roleInstance page.
 	 */
 	def list = {
 		if (!params.max) {
 			params.max = 10
 		}
-		[authorityList: Role.list(params)]
+		[roleInstanceList: Role.list(params)]
 	}
 
 	/**
-	 * Display the show authority page.
+	 * Display the show roleInstance page.
 	 */
 	def show = {
-		def authority = Role.get(params.id)
-		if (!authority) {
+		def roleInstance = Role.get(params.id)
+		if (!roleInstance) {
 			flash.message = "Role not found with id $params.id"
 			redirect action: list
 			return
 		}
 
-		[authority: authority]
+		[roleInstance: roleInstance]
 	}
 
 	/**
-	 * Delete an authority.
+	 * Delete an roleInstance.
 	 */
 	def delete = {
-		def authority = Role.get(params.id)
-		if (!authority) {
+		def roleInstance = Role.get(params.id)
+		if (!roleInstance) {
 			flash.message = "Role not found with id $params.id"
 			redirect action: list
 			return
 		}
 
-		authenticateService.deleteRole(authority)
+		authenticateService.deleteRole(roleInstance)
 
 		flash.message = "Role $params.id deleted."
 		redirect action: list
 	}
 
 	/**
-	 * Display the edit authority page.
+	 * Display the edit roleInstance page.
 	 */
 	def edit = {
-		def authority = Role.get(params.id)
-		if (!authority) {
+		def roleInstance = Role.get(params.id)
+		if (!roleInstance) {
 			flash.message = "Role not found with id $params.id"
 			redirect action: list
 			return
 		}
 
-		[authority: authority]
+		[roleInstance: roleInstance]
 	}
 
 	/**
@@ -77,49 +78,71 @@ class RoleController {
 	 */
 	def update = {
 
-		def authority = Role.get(params.id)
-		if (!authority) {
+		def roleInstance = Role.get(params.id)
+		if (!roleInstance) {
 			flash.message = "Role not found with id $params.id"
 			redirect action: edit, id: params.id
 			return
 		}
 
 		long version = params.version.toLong()
-		if (authority.version > version) {
-			authority.errors.rejectValue 'version', 'authority.optimistic.locking.failure',
+		if (roleInstance.version > version) {
+			roleInstance.errors.rejectValue 'version', 'roleInstance.optimistic.locking.failure',
 				'Another user has updated this Role while you were editing.'
-			render view: 'edit', model: [authority: authority]
+			render view: 'edit', model: [roleInstance: roleInstance]
 			return
 		}
 
-		if (authenticateService.updateRole(authority, params)) {
+		if (authenticateService.updateRole(roleInstance, params)) {
 			authenticateService.clearCachedRequestmaps()
-			redirect action: show, id: authority.id
+			redirect action: show, id: roleInstance.id
 		}
 		else {
-			render view: 'edit', model: [authority: authority]
+			render view: 'edit', model: [roleInstance: roleInstance]
 		}
 	}
 
 	/**
-	 * Display the create new authority page.
+	 * Display the create new roleInstance page.
 	 */
 	def create = {
-		[authority: new Role()]
+		[roleInstance: new Role()]
 	}
 
 	/**
-	 * Save a new authority.
+	 * Save a new roleInstance.
 	 */
 	def save = {
 
-		def authority = new Role()
-		authority.properties = params
-		if (authority.save()) {
-			redirect action: show, id: authority.id
+		def roleInstance = new Role()
+		roleInstance.properties = params
+		if (roleInstance.save()) {
+			redirect action: show, id: roleInstance.id
 		}
 		else {
-			render view: 'create', model: [authority: authority]
+			render view: 'create', model: [roleInstance: roleInstance]
 		}
 	}
+	
+	def dataTableDataAsJSON = {
+        def list = Role.list(params)
+        def ret = []
+        response.setHeader("Cache-Control", "no-store")
+
+        list.each {
+        	ret << [
+    			id:it.id,
+        		description:it.description,
+		   		authority:it.authority,
+				urlID:it.id,
+            ]
+        }
+
+        def data = [
+                totalRecords: Role.count(),
+                results: ret
+        ]
+
+        render data as JSON
+    }
 }

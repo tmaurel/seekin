@@ -1,69 +1,52 @@
-<head>
-	<meta name="layout" content="main" />
-	<title>Edit Role</title>
-</head>
 
-<body>
+<%@ page import="me.hcl.seekin.Auth.Role" %>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta name="layout" content="main" />
+        <title><g:message code="role.edit"/></title>
+        <g:YUIButtonRessource />
+    </head>
+    <body>
+      <h2><g:message code="role.edit"/></h2>
+      <g:if test="${flash.message}">
+      <div class="flash_message"><g:message code="${flash.message}" args="${flash.args}"/></div>
+      </g:if>
+      <g:hasErrors bean="${roleInstance}">
+      <div class="flash_message"><g:renderErrors bean="${roleInstance}" as="list" /></div>
+      </g:hasErrors>
+      <g:form class="boxed_form" name="crud_panel" method="post" >
+          <g:hiddenField name="id" value="${roleInstance?.id}" />
+          <g:hiddenField name="version" value="${roleInstance?.version}" />
+          
+                <p>
 
-	<div class="nav">
-		<span class="menuButton"><a class="home" href="${createLinkTo(dir:'')}">Home</a></span>
-		<span class="menuButton"><g:link class="list" action="list">Role List</g:link></span>
-		<span class="menuButton"><g:link class="create" action="create">New Role</g:link></span>
-	</div>
+                          <label for="authority"><g:message code="role.authority" default="Authority" /></label>
+                          <g:textField name="authority" value="${fieldValue(bean: roleInstance, field: 'authority')}" />
 
-	<div class="body">
-		<h1>Edit Role</h1>
-		<g:if test="${flash.message}">
-		<div class="message">${flash.message}</div>
-		</g:if>
-		<g:hasErrors bean="${authority}">
-		<div class="errors">
-			<g:renderErrors bean="${authority}" as="list" />
-		</div>
-		</g:hasErrors>
-		<div class="prop">
-			<span class="name">ID:</span>
-			<span class="value">${authority.id}</span>
-		</div>
-		<g:form>
-			<input type="hidden" name="id" value="${authority.id}" />
-			<input type="hidden" name="version" value="${authority.version}" />
-			<div class="dialog">
-			<table>
-			<tbody>
-				<tr class="prop">
-					<td valign="top" class="name"><label for="authority">Role Name:</label></td>
-					<td valign="top" class="value ${hasErrors(bean:authority,field:'authority','errors')}">
-						<input type="text" id="authority" name="authority" value="${authority.authority?.encodeAsHTML()}"/>
-					</td>
-				</tr>
+                </p>
+          
+                <p>
 
-				<tr class="prop">
-					<td valign="top" class="name"><label for="description">Description:</label></td>
-					<td valign="top" class="value ${hasErrors(bean:authority,field:'description','errors')}">
-						<input type="text" id="description" name="description" value="${authority.description?.encodeAsHTML()}"/>
-					</td>
-				</tr>
+                          <label for="description"><g:message code="role.description" default="Description" /></label>
+                          <g:textField name="description" value="${fieldValue(bean: roleInstance, field: 'description')}" />
 
-				<tr class="prop">
-					<td valign="top" class="name"><label for="people">People:</label></td>
-					<td valign="top" class="value ${hasErrors(bean:authority,field:'people','errors')}">
-						<ul>
-						<g:each var="p" in="${authority.people?}">
-							<li>${p}</li>
-						</g:each>
-						</ul>
-					</td>
-				</tr>
-			</tbody>
-			</table>
-			</div>
+                </p>
+          
+                <p>
 
-			<div class="buttons">
-				<span class="button"><g:actionSubmit class="save" value="Update" /></span>
-				<span class="button"><g:actionSubmit class="delete" onclick="return confirm('Are you sure?');" value="Delete" /></span>
-			</div>
+                          <label for="people"><g:message code="role.people" default="People" /></label>
+                          <g:select name="people"
+from="${me.hcl.seekin.Auth.User.list()}"
+size="5" multiple="yes" optionKey="id"
+value="${roleInstance?.people}" />
 
-		</g:form>
-	</div>
-</body>
+
+                </p>
+          
+          <div class="submit yui-skin-sam">
+            <g:buildEditButtons />
+          </div>
+      </g:form>
+    </body>
+</html>

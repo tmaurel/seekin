@@ -4,88 +4,89 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="layout" content="main" />
-        <title><g:message code="user.show" default="Show User" /></title>
+        <title><g:message code="user.show" /></title>
+        <g:YUIButtonRessource />
     </head>
     <body>
-        <div class="nav">
-            <span class="menuButton"><a class="home" href="${createLinkTo(dir: '')}"><g:message code="navigation.menu.home" default="Home" /></a></span>
-            <span class="menuButton"><g:link class="list" action="list"><g:message code="user.list" default="User List" /></g:link></span>
-            <span class="menuButton"><g:link class="create" action="create"><g:message code="user.new" default="New User" /></g:link></span>
-        </div>
-        <div class="body">
-            <h1><g:message code="user.show" default="Show User" /></h1>
-            <g:if test="${flash.message}">
-            <div class="message"><g:message code="${flash.message}" args="${flash.args}" default="${flash.defaultMessage}" /></div>
-            </g:if>
-            <g:form>
-                <g:hiddenField name="id" value="${person?.id}" />
-                <div class="dialog">
-                    <table>
-                        <tbody>
-                        
-                            <tr class="prop">
-                                <td valign="top" class="name"><g:message code="user.id" default="Id" />:</td>
-                                
-                                <td valign="top" class="value">${fieldValue(bean: person, field: "id")}</td>
-                                
-                            </tr>
-                            
-                            <tr class="prop">
-                                <td valign="top" class="name"><g:message code="user.email" default="Email" />:</td>
-                                
-                                <td valign="top" class="value">${fieldValue(bean: person, field: "email")}</td>
-                                
-                            </tr>
-                            
-                            <tr class="prop">
-                                <td valign="top" class="name"><g:message code="user.password" default="Password" />:</td>
-                                
-                                <td valign="top" class="value">${fieldValue(bean: person, field: "password")}</td>
-                                
-                            </tr>
-                            
-                            <tr class="prop">
-                                <td valign="top" class="name"><g:message code="user.enabled" default="Enabled" />:</td>
-                                
-                                <td valign="top" class="value"><g:formatBoolean boolean="${person?.enabled}" /></td>
-                                
-                            </tr>
-                            
-                            <tr class="prop">
-                                <td valign="top" class="name"><g:message code="user.showEmail" default="Show Email" />:</td>
-                                
-                                <td valign="top" class="value"><g:formatBoolean boolean="${person?.showEmail}" /></td>
-                                
-                            </tr>
-                            
-                            <tr class="prop">
-                                <td valign="top" class="name"><g:message code="user.profile" default="Profile" />:</td>
-                                
-                                <td valign="top" class="value">${fieldValue(bean: person, field: "profile")}</td>
-                                
-                            </tr>
 
-                            <tr class="prop">
-                                <td valign="top" class="name"><g:message code="user.authorities" default="Authorities" />:</td>
-                                
-                                <td  valign="top" style="text-align: left;" class="value">
-                                    <ul>
-                                    <g:each in="${person?.authorities}" var="roleInstance">
-                                        <li><g:link controller="role" action="show" id="${roleInstance.id}">${roleInstance.encodeAsHTML()}</g:link></li>
-                                    </g:each>
-                                    </ul>
-                                </td>
-                                
-                            </tr>
+        <h2><g:message code="user.show" /></h2>
+        <g:form class="boxed_form" name="crud_panel">
+            <g:if test="${flash.message}">
+            <div class="flash_message"><g:message code="${flash.message}" args="${flash.args}" default="${flash.defaultMessage}" /></div>
+            </g:if>
+            <g:hiddenField name="id" value="${userInstance?.id}" />
+                    
+                       <p>
+                            <label><g:message code="user.id" default="Id" /></label>
+                            <span class="field_value">
                             
-                        </tbody>
-                    </table>
-                </div>
-                <div class="buttons">
-                    <span class="button"><g:actionSubmit class="edit" action="edit" value="${message(code: 'edit', 'default': 'Edit')}" /></span>
-                    <span class="button"><g:actionSubmit class="delete" action="delete" value="${message(code: 'delete', 'default': 'Delete')}" onclick="return confirm('${message(code: 'delete.confirm', 'default': 'Are you sure?')}');" /></span>
-                </div>
+                            ${fieldValue(bean: userInstance, field: "id")}
+                            
+                            </span>
+                      </p>
+                        
+                       <p>
+                            <label><g:message code="user.email" default="Email" /></label>
+                            <span class="field_value">
+                            
+                            ${fieldValue(bean: userInstance, field: "email")}
+                            
+                            </span>
+                      </p>
+                        
+                       <p>
+                            <label><g:message code="user.password" default="Password" /></label>
+                            <span class="field_value">
+                            
+                            ${fieldValue(bean: userInstance, field: "password")}
+                            
+                            </span>
+                      </p>
+                        
+                       <p>
+                            <label><g:message code="user.enabled" default="Enabled" /></label>
+                            <span class="field_value">
+                            
+                            <g:formatBoolean boolean="${userInstance?.enabled}" />
+                            
+                            </span>
+                      </p>
+                        
+                       <p>
+                            <label><g:message code="user.profile" default="Profile" /></label>
+                            <span class="field_value">
+                            
+                            <g:link controller="profile" action="show" id="${userInstance?.profile?.id}">${userInstance?.profile?.encodeAsHTML()}</g:link>
+                            
+                            </span>
+                      </p>
+                        
+                       <p>
+                            <label><g:message code="user.showEmail" default="Show Email" /></label>
+                            <span class="field_value">
+                            
+                            <g:formatBoolean boolean="${userInstance?.showEmail}" />
+                            
+                            </span>
+                      </p>
+                        
+                       <p>
+                            <label><g:message code="user.authorities" default="Authorities" /></label>
+                            <span class="field_value">
+                            
+                            <ul>
+                            <g:each in="${userInstance?.authorities}" var="roleInstance">
+                                <li><g:link controller="role" action="show" id="${roleInstance.id}">${roleInstance.encodeAsHTML()}</g:link></li>
+                            </g:each>
+                            </ul>
+                            
+                            </span>
+                      </p>
+                        
+                      
+                      <div class="submit yui-skin-sam">
+                        <g:buildShowButtons />
+                      </div>
             </g:form>
-        </div>
-    </body>
+       </body>
 </html>

@@ -1,57 +1,65 @@
-<head>
-	<meta name="layout" content="main" />
-	<title>Show Role</title>
-</head>
 
-<body>
+<%@ page import="me.hcl.seekin.Auth.Role" %>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta name="layout" content="main" />
+        <title><g:message code="role.show" /></title>
+        <g:YUIButtonRessource />
+    </head>
+    <body>
 
-	<div class="nav">
-		<span class="menuButton"><a class="home" href="${createLinkTo(dir:'')}">Home</a></span>
-		<span class="menuButton"><g:link class="list" action="list">Role List</g:link></span>
-		<span class="menuButton"><g:link class="create" action="create">New Role</g:link></span>
-	</div>
-
-	<div class="body">
-		<h1>Show Role</h1>
-		<g:if test="${flash.message}">
-		<div class="message">${flash.message}</div>
-		</g:if>
-		<div class="dialog">
-			<table>
-			<tbody>
-
-				<tr class="prop">
-					<td valign="top" class="name">ID:</td>
-					<td valign="top" class="value">${authority.id}</td>
-				</tr>
-
-				<tr class="prop">
-					<td valign="top" class="name">Role Name:</td>
-					<td valign="top" class="value">${authority.authority}</td>
-				</tr>
-
-				<tr class="prop">
-					<td valign="top" class="name">Description:</td>
-					<td valign="top" class="value">${authority.description}</td>
-				</tr>
-
-				<tr class="prop">
-					<td valign="top" class="name">People:</td>
-					<td valign="top" class="value">${authority.people}</td>
-				</tr>
-
-			</tbody>
-			</table>
-		</div>
-
-		<div class="buttons">
-			<g:form>
-				<input type="hidden" name="id" value="${authority?.id}" />
-				<span class="button"><g:actionSubmit class="edit" value="Edit" /></span>
-				<span class="button"><g:actionSubmit class="delete" onclick="return confirm('Are you sure?');" value="Delete" /></span>
-			</g:form>
-		</div>
-
-	</div>
-
-</body>
+        <h2><g:message code="role.show" /></h2>
+        <g:form class="boxed_form" name="crud_panel">
+            <g:if test="${flash.message}">
+            <div class="flash_message"><g:message code="${flash.message}" args="${flash.args}" default="${flash.defaultMessage}" /></div>
+            </g:if>
+            <g:hiddenField name="id" value="${roleInstance?.id}" />
+                    
+                       <p>
+                            <label><g:message code="role.id" default="Id" /></label>
+                            <span class="field_value">
+                            
+                            ${fieldValue(bean: roleInstance, field: "id")}
+                            
+                            </span>
+                      </p>
+                        
+                       <p>
+                            <label><g:message code="role.authority" default="Authority" /></label>
+                            <span class="field_value">
+                            
+                            ${fieldValue(bean: roleInstance, field: "authority")}
+                            
+                            </span>
+                      </p>
+                        
+                       <p>
+                            <label><g:message code="role.description" default="Description" /></label>
+                            <span class="field_value">
+                            
+                            ${fieldValue(bean: roleInstance, field: "description")}
+                            
+                            </span>
+                      </p>
+                        
+                       <p>
+                            <label><g:message code="role.people" default="People" /></label>
+                            <span class="field_value">
+                            
+                            <ul>
+                            <g:each in="${roleInstance?.people}" var="userInstance">
+                                <li><g:link controller="user" action="show" id="${userInstance.id}">${userInstance.encodeAsHTML()}</g:link></li>
+                            </g:each>
+                            </ul>
+                            
+                            </span>
+                      </p>
+                        
+                      
+                      <div class="submit yui-skin-sam">
+                        <g:buildShowButtons />
+                      </div>
+            </g:form>
+       </body>
+</html>

@@ -1,51 +1,41 @@
-<head>
-	<meta name="layout" content="main" />
-	<title>Create Role</title>
-</head>
 
-<body>
+<%@ page import="me.hcl.seekin.Auth.Role" %>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta name="layout" content="main" />
+        <title><g:message code="role.create" /></title>
+        <g:YUIButtonRessource />
+    </head>
+    <body>  
+      <h2><g:message code="role.create" /></h2>
+      <g:if test="${flash.message}">
+      <div class="flash_message"><g:message code="${flash.message}" args="${flash.args}" /></div>
+      </g:if>
+      <g:hasErrors bean="${roleInstance}">
+      <div class="flash_message">
+          <g:renderErrors bean="${roleInstance}" as="list" />
+      </div>
+      </g:hasErrors>
+      <g:form class="boxed_form" name="crud_panel" action="save" method="post" >
+          
+                <p>
+                      <label for="authority"><g:message code="role.authority" default="Authority" />:</label>
+                      <g:textField name="authority" value="${fieldValue(bean: roleInstance, field: 'authority')}" />
 
-	<div class="nav">
-		<span class="menuButton"><a class="home" href="${createLinkTo(dir:'')}">Home</a></span>
-		<span class="menuButton"><g:link class="list" action="list">Role List</g:link></span>
-	</div>
+                </p>
+          
+                <p>
+                      <label for="description"><g:message code="role.description" default="Description" />:</label>
+                      <g:textField name="description" value="${fieldValue(bean: roleInstance, field: 'description')}" />
 
-	<div class="body">
+                </p>
+          
+          <div class="submit yui-skin-sam">
+             <g:buildCreateButtons />
+          </div>
 
-		<h1>Create Role</h1>
-		<g:if test="${flash.message}">
-		<div class="message">${flash.message}</div>
-		</g:if>
-		<g:hasErrors bean="${authority}">
-		<div class="errors">
-		<g:renderErrors bean="${authority}" as="list" />
-		</div>
-		</g:hasErrors>
+      </g:form>
 
-		<g:form action="save">
-		<div class="dialog">
-		<table>
-		<tbody>
-			<tr class="prop">
-				<td valign="top" class="name"><label for="authority">Role Name:</label></td>
-				<td valign="top" class="value ${hasErrors(bean:authority,field:'authority','errors')}">
-					<input type="text" id="authority" name="authority" value="${authority?.authority?.encodeAsHTML()}"/>
-				</td>
-			</tr>
-
-			<tr class="prop">
-				<td valign="top" class="name"><label for="description">Description:</label></td>
-				<td valign="top" class="value ${hasErrors(bean:authority,field:'description','errors')}">
-					<input type="text" id="description" name="description" value="${authority?.description?.encodeAsHTML()}"/>
-				</td>
-			</tr>
-		</tbody>
-		</table>
-		</div>
-
-		<div class="buttons">
-			<span class="button"><input class="save" type="submit" value="Create" /></span>
-		</div>
-		</g:form>
-	</div>
-</body>
+    </body>
+</html>

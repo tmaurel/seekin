@@ -22,6 +22,8 @@ import java.awt.image.BufferedImage
 import nl.captcha.Captcha
 import nl.captcha.backgrounds.*
 import nl.captcha.servlet.CaptchaServletUtil
+import grails.converters.JSON
+
 
 /**
  * User controller.
@@ -61,7 +63,7 @@ class UserController {
 	 */
 	def list = {
 		params.max = Math.min(params.max ? params.max.toInteger() : 10,  100)
-		[personList: User.list(params), personTotal: User.count()]
+		[userInstanceList: User.list(params), userInstanceTotal: User.count()]
 	}
 
 	/**
@@ -69,9 +71,9 @@ class UserController {
 	 */
 	def show = {
                 // get the user using the url id
-		def person = User.get(params.id)
+		def userInstance = User.get(params.id)
                 // if the user doesnt exit, show error message
-		if (!person) {
+		if (!userInstance) {
 			flash.message = "user.not.found"
 			flash.args = [params.id]
                         // redirect to the list of users
@@ -80,35 +82,35 @@ class UserController {
 		}
                 // get all roles associated to the user
 		List roleNames = []
-		for (role in person.authorities) {
+		for (role in userInstance.authorities) {
 			roleNames << role.authority
 		}
                 // sort user roles
 		roleNames.sort { n1, n2 ->
 			n1 <=> n2
 		}
-		[person: person, roleNames: roleNames]
+		[userInstance: userInstance, roleNames: roleNames]
 	}
 
 	/**
-	 * Person delete action. Before removing an existing person,
+	 * Person delete action. Before removing an existing userInstance,
 	 * he should be removed from those authorities which he is involved.
 	 */
 	def delete = {
 
-		def person = User.get(params.id)
-		if (person) {
+		def userInstance = User.get(params.id)
+		if (userInstance) {
 			def authPrincipal = authenticateService.principal()
 			//avoid self-delete if the logged-in user is an admin
-			if (!(authPrincipal instanceof String) && authPrincipal.email == person.email) {
+			if (!(authPrincipal instanceof String) && authPrincipal.email == userInstance.email) {
                             flash.message = "user.not.deleted"
                             flash.args = [params.id]
                             redirect(action: "show", id: params.id)
 			}
 			else {
-				//first, delete this person from People_Authorities table.
-				Role.findAll().each { it.removeFromPeople(person) }
-				person.delete()
+				//first, delete this userInstance from People_Authorities table.
+				Role.findAll().each { it.removeFromPeople(userInstance) }
+				userInstance.delete()
 				flash.message = "user.deleted"
 				flash.args = [params.id]
 				redirect(action: "list")
@@ -123,15 +125,15 @@ class UserController {
 
 	def edit = {
 
-		def person = User.get(params.id)
-		if (!person) {
+		def userInstance = User.get(params.id)
+		if (!userInstance) {
 			flash.message = "user.not.found"
 			flash.args = [params.id]
 			redirect(action: "list")
 			return
 		}
 
-		return buildPersonModel(person)
+		return buildPersonModel(userInstance)
 	}
 
 	/**
@@ -139,8 +141,8 @@ class UserController {
 	 */
 	def update = {
 
-		def person = User.get(params.id)
-		if (!person) {
+		def userInstance = User.get(params.id)
+		if (!userInstance) {
 			flash.message = "user.not.found"
 			flash.args = [params.id]
 			redirect(action: "edit", id: params.id)
@@ -148,32 +150,32 @@ class UserController {
 		}
 
 		long version = params.version.toLong()
-		if (person.version > version) {
-			person.errors.rejectValue 'version', "person.optimistic.locking.failure",
+		if (userInstance.version > version) {
+			userInstance.errors.rejectValue 'version', "userInstance.optimistic.locking.failure",
 				"Another user has updated this User while you were editing."
-				render view: 'edit', model: buildPersonModel(person)
+				render view: 'edit', model: buildPersonModel(userInstance)
 			return
 		}
 
-		def oldPassword = person.password
-		person.properties = params
+		def oldPassword = userInstance.password
+		userInstance.properties = params
 		if (!params.password.equals(oldPassword)) {
-			person.password = authenticateService.encodePassword(params.password)
+			userInstance.password = authenticateService.encodePassword(params.password)
 		}
-		if (person.save()) {
+		if (userInstance.save()) {
 			flash.message = "user.updated"
 			flash.args = [params.id]
-			Role.findAll().each { it.removeFromPeople(person) }
-			addRoles(person)
-			redirect action: show, id: person.id
+			Role.findAll().each { it.removeFromPeople(userInstance) }
+			addRoles(userInstance)
+			redirect action: show, id: userInstance.id
 		}
 		else {
-			render view: 'edit', model: buildPersonModel(person)
+			render view: 'edit', model: buildPersonModel(userInstance)
 		}
 	}
 
 	def create = {
-		[person: new User(params), authorityList: Role.list()]
+		[userInstance: new User(params), authorityList: Role.list()]
 	}
 
 	/**
@@ -181,36 +183,36 @@ class UserController {
 	 */
 	def save = {
 
-		def person = new User()
-		person.properties = params
-		person.password = authenticateService.encodePassword(params.password)
-		if (person.save()) {
+		def userInstance = new User()
+		userInstance.properties = params
+		userInstance.password = authenticateService.encodePassword(params.password)
+		if (userInstance.save()) {
 			flash.message = "user.created"
-			flash.args = [person.id]
-			addRoles(person)
-			redirect action: show, id: person.id
+			flash.args = [userInstance.id]
+			addRoles(userInstance)
+			redirect action: show, id: userInstance.id
 		}
 		else {
-			render view: 'create', model: [authorityList: Role.list(), person: person]
+			render view: 'create', model: [authorityList: Role.list(), userInstance: userInstance]
 		}
 	}
 
-	private void addRoles(person) {
+	private void addRoles(userInstance) {
 		for (String key in params.keySet()) {
 			if (key.contains('ROLE') && 'on' == params.get(key)) {
-				Role.findByAuthority(key).addToPeople(person)
+				Role.findByAuthority(key).addToPeople(userInstance)
 			}
 		}
 	}
 
-	private Map buildPersonModel(person) {
+	private Map buildPersonModel(userInstance) {
 
 		List roles = Role.list()
 		roles.sort { r1, r2 ->
 			r1.authority <=> r2.authority
 		}
 		Set userRoleNames = []
-		for (role in person.authorities) {
+		for (role in userInstance.authorities) {
 			userRoleNames << role.authority
 		}
 		LinkedHashMap<Role, Boolean> roleMap = [:]
@@ -218,7 +220,7 @@ class UserController {
 			roleMap[(role)] = userRoleNames.contains(role.authority)
 		}
 
-		return [person: person, roleMap: roleMap]
+		return [userInstance: userInstance, roleMap: roleMap]
 	}
 	
 	
@@ -335,7 +337,7 @@ class UserController {
 	 */
 	def register = {
 
-                def person = new User()
+                def userInstance = new User()
                 def ret
 
 
@@ -347,30 +349,30 @@ class UserController {
 
                 if (session.id)
                 {
-                    person.email = params.email
-                    person.password = params.password
+                    userInstance.email = params.email
+                    userInstance.password = params.password
 
                     // If User selected "Student"
                     if(params.usertype == "1")
                     {
-                        person.profile = new Student()
-                        ret = [person: person, profile: person.profile, usertype: params.usertype, formations:Formation.list()]
+                        userInstance.profile = new Student()
+                        ret = [userInstance: userInstance, profile: userInstance.profile, usertype: params.usertype, formations:Formation.list()]
                     } // If User selected "Staff"
                     else if(params.usertype == "2")
                     {
-                        person.profile = new Staff()
-                        ret = [person: person, profile: person.profile, usertype: params.usertype]
+                        userInstance.profile = new Staff()
+                        ret = [userInstance: userInstance, profile: userInstance.profile, usertype: params.usertype]
                     } // If User selected "Other"
                     else if(params.usertype == "3")
                     {
-                        person.profile = new External()
-                        person.profile.formerStudent = params.formerStudent
-                        ret = [person: person, profile: person.profile, usertype: params.usertype, company: params.company]
+                        userInstance.profile = new External()
+                        userInstance.profile.formerStudent = params.formerStudent
+                        ret = [userInstance: userInstance, profile: userInstance.profile, usertype: params.usertype, company: params.company]
                     }
                     else return;
 
-                    person.profile.firstName = params.firstName
-                    person.profile.lastName = params.lastName
+                    userInstance.profile.firstName = params.firstName
+                    userInstance.profile.lastName = params.lastName
                 
                     // If u got to this form by a link or from homepage form
                     if(request.method == 'GET' || params.fromHome == "1")
@@ -384,14 +386,14 @@ class UserController {
                         def defaultRole = config.security.defaultRole
 
                         // Add all form data to the user profile
-                        person.profile.firstName = params.firstName
-                        person.profile.lastName = params.lastName
-                        person.profile.address = new Address()
-                        person.profile.address.street = params.street
-                        person.profile.address.town = params.town
-                        person.profile.address.zipCode = params.zipCode
-                        person.profile.phone = params.phone
-                        person.profile.visible = params.visible
+                        userInstance.profile.firstName = params.firstName
+                        userInstance.profile.lastName = params.lastName
+                        userInstance.profile.address = new Address()
+                        userInstance.profile.address.street = params.street
+                        userInstance.profile.address.town = params.town
+                        userInstance.profile.address.zipCode = params.zipCode
+                        userInstance.profile.phone = params.phone
+                        userInstance.profile.visible = params.visible
 
                         // retrieve default role
                         def role = Role.findByAuthority(defaultRole)
@@ -411,16 +413,16 @@ class UserController {
                         }
                         // encode the password for the insertion in database
                         def pass = authenticateService.encodePassword(params.password)
-                        person.password = pass
-                        person.enabled = false
-                        person.showEmail = false
+                        userInstance.password = pass
+                        userInstance.enabled = false
+                        userInstance.showEmail = false
 
                         //Construction of the lineBar included in the email with the good size
                         String lineBar = ""
                         message(code:"user.email.content.text2").size().times{lineBar += "-"}
 
                         // If everything went well
-                        if (person.validate() && flash.message == null)
+                        if (userInstance.validate() && flash.message == null)
                         {
                             // Check if the company as been specified
                             if(params.company != null)
@@ -437,7 +439,7 @@ class UserController {
                             }
 
                             // Add default role to the user
-                            role.addToPeople(person)
+                            role.addToPeople(userInstance)
 
                             // If we use confirmation mail
                             if (config.security.useMail)
@@ -448,29 +450,52 @@ class UserController {
 
                                 ${message(code:"user.email.content.text2")}
                                 ${lineBar}
-                                ${message(code:"user.email")}: ${person.email}"""
+                                ${message(code:"user.email")}: ${userInstance.email}"""
 
                                 def email = [
-                                        to: [person.email], // 'to' expects a List, NOT a single email address
+                                        to: [userInstance.email], // 'to' expects a List, NOT a single email address
                                         subject: "[${request.contextPath}] "+ message(code:"user.email.subject"),
                                         text: flash.message // 'text' is the email body
                                         ]
                                 emailerService.sendEmails([email])
                             }
-                            person.save(flush: true)
+                            userInstance.save(flush: true)
 
 
-//                          def auth = new AuthToken(person.email, params.password)
+//                          def auth = new AuthToken(userInstance.email, params.password)
 //                          def authtoken = daoAuthenticationProvider.authenticate(auth)
 //                          SCH.context.authentication = authtoken
                             redirect uri: '/'
                         }
                         else
                         {
-                                person.password = ''
+                                userInstance.password = ''
                                 return ret
                         }
                     }
                }
 	}
+	def dataTableDataAsJSON = {
+        def list = User.list(params)
+        def ret = []
+        response.setHeader("Cache-Control", "no-store")
+
+        list.each {
+        	ret << [
+    			id:it.id,
+        		email:it.email,
+		   		showEmail:it.showEmail,
+				enabled:it.enabled,
+				profile:it.profile,
+				urlID:it.id
+            ]
+        }
+
+        def data = [
+                totalRecords: User.count(),
+                results: ret
+        ]
+
+        render data as JSON
+    }
 }
