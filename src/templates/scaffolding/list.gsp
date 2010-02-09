@@ -16,6 +16,22 @@
       </g:if>
       <div class="yui-skin-sam" id="crud_panel">
           <g:buildListButtons />
+          <%  excludedProps = ["version",
+                                 Events.ONLOAD_EVENT,
+                                 Events.BEFORE_INSERT_EVENT,
+                                 Events.BEFORE_UPDATE_EVENT,
+                                 Events.BEFORE_DELETE_EVENT]
+                props = domainClass.properties.findAll { !excludedProps.contains(it.name) && it.type != Set.class }
+                Collections.sort(props, comparator.constructors[0].newInstance([domainClass] as Object[]))
+                size = props.size()
+                props.eachWithIndex
+                { p, i ->
+                    if (i < 6)
+                    { %>
+                        <g:set var="${p.name}Internationalized" value="\${message(code:'${domainClass.propertyName}.${p.name}')}" />
+                 <% }
+
+                }  %>
           <gui:dataTable
               id="dt_2"
               draggableColumns="true"
@@ -34,11 +50,11 @@
                     {
                         if (p.isAssociation())
                         { %>
-                            [key: '${p.name}', sortable: true, resizeable: true, label: '${p.naturalName}', formatter: 'customLinkFormatter'],
+                            [key: '${p.name}', sortable: true, resizeable: true, label: ${p.name}Internationalized, formatter: 'customLinkFormatter'],
                      <% }
                         else
                         { %>
-                            [key: '${p.name}', sortable: true, resizeable: true, label: '${p.naturalName}'],
+                            [key: '${p.name}', sortable: true, resizeable: true, label: ${p.name}Internationalized],
                      <% }
                     }
 
