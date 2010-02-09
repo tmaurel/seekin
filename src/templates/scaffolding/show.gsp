@@ -46,8 +46,9 @@
                             \${fieldValue(bean: ${propertyName}, field: "${p.name}")}
                             <%  } %>
                             </span>
-                        <%  } %>
                       </p>
+                        <%  } %>
+                      
                       <div class="submit yui-skin-sam">
                         <g:buildShowButtons />
                       </div>

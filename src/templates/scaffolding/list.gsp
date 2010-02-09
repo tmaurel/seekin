@@ -65,7 +65,7 @@
               action="dataTableDataAsJSON"
               paginatorConfig="[
                   template:'{PreviousPageLink} {PageLinks} {NextPageLink} {CurrentPageReport}',
-                  pageReportTemplate:'{totalRecords} total records'
+                  pageReportTemplate:'{totalRecords} ' + message(code:'list.total.records')
               ]"
               rowExpansion="false"
               rowsPerPage="10"

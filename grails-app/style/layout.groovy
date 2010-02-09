@@ -273,6 +273,8 @@ style = {
 		'border':'1px solid #808080'
 	)
 
+
+
 	'.boxed_form img' (
                 'float':'right',
                 'margin-top':'10px',

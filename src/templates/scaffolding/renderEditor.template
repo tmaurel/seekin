@@ -85,12 +85,10 @@
         def sw = new StringWriter()
         def pw = new PrintWriter(sw)
         pw.println()
-        pw.println "<ul>"
-        pw.println "<g:each in=\"\${${domainInstance}?.${property.name}}\" var=\"${property.referencedDomainClass.propertyName}Instance\">"
-        pw.println "    <li><g:link controller=\"${property.referencedDomainClass.propertyName}\" action=\"show\" id=\"\${${property.referencedDomainClass.propertyName}Instance.id}\">\${${property.referencedDomainClass.propertyName}Instance?.encodeAsHTML()}</g:link></li>"
-        pw.println "</g:each>"
-        pw.println "</ul>"
         pw.println "<g:link controller=\"${property.referencedDomainClass.propertyName}\" params=\"['${domainClass.propertyName}.id': ${domainInstance}?.id]\" action=\"create\"><g:message code=\"${property.referencedDomainClass.propertyName}.new\" default=\"New ${property.referencedDomainClass.shortName}\" /></g:link>"
+        pw.println "<br /><g:each in=\"\${${domainInstance}?.${property.name}}\" var=\"${property.referencedDomainClass.propertyName}Instance\">"
+        pw.println "    - <g:link controller=\"${property.referencedDomainClass.propertyName}\" action=\"show\" id=\"\${${property.referencedDomainClass.propertyName}Instance.id}\">\${${property.referencedDomainClass.propertyName}Instance?.encodeAsHTML()}</g:link><br />"
+        pw.println "</g:each>"
         return sw.toString()
     }
 
