@@ -4,7 +4,7 @@
 	<gui:resources components="accordion"/>	
 </head>
 
-<body>
+<body class="yui-skin-sam">
 	<div id="register_form" class="yui-skin-sam">
 		<gui:expandablePanel title="${message(code:'register.form.title')}" expanded="true" bounce="false">
 			<g:form name="registerForm" url="[action:'register',controller:'user']" class="boxed_form">	

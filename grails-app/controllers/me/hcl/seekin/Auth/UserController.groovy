@@ -5,6 +5,7 @@ import me.hcl.seekin.Auth.Role
 import me.hcl.seekin.Profile.*
 import me.hcl.seekin.Formation
 import me.hcl.seekin.Util.Address
+import me.hcl.seekin.Util.Settings
 
 import org.springframework.security.providers.UsernamePasswordAuthenticationToken as AuthToken
 
@@ -50,7 +51,15 @@ class UserController {
 
                 // If the user isnt logged in, redirect to auth closure
 		if (!isLoggedIn()) {
-			redirect action: auth, params: params
+			if(!Settings.get(1))
+			{
+				redirect(controller: "settings", action: "install")
+			}
+			else
+			{
+				redirect action: auth, params: params
+			}
+
 		}
 		else
 		{

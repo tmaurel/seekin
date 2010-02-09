@@ -134,7 +134,7 @@ class RoleController {
     			id:it.id,
         		description:it.description,
 		   		authority:it.authority,
-				urlID:it.id,
+				urlID:it.id
             ]
         }
 
