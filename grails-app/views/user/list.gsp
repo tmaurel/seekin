@@ -21,13 +21,13 @@
                  
                         <g:set var="emailInternationalized" value="${message(code:'user.email')}" />
                  
-                        <g:set var="passwordInternationalized" value="${message(code:'user.password')}" />
+                        <g:set var="showEmailInternationalized" value="${message(code:'user.showEmail')}" />
                  
                         <g:set var="enabledInternationalized" value="${message(code:'user.enabled')}" />
                  
-                        <g:set var="profileInternationalized" value="${message(code:'user.profile')}" />
+                        <g:set var="firstNameInternationalized" value="${message(code:'user.firstName')}" />
                  
-                        <g:set var="showEmailInternationalized" value="${message(code:'user.showEmail')}" />
+                        <g:set var="lastNameInternationalized" value="${message(code:'user.lastName')}" />
                  
           <gui:dataTable
               id="dt_2"
@@ -38,13 +38,13 @@
                      
                             [key: 'email', sortable: true, resizeable: true, label: emailInternationalized],
                      
-                            [key: 'password', sortable: true, resizeable: true, label: passwordInternationalized],
+                            [key: 'showEmail', sortable: true, resizeable: true, label: showEmailInternationalized],
                      
                             [key: 'enabled', sortable: true, resizeable: true, label: enabledInternationalized],
                      
-                            [key: 'profile', sortable: true, resizeable: true, label: profileInternationalized, formatter: 'customLinkFormatter'],
+                            [key: 'firstName', sortable: true, resizeable: true, label: firstNameInternationalized],
                      
-                            [key: 'showEmail', sortable: true, resizeable: true, label: showEmailInternationalized],
+                            [key: 'lastName', sortable: true, resizeable: true, label: lastNameInternationalized],
                      
                   [key: 'urlID', sortable: false, resizeable: false, label:'Actions', formatter: 'adminPanelFormatter']
               ]"

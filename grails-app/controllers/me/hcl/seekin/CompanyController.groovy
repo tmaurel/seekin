@@ -11,8 +11,6 @@ class CompanyController {
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
     def list = {
-        params.max = Math.min(params.max ? params.max.toInteger() : 10,  100)
-        [companyInstanceList: Company.list(params), companyInstanceTotal: Company.count()]
     }
 
     def create = {

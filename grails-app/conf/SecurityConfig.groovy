@@ -5,7 +5,7 @@ security {
 	active = true
 
 	loginUserDomainClass = "me.hcl.seekin.Auth.User"
-	authorityDomainClass = "me.hcl.seekin.Auth.Role"
+	authorityDomainClass = "me.hcl.seekin.Auth.Role.Role"
 	requestMapClass = "me.hcl.seekin.Auth.RequestMap"
 	
 	useRequestMapDomainClass = false

@@ -1,6 +1,6 @@
 package me.hcl.seekin
 
-import me.hcl.seekin.Profile.External
+import me.hcl.seekin.Auth.Role.External
 import me.hcl.seekin.Util.Address
 
 /*

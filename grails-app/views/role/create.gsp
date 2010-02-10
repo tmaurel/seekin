@@ -1,5 +1,5 @@
 
-<%@ page import="me.hcl.seekin.Auth.Role" %>
+<%@ page import="me.hcl.seekin.Auth.Role.Role" %>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -18,6 +18,12 @@
       </div>
       </g:hasErrors>
       <g:form class="boxed_form" name="crud_panel" action="save" method="post" >
+          
+                <p>
+                      <label for="visible"><g:message code="role.visible" default="Visible" />:</label>
+                      <g:checkBox name="visible" value="${roleInstance?.visible}" />
+
+                </p>
           
                 <p>
                       <label for="authority"><g:message code="role.authority" default="Authority" />:</label>

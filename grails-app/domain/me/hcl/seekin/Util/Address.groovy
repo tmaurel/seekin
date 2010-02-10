@@ -1,6 +1,6 @@
 package me.hcl.seekin.Util
 
-import me.hcl.seekin.Profile.Profile
+import me.hcl.seekin.Auth.Role.Role
 import me.hcl.seekin.Company
 
 /*
@@ -8,7 +8,7 @@ import me.hcl.seekin.Company
  */
 class Address {
 	
-	static belongsTo = [ Profile, Company ]
+	static belongsTo = [ Role, Company ]
 
     /** Street of the address */
     String street

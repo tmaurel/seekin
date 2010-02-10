@@ -1,5 +1,5 @@
 
-<%@ page import="me.hcl.seekin.Auth.Role" %>
+<%@ page import="me.hcl.seekin.Auth.Role.Role" %>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -21,6 +21,15 @@
                             <span class="field_value">
                             
                             ${fieldValue(bean: roleInstance, field: "id")}
+                            
+                            </span>
+                      </p>
+                        
+                       <p>
+                            <label><g:message code="role.visible" default="Visible" /></label>
+                            <span class="field_value">
+                            
+                            <g:formatBoolean boolean="${roleInstance?.visible}" />
                             
                             </span>
                       </p>

@@ -1,6 +1,6 @@
 package me.hcl.seekin.Internship
 
-import me.hcl.seekin.Profile.*
+import me.hcl.seekin.Auth.Role.*
 import me.hcl.seekin.Convocation
 
 class Internship {

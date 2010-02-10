@@ -42,8 +42,29 @@
           
                 <p>
 
-                          <label for="profile"><g:message code="user.profile" default="Profile" /></label>
-                          <g:select name="profile.id" from="${me.hcl.seekin.Profile.Profile.list()}" optionKey="id" value="${userInstance?.profile?.id}" noSelection="['null': '']" />
+                          <label for="firstName"><g:message code="user.firstName" default="First Name" /></label>
+                          <g:textField name="firstName" value="${fieldValue(bean: userInstance, field: 'firstName')}" />
+
+                </p>
+          
+                <p>
+
+                          <label for="lastName"><g:message code="user.lastName" default="Last Name" /></label>
+                          <g:textField name="lastName" value="${fieldValue(bean: userInstance, field: 'lastName')}" />
+
+                </p>
+          
+                <p>
+
+                          <label for="address"><g:message code="user.address" default="Address" /></label>
+                          <g:select name="address.id" from="${me.hcl.seekin.Util.Address.list()}" optionKey="id" value="${userInstance?.address?.id}"  />
+
+                </p>
+          
+                <p>
+
+                          <label for="phone"><g:message code="user.phone" default="Phone" /></label>
+                          <g:textField name="phone" maxlength="10" value="${fieldValue(bean: userInstance, field: 'phone')}" />
 
                 </p>
           
@@ -57,7 +78,11 @@
                 <p>
 
                           <label for="authorities"><g:message code="user.authorities" default="Authorities" /></label>
-                          
+                          <g:select name="authorities"
+from="${me.hcl.seekin.Auth.Role.Role.list()}"
+size="5" multiple="yes" optionKey="id"
+value="${userInstance?.authorities}" />
+
 
                 </p>
           

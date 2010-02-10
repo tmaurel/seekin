@@ -1,5 +1,5 @@
 
-<%@ page import="me.hcl.seekin.Auth.Role" %>
+<%@ page import="me.hcl.seekin.Auth.Role.Role" %>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -21,6 +21,13 @@
           
                 <p>
 
+                          <label for="visible"><g:message code="role.visible" default="Visible" /></label>
+                          <g:checkBox name="visible" value="${roleInstance?.visible}" />
+
+                </p>
+          
+                <p>
+
                           <label for="authority"><g:message code="role.authority" default="Authority" /></label>
                           <g:textField name="authority" value="${fieldValue(bean: roleInstance, field: 'authority')}" />
 
@@ -36,11 +43,7 @@
                 <p>
 
                           <label for="people"><g:message code="role.people" default="People" /></label>
-                          <g:select name="people"
-from="${me.hcl.seekin.Auth.User.list()}"
-size="5" multiple="yes" optionKey="id"
-value="${roleInstance?.people}" />
-
+                          
 
                 </p>
           

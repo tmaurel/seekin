@@ -1,5 +1,5 @@
 
-<%@ page import="me.hcl.seekin.Auth.Role" %>
+<%@ page import="me.hcl.seekin.Auth.Role.Role" %>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -19,6 +19,8 @@
           
                         <g:set var="idInternationalized" value="${message(code:'role.id')}" />
                  
+                        <g:set var="visibleInternationalized" value="${message(code:'role.visible')}" />
+                 
                         <g:set var="authorityInternationalized" value="${message(code:'role.authority')}" />
                  
                         <g:set var="descriptionInternationalized" value="${message(code:'role.description')}" />
@@ -29,6 +31,8 @@
               columnDefs="[
                   
                             [key: 'id', sortable: true, resizeable: true, label: idInternationalized],
+                     
+                            [key: 'visible', sortable: true, resizeable: true, label: visibleInternationalized],
                      
                             [key: 'authority', sortable: true, resizeable: true, label: authorityInternationalized],
                      

@@ -53,27 +53,27 @@
                             <div class="boxed_form">
                                     <p>
                                             <label for="firstName"><g:message code="profile.firstName" /></label>
-                                            <g:textField name="firstName" value="${profile?.firstName?.encodeAsHTML()}" />
+                                            <g:textField name="firstName" value="${user?.firstName?.encodeAsHTML()}" />
                                     </p>
                                     <p>
                                             <label for="lastName"><g:message code="profile.lastName" /></label>
-                                            <g:textField name="lastName" value="${profile?.lastName?.encodeAsHTML()}" />
+                                            <g:textField name="lastName" value="${user?.lastName?.encodeAsHTML()}" />
                                     </p>
                                     <p>
                                             <label for="street"><g:message code="address.street" /></label>
-                                            <g:textField name="street" value="${profile?.address?.street?.encodeAsHTML()}" />
+                                            <g:textField name="street" value="${user?.address?.street?.encodeAsHTML()}" />
                                     </p>
                                     <p>
                                             <label for="zipCode"><g:message code="address.zipcode" /></label>
-                                            <g:textField name="zipCode" value="${profile?.address?.zipCode?.encodeAsHTML()}" />
+                                            <g:textField name="zipCode" value="${user?.address?.zipCode?.encodeAsHTML()}" />
                                     </p>
                                     <p>
                                             <label for="town"><g:message code="address.city" /></label>
-                                            <g:textField name="town" value="${profile?.address?.town?.encodeAsHTML()}" />
+                                            <g:textField name="town" value="${user?.address?.town?.encodeAsHTML()}" />
                                     </p>
                                     <p>
                                             <label for="phone"><g:message code="profile.phone" /></label>
-                                            <g:textField name="phone" value="${profile?.phone?.encodeAsHTML()}" />
+                                            <g:textField name="phone" value="${user?.phone?.encodeAsHTML()}" />
                                     </p>
                                     <g:isExternal profile="${profile}">
                                     <p>

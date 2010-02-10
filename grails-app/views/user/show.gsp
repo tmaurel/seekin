@@ -53,10 +53,37 @@
                       </p>
                         
                        <p>
-                            <label><g:message code="user.profile" default="Profile" /></label>
+                            <label><g:message code="user.firstName" default="First Name" /></label>
                             <span class="field_value">
                             
-                            <g:link controller="profile" action="show" id="${userInstance?.profile?.id}">${userInstance?.profile?.encodeAsHTML()}</g:link>
+                            ${fieldValue(bean: userInstance, field: "firstName")}
+                            
+                            </span>
+                      </p>
+                        
+                       <p>
+                            <label><g:message code="user.lastName" default="Last Name" /></label>
+                            <span class="field_value">
+                            
+                            ${fieldValue(bean: userInstance, field: "lastName")}
+                            
+                            </span>
+                      </p>
+                        
+                       <p>
+                            <label><g:message code="user.address" default="Address" /></label>
+                            <span class="field_value">
+                            
+                            <g:link controller="address" action="show" id="${userInstance?.address?.id}">${userInstance?.address?.encodeAsHTML()}</g:link>
+                            
+                            </span>
+                      </p>
+                        
+                       <p>
+                            <label><g:message code="user.phone" default="Phone" /></label>
+                            <span class="field_value">
+                            
+                            ${fieldValue(bean: userInstance, field: "phone")}
                             
                             </span>
                       </p>

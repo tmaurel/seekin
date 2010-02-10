@@ -7,6 +7,6 @@ include "reports"
 include "convocations"
 
 fixture {
-	secondInternship(Internship, subject: "Second Internship", beginAt: new Date(), isApproval: true, student: thomasProfile, academicTutor: hclProfile, companyTutor: balmerProfile, report: secondInternshipReport, convocation: secondConvocation)
-	firstInternship(Internship, subject: "First Internship", beginAt: new Date(), isApproval: true, student: nadirProfile, academicTutor: hclProfile, companyTutor: jobsProfile, report: firstInternshipReport, convocation: firstConvocation)
+	secondInternship(Internship, subject: "Second Internship", beginAt: new Date(), isApproval: true, student: thomasRole, academicTutor: hclRole, companyTutor: balmerRole, report: secondInternshipReport, convocation: secondConvocation)
+	firstInternship(Internship, subject: "First Internship", beginAt: new Date(), isApproval: true, student: nadirRole, academicTutor: hclRole, companyTutor: jobsRole, report: firstInternshipReport, convocation: firstConvocation)
 }

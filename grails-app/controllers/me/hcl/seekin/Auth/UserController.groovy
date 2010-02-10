@@ -1,8 +1,6 @@
 package me.hcl.seekin.Auth
 
-import me.hcl.seekin.Auth.User
-import me.hcl.seekin.Auth.Role
-import me.hcl.seekin.Profile.*
+import me.hcl.seekin.Auth.Role.Role
 import me.hcl.seekin.Formation
 import me.hcl.seekin.Util.Address
 import me.hcl.seekin.Util.Settings
@@ -71,8 +69,7 @@ class UserController {
 	 * List all Users
 	 */
 	def list = {
-		params.max = Math.min(params.max ? params.max.toInteger() : 10,  100)
-		[userInstanceList: User.list(params), userInstanceTotal: User.count()]
+
 	}
 
 	/**
@@ -118,7 +115,10 @@ class UserController {
 			}
 			else {
 				//first, delete this userInstance from People_Authorities table.
-				Role.findAll().each { it.removeFromPeople(userInstance) }
+				for (role in userInstance.authorities) 
+                                {
+                                    role.delete()
+                                }
 				userInstance.delete()
 				flash.message = "user.deleted"
 				flash.args = [params.id]
@@ -345,144 +345,144 @@ class UserController {
 	 * User Registration Top page.
 	 */
 	def register = {
-
-                def userInstance = new User()
-                def ret
-
-
-                // skip if already logged in
-                if (authenticateService.isLoggedIn()) {
-                        redirect uri: '/'
-                        return
-                }
-
-                if (session.id)
-                {
-                    userInstance.email = params.email
-                    userInstance.password = params.password
-
-                    // If User selected "Student"
-                    if(params.usertype == "1")
-                    {
-                        userInstance.profile = new Student()
-                        ret = [userInstance: userInstance, profile: userInstance.profile, usertype: params.usertype, formations:Formation.list()]
-                    } // If User selected "Staff"
-                    else if(params.usertype == "2")
-                    {
-                        userInstance.profile = new Staff()
-                        ret = [userInstance: userInstance, profile: userInstance.profile, usertype: params.usertype]
-                    } // If User selected "Other"
-                    else if(params.usertype == "3")
-                    {
-                        userInstance.profile = new External()
-                        userInstance.profile.formerStudent = params.formerStudent
-                        ret = [userInstance: userInstance, profile: userInstance.profile, usertype: params.usertype, company: params.company]
-                    }
-                    else return;
-
-                    userInstance.profile.firstName = params.firstName
-                    userInstance.profile.lastName = params.lastName
-                
-                    // If u got to this form by a link or from homepage form
-                    if(request.method == 'GET' || params.fromHome == "1")
-                    {
-                        return ret
-                    }
-                    else if(request.method == 'POST')
-                    {
-
-                        def config = authenticateService.securityConfig
-                        def defaultRole = config.security.defaultRole
-
-                        // Add all form data to the user profile
-                        userInstance.profile.firstName = params.firstName
-                        userInstance.profile.lastName = params.lastName
-                        userInstance.profile.address = new Address()
-                        userInstance.profile.address.street = params.street
-                        userInstance.profile.address.town = params.town
-                        userInstance.profile.address.zipCode = params.zipCode
-                        userInstance.profile.phone = params.phone
-                        userInstance.profile.visible = params.visible
-
-                        // retrieve default role
-                        def role = Role.findByAuthority(defaultRole)
-                        if (!role)
-                        {
-                                flash.message = "user.default.role.not.found"
-                        }
-                        // check if the entered code matches the captcha image
-                        if (!session?.captcha?.isCorrect(params.captcha))
-                        {
-                                flash.message = message(code:"user.code.dismatch")
-                        }
-                        // check if the password matches the repassword
-                        if (params.password != params.repassword)
-                        {
-                                flash.message = message(code:"user.password.dismatch")
-                        }
-                        // encode the password for the insertion in database
-                        def pass = authenticateService.encodePassword(params.password)
-                        userInstance.password = pass
-                        userInstance.enabled = false
-                        userInstance.showEmail = false
-
-                        //Construction of the lineBar included in the email with the good size
-                        String lineBar = ""
-                        message(code:"user.email.content.text2").size().times{lineBar += "-"}
-
-                        // If everything went well
-                        if (userInstance.validate() && flash.message == null)
-                        {
-                            // Check if the company as been specified
-                            if(params.company != null)
-                            {
-                                // If the company already exists in database
-                                def comp = Company.findByName(params.company)
-                                if(comp.size() == 1)
-                                {
-
-                                    println comp
-                                    // TODO : Link to Company or Create it
-                                }
-
-                            }
-
-                            // Add default role to the user
-                            role.addToPeople(userInstance)
-
-                            // If we use confirmation mail
-                            if (config.security.useMail)
-                            {
-                                flash.message = message(code:"user.email.content.text1") + """
-
-                                ${request.scheme}://${request.serverName}:${request.serverPort}${request.contextPath}
-
-                                ${message(code:"user.email.content.text2")}
-                                ${lineBar}
-                                ${message(code:"user.email")}: ${userInstance.email}"""
-
-                                def email = [
-                                        to: [userInstance.email], // 'to' expects a List, NOT a single email address
-                                        subject: "[${request.contextPath}] "+ message(code:"user.email.subject"),
-                                        text: flash.message // 'text' is the email body
-                                        ]
-                                emailerService.sendEmails([email])
-                            }
-                            userInstance.save(flush: true)
-
-
-//                          def auth = new AuthToken(userInstance.email, params.password)
-//                          def authtoken = daoAuthenticationProvider.authenticate(auth)
-//                          SCH.context.authentication = authtoken
-                            redirect uri: '/'
-                        }
-                        else
-                        {
-                                userInstance.password = ''
-                                return ret
-                        }
-                    }
-               }
+//
+//                def userInstance = new User()
+//                def ret
+//
+//
+//                // skip if already logged in
+//                if (authenticateService.isLoggedIn()) {
+//                        redirect uri: '/'
+//                        return
+//                }
+//
+//                if (session.id)
+//                {
+//                    userInstance.email = params.email
+//                    userInstance.password = params.password
+//
+//                    // If User selected "Student"
+//                    if(params.usertype == "1")
+//                    {
+//                        userInstance.profile = new Student()
+//                        ret = [userInstance: userInstance, profile: userInstance.profile, usertype: params.usertype, formations:Formation.list()]
+//                    } // If User selected "Staff"
+//                    else if(params.usertype == "2")
+//                    {
+//                        userInstance.profile = new Staff()
+//                        ret = [userInstance: userInstance, profile: userInstance.profile, usertype: params.usertype]
+//                    } // If User selected "Other"
+//                    else if(params.usertype == "3")
+//                    {
+//                        userInstance.profile = new External()
+//                        userInstance.profile.formerStudent = params.formerStudent
+//                        ret = [userInstance: userInstance, profile: userInstance.profile, usertype: params.usertype, company: params.company]
+//                    }
+//                    else return;
+//
+//                    userInstance.profile.firstName = params.firstName
+//                    userInstance.profile.lastName = params.lastName
+//
+//                    // If u got to this form by a link or from homepage form
+//                    if(request.method == 'GET' || params.fromHome == "1")
+//                    {
+//                        return ret
+//                    }
+//                    else if(request.method == 'POST')
+//                    {
+//
+//                        def config = authenticateService.securityConfig
+//                        def defaultRole = config.security.defaultRole
+//
+//                        // Add all form data to the user profile
+//                        userInstance.profile.firstName = params.firstName
+//                        userInstance.profile.lastName = params.lastName
+//                        userInstance.profile.address = new Address()
+//                        userInstance.profile.address.street = params.street
+//                        userInstance.profile.address.town = params.town
+//                        userInstance.profile.address.zipCode = params.zipCode
+//                        userInstance.profile.phone = params.phone
+//                        userInstance.profile.visible = params.visible
+//
+//                        // retrieve default role
+//                        def role = Role.findByAuthority(defaultRole)
+//                        if (!role)
+//                        {
+//                                flash.message = "user.default.role.not.found"
+//                        }
+//                        // check if the entered code matches the captcha image
+//                        if (!session?.captcha?.isCorrect(params.captcha))
+//                        {
+//                                flash.message = message(code:"user.code.dismatch")
+//                        }
+//                        // check if the password matches the repassword
+//                        if (params.password != params.repassword)
+//                        {
+//                                flash.message = message(code:"user.password.dismatch")
+//                        }
+//                        // encode the password for the insertion in database
+//                        def pass = authenticateService.encodePassword(params.password)
+//                        userInstance.password = pass
+//                        userInstance.enabled = false
+//                        userInstance.showEmail = false
+//
+//                        //Construction of the lineBar included in the email with the good size
+//                        String lineBar = ""
+//                        message(code:"user.email.content.text2").size().times{lineBar += "-"}
+//
+//                        // If everything went well
+//                        if (userInstance.validate() && flash.message == null)
+//                        {
+//                            // Check if the company as been specified
+//                            if(params.company != null)
+//                            {
+//                                // If the company already exists in database
+//                                def comp = Company.findByName(params.company)
+//                                if(comp.size() == 1)
+//                                {
+//
+//                                    println comp
+//                                    // TODO : Link to Company or Create it
+//                                }
+//
+//                            }
+//
+//                            // Add default role to the user
+//                            role.addToPeople(userInstance)
+//
+//                            // If we use confirmation mail
+//                            if (config.security.useMail)
+//                            {
+//                                flash.message = message(code:"user.email.content.text1") + """
+//
+//                                ${request.scheme}://${request.serverName}:${request.serverPort}${request.contextPath}
+//
+//                                ${message(code:"user.email.content.text2")}
+//                                ${lineBar}
+//                                ${message(code:"user.email")}: ${userInstance.email}"""
+//
+//                                def email = [
+//                                        to: [userInstance.email], // 'to' expects a List, NOT a single email address
+//                                        subject: "[${request.contextPath}] "+ message(code:"user.email.subject"),
+//                                        text: flash.message // 'text' is the email body
+//                                        ]
+//                                emailerService.sendEmails([email])
+//                            }
+//                            userInstance.save(flush: true)
+//
+//
+////                          def auth = new AuthToken(userInstance.email, params.password)
+////                          def authtoken = daoAuthenticationProvider.authenticate(auth)
+////                          SCH.context.authentication = authtoken
+//                            redirect uri: '/'
+//                        }
+//                        else
+//                        {
+//                                userInstance.password = ''
+//                                return ret
+//                        }
+//                    }
+//               }
 	}
 	def dataTableDataAsJSON = {
         def list = User.list(params)
@@ -495,7 +495,8 @@ class UserController {
         		email:it.email,
 		   		showEmail:it.showEmail,
 				enabled:it.enabled,
-				profile:it.profile,
+                                firstName: it.firstName,
+                                lastName: it.lastName,
 				urlID:it.id
             ]
         }
