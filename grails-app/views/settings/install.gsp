@@ -32,7 +32,7 @@
                 </p>
           
           <div class="submit yui-skin-sam">
-             <g:buildCreateButtons />
+             <g:YUISubmitbutton value="create" action="save"/>
           </div>
 
       </g:form>

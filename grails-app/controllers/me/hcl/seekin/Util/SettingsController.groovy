@@ -8,9 +8,15 @@ class SettingsController {
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
     def install = {
-        def settingsInstance = new Settings()
-        settingsInstance.properties = params
-        return [settingsInstance: settingsInstance]
+        def settingsInstance = Settings.get(1)
+        if(settingsInstance != null) {
+            redirect(controller: "user", action: "auth")
+        }
+        else {
+          settingsInstance = new Settings()
+          settingsInstance.properties = params
+          return [settingsInstance: settingsInstance]
+        }
     }
 
     def save = {
@@ -31,7 +37,7 @@ class SettingsController {
         if (!settingsInstance) {
             flash.message = "settings.not.found"
             flash.args = [1]
-            redirect(action: "edit")
+            redirect(action: "install")
         }
         else {
             return [settingsInstance: settingsInstance]
