@@ -57,6 +57,25 @@ class SettingsController {
                 }
             }
             settingsInstance.properties = params
+
+			def logoFile = request.getFile('logo')
+			if(!logoFile?.empty)
+			{
+				if(logoFile.contentType != "image/png")
+				{
+					flash.message = "settings.errors.logo.type"
+					render(view: "edit", model: [settingsInstance: settingsInstance])
+					return
+				}
+				if(logoFile.size > 1024*200)
+				{
+					flash.message = "settings.errors.logo.size"
+					render(view: "edit", model: [settingsInstance: settingsInstance])
+					return
+				}
+				logoFile.transferTo(new File("web-app/images/skin/logo.png"))
+			}
+			
             if (!settingsInstance.hasErrors() && settingsInstance.save()) {
                 flash.message = "settings.updated"
                 flash.args = [1]

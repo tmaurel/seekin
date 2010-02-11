@@ -41,7 +41,7 @@ style = {
 		'display': 'block', 
 		'width':'201px', 
 		'height':'81px', 
-		'background':'transparent url(../images/skin/seekin.png) no-repeat 0 0', 
+		'background':'transparent url(../images/skin/logo.png) no-repeat 0 0',
 		'text-indent':'-9999px'
 	)
 
@@ -205,7 +205,7 @@ style = {
 		'border-left':'1px solid #8c8c8c'
 	)
 
-	'#bar #bar_cont .navigation li.navigation_active' (
+	'#bar #b ar_cont .navigation li.navigation_active' (
 		'background-color':'transparent'
 	)
 

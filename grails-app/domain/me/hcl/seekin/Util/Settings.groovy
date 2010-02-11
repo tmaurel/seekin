@@ -3,12 +3,14 @@ package me.hcl.seekin.Util
 class Settings {
 
 	String applicationName
-	// Byte[] logo
+	def logo
 	String emailAdmin
 
     static constraints = {
 		applicationName(nullable: true)
-		// logo(nullable: true)
+		logo(nullable: true)
 		emailAdmin(email: true)
     }
+
+	static transcients = ["logo"]
 }

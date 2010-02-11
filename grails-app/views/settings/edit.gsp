@@ -41,7 +41,7 @@
                 </p>
           
           <div class="submit yui-skin-sam">
-            <g:YUISubmitbutton value="update" action="update"/>
+            <g:YUISubmitbutton value="update" action="update" />
           </div>
       </g:form>
     </body>
