@@ -19,15 +19,15 @@
                                         </div>
                                     </g:hasErrors>
                                     <p>
-                                            <label for="email"><g:message code="register.form.enteryourmail" /></label>
+                                            <label for="email"><g:message code="user.enteryourmail" /></label>
                                             <g:textField name="email" value="${person?.email?.encodeAsHTML()}" />
                                     </p>
                                     <p>
-                                            <label for='password'><g:message code="login.label.password" /></label>
+                                            <label for='password'><g:message code="user.password" /></label>
                                             <g:passwordField name='password' />
                                     </p>
                                     <p>
-                                            <label for='password'><g:message code="register.form.repassword" /></label>
+                                            <label for='password'><g:message code="user.repassword" /></label>
                                             <g:passwordField name='repassword' />
                                     </p>
                             </div>
@@ -52,11 +52,11 @@
                       <gui:expandablePanel title="${message(code:'register.form.profile')}" expanded="true" bounce="false">
                             <div class="boxed_form">
                                     <p>
-                                            <label for="firstName"><g:message code="profile.firstName" /></label>
+                                            <label for="firstName"><g:message code="user.firstName" /></label>
                                             <g:textField name="firstName" value="${user?.firstName?.encodeAsHTML()}" />
                                     </p>
                                     <p>
-                                            <label for="lastName"><g:message code="profile.lastName" /></label>
+                                            <label for="lastName"><g:message code="user.lastName" /></label>
                                             <g:textField name="lastName" value="${user?.lastName?.encodeAsHTML()}" />
                                     </p>
                                     <p>
@@ -72,16 +72,16 @@
                                             <g:textField name="town" value="${user?.address?.town?.encodeAsHTML()}" />
                                     </p>
                                     <p>
-                                            <label for="phone"><g:message code="profile.phone" /></label>
+                                            <label for="phone"><g:message code="user.phone" /></label>
                                             <g:textField name="phone" value="${user?.phone?.encodeAsHTML()}" />
                                     </p>
                                     <g:isExternal profile="${profile}">
                                     <p>
-                                      <label for="formerStudent"><g:message code="profile.external.formerstudent" /></label>
+                                      <label for="formerStudent"><g:message code="external.formerstudent" /></label>
                                       <g:checkBox name="formerStudent" value="${profile?.formerStudent}" />
                                     </p>
                                     <div>
-                                        <label for="company"><g:message code="profile.external.company" /></label>
+                                        <label for="company"><g:message code="external.company" /></label>
                                         <gui:autoComplete
                                           id="company"
                                           controller="company"
@@ -95,12 +95,12 @@
                                     </g:isExternal>
                                     <g:isStudent profile="${profile}">
                                           <p>
-                                            <label for="formation"><g:message code="profile.student.formation" /></label>
+                                            <label for="formation"><g:message code="student.formation" /></label>
                                             <g:select name="formation" from="${formations}"  optionKey="id" optionValue="label"/>
                                           </p>
                                     </g:isStudent>
                                     <p>
-                                      <label for="visible"><g:message code="profile.visible" /></label>
+                                      <label for="visible"><g:message code="student.visible" /></label>
                                       <g:checkBox name="visible" value="${profile?.visible}" />
                                     </p>
                             </div>

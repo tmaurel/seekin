@@ -13,11 +13,11 @@
 					<g:textField name="email" />
 				</p>
                                 <p>
-					<label for="firstName"><g:message code="profile.firstName" /></label>
+					<label for="firstName"><g:message code="user.firstName" /></label>
 					<g:textField name="firstName" />
 				</p>
                                 <p>
-					<label for="lastName"><g:message code="profile.lastName" /></label>
+					<label for="lastName"><g:message code="user.lastName" /></label>
 					<g:textField name="lastName" />
 				</p>
 				<p class="centered_para">
@@ -42,11 +42,11 @@
                                         <div class="flash_message">${flash.message}</div>
                                     </g:if>
 				<p>
-					<label for='j_username'><g:message code="login.label.username" /></label>
+					<label for='j_username'><g:message code="user.email" /></label>
 					<g:textField  name='j_username' value='${request.remoteUser}' />
 				</p>
 				<p>
-					<label for='j_password'><g:message code="login.label.password" /></label>
+					<label for='j_password'><g:message code="user.password" /></label>
 					<g:passwordField name='j_password' />
 				</p>
 				<p>

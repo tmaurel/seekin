@@ -7,24 +7,17 @@ import me.hcl.seekin.Util.Address
  * Role class
  */
 class Role {
-	static transients = [ "authority" ]
-	/** User which is identified by the Role */
-	static hasMany = [people: User]
-        static belongsTo = User
-	
-	/** description */
-	String description
+    
+    static belongsTo = [user: User]
 
-	/** ROLE String */
-	String authority = "ROLE_USER"
+    static transients = ['$authority','authority']
 
-        /** Visible ? **/
-        Boolean visible
+    protected transient @Lazy(soft=true) volatile String authority = {
+        "ROLE_" + this.class.name.substring(this.class.name.lastIndexOf(".") + 1).toUpperCase()
+    }()
 	
-	/** Constraints used to check if an instance is correct */
+    /** Constraints used to check if an instance is correct */
     static constraints = {
-        visible(nullable: true)
-        authority(blank: false, unique: false)
-        description(nullable: true)
+        user(nullable: true)
     }
 }

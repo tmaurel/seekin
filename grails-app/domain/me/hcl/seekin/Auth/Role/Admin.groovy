@@ -1,11 +1,11 @@
 package me.hcl.seekin.Auth.Role
 
 /*
- * A staff member is a particular Role
+ * An Admin is a particular Role
  */
-class Staff extends Role {
+class Admin extends Role {
 
     static constraints = {
     }
-  
+
 }

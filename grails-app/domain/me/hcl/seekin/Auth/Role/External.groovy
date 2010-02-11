@@ -11,9 +11,6 @@ class External extends Role {
         
 	Boolean formerStudent
 
-    	/** ROLE String */
-	String authority = "ROLE_EXTERNAL"
-
         static constraints = {
 		company(nullable: true)
 		formerStudent(nullable: true)

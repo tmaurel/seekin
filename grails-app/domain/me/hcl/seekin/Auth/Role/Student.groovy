@@ -11,11 +11,11 @@ class Student extends Role {
     /** A student can have many internship during his studies */
     static hasMany = [ internships : Internship ]
 
-    /** ROLE String */
-    String authority = "ROLE_STUDENT"
+    /** Visible ? **/
+    Boolean visible
 
-	
     static constraints = {
+        visible(nullable: true)
     }
   
 }

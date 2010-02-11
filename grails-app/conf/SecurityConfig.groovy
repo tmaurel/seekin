@@ -12,7 +12,7 @@ security {
 	
 	useControllerAnnotations = true 
 	
-	defaultRole = "ROLE_USER"
+	defaultRole = "ROLE_ROLE"
 	
 	authenticationFailureUrl = "/user/authFail?login_error=1"
 	loginFormUrl = "/user/auth" 
