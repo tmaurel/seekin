@@ -26,7 +26,7 @@ class AddressTests extends GrailsUnitTestCase {
         /** Add the dynamic method validate to our Address class */
 		mockForConstraintsTests(Address)
 
-		/** Build a correct instance of Profile and test that the validation is correct */
+		/** Build a correct instance of Address and test that the validation is correct */
 		address = new Address(street: "12 rue des riveaux", zipCode: "63320", town: "chidrac")
 
 		assertTrue address.validate()

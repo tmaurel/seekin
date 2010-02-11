@@ -3,7 +3,7 @@ package me.hcl.seekin.Util
 import grails.test.*
 
 class DocumentTests extends GrailsUnitTestCase {
-	/** attribute used to build a Profile instance */
+	/** attribute used to build a Document instance */
 	def document
 	
     protected void setUp() {
