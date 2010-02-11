@@ -1,6 +1,6 @@
 package me.hcl.seekin.Auth
 
-import me.hcl.seekin.Auth.Role.Role
+import me.hcl.seekin.Auth.Role.*
 import me.hcl.seekin.Formation
 import me.hcl.seekin.Util.Address
 import me.hcl.seekin.Util.Settings
@@ -30,6 +30,8 @@ import grails.converters.JSON
 class UserController {
 
 	def authenticateService
+
+        def roleService
 
 	// the delete, save and update actions only accept POST requests
 	static Map allowedMethods = [delete: 'POST', save: 'POST', update: 'POST']
@@ -62,6 +64,7 @@ class UserController {
 		else
 		{
 			// TODO : Accueil Logged User
+                        render "Logged-in Home"
 		}
 	}
 
@@ -86,16 +89,20 @@ class UserController {
 			redirect(action: "list")
 			return
 		}
+
                 // get all roles associated to the user
-		List roleNames = []
+		def roleNames = ""
 		for (role in userInstance.authorities) {
-			roleNames << role.authority
+			roleNames += role.getRoleName() + " "
 		}
-                // sort user roles
-		roleNames.sort { n1, n2 ->
-			n1 <=> n2
-		}
-		[userInstance: userInstance, roleNames: roleNames]
+
+                // build a string from the address
+                def userAddress = ""
+                userAddress += userInstance?.address?.street + " "
+                userAddress += userInstance?.address?.town + " "
+                userAddress += userInstance?.address?.zipCode
+          
+		[userInstance: userInstance, address: userAddress, roleNames: roleNames]
 	}
 
 	/**
@@ -114,11 +121,6 @@ class UserController {
                             redirect(action: "show", id: params.id)
 			}
 			else {
-				//first, delete this userInstance from People_Authorities table.
-				for (role in userInstance.authorities) 
-                                {
-                                    role.delete()
-                                }
 				userInstance.delete()
 				flash.message = "user.deleted"
 				flash.args = [params.id]
@@ -133,7 +135,7 @@ class UserController {
 	}
 
 	def edit = {
-
+                
 		def userInstance = User.get(params.id)
 		if (!userInstance) {
 			flash.message = "user.not.found"
@@ -142,7 +144,7 @@ class UserController {
 			return
 		}
 
-		return buildPersonModel(userInstance)
+		[userInstance: userInstance, roles: buildRolesList(userInstance)]
 	}
 
 	/**
@@ -162,7 +164,7 @@ class UserController {
 		if (userInstance.version > version) {
 			userInstance.errors.rejectValue 'version', "userInstance.optimistic.locking.failure",
 				"Another user has updated this User while you were editing."
-				render view: 'edit', model: buildPersonModel(userInstance)
+				render view: 'edit', model: [userInstance: userInstance, roles: buildRolesList(userInstance)]
 			return
 		}
 
@@ -174,28 +176,31 @@ class UserController {
 		if (userInstance.save()) {
 			flash.message = "user.updated"
 			flash.args = [params.id]
-			Role.findAll().each { it.removeFromPeople(userInstance) }
 			addRoles(userInstance)
 			redirect action: show, id: userInstance.id
 		}
 		else {
-			render view: 'edit', model: buildPersonModel(userInstance)
+                    
+			render view: 'edit', model: [userInstance: userInstance, roles: buildParamsRolesList()]
 		}
 	}
 
 	def create = {
-		[userInstance: new User(params), authorityList: Role.list()]
+
+		[userInstance: new User(password: generatePwd(8)), roles: buildParamsRolesList()]
 	}
 
 	/**
 	 * Person save action.
 	 */
 	def save = {
-
 		def userInstance = new User()
+                userInstance.address = new Address()
 		userInstance.properties = params
-		userInstance.password = authenticateService.encodePassword(params.password)
-		if (userInstance.save()) {
+
+		if (userInstance.validate()) {
+                        userInstance.password = authenticateService.encodePassword(params.password)
+                        userInstance.save()
 			flash.message = "user.created"
 			flash.args = [userInstance.id]
 			addRoles(userInstance)
@@ -206,33 +211,6 @@ class UserController {
 		}
 	}
 
-	private void addRoles(userInstance) {
-		for (String key in params.keySet()) {
-			if (key.contains('ROLE') && 'on' == params.get(key)) {
-				Role.findByAuthority(key).addToPeople(userInstance)
-			}
-		}
-	}
-
-	private Map buildPersonModel(userInstance) {
-
-		List roles = Role.list()
-		roles.sort { r1, r2 ->
-			r1.authority <=> r2.authority
-		}
-		Set userRoleNames = []
-		for (role in userInstance.authorities) {
-			userRoleNames << role.authority
-		}
-		LinkedHashMap<Role, Boolean> roleMap = [:]
-		for (role in roles) {
-			roleMap[(role)] = userRoleNames.contains(role.authority)
-		}
-
-		return [userInstance: userInstance, roleMap: roleMap]
-	}
-	
-	
 	
 	
 	/* Based on LogoutController */ 
@@ -303,20 +281,108 @@ class UserController {
 	/**
 	 * Check if logged in.
 	 */
-	private boolean isLoggedIn() {
+	private boolean isLoggedIn()
+        {
 		return authenticateService.isLoggedIn()
 	}
 	
 	/**
          * Make sure the is no cache for the response
          */
-	private void noCache(response) {
+	private void noCache(response)
+        {
 		response.setHeader('Cache-Control', 'no-cache') // HTTP 1.1
 		response.addDateHeader('Expires', 0)
 		response.setDateHeader('max-age', 0)
 		response.setIntHeader ('Expires', -1) //prevents caching at the proxy server
 		response.addHeader('cache-Control', 'private') //IE5.x only
 	}
+
+        private ArrayList buildParamsRolesList()
+        {
+                def roles = roleService.getRoleNames()
+                def authorities = []
+                def role
+                
+                roles.each
+                {
+                     role = "ROLE_$it".toUpperCase()
+                     authorities << [name:it, value:params."$role"]
+                }
+
+                return authorities
+        }
+
+        private ArrayList buildRolesList(userInstance)
+        {
+                def roles = roleService.getRoleNames()
+                def authorities = []
+                def found
+                
+                roles.each
+                {
+                   found = false
+                   for (role in userInstance.authorities)
+                   {
+                       if(role.getRoleName() == it)
+                       {
+                            found = true
+                            break
+                       }
+                   }
+                   authorities << [name:it, value:found]
+                }
+
+                return authorities
+        }
+
+        private void addRoles(userInstance)
+        {
+                def roles = roleService.getRoleNames()
+                def name
+                def value
+                def found
+                def catchedRole
+                def roleClass
+  
+                roles.each
+                {
+                    catchedRole = null
+                    name = "ROLE_$it".toUpperCase()
+                    value = params."$name"
+
+                    for (role in userInstance.authorities)
+                    {
+                       if(role.getRoleName() == it)
+                       {
+                            catchedRole = role
+                            break
+                       }
+                    }
+            
+                    if(value == "on" && catchedRole == null)
+                    {
+                        Thread t = Thread.currentThread()
+                        ClassLoader cl = t.getContextClassLoader()
+                        roleClass = cl.loadClass("me.hcl.seekin.Auth.Role." + it)
+                        userInstance.addToAuthorities(roleClass.newInstance())
+                    }
+                    else if(value == null && catchedRole != null)
+                    {
+                        userInstance.removeFromAuthorities(catchedRole)
+                        catchedRole.delete()
+                    }
+                }
+        }
+
+        private static String generatePwd(length) {
+            def charset = "!0123456789abcdefghijklmnopqrstuvwxyz"       
+            def rand = new Random(System.currentTimeMillis())
+            def ret = (1..length).collect {
+                charset.charAt(rand.nextInt(charset.length()))
+            }
+            return ret.join()
+        }
 	
 	
 	
@@ -484,20 +550,29 @@ class UserController {
 //                    }
 //               }
 	}
-	def dataTableDataAsJSON = {
+
+    
+    def dataTableDataAsJSON = {
         def list = User.list(params)
         def ret = []
         response.setHeader("Cache-Control", "no-store")
 
         list.each {
-        	ret << [
-    			id:it.id,
-        		email:it.email,
-		   		showEmail:it.showEmail,
-				enabled:it.enabled,
-                                firstName: it.firstName,
-                                lastName: it.lastName,
-				urlID:it.id
+
+            def auth = ""
+            it.authorities.each {
+                auth += it.getRoleName() + "<br />"
+            }
+
+            ret << [
+                id:it.id,
+                email:it.email,
+                firstName: it.firstName,
+                lastName: it.lastName,
+                showEmail:it.showEmail,
+                roles:auth,
+                enabled:it.enabled,
+                urlID:it.id
             ]
         }
 

@@ -13,11 +13,17 @@ class Role {
     static transients = ['$authority','authority']
 
     protected transient @Lazy(soft=true) volatile String authority = {
-        "ROLE_" + this.class.name.substring(this.class.name.lastIndexOf(".") + 1).toUpperCase()
+        "ROLE_" + getRoleName().toUpperCase()
     }()
 	
     /** Constraints used to check if an instance is correct */
     static constraints = {
         user(nullable: true)
     }
+
+    def getRoleName()
+    {
+        this.class.name.substring(this.class.name.lastIndexOf(".") + 1)
+    }
+
 }

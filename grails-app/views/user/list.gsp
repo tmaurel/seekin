@@ -22,7 +22,9 @@
                         <g:set var="emailInternationalized" value="${message(code:'user.email')}" />
                  
                         <g:set var="showEmailInternationalized" value="${message(code:'user.showEmail')}" />
-                 
+
+                        <g:set var="roleInternationalized" value="${message(code:'user.role')}" />
+
                         <g:set var="enabledInternationalized" value="${message(code:'user.enabled')}" />
                  
                         <g:set var="firstNameInternationalized" value="${message(code:'user.firstName')}" />
@@ -33,20 +35,21 @@
               id="dt_2"
               draggableColumns="true"
               columnDefs="[
-                  
                             [key: 'id', sortable: true, resizeable: true, label: idInternationalized],
                      
                             [key: 'email', sortable: true, resizeable: true, label: emailInternationalized],
-                     
-                            [key: 'showEmail', sortable: true, resizeable: true, label: showEmailInternationalized],
-                     
-                            [key: 'enabled', sortable: true, resizeable: true, label: enabledInternationalized],
-                     
+
                             [key: 'firstName', sortable: true, resizeable: true, label: firstNameInternationalized],
-                     
+
                             [key: 'lastName', sortable: true, resizeable: true, label: lastNameInternationalized],
                      
-                  [key: 'urlID', sortable: false, resizeable: false, label:'Actions', formatter: 'adminPanelFormatter']
+                            [key: 'showEmail', sortable: true, resizeable: true, label: showEmailInternationalized],
+
+                            [key: 'enabled', sortable: true, resizeable: true, label: enabledInternationalized],
+
+                            [key: 'roles', sortable: false, resizeable: true, label: roleInternationalized],
+                     
+                            [key: 'urlID', sortable: false, resizeable: false, label:'Actions', formatter: 'adminPanelFormatter']
               ]"
               controller="user"
               action="dataTableDataAsJSON"

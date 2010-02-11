@@ -11,8 +11,8 @@ class RoleService {
 
     def listRole = []
 
-    def nameRole = {
-
+    def getRoleNames = {
+       listRole = []
        def pckgname = "me.hcl.seekin.Auth.Role"
        ArrayList<Class> classes = new ArrayList<Class>()
        // Get a File object for the package

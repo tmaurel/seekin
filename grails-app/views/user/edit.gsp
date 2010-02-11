@@ -25,14 +25,7 @@
                           <g:textField name="email" value="${fieldValue(bean: userInstance, field: 'email')}" />
 
                 </p>
-          
-                <p>
-
-                          <label for="password"><g:message code="user.password" default="Password" /></label>
-                          <g:textField name="password" value="${fieldValue(bean: userInstance, field: 'password')}" />
-
-                </p>
-          
+                    
                 <p>
 
                           <label for="enabled"><g:message code="user.enabled" default="Enabled" /></label>
@@ -55,12 +48,20 @@
                 </p>
           
                 <p>
-
-                          <label for="address"><g:message code="user.address" default="Address" /></label>
-                          <g:select name="address.id" from="${me.hcl.seekin.Util.Address.list()}" optionKey="id" value="${userInstance?.address?.id}"  />
-
+                          <label for="address.street"><g:message code="address.street" default="Street" /></label>
+                          <g:textField name="address.street" value="${fieldValue(bean: userInstance?.address, field: 'street')}" />
                 </p>
-          
+
+                <p>
+                          <label for="address.town"><g:message code="address.town" default="Town" /></label>
+                          <g:textField name="address.town" value="${fieldValue(bean: userInstance?.address, field: 'town')}" />
+                </p>
+
+                <p>
+                          <label for="address.zipCode"><g:message code="address.zipCode" default="Zip Code" /></label>
+                          <g:textField name="address.zipCode" value="${fieldValue(bean: userInstance?.address, field: 'zipCode')}" />
+                </p>
+
                 <p>
 
                           <label for="phone"><g:message code="user.phone" default="Phone" /></label>
@@ -74,17 +75,17 @@
                           <g:checkBox name="showEmail" value="${userInstance?.showEmail}" />
 
                 </p>
-          
-                <p>
+                <div>
+                          <label><g:message code="user.authorities" default="Authorities" /></label>
+                          <ul>
+                          <g:each var="role" in="${roles}">
+                                  <li>${role.name.encodeAsHTML()}
+                                          <g:checkBox name="ROLE_${role.name.toUpperCase()}" value="${role.value}"/>
+                                  </li>
+                          </g:each>
+                          </ul>
+                </div>
 
-                          <label for="authorities"><g:message code="user.authorities" default="Authorities" /></label>
-                          <g:select name="authorities"
-from="${me.hcl.seekin.Auth.Role.Role.list()}"
-size="5" multiple="yes" optionKey="id"
-value="${userInstance?.authorities}" />
-
-
-                </p>
           
           <div class="submit yui-skin-sam">
             <g:buildEditButtons />

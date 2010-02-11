@@ -1,6 +1,6 @@
 package me.hcl.seekin.Internship
 
-import me.hcl.seekin.Auth.Role.*
+import me.hcl.seekin.Auth.User
 import me.hcl.seekin.Convocation
 
 class Internship {
@@ -15,13 +15,13 @@ class Internship {
 	Boolean isApproval
 
     /** Student who is concerned by the internship */
-	Student student
+	User student
 
     /** Tutor who is member of the university */
-	Staff academicTutor
+	User academicTutor
 
     /** Tutor who is member of the company which posts the internship */  
-	External companyTutor
+	User companyTutor
 	
 	/** Report of the Internship */
 	Report report
@@ -31,13 +31,13 @@ class Internship {
 	
 	/** Constraints used to check if an instance is correct */
     static constraints = {
-		subject(blank: false)
-		beginAt(nullable: false)
-		isApproval()
-		report(nullable: true)
+        subject(blank: false)
+        beginAt(nullable: false)
+        isApproval()
+        report(nullable: true)
         student(nullable: false)
-        academicTutor(nullable: false)
-        companyTutor(nullable: false)
+        academicTutor(nullable: true)
+        companyTutor(nullable: true)
         convocation(nullable: true)
 	}
 }

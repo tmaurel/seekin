@@ -15,5 +15,4 @@ class External extends Role {
 		company(nullable: true)
 		formerStudent(nullable: true)
 	}
-  
 }

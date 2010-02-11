@@ -8,7 +8,16 @@ style = {
 	
 	'body' (
 		'background-color':'#fff',
-		'height':'100%'
+		'height':'100%',
+                '-x-system-font':'none',
+                'font-family':'arial,helvetica,clean,sans-serif',
+                'font-size':'13px',
+                'font-size-adjust':'none',
+                'font-stretch':'normal',
+                'font-style':'normal',
+                'font-variant':'normal',
+                'font-weight':'normal',
+                'line-height':'1.231'
 	)
 
 	'a img' (
@@ -305,6 +314,14 @@ style = {
 		'min-height':'20px',
 		'padding':'4px'
 	)
+
+        '.boxed_form ul' (
+		'width':'30%',
+		'float':'left',
+                'text-align':'left',
+                'list-style-type':'none',
+                'margin-bottom':'10px'
+        )
 
 	'.centered_para' (
 		'text-align':'center'

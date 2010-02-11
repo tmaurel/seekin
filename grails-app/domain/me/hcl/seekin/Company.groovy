@@ -1,6 +1,6 @@
 package me.hcl.seekin
 
-import me.hcl.seekin.Auth.Role.External
+import me.hcl.seekin.Auth.User
 import me.hcl.seekin.Util.Address
 
 /*
@@ -18,7 +18,7 @@ class Company {
 	String phone
 
     /** A company may have many employees */
-	static hasMany = [ employees : External ]
+	static hasMany = [ employees : User ]
 	
 	/** Constraints used to check if an instance is correct */
     static constraints = {

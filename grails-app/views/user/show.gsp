@@ -35,15 +35,6 @@
                       </p>
                         
                        <p>
-                            <label><g:message code="user.password" default="Password" /></label>
-                            <span class="field_value">
-                            
-                            ${fieldValue(bean: userInstance, field: "password")}
-                            
-                            </span>
-                      </p>
-                        
-                       <p>
                             <label><g:message code="user.enabled" default="Enabled" /></label>
                             <span class="field_value">
                             
@@ -69,12 +60,44 @@
                             
                             </span>
                       </p>
+
+
+
+                      <p>
+                            <label><g:message code="address.street" default="Street" /></label>
+                            <span class="field_value">
+
+                            ${fieldValue(bean: userInstance?.address, field: 'street')}
+
+                            </span>
+                      </p>
+
+                     <p>
+                            <label><g:message code="address.town" default="Town" /></label>
+                            <span class="field_value">
+
+                            ${fieldValue(bean: userInstance?.address, field: 'town')}
+
+                            </span>
+                      </p>
+
+                     <p>
+                            <label><g:message code="address.zipCode" default="Zip Code" /></label>
+                            <span class="field_value">
+
+                            ${fieldValue(bean: userInstance?.address, field: 'zipCode')}
+
+                            </span>
+                      </p>
+
+
+
                         
                        <p>
                             <label><g:message code="user.address" default="Address" /></label>
                             <span class="field_value">
                             
-                            <g:link controller="address" action="show" id="${userInstance?.address?.id}">${userInstance?.address?.encodeAsHTML()}</g:link>
+                            ${address}
                             
                             </span>
                       </p>
@@ -101,11 +124,7 @@
                             <label><g:message code="user.authorities" default="Authorities" /></label>
                             <span class="field_value">
                             
-                            <ul>
-                            <g:each in="${userInstance?.authorities}" var="roleInstance">
-                                <li><g:link controller="role" action="show" id="${roleInstance.id}">${roleInstance.encodeAsHTML()}</g:link></li>
-                            </g:each>
-                            </ul>
+                            ${roleNames}
                             
                             </span>
                       </p>
