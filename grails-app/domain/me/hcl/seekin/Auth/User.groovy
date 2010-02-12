@@ -3,6 +3,7 @@ package me.hcl.seekin.Auth
 import me.hcl.seekin.Auth.User
 import me.hcl.seekin.Util.Address
 import me.hcl.seekin.Auth.Role.Role
+import me.hcl.seekin.Internship.Internship
 
 /**
  * User domain class.
@@ -10,7 +11,7 @@ import me.hcl.seekin.Auth.Role.Role
 class User {
 
     /** A user can have some Role */
-	static hasMany = [ authorities : Role ]
+	static hasMany = [ authorities : Role, internships : Internship ]
 
     /** Email which is used as a login */
 	String email

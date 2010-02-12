@@ -81,7 +81,7 @@
                           <g:checkBox name="showEmail" value="${userInstance?.showEmail}" />
 
                 </p>
-                <div>
+                <div class="properties_list">
                           <label><g:message code="user.authorities" default="Authorities" /></label>
                           <ul>
                           <g:each var="role" in="${roles}">

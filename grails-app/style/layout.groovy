@@ -239,8 +239,12 @@ style = {
 		'color':'red',
 		'min-height':'20px',
 		'text-align':'center',
-		'width':'100%'
-	)	
+		'width':'100%',
+	)
+
+        '.flash_message ul' (
+                'list-style-type':'none'
+        )
 
 	'h2' (
 		'display':'block',
@@ -269,10 +273,10 @@ style = {
                 'margin':'0px',
                 'padding':'0px',
                 'clear':'none',
-                'width':'38%',
+                'width':'50%',
 		'margin-right':'5%',
 		'height':'16px',
-		'float':'right',
+		'float':'left',
         )
 	
 	'.boxed_form input[type=\'text\'], .boxed_form input[type=\'password\'], .boxed_form input[type=\'checkbox\'], .boxed_form textarea' (
@@ -315,7 +319,7 @@ style = {
 		'padding':'4px'
 	)
 
-        '.boxed_form ul' (
+        '.boxed_form .properties_list' (
 		'width':'30%',
 		'float':'left',
                 'text-align':'left',

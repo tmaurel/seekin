@@ -13,14 +13,14 @@
                                     <g:if test="${flash.message}">
                                         <div class="flash_message">${flash.message}</div>
                                     </g:if>
-                                    <g:hasErrors bean="${person}">
+                                    <g:hasErrors bean="${userInstance}">
                                         <div class="flash_message">
-                                                <g:renderErrors bean="${person}" />
+                                                <g:renderErrors bean="${userInstance}" />
                                         </div>
                                     </g:hasErrors>
                                     <p>
                                             <label for="email"><g:message code="user.enteryourmail" /></label>
-                                            <g:textField name="email" value="${person?.email?.encodeAsHTML()}" />
+                                            <g:textField name="email" value="${userInstance?.email?.encodeAsHTML()}" />
                                     </p>
                                     <p>
                                             <label for='password'><g:message code="user.password" /></label>
@@ -53,29 +53,29 @@
                             <div class="boxed_form">
                                     <p>
                                             <label for="firstName"><g:message code="user.firstName" /></label>
-                                            <g:textField name="firstName" value="${user?.firstName?.encodeAsHTML()}" />
+                                            <g:textField name="firstName" value="${userInstance?.firstName?.encodeAsHTML()}" />
                                     </p>
                                     <p>
                                             <label for="lastName"><g:message code="user.lastName" /></label>
-                                            <g:textField name="lastName" value="${user?.lastName?.encodeAsHTML()}" />
+                                            <g:textField name="lastName" value="${userInstance?.lastName?.encodeAsHTML()}" />
                                     </p>
                                     <p>
-                                            <label for="street"><g:message code="address.street" /></label>
-                                            <g:textField name="street" value="${user?.address?.street?.encodeAsHTML()}" />
+                                            <label for="address.street"><g:message code="address.street" /></label>
+                                            <g:textField name="address.street" value="${userInstance?.address?.street?.encodeAsHTML()}" />
                                     </p>
                                     <p>
-                                            <label for="zipCode"><g:message code="address.zipcode" /></label>
-                                            <g:textField name="zipCode" value="${user?.address?.zipCode?.encodeAsHTML()}" />
+                                            <label for="address.zipCode"><g:message code="address.zipcode" /></label>
+                                            <g:textField name="address.zipCode" value="${userInstance?.address?.zipCode?.encodeAsHTML()}" />
                                     </p>
                                     <p>
-                                            <label for="town"><g:message code="address.city" /></label>
-                                            <g:textField name="town" value="${user?.address?.town?.encodeAsHTML()}" />
+                                            <label for="address.town"><g:message code="address.city" /></label>
+                                            <g:textField name="address.town" value="${userInstance?.address?.town?.encodeAsHTML()}" />
                                     </p>
                                     <p>
                                             <label for="phone"><g:message code="user.phone" /></label>
-                                            <g:textField name="phone" value="${user?.phone?.encodeAsHTML()}" />
+                                            <g:textField name="phone" value="${userInstance?.phone?.encodeAsHTML()}" />
                                     </p>
-                                    <g:isExternal profile="${profile}">
+                                    <g:if test="${usertype == '3'}">
                                     <p>
                                       <label for="formerStudent"><g:message code="external.formerstudent" /></label>
                                       <g:checkBox name="formerStudent" value="${profile?.formerStudent}" />
@@ -92,16 +92,20 @@
 
                                         />
                                     </div>
-                                    </g:isExternal>
-                                    <g:isStudent profile="${profile}">
+                                    </g:if>
+                                    <g:if test="${usertype == '1'}">
                                           <p>
                                             <label for="formation"><g:message code="student.formation" /></label>
                                             <g:select name="formation" from="${formations}"  optionKey="id" optionValue="label"/>
                                           </p>
-                                    </g:isStudent>
+                                          <p>
+                                            <label for="visible"><g:message code="student.visible" /></label>
+                                            <g:checkBox name="visible" value="${profile?.visible}" />
+                                          </p>
+                                    </g:if>
                                     <p>
-                                      <label for="visible"><g:message code="student.visible" /></label>
-                                      <g:checkBox name="visible" value="${profile?.visible}" />
+                                      <label for="showEmail"><g:message code="user.showEmail" default="Show Email" /></label>
+                                      <g:checkBox name="showEmail" value="${user?.showEmail}" />
                                     </p>
                             </div>
                     </gui:expandablePanel>
