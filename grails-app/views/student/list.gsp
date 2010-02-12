@@ -25,6 +25,8 @@
                  
                         <g:set var="authorityInternationalized" value="${message(code:'student.authority')}" />
                  
+                        <g:set var="roleNameInternationalized" value="${message(code:'student.roleName')}" />
+                 
           <gui:dataTable
               id="dt_2"
               draggableColumns="true"
@@ -37,6 +39,8 @@
                             [key: 'visible', sortable: true, resizeable: true, label: visibleInternationalized],
                      
                             [key: 'authority', sortable: true, resizeable: true, label: authorityInternationalized],
+                     
+                            [key: 'roleName', sortable: true, resizeable: true, label: roleNameInternationalized],
                      
                   [key: 'urlID', sortable: false, resizeable: false, label:'Actions', formatter: 'adminPanelFormatter']
               ]"

@@ -37,6 +37,12 @@
 
                 </p>
           
+                <p>
+                      <label for="roleName"><g:message code="student.roleName" default="Role Name" />:</label>
+                      
+
+                </p>
+          
           <div class="submit yui-skin-sam">
              <g:buildCreateButtons />
           </div>

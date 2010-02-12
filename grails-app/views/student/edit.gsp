@@ -35,20 +35,15 @@
           
                 <p>
 
-                          <label for="internships"><g:message code="student.internships" default="Internships" /></label>
-                          
-<g:link controller="internship" params="['student.id': studentInstance?.id]" action="create"><g:message code="internship.new" default="New Internship" /></g:link>
-<br /><g:each in="${studentInstance?.internships}" var="internshipInstance">
-    - <g:link controller="internship" action="show" id="${internshipInstance.id}">${internshipInstance?.encodeAsHTML()}</g:link><br />
-</g:each>
-
+                          <label for="authority"><g:message code="student.authority" default="Authority" /></label>
+                          <g:textField name="authority" value="${fieldValue(bean: studentInstance, field: 'authority')}" />
 
                 </p>
           
                 <p>
 
-                          <label for="authority"><g:message code="student.authority" default="Authority" /></label>
-                          <g:textField name="authority" value="${fieldValue(bean: studentInstance, field: 'authority')}" />
+                          <label for="roleName"><g:message code="student.roleName" default="Role Name" /></label>
+                          
 
                 </p>
           

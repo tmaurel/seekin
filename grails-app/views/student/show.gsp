@@ -44,23 +44,19 @@
                       </p>
                         
                        <p>
-                            <label><g:message code="student.internships" default="Internships" /></label>
+                            <label><g:message code="student.authority" default="Authority" /></label>
                             <span class="field_value">
                             
-                            <ul>
-                            <g:each in="${studentInstance?.internships}" var="internshipInstance">
-                                <li><g:link controller="internship" action="show" id="${internshipInstance.id}">${internshipInstance.encodeAsHTML()}</g:link></li>
-                            </g:each>
-                            </ul>
+                            ${fieldValue(bean: studentInstance, field: "authority")}
                             
                             </span>
                       </p>
                         
                        <p>
-                            <label><g:message code="student.authority" default="Authority" /></label>
+                            <label><g:message code="student.roleName" default="Role Name" /></label>
                             <span class="field_value">
                             
-                            ${fieldValue(bean: studentInstance, field: "authority")}
+                            ${fieldValue(bean: studentInstance, field: "roleName")}
                             
                             </span>
                       </p>
