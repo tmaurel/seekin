@@ -4,6 +4,10 @@ import javax.mail.MessagingException
 
 import org.springframework.mail.MailException
 import org.springframework.mail.SimpleMailMessage
+import me.hcl.seekin.Auth.User
+import org.apache.commons.codec.binary.Base64
+import java.text.DateFormat
+
 
 /**
  * Simple service for sending emails.
@@ -49,4 +53,24 @@ class EmailerService {
 			log.error "Failed to send emails: $e.message", e
 		}
 	}
+
+    def buildURL(user) {
+
+        /* Get information from user for the hash */
+        def pwd = user.password
+        def email =  user.email
+
+        /* Build the today's date */
+        def date = DateFormat.getInstance().format(new Date())
+
+        /* Build the string with all the information */
+        def tmp = date.toString()+pwd+email
+
+        /* Encode the string */
+        def encode = Base64.encodeBase64(tmp.getBytes())
+
+        /* Return the encoded string in a String format */
+        return new String(encode)
+
+    }
 }
