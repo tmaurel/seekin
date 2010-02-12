@@ -277,6 +277,33 @@ class UserController {
 		flash.message = msg
 		redirect action: auth, params: params
 	}
+
+
+    def lostPwd = {
+
+      def today = new Date()
+      long mills_per_day = 1000 * 60 * 60 * 24;
+
+
+      def list = User.findById(1)
+      def encodedUrl = emailerService.buildURL(list)
+
+      println "Encoded Url: " + encodedUrl
+      def decodedUrl = new String(Base64.decodeBase64(encodedUrl.getBytes()))
+      println "Date: " + decodedUrl.substring(0, 14)
+      println "Password MD5: " + decodedUrl.substring(14, 54)
+      println "Email: " + decodedUrl.substring(54, decodedUrl.length())
+
+      def date = DateFormat.getInstance().parse(decodedUrl.substring(0, 14))
+      def pwd = decodedUrl.substring(14, 54)
+      def email = decodedUrl.substring(54, decodedUrl.length())
+      def userFound = User.findByEmailAndPassword(email, pwd)
+      def value = (today.getTime() - date.getTime())/mills_per_day
+      if(userFound != null && value < 3)
+        println "User found"
+      else
+        println "User not found"
+    }
 	
 	/**
 	 * Check if logged in.
