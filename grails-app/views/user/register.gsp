@@ -2,6 +2,7 @@
 	<meta name='layout' content='main' />
 	<title><g:message code="login.page.title" /></title>
 	<gui:resources components="accordion, autoComplete"/>
+        <g:YUIButtonRessource />
 </head>
 
 <body>
@@ -42,7 +43,7 @@
                                             <img src="${createLink(action:'generateCaptcha')}" alt="Captcha" />
                                     </p>
                                     <p class="submit">
-                                            <g:submitButton name="processRegister" value="${message(code:'register.form.submit')}" />
+                                            <g:buildSubmitButton value="register.form.submit" action="register"/>
                                     </p>
                             </div>
                     </gui:expandablePanel>

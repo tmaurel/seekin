@@ -278,32 +278,60 @@ class UserController {
 		redirect action: auth, params: params
 	}
 
+	/**
+	 * Lost password form
+	 */
+        def lostPassword = {
 
-    def lostPwd = {
+                if(request.method == 'POST')
+                {
+                    def user = User.findByEmail(params.email)
+                    if (user)
+                    {
+                            emailerService.buildLostPwdEmail(user)
+                            flash.message = message(code:"user.lostpassword.email.sent", args:["${params.email}"])
+                    }
+                    else
+                    {
+                            flash.message = message(code:"user.not.found")
+                    }
+                }
+        }
 
-      def today = new Date()
-      long mills_per_day = 1000 * 60 * 60 * 24;
+ 	/**
+	 * Form to check the Url Code and enter a new password
+	 */
+        def checkCode = {
 
+                def code = params.id
+                def user
 
-      def list = User.findById(1)
-      def encodedUrl = emailerService.buildURL(list)
+                if(code && (user = emailerService.getUserFromLostPwdCode(code)) != null)
+                {
 
-      println "Encoded Url: " + encodedUrl
-      def decodedUrl = new String(Base64.decodeBase64(encodedUrl.getBytes()))
-      println "Date: " + decodedUrl.substring(0, 14)
-      println "Password MD5: " + decodedUrl.substring(14, 54)
-      println "Email: " + decodedUrl.substring(54, decodedUrl.length())
+                        if(request.method == 'POST')
+                        {
+                            if (params.password != params.repassword)
+                            {
+                                    flash.message = message(code:"user.password.dismatch")
+                            }
+                            else
+                            {
+                                    // encode the password for the insertion in database
+                                    def pass = authenticateService.encodePassword(params.password)
+                                    user.password = pass
+                                    if(user.save())
+                                        flash.message = message(code:"user.password.changed")
 
-      def date = DateFormat.getInstance().parse(decodedUrl.substring(0, 14))
-      def pwd = decodedUrl.substring(14, 54)
-      def email = decodedUrl.substring(54, decodedUrl.length())
-      def userFound = User.findByEmailAndPassword(email, pwd)
-      def value = (today.getTime() - date.getTime())/mills_per_day
-      if(userFound != null && value < 3)
-        println "User found"
-      else
-        println "User not found"
-    }
+                            }
+                        }
+                }
+                else
+                {
+                    flash.message = message(code:"user.lostpassword.code.invalid")
+                }
+        }
+
 	
 	/**
 	 * Check if logged in.
@@ -525,20 +553,7 @@ class UserController {
                             // If we use confirmation mail
                             if (config.security.useMail)
                             {
-                                flash.message = message(code:"user.email.content.text1") + """
-
-                                ${request.scheme}://${request.serverName}:${request.serverPort}${request.contextPath}
-
-                                ${message(code:"user.email.content.text2")}
-                                ${lineBar}
-                                ${message(code:"user.email")}: ${userInstance.email}"""
-
-                                def email = [
-                                        to: [userInstance.email], // 'to' expects a List, NOT a single email address
-                                        subject: "[${request.contextPath}] "+ message(code:"user.email.subject"),
-                                        text: flash.message // 'text' is the email body
-                                        ]
-                                emailerService.sendEmails([email])
+                                emailerService.buildRegistrationMail(userInstance)
                             }
                             userInstance.save(flush: true)
 

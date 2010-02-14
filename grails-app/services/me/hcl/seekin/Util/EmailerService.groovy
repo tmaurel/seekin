@@ -1,7 +1,7 @@
 package me.hcl.seekin.Util
 
 import javax.mail.MessagingException
-
+import org.codehaus.groovy.grails.commons.ConfigurationHolder
 import org.springframework.mail.MailException
 import org.springframework.mail.SimpleMailMessage
 import me.hcl.seekin.Auth.User
@@ -54,23 +54,118 @@ class EmailerService {
 		}
 	}
 
-    def buildURL(user) {
+	/**
+	 * Build the code for the lost password form
+	 *
+	 * @param user the user who lost his password
+	 */
+        def buildLostPwdURL(user) {
 
-        /* Get information from user for the hash */
-        def pwd = user.password
-        def email =  user.email
+            /* Get information from user for the hash */
+            def pwd = user.password
+            def email =  user.email
 
-        /* Build the today's date */
-        def date = DateFormat.getInstance().format(new Date())
+            /* Build the today's date */
+            def date = DateFormat.getInstance().format(new Date())
 
-        /* Build the string with all the information */
-        def tmp = date.toString()+pwd+email
+            /* Build the string with all the information */
+            def tmp = date.toString()+pwd+email
 
-        /* Encode the string */
-        def encode = Base64.encodeBase64(tmp.getBytes())
+            /* Encode the string */
+            def encode = Base64.encodeBase64(tmp.getBytes())
 
-        /* Return the encoded string in a String format */
-        return new String(encode)
+            /* Return the encoded string in a String format */
+            return new String(encode)
 
-    }
+        }
+        
+
+    	/**
+	 * Build the registration confirmation mail
+	 *
+	 * @param user instance of the newly registered user
+	 */
+       def buildRegistrationMail(user) {
+           flash.message = message(code:"user.email.content.text1") + """
+
+            ${request.scheme}://${request.serverName}:${request.serverPort}${request.contextPath}
+
+            ${message(code:"user.email.content.text2")}
+            ${lineBar}
+            ${message(code:"user.email")}: ${user.email}"""
+
+            def email = [
+                    to: [user.email], // 'to' expects a List, NOT a single email address
+                    subject: "[${request.contextPath}] "+ message(code:"user.email.subject"),
+                    text: flash.message // 'text' is the email body
+                    ]
+                    
+            sendEmails([email])
+       }
+
+
+    	/**
+	 * Build the email with the url containing the code for the lost password form
+	 *
+	 * @param user the user who lost his password
+	 */
+        def buildLostPwdEmail(user) {
+
+            /* Build the code */
+            def encodedUrl = buildLostPwdURL(user)
+
+            /* Get the serveur URL from the Config file */
+            def baseUrl = ConfigurationHolder.config.grails.serverURL
+
+            log.error baseUrl + "/user/checkCode/" + encodedUrl
+
+            def email = [
+                    to: [user.email], // 'to' expects a List, NOT a single email address
+                    subject: "TODO",
+                    text: baseUrl + "/user/checkCode/" + encodedUrl // 'text' is the email body
+                    ]
+            sendEmails([email])
+        }
+
+    	/**
+	 * Check if the given code is valid and
+         * return the user
+	 *
+	 * @param encodedUrl the code provided by the user
+	 */
+        def getUserFromLostPwdCode(encodedUrl) {
+
+            /* Current Date */
+            def today = new Date()
+
+            /* Number of milliseconds per day */
+            long mills_per_day = 1000 * 60 * 60 * 24;
+
+            println "Encoded Url: " + encodedUrl
+
+            /* Decode the base64 code */
+            def decodedUrl = new String(Base64.decodeBase64(encodedUrl.getBytes()))
+
+            println "Date: " + decodedUrl.substring(0, 14)
+            println "Password MD5: " + decodedUrl.substring(14, 54)
+            println "Email: " + decodedUrl.substring(54, decodedUrl.length())
+
+
+            /* Split the code to get the date, the password, and the email */
+            def date = DateFormat.getInstance().parse(decodedUrl.substring(0, 14))
+            def pwd = decodedUrl.substring(14, 54)
+            def email = decodedUrl.substring(54, decodedUrl.length())
+
+            /* Check if the user exists */
+            def userFound = User.findByEmailAndPassword(email, pwd)
+
+            /* Make sur the code's date is less than 3 days ago */
+            def value = (today.getTime() - date.getTime())/mills_per_day
+
+            /* If the user exists, and the date is ok, then return true */
+            if(userFound != null && value < 3)
+                return userFound
+            else
+                return null
+        }
 }

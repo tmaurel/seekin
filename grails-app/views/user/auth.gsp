@@ -1,7 +1,8 @@
 <head>
 	<meta name='layout' content='main' />
 	<title><g:message code="login.page.title" /></title>
-	<gui:resources components="accordion"/>	
+	<gui:resources components="accordion"/>
+        <g:YUIButtonRessource />
 </head>
 
 <body class="yui-skin-sam">
@@ -29,8 +30,8 @@
 					</g:radioGroup>
 				</p>
 				<p class="submit">
-                    <g:hiddenField name="fromHome" value="1" />
-					<g:submitButton name="processRegister" value="${message(code:'register.form.submit')}" />
+                                        <g:hiddenField name="fromHome" value="1" />
+					<g:buildSubmitButton value="register.form.submit" action="register"/>
 				</p>
 			</g:form>
 		</gui:expandablePanel>
@@ -54,7 +55,8 @@
 					<g:checkBox class='chk' name='_spring_security_remember_me' value="${hasCookie}" />
 				</p>
 				<p class="submit">
-					<g:submitButton name="processLogin" value="${message(code:'login.form.submit')}" />
+                                        <g:buildSubmitButton value="login.form.submit" action="login"/><br /><br />
+                                        <a href="${createLink(action:'lostPassword')}"><g:message code="user.lostPassword"/></a>
 				</p>
 			</form>
 		</gui:expandablePanel>

@@ -74,4 +74,10 @@ class YUITagLib {
         out << YUISubmitbutton(value:"create", action:"save")
     }
 
+    def buildSubmitButton = { attrs ->
+        def value = attrs["value"]
+        def action = attrs["action"]
+        out << YUISubmitbutton(value:value, action:action)
+    }
+
 }
