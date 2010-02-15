@@ -22,21 +22,21 @@
                 <p>
 
                           <label for="applicationName"><g:message code="settings.applicationName" default="Application Name" /></label>
-                          <g:textField name="applicationName" value="${fieldValue(bean: settingsInstance, field: 'applicationName')}" />
+                          <g:textField name="applicationName" value="${fieldValue(bean: settingsInstance, field: 'applicationName')}" class="field${hasErrors(bean:settingsInstance,field:'applicationName','error')}"/>
 
                 </p>
           
                 <p>
 
                           <label for="logo"><g:message code="settings.logo" default="Logo" /></label>
-                          <input type="file" id="logo" name="logo" />
+                          <input type="file" id="logo" name="logo" class="field${hasErrors(bean:settingsInstance,field:'logo','error')}"/>
 
                 </p>
           
                 <p>
 
                           <label for="emailAdmin"><g:message code="settings.emailAdmin" default="Email Admin" /></label>
-                          <g:textField name="emailAdmin" value="${fieldValue(bean: settingsInstance, field: 'emailAdmin')}" />
+                          <g:textField name="emailAdmin" value="${fieldValue(bean: settingsInstance, field: 'emailAdmin')}" class="field${hasErrors(bean:settingsInstance,field:'emailAdmin','error')}"/>
 
                 </p>
           

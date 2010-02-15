@@ -21,11 +21,11 @@
                                     </g:hasErrors>
                                     <p>
                                             <label for="email"><g:message code="user.enteryourmail" /></label>
-                                            <g:textField name="email" value="${userInstance?.email?.encodeAsHTML()}" />
+                                            <g:textField name="email" value="${userInstance?.email?.encodeAsHTML()}" class="field${hasErrors(bean:userInstance,field:'email','error')}"/>
                                     </p>
                                     <p>
                                             <label for='password'><g:message code="user.password" /></label>
-                                            <g:passwordField name='password' />
+                                            <g:passwordField name='password' class="field${hasErrors(bean:userInstance,field:'password','error')}"/>
                                     </p>
                                     <p>
                                             <label for='password'><g:message code="user.repassword" /></label>
@@ -54,33 +54,33 @@
                             <div class="boxed_form">
                                     <p>
                                             <label for="firstName"><g:message code="user.firstName" /></label>
-                                            <g:textField name="firstName" value="${userInstance?.firstName?.encodeAsHTML()}" />
+                                            <g:textField name="firstName" value="${userInstance?.firstName?.encodeAsHTML()}" class="field${hasErrors(bean:userInstance,field:'firstName','error')}"/>
                                     </p>
                                     <p>
                                             <label for="lastName"><g:message code="user.lastName" /></label>
-                                            <g:textField name="lastName" value="${userInstance?.lastName?.encodeAsHTML()}" />
+                                            <g:textField name="lastName" value="${userInstance?.lastName?.encodeAsHTML()}" class="field${hasErrors(bean:userInstance,field:'lastName','error')}"/>
                                     </p>
                                     <p>
                                             <label for="address.street"><g:message code="address.street" /></label>
-                                            <g:textField name="address.street" value="${userInstance?.address?.street?.encodeAsHTML()}" />
+                                            <g:textField name="address.street" value="${userInstance?.address?.street?.encodeAsHTML()}" class="field${hasErrors(bean:userInstance,field:'address.street','error')}"/>
                                     </p>
                                     <p>
                                             <label for="address.zipCode"><g:message code="address.zipcode" /></label>
-                                            <g:textField name="address.zipCode" value="${userInstance?.address?.zipCode?.encodeAsHTML()}" />
+                                            <g:textField name="address.zipCode" value="${userInstance?.address?.zipCode?.encodeAsHTML()}" class="field${hasErrors(bean:userInstance,field:'address.zipCode','error')}"/>
                                     </p>
                                     <p>
                                             <label for="address.town"><g:message code="address.city" /></label>
-                                            <g:textField name="address.town" value="${userInstance?.address?.town?.encodeAsHTML()}" />
+                                            <g:textField name="address.town" value="${userInstance?.address?.town?.encodeAsHTML()}" class="field${hasErrors(bean:userInstance,field:'address.town','error')}"/>
                                     </p>
                                     <p>
                                             <label for="phone"><g:message code="user.phone" /></label>
-                                            <g:textField name="phone" value="${userInstance?.phone?.encodeAsHTML()}" />
+                                            <g:textField name="phone" value="${userInstance?.phone?.encodeAsHTML()}" class="field${hasErrors(bean:userInstance,field:'phone','error')}"/>
+                                    </p>
+                                    <p>
+                                      <label for="showEmail"><g:message code="user.showEmail" default="Show Email" /></label>
+                                      <g:checkBox name="showEmail" value="${user?.showEmail}" />
                                     </p>
                                     <g:if test="${usertype == '3'}">
-                                    <p>
-                                      <label for="formerStudent"><g:message code="external.formerstudent" /></label>
-                                      <g:checkBox name="formerStudent" value="${profile?.formerStudent}" />
-                                    </p>
                                     <div>
                                         <label for="company"><g:message code="external.company" /></label>
                                         <gui:autoComplete
@@ -93,6 +93,10 @@
 
                                         />
                                     </div>
+                                    <p>
+                                      <label for="formerStudent"><g:message code="external.formerstudent" /></label>
+                                      <g:checkBox name="formerStudent" value="${profile?.formerStudent}" />
+                                    </p>
                                     </g:if>
                                     <g:if test="${usertype == '1'}">
                                           <p>
@@ -104,10 +108,6 @@
                                             <g:checkBox name="visible" value="${profile?.visible}" />
                                           </p>
                                     </g:if>
-                                    <p>
-                                      <label for="showEmail"><g:message code="user.showEmail" default="Show Email" /></label>
-                                      <g:checkBox name="showEmail" value="${user?.showEmail}" />
-                                    </p>
                             </div>
                     </gui:expandablePanel>
 

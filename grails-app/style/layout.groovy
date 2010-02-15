@@ -194,6 +194,11 @@ style = {
                 'list-style-type':'none'
         )
 
+        '.fielderror' (
+                'background-color':'#df6565',
+                'color':'white'
+        )
+
 	'h2' (
 		'display':'block',
 		'width':'100%',
