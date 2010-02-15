@@ -448,9 +448,9 @@ class UserController {
 	 * Captcha generation
 	 */
         def generateCaptcha = {
-            // Generate a captcha of 200px X 50px with gimp, noise and border
+            // Generate a captcha of 150px X 50px with gimp, noise and border
             // And add the associated text to the current user session
-            def captcha = new Captcha.Builder(200, 50)
+            def captcha = new Captcha.Builder(150, 50)
                 .addText()
                 .gimp()
                 .addNoise()

@@ -40,9 +40,9 @@
                                     <p>
                                             <label for='captcha'><g:message code="register.form.captcha" /></label>
                                             <g:textField name="captcha" />
-                                            <img src="${createLink(action:'generateCaptcha')}" alt="Captcha" />
                                     </p>
                                     <p class="submit">
+                                            <img src="${createLink(action:'generateCaptcha')}" alt="Captcha" /><br />
                                             <g:buildSubmitButton value="register.form.submit" action="register"/>
                                     </p>
                             </div>

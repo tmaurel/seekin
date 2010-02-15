@@ -235,16 +235,6 @@ style = {
 	)
 
 
-
-	'.boxed_form img' (
-                'float':'right',
-                'margin-top':'10px',
-                'margin-bottom':'10px',
-                'margin-right':'5%',
-                'width':'200px',
-		'height':'50px'
-	)
-
         ' .boxed_form select' (
                 'height':'20px',
                 'margin':'1px',
@@ -288,23 +278,18 @@ style = {
         )
 	
 	'#login_form' (
-		'width':'40%',
+		'width':'36%',
 		'float':'right',
 	)
 	
-	'#register_form' (
+	'#register_form, #profile_form' (
 		'float':'left',
-		'width':'53%',
-	)
-
-    	'#profile_form' (
-		'float':'left',
-		'width':'63%',
+		'width':'60%',
 	)
 
 	'#captcha_form' (
 		'float':'right',
-		'width':'28%',
+		'width':'36%',
 	)
 
 	'.yui-skin-sam' (
