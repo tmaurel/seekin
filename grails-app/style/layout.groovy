@@ -161,71 +161,19 @@ style = {
 	)
 
 	'#bar #bar_cont' (
-		'clear':'both',
-		'width': '945px',
-		'margin-left':'auto',
-		'margin-right':'auto',
+		'width': '200px',
+                'float':'left',
 		'height': '36px',
 		'background-image':'url(../images/skin/bar_bg.png)',
 		'border':'1px solid #8c8c8c',	
 	)
 
-	'#bar #bar_cont .navigation' (
-		'margin':'-1px',
-		'margin-left':'-1px',
-		'padding':'0px',
-		'max-width':'50%',
-		'clear':'none'
-	)
-
-
-	'#bar #bar_cont .navigation li' (
-		'height':'37px',
-		'border':'0px none #000',
-		'background-color': 'transparent'
-	)
-
-	'#bar #bar_cont #bar_left' (
-		'float':'left'
-	)
-
-	'#bar #bar_cont #bar_right' (
-		'float':'right'
-	)
-
-	'#bar #bar_cont .navigation li a' (
-		'margin-top':'8px',
-		'display':'inline-block',
-		'padding':'0',
-		'height':'22px',
-		'line-height':'22px',
-		'padding-left':'10px',
-		'padding-right':'10px',
-		'background-color': 'transparent',
-		'color':'#000',
-		'font-size':'1.3em'
-	)
-
-	'#bar #bar_cont #bar_left li a' (
-		'border-right':'1px solid #8c8c8c'
-	)
-
-	'#bar #bar_cont #bar_right li a' (
-		'border-left':'1px solid #8c8c8c'
-	)
-
-	'#bar #b ar_cont .navigation li.navigation_active' (
-		'background-color':'transparent'
-	)
-
-	'#bar #bar_cont .navigation li.navigation_active a' (
-		'background-color':'transparent',
-		'color':selectedColor
-	)
-
-	'#bar #bar_cont .navigation li a:hover' (
-		'color':selectedColor
-	)
+        '#bar #bar_powered' (
+                'float':'right',
+                'margin-top':'3px',
+                'width':'90px',
+                'height': '36px',
+        )
 
 	'#main' ( 
 		'width':'945px',
@@ -340,18 +288,18 @@ style = {
         )
 	
 	'#login_form' (
-		'width':'28%',
+		'width':'40%',
 		'float':'right',
 	)
 	
 	'#register_form' (
 		'float':'left',
-		'width':'70%',
+		'width':'53%',
 	)
 
     	'#profile_form' (
 		'float':'left',
-		'width':'70%',
+		'width':'63%',
 	)
 
 	'#captcha_form' (

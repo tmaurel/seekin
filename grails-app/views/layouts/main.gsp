@@ -42,10 +42,14 @@
 			<g:layoutBody />		
         </div>	
         <div id="bar">
-        	<div id="bar_cont">
-        		<nav:render group="bar_left" id="bar_left"/>
-        		<nav:render group="bar_right" id="bar_right"/>
-        	</div>
+                <g:isLoggedIn>
+                  <div id="bar_cont">
+                      Blabla
+                  </div>
+                </g:isLoggedIn>
+                <div id="bar_powered">
+                  <a href="http://seekin.hcl.me"><img src="${resource(dir:'images/icons',file:'powered.png')}" alt="Powered by seekin'" /></a>
+                </div>
         </div>
     </body>	
 </html>

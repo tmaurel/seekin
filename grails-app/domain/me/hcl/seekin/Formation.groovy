@@ -20,5 +20,6 @@ class Formation {
     static constraints = {
 		label(blank: false)
 		description(blank: false)
+                file(nullable: true)
     }
 }

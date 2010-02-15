@@ -21,13 +21,9 @@ class BootStrap {
 		navigationService.registerItem('menu', [controller:'user', action:'logout', order:'8', title:'logout'])
 
 
-		// Bottom Bar
-		navigationService.registerItem('bar_left', [controller:'test', action:'index', title:'profil', id:'profil'])
-		navigationService.registerItem('bar_right', [controller:'test', action:'index', title:'contact', id:'contact'])
-
 		// Load Fixtures
 		if (GrailsUtil.environment == GrailsApplication.ENV_DEVELOPMENT) {
-			fixtureLoader.load("settings","students","externals","staffs","users","companies","reports","convocations","internships","links")
+			fixtureLoader.load("settings","students","externals","staffs","users","companies","reports","convocations","internships","links", "formations")
 		}
 		
      }
