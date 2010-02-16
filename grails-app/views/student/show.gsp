@@ -44,6 +44,19 @@
                       </p>
                         
                        <p>
+                            <label><g:message code="student.internships" default="Internships" /></label>
+                            <span class="field_value">
+                            
+                            <ul>
+                            <g:each in="${studentInstance?.internships}" var="internshipInstance">
+                                <li><g:link controller="internship" action="show" id="${internshipInstance.id}">${internshipInstance.encodeAsHTML()}</g:link></li>
+                            </g:each>
+                            </ul>
+                            
+                            </span>
+                      </p>
+                        
+                       <p>
                             <label><g:message code="student.authority" default="Authority" /></label>
                             <span class="field_value">
                             

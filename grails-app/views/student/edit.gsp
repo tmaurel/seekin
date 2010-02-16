@@ -35,8 +35,19 @@
           
                 <p>
 
+                          <label for="internships"><g:message code="student.internships" default="Internships" /></label>
+                          <g:select name="internships"
+from="${me.hcl.seekin.Internship.Internship.list()}"
+size="5" multiple="yes" optionKey="id"
+value="${studentInstance?.internships}" />
+
+
+                </p>
+          
+                <p>
+
                           <label for="authority"><g:message code="student.authority" default="Authority" /></label>
-                          <g:textField name="authority" value="${fieldValue(bean: studentInstance, field: 'authority')}" />
+                          <g:textField name="authority" value="${fieldValue(bean: studentInstance, field: 'authority')}" class="field${hasErrors(bean:studentInstance ,field:'authority','error')}"/>
 
                 </p>
           

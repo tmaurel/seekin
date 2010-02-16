@@ -21,7 +21,7 @@
           
                 <p>
                       <label for="subject"><g:message code="internship.subject" default="Subject" />:</label>
-                      <g:textField name="subject" value="${fieldValue(bean: internshipInstance, field: 'subject')}" />
+                      <g:textField name="subject" class="field${hasErrors(bean:internshipInstance ,field:'subject','error')}" value="${fieldValue(bean: internshipInstance, field: 'subject')}" />
 
                 </p>
           
@@ -45,19 +45,19 @@
           
                 <p>
                       <label for="student"><g:message code="internship.student" default="Student" />:</label>
-                      <g:select name="student.id" from="${me.hcl.seekin.Auth.Role.Student.list()}" optionKey="id" value="${internshipInstance?.student?.id}"  />
+                      <g:select name="student.id" from="${me.hcl.seekin.Auth.User.list()}" optionKey="id" value="${internshipInstance?.student?.id}"  />
 
                 </p>
           
                 <p>
                       <label for="academicTutor"><g:message code="internship.academicTutor" default="Academic Tutor" />:</label>
-                      <g:select name="academicTutor.id" from="${me.hcl.seekin.Auth.Role.Staff.list()}" optionKey="id" value="${internshipInstance?.academicTutor?.id}"  />
+                      <g:select name="academicTutor.id" from="${me.hcl.seekin.Auth.User.list()}" optionKey="id" value="${internshipInstance?.academicTutor?.id}" noSelection="['null': '']" />
 
                 </p>
           
                 <p>
                       <label for="companyTutor"><g:message code="internship.companyTutor" default="Company Tutor" />:</label>
-                      <g:select name="companyTutor.id" from="${me.hcl.seekin.Auth.Role.External.list()}" optionKey="id" value="${internshipInstance?.companyTutor?.id}"  />
+                      <g:select name="companyTutor.id" from="${me.hcl.seekin.Auth.User.list()}" optionKey="id" value="${internshipInstance?.companyTutor?.id}" noSelection="['null': '']" />
 
                 </p>
           

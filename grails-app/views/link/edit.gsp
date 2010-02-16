@@ -22,21 +22,21 @@
                 <p>
 
                           <label for="title"><g:message code="link.title" default="Title" /></label>
-                          <g:textField name="title" value="${fieldValue(bean: linkInstance, field: 'title')}" />
+                          <g:textField name="title" class="field${hasErrors(bean:linkInstance ,field:'title','error')}" value="${fieldValue(bean: linkInstance, field: 'title')}" />
 
                 </p>
           
                 <p>
 
                           <label for="url"><g:message code="link.url" default="Url" /></label>
-                          <g:textField name="url" value="${fieldValue(bean: linkInstance, field: 'url')}" />
+                          <g:textField name="url" class="field${hasErrors(bean:linkInstance ,field:'url','error')}" value="${fieldValue(bean: linkInstance, field: 'url')}" />
 
                 </p>
           
                 <p>
 
                           <label for="description"><g:message code="link.description" default="Description" /></label>
-                          <g:textField name="description" value="${fieldValue(bean: linkInstance, field: 'description')}" />
+                          <g:textField name="description" class="field${hasErrors(bean:linkInstance ,field:'description','error')}" value="${fieldValue(bean: linkInstance, field: 'description')}" />
 
                 </p>
           

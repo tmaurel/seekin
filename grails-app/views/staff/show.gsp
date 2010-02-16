@@ -43,6 +43,15 @@
                             </span>
                       </p>
                         
+                       <p>
+                            <label><g:message code="staff.roleName" default="Role Name" /></label>
+                            <span class="field_value">
+                            
+                            ${fieldValue(bean: staffInstance, field: "roleName")}
+                            
+                            </span>
+                      </p>
+                        
                       
                       <div class="submit yui-skin-sam">
                         <g:buildShowButtons />

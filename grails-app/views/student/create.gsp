@@ -33,7 +33,7 @@
           
                 <p>
                       <label for="authority"><g:message code="student.authority" default="Authority" />:</label>
-                      <g:textField name="authority" value="${fieldValue(bean: studentInstance, field: 'authority')}" />
+                      <g:textField name="authority" value="${fieldValue(bean: studentInstance, field: 'authority')}" class="field${hasErrors(bean:studentInstance ,field:'authority','error')}"/>
 
                 </p>
           

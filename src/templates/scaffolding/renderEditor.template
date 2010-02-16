@@ -37,7 +37,7 @@
 
     private renderStringEditor(domainClass, property) {
         if (!cp) {
-            return "<g:textField name=\"${property.name}\" value=\"\${fieldValue(bean: ${domainInstance}, field: '${property.name}')}\" class="field\${hasErrors(bean: ${domainInstance}, field: '${property.name}', 'error')}"/>"
+            return "<g:textField name=\"${property.name}\" value=\"\${fieldValue(bean: ${domainInstance}, field: '${property.name}')}\" class=\"field\${hasErrors(bean:${domainInstance} ,field:'${property.name}','error')}\"/>"
         }
         else {
             if ("textarea" == cp.widget || (cp.maxSize > 250 && !cp.password && !cp.inList)) {
@@ -49,7 +49,7 @@
                 }
                 else {
 
-                    def sb = new StringBuffer("<g:${cp.password ? 'passwordField' : 'textField'} name=\"${property.name}\" ")
+                    def sb = new StringBuffer("<g:${cp.password ? 'passwordField' : 'textField'} name=\"${property.name}\" class=\"field\${hasErrors(bean:${domainInstance} ,field:'${property.name}','error')}\" ")
                     if (cp.maxSize) sb << "maxlength=\"${cp.maxSize}\" "
                     if (!cp.editable) sb << "readonly=\"readonly\" "
                     sb << "value=\"\${fieldValue(bean: ${domainInstance}, field: '${property.name}')}\" />"
@@ -98,7 +98,7 @@
                 return "<g:select name=\"${property.name}\" from=\"\${-128..127}\" value=\"\${${domainInstance}?.${property.name}}\" />"
             }
             else {
-                return "<g:textField name=\"${property.name}\" value=\"\${fieldValue(bean: ${domainInstance}, field: '${property.name}')}\" />"
+                return "<g:textField name=\"${property.name}\" value=\"\${fieldValue(bean: ${domainInstance}, field: '${property.name}')}\" class=\"field\${hasErrors(bean:${domainInstance} ,field:'${property.name}','error')}\" />"
             }
         }
         else {
@@ -112,7 +112,7 @@
                 return "<g:select name=\"${property.name}\" from=\"\${-128..127}\" value=\"\${${domainInstance}?.${property.name}}\" ${renderNoSelection(property)} />"
             }
             else {
-                return "<g:textField name=\"${property.name}\" value=\"\${fieldValue(bean: ${domainInstance}, field: '${property.name}')}\" />"
+                return "<g:textField name=\"${property.name}\" value=\"\${fieldValue(bean: ${domainInstance}, field: '${property.name}')}\" class=\"field\${hasErrors(bean:${domainInstance} ,field:'${property.name}','error')}\"/>"
             }
         }
      }

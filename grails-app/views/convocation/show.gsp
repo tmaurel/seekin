@@ -1,71 +1,62 @@
 
-<%@ page import="me.hcl.seekin.Auth.Role.External" %>
+<%@ page import="me.hcl.seekin.Convocation" %>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="layout" content="main" />
-        <title><g:message code="external.show" /></title>
+        <title><g:message code="convocation.show" /></title>
         <g:YUIButtonRessource />
     </head>
     <body>
 
-        <h2><g:message code="external.show" /></h2>
+        <h2><g:message code="convocation.show" /></h2>
         <g:form class="boxed_form" name="crud_panel">
             <g:if test="${flash.message}">
             <div class="flash_message"><g:message code="${flash.message}" args="${flash.args}" default="${flash.defaultMessage}" /></div>
             </g:if>
-            <g:hiddenField name="id" value="${externalInstance?.id}" />
+            <g:hiddenField name="id" value="${convocationInstance?.id}" />
                     
                        <p>
-                            <label><g:message code="external.id" default="Id" /></label>
+                            <label><g:message code="convocation.id" default="Id" /></label>
                             <span class="field_value">
                             
-                            ${fieldValue(bean: externalInstance, field: "id")}
+                            ${fieldValue(bean: convocationInstance, field: "id")}
                             
                             </span>
                       </p>
                         
                        <p>
-                            <label><g:message code="external.user" default="User" /></label>
+                            <label><g:message code="convocation.date" default="Date" /></label>
                             <span class="field_value">
                             
-                            <g:link controller="user" action="show" id="${externalInstance?.user?.id}">${externalInstance?.user?.encodeAsHTML()}</g:link>
+                            <g:formatDate date="${convocationInstance?.date}" />
                             
                             </span>
                       </p>
                         
                        <p>
-                            <label><g:message code="external.company" default="Company" /></label>
+                            <label><g:message code="convocation.building" default="Building" /></label>
                             <span class="field_value">
                             
-                            <g:link controller="company" action="show" id="${externalInstance?.company?.id}">${externalInstance?.company?.encodeAsHTML()}</g:link>
+                            ${fieldValue(bean: convocationInstance, field: "building")}
                             
                             </span>
                       </p>
                         
                        <p>
-                            <label><g:message code="external.formerStudent" default="Former Student" /></label>
+                            <label><g:message code="convocation.room" default="Room" /></label>
                             <span class="field_value">
                             
-                            <g:formatBoolean boolean="${externalInstance?.formerStudent}" />
+                            ${fieldValue(bean: convocationInstance, field: "room")}
                             
                             </span>
                       </p>
                         
                        <p>
-                            <label><g:message code="external.authority" default="Authority" /></label>
+                            <label><g:message code="convocation.internship" default="Internship" /></label>
                             <span class="field_value">
                             
-                            ${fieldValue(bean: externalInstance, field: "authority")}
-                            
-                            </span>
-                      </p>
-                        
-                       <p>
-                            <label><g:message code="external.roleName" default="Role Name" /></label>
-                            <span class="field_value">
-                            
-                            ${fieldValue(bean: externalInstance, field: "roleName")}
+                            <g:link controller="internship" action="show" id="${convocationInstance?.internship?.id}">${convocationInstance?.internship?.encodeAsHTML()}</g:link>
                             
                             </span>
                       </p>

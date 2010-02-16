@@ -27,7 +27,13 @@
           
                 <p>
                       <label for="authority"><g:message code="staff.authority" default="Authority" />:</label>
-                      <g:textField name="authority" value="${fieldValue(bean: staffInstance, field: 'authority')}" />
+                      <g:textField name="authority" value="${fieldValue(bean: staffInstance, field: 'authority')}" class="field${hasErrors(bean:staffInstance ,field:'authority','error')}"/>
+
+                </p>
+          
+                <p>
+                      <label for="roleName"><g:message code="staff.roleName" default="Role Name" />:</label>
+                      
 
                 </p>
           

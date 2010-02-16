@@ -43,7 +43,14 @@
                 <p>
 
                           <label for="authority"><g:message code="external.authority" default="Authority" /></label>
-                          <g:textField name="authority" value="${fieldValue(bean: externalInstance, field: 'authority')}" />
+                          <g:textField name="authority" value="${fieldValue(bean: externalInstance, field: 'authority')}" class="field${hasErrors(bean:externalInstance ,field:'authority','error')}"/>
+
+                </p>
+          
+                <p>
+
+                          <label for="roleName"><g:message code="external.roleName" default="Role Name" /></label>
+                          
 
                 </p>
           

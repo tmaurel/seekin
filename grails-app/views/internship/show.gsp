@@ -65,7 +65,7 @@
                             <label><g:message code="internship.student" default="Student" /></label>
                             <span class="field_value">
                             
-                            <g:link controller="student" action="show" id="${internshipInstance?.student?.id}">${internshipInstance?.student?.encodeAsHTML()}</g:link>
+                            <g:link controller="user" action="show" id="${internshipInstance?.student?.id}">${internshipInstance?.student?.encodeAsHTML()}</g:link>
                             
                             </span>
                       </p>
@@ -74,7 +74,7 @@
                             <label><g:message code="internship.academicTutor" default="Academic Tutor" /></label>
                             <span class="field_value">
                             
-                            <g:link controller="staff" action="show" id="${internshipInstance?.academicTutor?.id}">${internshipInstance?.academicTutor?.encodeAsHTML()}</g:link>
+                            <g:link controller="user" action="show" id="${internshipInstance?.academicTutor?.id}">${internshipInstance?.academicTutor?.encodeAsHTML()}</g:link>
                             
                             </span>
                       </p>
@@ -83,7 +83,7 @@
                             <label><g:message code="internship.companyTutor" default="Company Tutor" /></label>
                             <span class="field_value">
                             
-                            <g:link controller="external" action="show" id="${internshipInstance?.companyTutor?.id}">${internshipInstance?.companyTutor?.encodeAsHTML()}</g:link>
+                            <g:link controller="user" action="show" id="${internshipInstance?.companyTutor?.id}">${internshipInstance?.companyTutor?.encodeAsHTML()}</g:link>
                             
                             </span>
                       </p>
