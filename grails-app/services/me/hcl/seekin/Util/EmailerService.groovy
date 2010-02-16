@@ -124,7 +124,7 @@ class EmailerService {
                     subject: "TODO",
                     text: baseUrl + "/user/checkCode/" + encodedUrl // 'text' is the email body
                     ]
-            sendEmails([email])
+            //sendEmails([email])
         }
 
     	/**
