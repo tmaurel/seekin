@@ -1,8 +1,11 @@
+<%! import me.hcl.seekin.Util.Settings %>
+<% def settingsName = (Settings.get(1)?.applicationName)?: "seekin'" %>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
-        <title>seekin' - <g:layoutTitle /></title>
+        <title>${settingsName} - <g:layoutTitle /></title>
         <g:layoutHead />
         <link rel="stylesheet" href="${resource(dir:'css',file:'layout.css')}" type="text/css" />
         <link rel="shortcut icon" href="${resource(dir:'images',file:'favicon.ico')}" type="image/x-icon" />
