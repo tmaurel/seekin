@@ -11,13 +11,8 @@ import me.hcl.seekin.Internship.Internship
 class User {
 
     /** A user can have some Role */
-	static hasMany = [ authorities : Role, 
-					   internshipsStudent : Internship,
-					   internshipsAcademicTutor : Internship,
-					   internshipsCompanyTutor : Internship ]
-	static mappedBy = [ internshipsStudent : "student",
-						internshipsAcademicTutor : "academicTutor",
-						internshipsCompanyTutor : "companyTutor" ]
+	static hasMany = [ authorities : Role ]
+
 
     /** Email which is used as a login */
 	String email
