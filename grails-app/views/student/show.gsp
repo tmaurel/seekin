@@ -8,76 +8,33 @@
         <g:YUIButtonRessource />
     </head>
     <body>
-
         <h2><g:message code="student.show" /></h2>
         <g:form class="boxed_form" name="crud_panel">
             <g:if test="${flash.message}">
             <div class="flash_message"><g:message code="${flash.message}" args="${flash.args}" default="${flash.defaultMessage}" /></div>
             </g:if>
-            <g:hiddenField name="id" value="${studentInstance?.id}" />
-                    
-                       <p>
-                            <label><g:message code="student.id" default="Id" /></label>
-                            <span class="field_value">
-                            
-                            ${fieldValue(bean: studentInstance, field: "id")}
-                            
-                            </span>
-                      </p>
-                        
-                       <p>
-                            <label><g:message code="student.user" default="User" /></label>
-                            <span class="field_value">
-                            
-                            <g:link controller="user" action="show" id="${studentInstance?.user?.id}">${studentInstance?.user?.encodeAsHTML()}</g:link>
-                            
-                            </span>
-                      </p>
-                        
-                       <p>
-                            <label><g:message code="student.visible" default="Visible" /></label>
-                            <span class="field_value">
-                            
-                            <g:formatBoolean boolean="${studentInstance?.visible}" />
-                            
-                            </span>
-                      </p>
-                        
-                       <p>
-                            <label><g:message code="student.internships" default="Internships" /></label>
-                            <span class="field_value">
-                            
-                            <ul>
-                            <g:each in="${studentInstance?.internships}" var="internshipInstance">
-                                <li><g:link controller="internship" action="show" id="${internshipInstance.id}">${internshipInstance.encodeAsHTML()}</g:link></li>
-                            </g:each>
-                            </ul>
-                            
-                            </span>
-                      </p>
-                        
-                       <p>
-                            <label><g:message code="student.authority" default="Authority" /></label>
-                            <span class="field_value">
-                            
-                            ${fieldValue(bean: studentInstance, field: "authority")}
-                            
-                            </span>
-                      </p>
-                        
-                       <p>
-                            <label><g:message code="student.roleName" default="Role Name" /></label>
-                            <span class="field_value">
-                            
-                            ${fieldValue(bean: studentInstance, field: "roleName")}
-                            
-                            </span>
-                      </p>
-                        
-                      
-                      <div class="submit yui-skin-sam">
-                        <g:buildShowButtons />
-                      </div>
+			<h3>${studentInstance?.user?.firstName?.encodeAsHTML()} ${studentInstance?.user?.lastName?.encodeAsHTML()}</h3>
+			<p>
+			  <label><g:message code="user.address" /></label>
+			  <span class="field_value">
+			  ${studentInstance?.user?.address?.street?.encodeAsHTML()} ${studentInstance?.user?.address?.zipCode?.encodeAsHTML()} ${studentInstance?.user?.address?.town?.encodeAsHTML()}
+			  </span>
+			</p>
+			<p>
+			  <label><g:message code="formation" /></label>
+			  <span class="field_value">
+			  <g:link controller="formation" action="show" id="${studentInstance?.formation?.id}">${studentInstance?.formation?.label?.encodeAsHTML()}</g:link>
+			  </span>
+			</p>
+			<h4><g:message code="student.internships" /></h4>
+			<ul>
+			<g:each in="${studentInstance?.internships}" var="internshipInstance">
+				<li><g:link controller="internship" action="show" id="${internshipInstance.id}">${internshipInstance?.subject?.encodeAsHTML()}</g:link> @ <g:link controller="internship" action="show" id="${internshipInstance.id}">${internshipInstance?.company?.name?.encodeAsHTML()}</g:link></li>
+			</g:each>
+			</ul>
+			<div class="submit yui-skin-sam">
+			  <g:buildShowButtons />
+			</div>
             </g:form>
        </body>
 </html>

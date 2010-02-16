@@ -1,12 +1,15 @@
 package me.hcl.seekin
 
+import me.hcl.seekin.Formation
 import me.hcl.seekin.Util.Document
 
 /*
  * Formation gives a description of the formation and some attached files
  */
 class Formation {
-	
+
+	static hasMany = [ formations : Formation ]
+
 	/** Label of the formation */
 	String label
 	

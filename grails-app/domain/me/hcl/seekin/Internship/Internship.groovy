@@ -4,6 +4,7 @@ import me.hcl.seekin.Auth.User
 import me.hcl.seekin.Auth.Role.Student
 import me.hcl.seekin.Auth.Role.Staff
 import me.hcl.seekin.Auth.Role.External
+import me.hcl.seekin.Company
 
 import me.hcl.seekin.Convocation
 
@@ -26,7 +27,10 @@ class Internship {
 
     /** Tutor who is member of the company which posts the internship */  
 	External companyTutor
-	
+
+	/** Company where the student will do this internship */
+	Company company
+
 	/** Report of the Internship */
 	Report report
 

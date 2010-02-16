@@ -2,6 +2,7 @@ package me.hcl.seekin
 
 import me.hcl.seekin.Auth.User
 import me.hcl.seekin.Util.Address
+import me.hcl.seekin.Internship.Internship
 
 /*
  * Company identifies a company and groups contact information
@@ -18,8 +19,10 @@ class Company {
 	String phone
 
     /** A company may have many employees */
-	static hasMany = [ employees : User ]
-	
+	/** A company may propose many internships */
+
+	static hasMany = [ employees : User, internships : Internship]
+
 	/** Constraints used to check if an instance is correct */
     static constraints = {
 		name(blank: false)
