@@ -199,6 +199,18 @@ style = {
                 'color':'white'
         )
 
+        '#submenu' (
+            'width':'200px',
+            'float':'left',
+            'margin-top':'50px',
+        )
+
+        '#content' (
+            'width':'695px',
+            'margin-right':'50px',
+            'float':'left'
+        )
+
 	'h2' (
 		'display':'block',
 		'width':'100%',

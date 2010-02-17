@@ -1,7 +1,7 @@
 package me.hcl.seekin.Internship
 
 import grails.test.*
-import me.hcl.seekin.Util.Document;
+import me.hcl.seekin.Ressource.Document;
 
 /**
  * OfferTests class

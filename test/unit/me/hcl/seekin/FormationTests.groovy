@@ -1,7 +1,7 @@
 package me.hcl.seekin
 
 import grails.test.*
-import me.hcl.seekin.Util.Document;
+import me.hcl.seekin.Ressource.Document;
 
 /**
  * FormationTests class

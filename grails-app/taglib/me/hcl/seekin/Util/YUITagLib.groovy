@@ -1,5 +1,7 @@
 package me.hcl.seekin.Util
 
+import org.codehaus.groovy.grails.plugins.springsecurity.AuthorizeTools
+
 class YUITagLib {
 
     def YUIButtonRessource = {
@@ -78,6 +80,49 @@ class YUITagLib {
         def value = attrs["value"]
         def action = attrs["action"]
         out << YUISubmitbutton(value:value, action:action)
+    }
+
+    def renderSubMenu = {
+        out << gui.accordion(multiple:"true", bounce:"true", fade:"true") {
+            if(AuthorizeTools.ifAllGranted("ROLE_STUDENT")) {
+                out << gui.accordionElement(title:message(code:"student"), selected:"true") {
+                    
+                    """<ul>
+                        <li><a href="${createLink(controller:"offer", action:"list")}">${message(code:"offer.list")}</a></li>
+                        <li><a href="${createLink(controller:"internship", action:"list")}">${message(code:"internship.list")}</a></li>
+                        <li><a href="${createLink(controller:"internship", action:"create")}">${message(code:"internship.create")}</a></li>
+                        <li><a href="${createLink(controller:"company", action:"list")}">${message(code:"company.list")}</a></li>
+                        <li><a href="${createLink(controller:"report", action:"list")}">${message(code:"report.list")}</a></li>
+                    </ul>"""
+                }
+            }
+            
+            if(AuthorizeTools.ifAllGranted("ROLE_STAFF")) {
+                out << gui.accordionElement(title:message(code:"staff"), selected:"true") {
+
+                    """<ul>
+                        <li><a href="${createLink(controller:"offer", action:"list")}">${message(code:"offer.list")}</a></li>
+                        <li><a href="${createLink(controller:"offer", action:"create")}">${message(code:"offer.create")}</a></li>
+                        <li><a href="${createLink(controller:"internship", action:"list")}">${message(code:"internship.list")}</a></li>
+                        <li><a href="${createLink(controller:"company", action:"list")}">${message(code:"company.list")}</a></li>
+                        <li><a href="${createLink(controller:"report", action:"list")}">${message(code:"report.list")}</a></li>
+                        <li><a href="${createLink(controller:"convocation", action:"list")}">${message(code:"convocation.list")}</a></li>
+                    </ul>"""
+                }
+            }
+
+            if(AuthorizeTools.ifAllGranted("ROLE_EXTERNAL")) {
+                out << gui.accordionElement(title:message(code:"external"), selected:"true") {
+
+                    """<ul>
+                        <li><a href="${createLink(controller:"offer", action:"list")}">${message(code:"offer.list")}</a></li>
+                        <li><a href="${createLink(controller:"offer", action:"create")}">${message(code:"offer.create")}</a></li>
+                        <li><a href="${createLink(controller:"company", action:"list")}">${message(code:"company.list")}</a></li>
+                    </ul>"""
+                }
+            }
+
+        }
     }
 
 }

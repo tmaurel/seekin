@@ -5,6 +5,14 @@ package me.hcl.seekin.Ressource
 import grails.converters.JSON
 class LinkController {
 
+
+    static navigation = [
+        group:'menu',
+        order:3,
+        title:'link',
+        action:'index'
+    ]
+
     def index = { redirect(action: "list", params: params) }
 
     // the delete, save and update actions only accept POST requests

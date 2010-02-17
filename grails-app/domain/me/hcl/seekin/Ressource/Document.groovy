@@ -1,4 +1,4 @@
-package me.hcl.seekin.Util
+package me.hcl.seekin.Ressource
 
 /*
  * Document which is identified by a title and have an uri

@@ -1,7 +1,7 @@
 package me.hcl.seekin
 
 import me.hcl.seekin.Formation
-import me.hcl.seekin.Util.Document
+import me.hcl.seekin.Ressource.Document
 
 /*
  * Formation gives a description of the formation and some attached files

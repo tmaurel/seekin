@@ -1,6 +1,6 @@
 package me.hcl.seekin.Internship
 
-import me.hcl.seekin.Util.Document
+import me.hcl.seekin.Ressource.Document
 
 class Offer {
 	

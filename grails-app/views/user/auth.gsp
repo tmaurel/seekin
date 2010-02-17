@@ -1,7 +1,6 @@
 <head>
 	<meta name='layout' content='main' />
 	<title><g:message code="login.page.title" /></title>
-	<gui:resources components="accordion"/>
         <g:YUIButtonRessource />
 </head>
 

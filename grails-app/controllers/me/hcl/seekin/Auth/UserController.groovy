@@ -29,6 +29,14 @@ import grails.converters.JSON
  */
 class UserController {
 
+
+        static navigation = [
+		group:'menu',
+		order:1,
+		title:'home',
+		action:'index'
+	]
+
 	def authenticateService
 
         def roleService
@@ -63,8 +71,14 @@ class UserController {
 		}
 		else
 		{
-			// TODO : Accueil Logged User
-                        render "Logged-in Home"
+
+                      def user = User.findByEmail("alexis.plantin@gmail.com")
+                      println "Domain : " + user.authorities
+
+                      def principal = authenticateService.principal()
+                      println "Service : " + principal.getAuthorities()//get authorities
+
+
 		}
 	}
 
@@ -168,11 +182,6 @@ class UserController {
 			return
 		}
 
-		def oldPassword = userInstance.password
-		userInstance.properties = params
-		if (!params.password.equals(oldPassword)) {
-			userInstance.password = authenticateService.encodePassword(params.password)
-		}
 		if (userInstance.save()) {
 			flash.message = "user.updated"
 			flash.args = [params.id]

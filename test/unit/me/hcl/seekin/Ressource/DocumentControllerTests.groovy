@@ -1,4 +1,4 @@
-package me.hcl.seekin.Util
+package me.hcl.seekin.Ressource
 
 import grails.test.*
 

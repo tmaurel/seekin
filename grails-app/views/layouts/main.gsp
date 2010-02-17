@@ -9,6 +9,7 @@
         <g:layoutHead />
         <link rel="stylesheet" href="${resource(dir:'css',file:'layout.css')}" type="text/css" />
         <link rel="shortcut icon" href="${resource(dir:'images',file:'favicon.ico')}" type="image/x-icon" />
+        <gui:resources components="accordion"/>
         <g:javascript library="application" />	
         <nav:resources/>	
     </head>
@@ -42,7 +43,16 @@
    			</div>
         </div>
         <div id="main">
-			<g:layoutBody />		
+                <g:isLoggedIn>
+                    <div id="content">
+                </g:isLoggedIn>
+                    <g:layoutBody />
+                <g:isLoggedIn>
+                    </div>
+                    <div class="yui-skin-sam" id="submenu">
+                        <g:renderSubMenu />
+                    </div>
+                </g:isLoggedIn>
         </div>	
         <div id="bar">
                 <g:isLoggedIn>
