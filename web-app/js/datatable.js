@@ -13,8 +13,7 @@ var customLinkFormatter = function(elLiner, oRecord, oColumn, oData) {
 
 var adminPanelFormatter = function(elLiner, oRecord, oColumn, oData) {
   var id = oData;
-  elLiner.innerHTML = "<a href=\"show/" + id + "\"><img src=\"../images/icons/show.png\" /></a>\n\
-                        <a href=\"edit/" + id + "\"><img src=\"../images/icons/edit.png\" /></a>";
+  elLiner.innerHTML = "<a href=\"show/" + id + "\"><img src=\"../images/icons/show.png\" /></a>";
 };
 
 YAHOO.widget.DataTable.Formatter.customLinkFormatter = customLinkFormatter;

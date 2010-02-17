@@ -17,7 +17,8 @@ fixture {
         lastName : "Boukeffa",
         address : nadirAddress ,
         phone : "0102030405",
-        authorities : [nadirRole]
+        authorities : [nadirRole],
+		showEmail : true
     )
 
 

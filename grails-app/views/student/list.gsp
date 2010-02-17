@@ -17,32 +17,19 @@
       <div class="yui-skin-sam" id="crud_panel">
           <g:buildListButtons />
           
-                        <g:set var="idInternationalized" value="${message(code:'student.id')}" />
+						<g:set var="firstNameInternationalized" value="${message(code:'user.firstName')}" />
+
+						<g:set var="lastNameInternationalized" value="${message(code:'user.lastName')}" />
                  
-                        <g:set var="userInternationalized" value="${message(code:'student.user')}" />
-                 
-                        <g:set var="visibleInternationalized" value="${message(code:'student.visible')}" />
-                 
-                        <g:set var="authorityInternationalized" value="${message(code:'student.authority')}" />
-                 
-                        <g:set var="roleNameInternationalized" value="${message(code:'student.roleName')}" />
+                        <g:set var="emailInternationalized" value="${message(code:'user.email')}" />
                  
           <gui:dataTable
               id="dt_2"
               draggableColumns="true"
               columnDefs="[
-                  
-                            [key: 'id', sortable: true, resizeable: true, label: idInternationalized],
-                     
-                            [key: 'user', sortable: true, resizeable: true, label: userInternationalized, formatter: 'customLinkFormatter'],
-                     
-                            [key: 'visible', sortable: true, resizeable: true, label: visibleInternationalized],
-                     
-                            [key: 'authority', sortable: true, resizeable: true, label: authorityInternationalized],
-                     
-                            [key: 'roleName', sortable: true, resizeable: true, label: roleNameInternationalized],
-                     
-                  [key: 'urlID', sortable: false, resizeable: false, label:'Actions', formatter: 'adminPanelFormatter']
+			  				[key: 'lastName', sortable: true, resizeable: true, label: lastNameInternationalized],
+							[key: 'firstName', sortable: true, resizeable: true, label: firstNameInternationalized],
+							[key: 'urlID', sortable: false, resizeable: false, label:'Actions', formatter: 'adminPanelFormatter']
               ]"
               controller="student"
               action="dataTableDataAsJSON"
@@ -52,6 +39,7 @@
               ]"
               rowExpansion="false"
               rowsPerPage="10"
+			  sortedBy="lastName"
           />
 
         </div>

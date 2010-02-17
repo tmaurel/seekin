@@ -1,6 +1,6 @@
 package me.hcl.seekin.Auth.Role
 
-
+import me.hcl.seekin.Auth.User
 
 import grails.converters.JSON
 class StudentController {
@@ -115,23 +115,28 @@ class StudentController {
     }
 
     def dataTableDataAsJSON = {
-        def list = Student.list(params)
+		def list = User.list()
+		//def list = Student.list().user
+		/*params.fetch = [user:"eager"]
+		def list = Student.list(params)*/
+
+		// println list
+
+		// println params
+
         def ret = []
         response.setHeader("Cache-Control", "no-store")
 
         list.each {
             ret << [
-               id:it.id,
-   user:[name:it.user?.id, link:g.createLink(controller: 'user', action: 'show', id:it.user?.id)],
-   visible:it.visible,
-   authority:it.authority,
-
-                urlID: it.id
+				firstName: it.firstName,
+				lastName: it.lastName,
+				urlID: it.id
             ]
         }
 
         def data = [
-                totalRecords: Student.count(),
+                totalRecords: User.count(),
                 results: ret
         ]
        
