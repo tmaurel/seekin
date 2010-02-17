@@ -56,7 +56,7 @@
                             <label><g:message code="internship.report" default="Report" /></label>
                             <span class="field_value">
                             
-                            <g:link controller="report" action="show" id="${internshipInstance?.report?.id}">${internshipInstance?.report?.encodeAsHTML()}</g:link>
+                            <g:link controller="report" action="show" id="${internshipInstance?.report?.id}">${internshipInstance?.report?.title?.encodeAsHTML()}</g:link>
                             
                             </span>
                       </p>
@@ -65,8 +65,8 @@
                             <label><g:message code="internship.student" default="Student" /></label>
                             <span class="field_value">
                             
-                            <g:link controller="user" action="show" id="${internshipInstance?.student?.id}">${internshipInstance?.student?.encodeAsHTML()}</g:link>
-                            
+                            <g:link controller="user" action="show" id="${internshipInstance?.student?.id}">${internshipInstance?.student?.user?.firstName?.encodeAsHTML()} ${internshipInstance?.student?.user?.lastName?.encodeAsHTML()}</g:link>
+
                             </span>
                       </p>
                         
@@ -74,7 +74,7 @@
                             <label><g:message code="internship.academicTutor" default="Academic Tutor" /></label>
                             <span class="field_value">
                             
-                            <g:link controller="user" action="show" id="${internshipInstance?.academicTutor?.id}">${internshipInstance?.academicTutor?.encodeAsHTML()}</g:link>
+                            <g:link controller="user" action="show" id="${internshipInstance?.academicTutor?.id}">${internshipInstance?.academicTutor?.user?.firstName?.encodeAsHTML()} ${internshipInstance?.academicTutor?.user?.lastName?.encodeAsHTML()}</g:link>
                             
                             </span>
                       </p>
@@ -83,7 +83,7 @@
                             <label><g:message code="internship.companyTutor" default="Company Tutor" /></label>
                             <span class="field_value">
                             
-                            <g:link controller="user" action="show" id="${internshipInstance?.companyTutor?.id}">${internshipInstance?.companyTutor?.encodeAsHTML()}</g:link>
+                            <g:link controller="user" action="show" id="${internshipInstance?.companyTutor?.id}">${internshipInstance?.companyTutor?.user?.firstName?.encodeAsHTML()} ${internshipInstance?.companyTutor?.user?.lastName?.encodeAsHTML()}</g:link>
                             
                             </span>
                       </p>
@@ -92,7 +92,7 @@
                             <label><g:message code="internship.convocation" default="Convocation" /></label>
                             <span class="field_value">
                             
-                            <g:link controller="convocation" action="show" id="${internshipInstance?.convocation?.id}">${internshipInstance?.convocation?.encodeAsHTML()}</g:link>
+                            <g:link controller="convocation" action="show" id="${internshipInstance?.convocation?.id}">${internshipInstance?.convocation?.date?.encodeAsHTML()}</g:link>
                             
                             </span>
                       </p>

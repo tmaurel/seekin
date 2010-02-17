@@ -38,32 +38,32 @@
                 </p>
           
                 <p>
-                      <label for="report"><g:message code="internship.report" default="Report" />:</label>
-                      <g:select name="report.id" from="${me.hcl.seekin.Internship.Report.list()}" optionKey="id" value="${internshipInstance?.report?.id}" noSelection="['null': '']" />
-
-                </p>
-          
-                <p>
                       <label for="student"><g:message code="internship.student" default="Student" />:</label>
-                      <g:select name="student.id" from="${me.hcl.seekin.Auth.User.list()}" optionKey="id" value="${internshipInstance?.student?.id}"  />
+                      <g:select name="student.id" from="${me.hcl.seekin.Auth.Role.Student.list()}" optionKey="id" value="${internshipInstance?.student?.id}"  />
 
                 </p>
           
                 <p>
                       <label for="academicTutor"><g:message code="internship.academicTutor" default="Academic Tutor" />:</label>
-                      <g:select name="academicTutor.id" from="${me.hcl.seekin.Auth.User.list()}" optionKey="id" value="${internshipInstance?.academicTutor?.id}" noSelection="['null': '']" />
+                      <g:select name="academicTutor.id" from="${staff}" optionKey="id" optionValue="value" value="${internshipInstance?.academicTutor?.id}" noSelection="['null': '']" />
 
                 </p>
-          
+
                 <p>
-                      <label for="companyTutor"><g:message code="internship.companyTutor" default="Company Tutor" />:</label>
-                      <g:select name="companyTutor.id" from="${me.hcl.seekin.Auth.User.list()}" optionKey="id" value="${internshipInstance?.companyTutor?.id}" noSelection="['null': '']" />
+                      <label for="firstName"><g:message code="user.firstName" />:</label>
+                      <g:textField name="firstName" class="field${hasErrors(bean:internshipInstance?.companyTutor?.user ,field:'firstName','error')}" value="${fieldValue(bean: internshipInstance?.companyTutor?.user, field:'firstName')}" />
 
                 </p>
-          
+
                 <p>
-                      <label for="convocation"><g:message code="internship.convocation" default="Convocation" />:</label>
-                      <g:select name="convocation.id" from="${me.hcl.seekin.Convocation.list()}" optionKey="id" value="${internshipInstance?.convocation?.id}" noSelection="['null': '']" />
+                      <label for="lastName"><g:message code="user.lastName" />:</label>
+                      <g:textField name="lastName" class="field${hasErrors(bean:internshipInstance?.companyTutor?.user ,field:'lastName','error')}" value="${fieldValue(bean: internshipInstance?.companyTutor?.user, field:'lastName')}" />
+
+                </p>
+
+                <p>
+                      <label for="email"><g:message code="user.email" />:</label>
+                      <g:textField name="email" class="field${hasErrors(bean:internshipInstance?.companyTutor?.user ,field:'firstName','error')}" value="${fieldValue(bean: internshipInstance?.companyTutor?.user, field:'firstName')}" />
 
                 </p>
           

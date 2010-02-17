@@ -42,10 +42,10 @@ class User {
 	static constraints = {
 		email(blank: false, unique: true, email: true)
 		password(blank: false)
-		enabled()
-                firstName(blank: false)
+		enabled(nullable:true)
+        firstName(blank: false)
 		lastName(blank: false)
-		address(nullable: false)
-		phone(size: 10..10)
+		address(nullable: true)
+		phone(nullable:true, size: 10..10)
 	}
 }

@@ -89,18 +89,6 @@
 
                             </span>
                       </p>
-
-
-
-                        
-                       <p>
-                            <label><g:message code="user.address" default="Address" /></label>
-                            <span class="field_value">
-                            
-                            ${address}
-                            
-                            </span>
-                      </p>
                         
                        <p>
                             <label><g:message code="user.phone" default="Phone" /></label>
