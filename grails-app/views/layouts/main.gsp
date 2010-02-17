@@ -28,7 +28,14 @@
 						<g:link controller="${controllerName}" action="${actionName}" id="${params.id}" params="[lang:'en']">
 							<img src="${resource(dir:'images/icons/flags',file:'en.png')}" alt="Français" />
 						</g:link>
+                                        
 	        		</div>
+                                <g:isLoggedIn>
+                                <ul id="logout_block">
+                                        <li><g:link controller="user" action="profile"><g:message code="user.profile" /></g:link></li>
+                                        <li><g:link controller="user" action="logout"><g:message code="user.logout" /></g:link></li>
+                                </ul>
+                                </g:isLoggedIn>
         		</div>
        		</div>
        		<div id="menu">

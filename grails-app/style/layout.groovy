@@ -56,8 +56,30 @@ style = {
 
 	'#header #banner #banner_cont #langage_selection' (
 		'float':'right',
-		'height':'30px'
+		'height':'10px',
+                'width':'36px'
 	)
+
+	'#header #banner #banner_cont #logout_block' (
+                'margin-top':'30px',
+		'float':'right',
+                'clear':'right'
+	)
+
+        '#header #banner ul' (
+                'list-style-image': 'url(../images/icons/dot.png)'
+        )
+
+        '#header #banner li' (
+                'float':'left',
+                'margin-left':'20px'
+        )
+
+        '#header #banner, #header #banner a' (
+                'color':'#fff',
+                'font-size':'11px',
+        )
+
 
 	
 	'#menu_cont #search_bar' (
