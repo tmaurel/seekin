@@ -32,7 +32,62 @@
                           <g:datePicker name="beginAt" value="${internshipInstance?.beginAt}"  />
 
                 </p>
+
+                <p>
+
+                          <label for="report"><g:message code="internship.report" default="Report" /></label>
+                          <span class="field_value">
+
+                            <g:link controller="report" action="show" id="${internshipInstance?.report?.id}">${internshipInstance?.report?.title?.encodeAsHTML()}</g:link>
+
+                          </span>
+
+                </p>
           
+                <p>
+
+                          <label for="student"><g:message code="internship.student" default="Student" /></label>
+                          <span class="field_value">
+
+                            <g:link controller="user" action="show" id="${internshipInstance?.student?.id}">${internshipInstance?.student?.user?.firstName?.encodeAsHTML()} ${internshipInstance?.student?.user?.lastName?.encodeAsHTML()}</g:link>
+
+                          </span>
+
+                </p>
+          
+                <p>
+
+                          <label for="academicTutor"><g:message code="internship.academicTutor" default="Academic Tutor" /></label>
+                          <span class="field_value">
+
+                            <g:link controller="user" action="show" id="${internshipInstance?.academicTutor?.id}">${internshipInstance?.academicTutor?.user?.firstName?.encodeAsHTML()} ${internshipInstance?.academicTutor?.user?.lastName?.encodeAsHTML()}</g:link>
+
+                          </span>
+
+                </p>
+          
+                <p>
+
+                          <label for="companyTutor"><g:message code="internship.companyTutor" default="Company Tutor" /></label>
+                          <span class="field_value">
+
+                            <g:link controller="user" action="show" id="${internshipInstance?.companyTutor?.id}">${internshipInstance?.companyTutor?.user?.firstName?.encodeAsHTML()} ${internshipInstance?.companyTutor?.user?.lastName?.encodeAsHTML()}</g:link>
+
+                          </span>
+
+                </p>
+          
+                <p>
+
+                          <label for="convocation"><g:message code="internship.convocation" default="Convocation" /></label>
+                          <span class="field_value">
+
+                            <g:link controller="convocation" action="show" id="${internshipInstance?.convocation?.id}">${internshipInstance?.convocation?.date?.encodeAsHTML()}</g:link>
+
+                          </span>
+
+                </p>
+
                 <p>
 
                           <label for="isApproval"><g:message code="internship.isApproval" default="Is Approval" /></label>
@@ -40,40 +95,6 @@
 
                 </p>
           
-                <p>
-
-                          <label for="report"><g:message code="internship.report" default="Report" /></label>
-                          <g:select name="report.id" from="${me.hcl.seekin.Internship.Report.list()}" optionKey="id" value="${internshipInstance?.report?.id}" noSelection="['null': '']" />
-
-                </p>
-          
-                <p>
-
-                          <label for="student"><g:message code="internship.student" default="Student" /></label>
-                          <g:select name="student.id" from="${me.hcl.seekin.Auth.User.list()}" optionKey="id" value="${internshipInstance?.student?.id}"  />
-
-                </p>
-          
-                <p>
-
-                          <label for="academicTutor"><g:message code="internship.academicTutor" default="Academic Tutor" /></label>
-                          <g:select name="academicTutor.id" from="${me.hcl.seekin.Auth.User.list()}" optionKey="id" value="${internshipInstance?.academicTutor?.id}" noSelection="['null': '']" />
-
-                </p>
-          
-                <p>
-
-                          <label for="companyTutor"><g:message code="internship.companyTutor" default="Company Tutor" /></label>
-                          <g:select name="companyTutor.id" from="${me.hcl.seekin.Auth.User.list()}" optionKey="id" value="${internshipInstance?.companyTutor?.id}" noSelection="['null': '']" />
-
-                </p>
-          
-                <p>
-
-                          <label for="convocation"><g:message code="internship.convocation" default="Convocation" /></label>
-                          <g:select name="convocation.id" from="${me.hcl.seekin.Convocation.list()}" optionKey="id" value="${internshipInstance?.convocation?.id}" noSelection="['null': '']" />
-
-                </p>
           
           <div class="submit yui-skin-sam">
             <g:buildEditButtons />
