@@ -50,6 +50,12 @@
                 </p>
 
                 <p>
+                      <label for="company"><g:message code="internship.company" default="Company" />:</label>
+                      <g:textField name="companyName" class="field${hasErrors(bean:internshipInstance ,field:'company','error')}" value="${fieldValue(bean: internshipInstance, field: 'company')}" />
+
+                </p>
+
+                <p>
                       <label for="firstName"><g:message code="user.firstName" />:</label>
                       <g:textField name="firstName" class="field${hasErrors(bean:internshipInstance?.companyTutor?.user ,field:'firstName','error')}" value="${fieldValue(bean: internshipInstance?.companyTutor?.user, field:'firstName')}" />
 

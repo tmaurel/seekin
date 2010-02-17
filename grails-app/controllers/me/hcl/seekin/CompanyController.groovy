@@ -115,13 +115,24 @@ class CompanyController {
     }
 
     def dataTableDataAsJSON = {
-        def list = []
+        def list = Company.list(params)
+        def ret = []
         response.setHeader("Cache-Control", "no-store")
+
+        list.each {
+
+            ret << [
+                name:it.name,
+                phone:it.phone,
+                urlID:it.id
+            ]
+        }
+
         def data = [
                 totalRecords: Company.count(),
-                results: Company.list(params)
+                results: ret
         ]
-        println data.results
+
         render data as JSON
     }
 

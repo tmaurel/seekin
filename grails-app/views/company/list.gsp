@@ -16,12 +16,8 @@
       </g:if>
       <div class="yui-skin-sam" id="crud_panel">
           <g:buildListButtons />
-          
-                        <g:set var="idInternationalized" value="${message(code:'company.id')}" />
                  
                         <g:set var="nameInternationalized" value="${message(code:'company.name')}" />
-                 
-                        <g:set var="addressInternationalized" value="${message(code:'company.address')}" />
                  
                         <g:set var="phoneInternationalized" value="${message(code:'company.phone')}" />
                  
@@ -29,18 +25,15 @@
               id="dt_2"
               draggableColumns="true"
               columnDefs="[
-                  
-                            [key: 'id', sortable: true, resizeable: true, label: idInternationalized],
                      
                             [key: 'name', sortable: true, resizeable: true, label: nameInternationalized],
-                     
-                            [key: 'address', sortable: true, resizeable: true, label: addressInternationalized, formatter: 'customLinkFormatter'],
                      
                             [key: 'phone', sortable: true, resizeable: true, label: phoneInternationalized],
                      
                   [key: 'urlID', sortable: false, resizeable: false, label:'Actions', formatter: 'adminPanelFormatter']
               ]"
               controller="company"
+              sortedBy="name"
               action="dataTableDataAsJSON"
               paginatorConfig="[
                   template:'{PreviousPageLink} {PageLinks} {NextPageLink} {CurrentPageReport}',

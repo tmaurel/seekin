@@ -10,6 +10,7 @@ import me.hcl.seekin.Auth.User
 import me.hcl.seekin.Auth.UserController
 import me.hcl.seekin.Auth.Role.External
 import me.hcl.seekin.Util.Address
+import me.hcl.seekin.Company
 
 class InternshipController {
 
@@ -35,22 +36,27 @@ class InternshipController {
 
     def save = {
         def internshipInstance = new Internship()
-        def companyTutor = new User()
-        companyTutor.properties = params
-        companyTutor.password = UserController.generatePwd(8)
-        println companyTutor.firstName
-        println companyTutor.password
+        def companyTutor
         def role = new External()
+        if(User.countByEmail(params.email) == 0) {
+            companyTutor = new User()
+            companyTutor.properties = params
+            companyTutor.password = UserController.generatePwd(8)
+        }
+        else {
+            companyTutor = User.findByEmail(params.email)
+        }
         companyTutor.addToAuthorities(role)
-        if(companyTutor.save(flush:true))
-            println "User cree"
-        else
-            println "User non cree"
-
-        internshipInstance.companyTutor = role
+        if(companyTutor.save(flush:true)) {
+            internshipInstance.companyTutor = role
+        }
 
         internshipInstance.properties = params
-        println params
+        def company = new Company()
+        company.name = params.companyName
+        println company.name
+        println company.save()
+        internshipInstance.company = company
         if (!internshipInstance.hasErrors() && internshipInstance.save()) {
             flash.message = "internship.created"
             flash.args = [internshipInstance.id]

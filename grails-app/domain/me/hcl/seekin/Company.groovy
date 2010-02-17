@@ -26,7 +26,7 @@ class Company {
 	/** Constraints used to check if an instance is correct */
     static constraints = {
 		name(blank: false)
-		address(blank: false)
-		phone(size: 10..10)
+		address(nullable: true)
+		phone(nullable:true, size: 10..10)
     }
 }

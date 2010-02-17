@@ -65,6 +65,15 @@
                           </span>
 
                 </p>
+
+                 <p>
+                      <label><g:message code="internship.company" default="Company" /></label>
+                      <span class="field_value">
+
+                      <g:link controller="company" action="show" id="${internshipInstance?.company?.id}">${internshipInstance?.company?.name?.encodeAsHTML()}</g:link>
+
+                      </span>
+                </p>
           
                 <p>
 
