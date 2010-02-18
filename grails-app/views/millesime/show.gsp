@@ -1,62 +1,53 @@
 
-<%@ page import="me.hcl.seekin.Convocation" %>
+<%@ page import="me.hcl.seekin.Formation.Millesime" %>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="layout" content="main" />
-        <title><g:message code="convocation.show" /></title>
+        <title><g:message code="millesime.show" /></title>
         <g:YUIButtonRessource />
     </head>
     <body>
 
-        <h2><g:message code="convocation.show" /></h2>
+        <h2><g:message code="millesime.show" /></h2>
         <g:form class="boxed_form" name="crud_panel">
             <g:if test="${flash.message}">
             <div class="flash_message"><g:message code="${flash.message}" args="${flash.args}" default="${flash.defaultMessage}" /></div>
             </g:if>
-            <g:hiddenField name="id" value="${convocationInstance?.id}" />
+            <g:hiddenField name="id" value="${millesimeInstance?.id}" />
                     
                        <p>
-                            <label><g:message code="convocation.id" default="Id" /></label>
+                            <label><g:message code="millesime.id" default="Id" /></label>
                             <span class="field_value">
                             
-                            ${fieldValue(bean: convocationInstance, field: "id")}
+                            ${fieldValue(bean: millesimeInstance, field: "id")}
                             
                             </span>
                       </p>
                         
                        <p>
-                            <label><g:message code="convocation.date" default="Date" /></label>
+                            <label><g:message code="millesime.beginDate" default="Begin Date" /></label>
                             <span class="field_value">
                             
-                            ${convocationInstance?.date.formatDate()}
+                            ${millesimeInstance?.beginDate.formatDate()}
                             
                             </span>
                       </p>
                         
                        <p>
-                            <label><g:message code="convocation.building" default="Building" /></label>
+                            <label><g:message code="millesime.endDate" default="End Date" /></label>
                             <span class="field_value">
                             
-                            ${fieldValue(bean: convocationInstance, field: "building")}
+                            ${millesimeInstance?.endDate.formatDate()}
                             
                             </span>
                       </p>
                         
                        <p>
-                            <label><g:message code="convocation.room" default="Room" /></label>
+                            <label><g:message code="millesime.current" default="Current" /></label>
                             <span class="field_value">
                             
-                            ${fieldValue(bean: convocationInstance, field: "room")}
-                            
-                            </span>
-                      </p>
-                        
-                       <p>
-                            <label><g:message code="convocation.internship" default="Internship" /></label>
-                            <span class="field_value">
-                            
-                            <g:link controller="internship" action="show" id="${convocationInstance?.internship?.id}">${convocationInstance?.internship?.encodeAsHTML()}</g:link>
+                            <g:formatBoolean boolean="${millesimeInstance?.current}" />
                             
                             </span>
                       </p>

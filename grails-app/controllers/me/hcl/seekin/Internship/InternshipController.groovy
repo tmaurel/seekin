@@ -14,6 +14,8 @@ import me.hcl.seekin.Company
 
 class InternshipController {
 
+    def dateService
+
     def index = { redirect(action: "list", params: params) }
 
     // the delete, save and update actions only accept POST requests
@@ -97,8 +99,7 @@ class InternshipController {
             redirect(action: "list")
         }
         else {
-            println internshipInstance
-            return [internshipInstance: internshipInstance]
+            return [internshipInstance: internshipInstance, beginAt: dateService.formatDate(request, internshipInstance.beginAt), convocation: dateService.formatDate(request, internshipInstance?.convocation?.date)]
         }
     }
 
@@ -111,7 +112,7 @@ class InternshipController {
             redirect(action: "list")
         }
         else {
-            return [internshipInstance: internshipInstance]
+            return [internshipInstance: internshipInstance, convocation: dateService.formatDate(request, internshipInstance?.convocation?.date)]
         }
     }
 
@@ -180,10 +181,10 @@ class InternshipController {
             ret << [
                id:it.id,
    subject:it.subject,
-   beginAt:it.beginAt?.toString(),
+   beginAt:it?.beginAt.formatDate(),
    isApproval:it.isApproval,
-   report:[name:it.report?.id, link:g.createLink(controller: 'report', action: 'show', id:it.report?.id)],
-   student:[name:it.student?.id, link:g.createLink(controller: 'user', action: 'show', id:it.student?.id)],
+   report:[name:it.report?.uri, link:g.createLink(controller: 'report', action: 'show', id:it.report?.id)],
+   student:[name:it.student?.user?.firstName + " " + it.student?.user?.lastName, link:g.createLink(controller: 'user', action: 'show', id:it.student?.id)],
 
                 urlID: it.id
             ]

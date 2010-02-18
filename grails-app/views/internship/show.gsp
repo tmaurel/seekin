@@ -38,7 +38,7 @@
                             <label><g:message code="internship.beginAt" default="Begin At" /></label>
                             <span class="field_value">
                             
-                            <g:formatDate date="${internshipInstance?.beginAt}" />
+                            ${internshipInstance?.beginAt?.formatDate()}
                             
                             </span>
                       </p>
@@ -101,7 +101,7 @@
                             <label><g:message code="internship.convocation" default="Convocation" /></label>
                             <span class="field_value">
                             
-                            <g:link controller="convocation" action="show" id="${internshipInstance?.convocation?.id}">${internshipInstance?.convocation?.date?.encodeAsHTML()}</g:link>
+                            <g:link controller="convocation" action="show" id="${internshipInstance?.convocation?.id}">${internshipInstance?.convocation?.date?.formatDate().encodeAsHTML()}</g:link>
                             
                             </span>
                       </p>
