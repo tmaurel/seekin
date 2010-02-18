@@ -256,16 +256,6 @@ style = {
 		'background-repeat':'repeat-y'
 	)
 
-        '.yui-skin-sam .yui-ac' (
-                'margin':'0px',
-                'padding':'0px',
-                'clear':'none',
-                'width':'50%',
-		'margin-right':'5%',
-		'height':'16px',
-		'float':'left',
-        )
-	
 	'.boxed_form input[type=\'text\'], .boxed_form input[type=\'password\'], .boxed_form input[type=\'checkbox\'], .boxed_form textarea' (
 		'width':'50%',		
 		'height':'16px',
@@ -296,14 +286,14 @@ style = {
 		'padding':'4px'
 	)
 
-        '.boxed_form .properties_list' (
+        '.boxed_form .properties_list ul' (
 		'width':'30%',
 		'float':'left',
                 'text-align':'left',
                 'list-style-type':'none',
                 'margin-bottom':'10px'
         )
-
+        
 	'.centered_para' (
 		'text-align':'center'
 	)
@@ -344,6 +334,17 @@ style = {
         '.yui-skin-sam .yui-cms-accordion .yui-cms-item.selected .bd' (
                 'overflow':'visible'
         )
+
+        '.yui-skin-sam .yui-ac' (
+                'margin':'0px',
+                'padding':'0px',
+                'clear':'none',
+                'width':'50%',
+		'margin-right':'5%',
+		'height':'16px',
+		'float':'left',
+        )
+
 
         '.yui-skin-sam .yui-ac input' (
                 'width':'100%'

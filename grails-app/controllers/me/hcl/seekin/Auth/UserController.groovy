@@ -16,8 +16,6 @@ import org.springframework.security.context.SecurityContextHolder as SCH
 import org.springframework.security.ui.AbstractProcessingFilter
 import org.springframework.security.ui.webapp.AuthenticationProcessingFilter
 
-import java.awt.image.BufferedImage
-
 import nl.captcha.Captcha
 import nl.captcha.backgrounds.*
 import nl.captcha.servlet.CaptchaServletUtil

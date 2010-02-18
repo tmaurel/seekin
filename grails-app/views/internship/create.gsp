@@ -18,7 +18,7 @@
           <g:renderErrors bean="${internshipInstance}" as="list" />
       </div>
       </g:hasErrors>
-      <g:form class="boxed_form" name="crud_panel" action="save" method="post" >
+      <g:form class="boxed_form yui-skin-sam" name="crud_panel" action="save" method="post" >
           
                 <p>
                       <label for="subject"><g:message code="internship.subject" default="Subject" />:</label>
@@ -50,7 +50,7 @@
 
                 </p>
 
-                <p>
+                <div>
                       <label for="company"><g:message code="internship.company" default="Company" />:</label>
 
                       <gui:autoComplete
@@ -63,7 +63,7 @@
 
                       />
 
-                </p>
+                </div>
 
                 <p>
                       <label for="firstName"><g:message code="user.firstName" />:</label>
