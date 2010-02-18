@@ -293,7 +293,11 @@ style = {
                 'list-style-type':'none',
                 'margin-bottom':'10px'
         )
-        
+
+        '.boxed_form textarea' (
+                'height':'150px'
+        )
+
 	'.centered_para' (
 		'text-align':'center'
 	)

@@ -519,15 +519,22 @@ class UserController {
                     {
                         def config = authenticateService.securityConfig
 
-                        // check if the entered code matches the captcha image
-                        if (!session?.captcha?.isCorrect(params.captcha))
-                        {
-                                flash.message = message(code:"user.code.dismatch")
-                        }
+                        userInstance.validate()
+
                         // check if the password matches the repassword
                         if (params.password != params.repassword)
                         {
-                                flash.message = message(code:"user.password.dismatch")
+                                userInstance.errors.rejectValue(
+                                    'password',
+                                    'user.password.dismatch'
+                                )
+                        }
+         
+                        if (!session?.captcha?.isCorrect(params.captcha))
+                        {
+                                userInstance.errors.reject(
+                                   'user.code.dismatch'
+                                )
                         }
 
                         // encode the password for the insertion in database
@@ -539,8 +546,9 @@ class UserController {
                         String lineBar = ""
                         message(code:"user.email.content.text2").size().times{lineBar += "-"}
 
+
                         // If everything went well
-                        if (userInstance.validate() && flash.message == null)
+                        if (!userInstance.hasErrors())
                         {
                             // Check if the company as been specified
                             if(params.company != null)

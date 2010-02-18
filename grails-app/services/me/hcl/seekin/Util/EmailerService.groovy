@@ -7,6 +7,7 @@ import org.springframework.mail.SimpleMailMessage
 import me.hcl.seekin.Auth.User
 import org.apache.commons.codec.binary.Base64
 import java.text.DateFormat
+import me.hcl.seekin.Util.Settings
 
 
 /**
@@ -53,6 +54,26 @@ class EmailerService {
 			log.error "Failed to send emails: $e.message", e
 		}
 	}
+
+        /**
+	 * Build the code for the lost password form
+	 *
+	 * @param user the user who lost his password
+	 */
+        def buildContactMail(message) {
+
+            def mail = Settings.get(1)?.emailAdmin
+
+            def email = [
+                    to: [mail], // 'to' expects a List, NOT a single email address
+                    subject: message.subject,
+                    text: """ From : ${message.fullName} <${message.email}>\n 
+                              Content : ${message.body} """ // 'text' is the email body
+                    ]
+
+            //sendEmails([email])
+       }
+
 
 	/**
 	 * Build the code for the lost password form

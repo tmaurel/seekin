@@ -6,7 +6,40 @@ import nl.captcha.servlet.CaptchaServletUtil
 
 class ContactController {
 
-    def index = { }
+    static navigation = [
+            group:'menu',
+            order:4,
+            title:'contact',
+            action:'index'
+    ]
+
+    def emailerService
+
+    def index = { ContactCommand cmd ->
+
+        if(request.method == 'POST')
+        {
+
+            if (!session?.captcha?.isCorrect(params.captcha))
+            {
+                cmd.errors.rejectValue(
+                   'captcha',
+                   'user.code.dismatch',
+                )
+            }
+
+            if(cmd.hasErrors())
+            {
+                return [contactInstance: cmd]
+            }
+            else
+            {
+                flash.message = "contact.message.sent"
+                emailerService.buildContactMail(params)
+            }
+
+        }
+    }
 
     /**
      * Captcha generation
