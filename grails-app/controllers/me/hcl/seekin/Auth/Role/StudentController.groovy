@@ -1,6 +1,8 @@
 package me.hcl.seekin.Auth.Role
 
 import me.hcl.seekin.Auth.User
+import me.hcl.seekin.Formation.Promotion
+import me.hcl.seekin.Formation.Millesime
 
 import grails.converters.JSON
 class StudentController {
@@ -11,6 +13,14 @@ class StudentController {
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
     def list = {
+		def millesime = Millesime.findAll()
+		millesime = millesime.find {
+			it.current == true
+		}
+
+		def promotions = Promotion.findAllByMillesime(millesime)
+
+		render(view: "list", model: [promotions: promotions])
     }
 
     def create = {
@@ -115,14 +125,15 @@ class StudentController {
     }
 
     def dataTableDataAsJSON = {
-		def list = User.list()
-		//def list = Student.list().user
-		/*params.fetch = [user:"eager"]
-		def list = Student.list(params)*/
+		def list = Student.list().user
 
-		// println list
-
-		// println params
+		list.sort {
+			p1, p2 ->
+				if(params.order == "desc")
+					p2."$params.sort" <=> p1."$params.sort"
+				else if(params.order == "asc")
+					p1."$params.sort" <=> p2."$params.sort"
+		}
 
         def ret = []
         response.setHeader("Cache-Control", "no-store")
@@ -136,7 +147,7 @@ class StudentController {
         }
 
         def data = [
-                totalRecords: User.count(),
+                totalRecords: Student.count(),
                 results: ret
         ]
        
