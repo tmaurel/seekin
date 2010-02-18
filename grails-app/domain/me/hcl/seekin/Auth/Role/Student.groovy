@@ -8,16 +8,12 @@ import me.hcl.seekin.Internship.Internship
  */
 class Student extends Role {
 
-    static hasMany = [ internships : Internship ]
-
-    /** A student follows a formation */
-    Promotion promotion
+    static hasMany = [ internships : Internship, promotions : Promotion ]
 
     /** Visible ? **/
     Boolean visible
 
     static constraints = {
-        promotion(nullable: true)
         visible(nullable: true)
     }
 

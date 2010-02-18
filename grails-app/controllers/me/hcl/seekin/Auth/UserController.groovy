@@ -4,6 +4,7 @@ import me.hcl.seekin.Auth.Role.*
 import me.hcl.seekin.Formation.*
 import me.hcl.seekin.Util.Address
 import me.hcl.seekin.Util.Settings
+import me.hcl.seekin.Company
 
 import org.springframework.security.providers.UsernamePasswordAuthenticationToken as AuthToken
 
@@ -473,7 +474,6 @@ class UserController {
 	 * User Registration Top page.
 	 */
 	def register = {
-
                 def userInstance = new User()
                 userInstance.address = new Address()
                 def ret
@@ -487,21 +487,52 @@ class UserController {
                 if (session.id)
                 {
                     userInstance.properties = params
- 
+                    def role
                     // If User selected "Student"
                     if(params.usertype == "1")
                     {
-                        userInstance.addToAuthorities(new Student())
-                        ret = [userInstance: userInstance, usertype: params.usertype, formations:Formation.list()]
+                        def millesime = Millesime.findAll()
+                        millesime = millesime.find {
+                                it.current == true
+                        }
+
+                        def formations = Promotion.findAllByMillesime(millesime).collect {
+                            [
+                                id: it.id,
+                                value: it?.formation?.label
+                            ]
+                        }
+
+                        role = new Student(promotions:[Promotion.get(params.promotion)], visible: (params.visible != null)?:false)
+                        userInstance.addToAuthorities(role)
+                        ret = [userInstance: userInstance, usertype: params.usertype, formations:formations]
                     } // If User selected "Staff"
                     else if(params.usertype == "2")
                     {
-                        userInstance.addToAuthorities(new Staff())
+                        role = new Staff()
+                        userInstance.addToAuthorities(role)
                         ret = [userInstance: userInstance, usertype: params.usertype]
                     } // If User selected "Other"
                     else if(params.usertype == "3")
                     {
-                        userInstance.addToAuthorities(new External(formerStudent: params.formerStudent))
+                        def company
+
+                        // Check if the company as been specified
+                        if(params.company != null)
+                        {
+                            if(Company.countByName(params.company) == 0)
+                            {
+                                company = new Company()
+                                company.name = params.company
+                                company.save()
+                            }
+                            else
+                            {
+                                company = Company.findByName(params.company)
+                            }
+                        }
+                        role = new External(company: company, formerStudent: (params.formerStudent != null)?:false)
+                        userInstance.addToAuthorities(role)
                         ret = [userInstance: userInstance, usertype: params.usertype, company: params.company]
                     }
                     else
@@ -550,20 +581,6 @@ class UserController {
                         // If everything went well
                         if (!userInstance.hasErrors())
                         {
-                            // Check if the company as been specified
-                            if(params.company != null)
-                            {
-                                // If the company already exists in database
-                                def comp = Company.findByName(params.company)
-                                if(comp.size() == 1)
-                                {
-
-                                    println comp
-                                    // TODO : Link to Company or Create it
-                                }
-
-                            }
-
                             
                             // If we use confirmation mail
                             if (config.security.useMail)
@@ -572,11 +589,11 @@ class UserController {
                             }
                             userInstance.save(flush: true)
 
-
 //                          def auth = new AuthToken(userInstance.email, params.password)
 //                          def authtoken = daoAuthenticationProvider.authenticate(auth)
 //                          SCH.context.authentication = authtoken
-                            redirect uri: '/'
+                            flash.message = message(code:"user.waiting.approval")
+                            
                         }
                         else
                         {
