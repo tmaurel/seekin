@@ -29,33 +29,53 @@ class InternshipController {
                     value: it.user.firstName + " " + it.user.lastName
             ]
         }
+        def student = Student.list().collect {
+            [
+                    id: it.id,
+                    value: it.user.firstName + " " + it.user.lastName
+            ]
+        }
         def internshipInstance = new Internship()
         internshipInstance.properties = params
-        return [internshipInstance: internshipInstance, staff: staff]
+        return [internshipInstance: internshipInstance, staff: staff, student: student]
     }
 
     def save = {
         def internshipInstance = new Internship()
-        def companyTutor
+        def company
+        if(Company.countByName(params.companyName) == 0) {
+          company = new Company()
+          company.name = params.companyName
+          company.save()
+        }
+        else {
+          company = Company.findByName(params.companyName)
+        }
+
         def role = new External()
+        role.company = Company.findByName(params.companyName)
+        role.formerStudent = false
+
+        def companyTutor
+
         if(User.countByEmail(params.email) == 0) {
             companyTutor = new User()
             companyTutor.properties = params
             companyTutor.password = UserController.generatePwd(8)
+            companyTutor.addToAuthorities(role)
         }
         else {
             companyTutor = User.findByEmail(params.email)
+            companyTutor.authorities.each {
+              if(it.class.name == "me.hcl.seekin.Auth.Role.External")
+                role = it
+            }
         }
-        companyTutor.addToAuthorities(role)
         if(companyTutor.save(flush:true)) {
             internshipInstance.companyTutor = role
         }
 
         internshipInstance.properties = params
-        def company = new Company()
-        company.name = params.companyName
-        println company.name
-        println company.save()
         internshipInstance.company = company
         if (!internshipInstance.hasErrors() && internshipInstance.save()) {
             flash.message = "internship.created"

@@ -6,6 +6,7 @@
         <meta name="layout" content="main" />
         <title><g:message code="internship.create" /></title>
         <g:YUIButtonRessource />
+	    <gui:resources components="accordion, autoComplete"/>
     </head>
     <body>  
       <h2><g:message code="internship.create" /></h2>
@@ -39,7 +40,7 @@
           
                 <p>
                       <label for="student"><g:message code="internship.student" default="Student" />:</label>
-                      <g:select name="student.id" from="${me.hcl.seekin.Auth.Role.Student.list()}" optionKey="id" value="${internshipInstance?.student?.id}"  />
+                      <g:select name="student.id" from="${student}" optionKey="id" optionValue="value" value="${internshipInstance?.student?.id}" noSelection="['null': '']" />
 
                 </p>
           
@@ -51,7 +52,16 @@
 
                 <p>
                       <label for="company"><g:message code="internship.company" default="Company" />:</label>
-                      <g:textField name="companyName" class="field${hasErrors(bean:internshipInstance ,field:'company','error')}" value="${fieldValue(bean: internshipInstance, field: 'company')}" />
+
+                      <gui:autoComplete
+                        id="companyName"
+                        controller="company"
+                        action="listCompanyAsJSON"
+                        minQueryLength='2'
+                        queryDelay='0.5'
+                        value="${company}"
+
+                      />
 
                 </p>
 
