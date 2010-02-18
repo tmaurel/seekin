@@ -1,4 +1,4 @@
-package me.hcl.seekin
+package me.hcl.seekin.Formation
 
 import grails.test.*
 import me.hcl.seekin.Ressource.Document;

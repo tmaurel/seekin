@@ -4,7 +4,7 @@ include "formations"
 
 fixture {
 
-	nadirRole(Student, formation: m2glia, visible: true)
-	alexisRole(Student, formation: m2siad, visible: true)
-	thomasRole(Student, formation: m2glia, visible: false)
+	nadirRole(Student, promotion: siad2009, visible: true)
+	alexisRole(Student, promotion: glia2009, visible: true)
+	thomasRole(Student, promotion: glia2009, visible: false)
 }

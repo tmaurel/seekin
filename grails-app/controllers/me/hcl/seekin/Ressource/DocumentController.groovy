@@ -6,7 +6,7 @@ class DocumentController {
         static navigation = [
 		group:'menu',
 		order:2,
-		title:'document',
+		title:'documents',
 		action:'index'
 	]
 

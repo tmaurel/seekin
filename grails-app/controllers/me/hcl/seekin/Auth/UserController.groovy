@@ -1,7 +1,7 @@
 package me.hcl.seekin.Auth
 
 import me.hcl.seekin.Auth.Role.*
-import me.hcl.seekin.Formation
+import me.hcl.seekin.Formation.*
 import me.hcl.seekin.Util.Address
 import me.hcl.seekin.Util.Settings
 

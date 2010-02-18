@@ -1,14 +1,14 @@
-package me.hcl.seekin
+package me.hcl.seekin.Formation
 
-import me.hcl.seekin.Formation
 import me.hcl.seekin.Ressource.Document
+import me.hcl.seekin.Auth.Role.Student
 
 /*
  * Formation gives a description of the formation and some attached files
  */
 class Formation {
 
-	static hasMany = [ formations : Formation ]
+	static hasMany = [ students : Student, promotions: Promotion]
 
 	/** Label of the formation */
 	String label

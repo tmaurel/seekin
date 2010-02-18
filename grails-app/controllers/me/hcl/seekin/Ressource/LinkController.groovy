@@ -9,7 +9,7 @@ class LinkController {
     static navigation = [
         group:'menu',
         order:3,
-        title:'link',
+        title:'links',
         action:'index'
     ]
 
