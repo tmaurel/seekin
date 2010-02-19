@@ -61,6 +61,13 @@
 
                 </p>
           
+                <p>
+
+                          <label for="promotions"><g:message code="offer.promotions" default="Promotions" /></label>
+                          
+
+                </p>
+          
           <div class="submit yui-skin-sam">
             <g:buildEditButtons />
           </div>

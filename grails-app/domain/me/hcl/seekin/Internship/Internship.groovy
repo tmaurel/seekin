@@ -19,6 +19,9 @@ class Internship {
 	/** Indicate if the Internship is approved by Staff member */
 	Boolean isApproval
 
+    /** Indicates if the internship is from an offer which was posted on seekin */
+    Boolean fromOffer
+
         /** Student who is concerned by the internship */
 	Student student
 
@@ -42,6 +45,7 @@ class Internship {
             subject(blank: false)
             beginAt(nullable: false)
             isApproval()
+            fromOffer(nullable: true)
             report(nullable: true)
             student(nullable: false)
             academicTutor(nullable: true)

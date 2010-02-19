@@ -37,9 +37,27 @@ class InternshipController {
                     value: it.user.firstName + " " + it.user.lastName
             ]
         }
-        def internshipInstance = new Internship()
-        internshipInstance.properties = params
-        return [internshipInstance: internshipInstance, staff: staff, student: student]
+        def offer = Offer.list().collect {
+            [
+                    id: it.id,
+                    value: it.subject
+            ]
+        }
+        def internshipInstance
+        if(params?.offer?.id != null) {
+            println params
+            def offerFromSelection = Offer.get(params.offer.id)
+            internshipInstance = new Internship()
+                internshipInstance.properties = params
+                internshipInstance.subject = offerFromSelection.subject
+                internshipInstance.beginAt = offerFromSelection.beginAt
+                internshipInstance.fromOffer = true
+        }
+        else {
+            internshipInstance = new Internship()
+            internshipInstance.properties = params
+        }
+        return [internshipInstance: internshipInstance, staff: staff, student: student, offer: offer]
     }
 
     def save = {

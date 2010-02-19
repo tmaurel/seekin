@@ -12,7 +12,7 @@ class BootStrap {
 
 		// Load Fixtures
 		if (GrailsUtil.environment == GrailsApplication.ENV_DEVELOPMENT) {
-			fixtureLoader.load("settings","students","externals","staffs","users","companies","reports","convocations","internships","links", "formations")
+			fixtureLoader.load("settings","students","externals","staffs","users","companies","reports","convocations","internships","links", "formations", "offers")
 		}
 
 		Date.metaClass.formatDate = { ->

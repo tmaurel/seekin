@@ -1,8 +1,12 @@
 package me.hcl.seekin.Internship
 
 import me.hcl.seekin.Ressource.Document
+import me.hcl.seekin.Formation.Promotion
 
 class Offer {
+
+    static hasMany = [promotions: Promotion]
+    static belongsTo = [Promotion]
 	
 	/** Subject of the Offer */
 	String subject

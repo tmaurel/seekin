@@ -12,5 +12,5 @@ class Settings {
 		emailAdmin(email: true)
     }
 
-	static transcients = ["logo"]
+	static transients = ["logo"]
 }
