@@ -1,7 +1,5 @@
 package me.hcl.seekin.Internship
 
-
-
 import grails.converters.JSON
 class ConvocationController {
 

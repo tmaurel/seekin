@@ -1,4 +1,4 @@
-import me.hcl.seekin.Convocation
+import me.hcl.seekin.Internship.Convocation
 
 fixture {
 	secondConvocation(Convocation, date: new Date(), building: "A", room: "A113")

@@ -33,7 +33,7 @@ fixture {
         address : alexisAddress, 
         phone : "0102030405",
         authorities : [alexisRole],
-		showEmail : true
+		showEmail : false
 
     )
 
@@ -47,7 +47,8 @@ fixture {
         lastName : "Maurel" ,
         address : thomasAddress,
         phone : "0102030405",
-        authorities : [thomasRole]
+        authorities : [thomasRole],
+		showEmail : true
     )
 
     balmerAddress(Address, street : "1 Microsoft Way", zipCode : "98052", town : "Washington")
