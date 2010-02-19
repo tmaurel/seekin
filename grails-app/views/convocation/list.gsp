@@ -40,7 +40,7 @@
                      
                             [key: 'room', sortable: true, resizeable: true, label: roomInternationalized],
                      
-                            [key: 'internship', sortable: true, resizeable: true, label: internshipInternationalized, formatter: 'customLinkFormatter'],
+                            [key: 'internship', sortable: true, resizeable: true, label: internshipInternationalized],
                      
                   [key: 'urlID', sortable: false, resizeable: false, label:'Actions', formatter: 'adminPanelFormatter']
               ]"

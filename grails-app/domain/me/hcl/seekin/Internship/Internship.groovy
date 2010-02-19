@@ -39,15 +39,19 @@ class Internship {
 	Convocation convocation
 	
 	/** Constraints used to check if an instance is correct */
-        static constraints = {
-            subject(blank: false)
-            beginAt(nullable: false)
-            isApproval()
-            fromOffer(nullable: true)
-            report(nullable: true)
-            student(nullable: false)
-            academicTutor(nullable: true)
-            companyTutor(nullable: true)
-            convocation(nullable: true)
-        }
+	static constraints = {
+		subject(blank: false)
+		beginAt(nullable: false)
+		isApproval()
+		fromOffer(nullable: true)
+		report(nullable: true)
+		student(nullable: false)
+		academicTutor(nullable: true)
+		companyTutor(nullable: true)
+		convocation(nullable: true)
+	}
+
+	String toString() {
+		subject + " (" + beginAt.format("MM/yyyy") + ")"
+	}
 }

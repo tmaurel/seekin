@@ -119,13 +119,13 @@ class ConvocationController {
 
         list.each {
             ret << [
-               id:it.id,
-   date:it.date?.formatDate(),
-   building:it.building,
-   room:it.room,
-   internship:[name:it.internship?.id, link:g.createLink(controller: 'internship', action: 'show', id:it.internship?.id)],
-
-                urlID: it.id
+				id:it.id,
+				date:it.date?.formatDate(),
+				building:it.building,
+				room:it.room,
+				//internship:[name:it.internship, link:g.createLink(controller: 'internship', action: 'show', id:it.internship?.id)],
+				internship: it.internship.toString(),
+				urlID: it.id
             ]
         }
 
