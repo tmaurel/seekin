@@ -32,7 +32,9 @@ fixture {
         lastName : "Plantin" , 
         address : alexisAddress, 
         phone : "0102030405",
-        authorities : [alexisRole]
+        authorities : [alexisRole],
+		showEmail : true
+
     )
 
     thomasAddress(Address, street : "12 chemin floreal", zipCode : "63110", town : "Beaumont")

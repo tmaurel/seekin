@@ -8,6 +8,7 @@ import me.hcl.seekin.Internship.Internship
  */
 class Student extends Role {
 
+	static belongsTo = Promotion
     static hasMany = [ internships : Internship, promotions : Promotion ]
 
     /** Visible ? **/

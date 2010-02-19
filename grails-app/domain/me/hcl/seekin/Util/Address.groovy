@@ -24,4 +24,8 @@ class Address {
       zipCode(blank: false, matches: /\d+/)
       town(blank: false)
     }
+
+	String toString() {
+		street + " " + zipCode + " " + town
+	}
 }

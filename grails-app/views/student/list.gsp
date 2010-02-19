@@ -15,25 +15,36 @@
       <div class="flash_message"><g:message code="${flash.message}" args="${flash.args}" default="${flash.defaultMessage}" /></div>
       </g:if>
       <div class="yui-skin-sam" id="crud_panel">
-          <g:buildListButtons />
-          
-						<g:set var="firstNameInternationalized" value="${message(code:'user.firstName')}" />
-
-						<g:set var="lastNameInternationalized" value="${message(code:'user.lastName')}" />
-                 
-                        <g:set var="emailInternationalized" value="${message(code:'user.email')}" />
-
-
+		
+		  <g:set var="firstNameInternationalized" value="${message(code:'user.firstName')}" />
+		  <g:set var="lastNameInternationalized" value="${message(code:'user.lastName')}" />
+		  <g:set var="emailInternationalized" value="${message(code:'user.email')}" />
+		  <g:set var="millesimeInternationalized" value="${message(code:'millesime')}" />
+		  <g:set var="activedTab" value="" />
+		  
+		  <g:form name="millesime_form" action="list">
+			<g:select name="idMillesime"
+					  from="${millesimes}"
+					  optionKey="id"
+					  onChange="millesime_form.submit()"
+					  noSelection="['null': millesimeInternationalized]"
+ 			/>
+		  </g:form>
+		  
+		  <br />
+		  
 		  <gui:tabView id="myTabView">
-			<g:each var="formation" in="${promotions.formation}">
-			<gui:tab label="${formation.label}" active="true">
-			  <h2>${promotions.formation.label}</h2>
+			<g:each var="promotion" in="${promotions}" status="i">
+			<g:set var="idPromotion" value="${promotion?.id}" />
+			<gui:tab id="${promotion.id}" label="${promotion.formation.label}" active="${(i==0)? 1:0}">
+			  <h2>${promotion?.formation?.label} (${promotion?.millesime})</h2>
 				<gui:dataTable
-				  id="dt_${formation.id}"
+				  id="dt_${promotion.id}"
 				  draggableColumns="true"
 				  columnDefs="[
 								[key: 'lastName', sortable: true, resizeable: true, label: lastNameInternationalized],
 								[key: 'firstName', sortable: true, resizeable: true, label: firstNameInternationalized],
+								[key: 'email', sortable: true, resizeable: true, label: emailInternationalized],
 								[key: 'urlID', sortable: false, resizeable: false, label:'Actions', formatter: 'adminPanelFormatter']
 				  ]"
 				  controller="student"
@@ -45,10 +56,10 @@
 				  rowExpansion="false"
 				  rowsPerPage="10"
 				  sortedBy="lastName"
+				  params="[promotion:idPromotion, millesime:idMillesime]"
 			  />
 			</gui:tab>
 			</g:each>
 		  </gui:tabView>
-        </div>
     </body>
 </html>

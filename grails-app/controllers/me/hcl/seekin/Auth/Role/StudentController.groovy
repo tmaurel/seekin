@@ -1,10 +1,9 @@
 package me.hcl.seekin.Auth.Role
 
 import me.hcl.seekin.Auth.User
-import me.hcl.seekin.Formation.Promotion
-import me.hcl.seekin.Formation.Millesime
-
+import me.hcl.seekin.Formation.*
 import grails.converters.JSON
+
 class StudentController {
 
     def index = { redirect(action: "list", params: params) }
@@ -13,14 +12,25 @@ class StudentController {
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
     def list = {
-		def millesime = Millesime.findAll()
-		millesime = millesime.find {
+
+		def millesimes = Millesime.findAllByBeginDateLessThan(new Date())
+		def millesimeCurrent = millesimes.find {
 			it.current == true
 		}
+		def millesimeSelected
 
-		def promotions = Promotion.findAllByMillesime(millesime)
+		if(params.idMillesime)
+		{
+			millesimeSelected = Millesime.get(params.idMillesime)
+		}
+		else
+		{
+			millesimeSelected = millesimeCurrent
+		}
 
-		render(view: "list", model: [promotions: promotions])
+		def promotions = Promotion.findAllByMillesime(millesimeSelected)
+
+		render(view: "list", model: [promotions: promotions, millesimes: millesimes])
     }
 
     def create = {
@@ -125,7 +135,9 @@ class StudentController {
     }
 
     def dataTableDataAsJSON = {
-		def list = Student.list().user
+
+		def promotion = Promotion.get(params.promotion)
+		def list = promotion.students.user
 
 		list.sort {
 			p1, p2 ->
@@ -142,14 +154,15 @@ class StudentController {
             ret << [
 				firstName: it.firstName,
 				lastName: it.lastName,
+				email: it.showEmail?it.email:message(code:'user.email.notvisible'),
 				urlID: it.id
             ]
         }
 
         def data = [
-                totalRecords: Student.count(),
+                totalRecords: list.size(),
                 results: ret
-        ]
+		]
        
         render data as JSON
     }

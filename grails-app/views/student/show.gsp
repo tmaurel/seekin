@@ -19,7 +19,7 @@
 			<p>
 			  <label><g:message code="user.address" /></label>
 			  <span class="field_value">
-			  ${studentInstance?.user?.address?.street?.encodeAsHTML()} ${studentInstance?.user?.address?.zipCode?.encodeAsHTML()} ${studentInstance?.user?.address?.town?.encodeAsHTML()}
+			  ${studentInstance?.user?.address?.encodeAsHTML()}
 			  </span>
 			</p>
 			<p>
@@ -36,17 +36,17 @@
 			  </span>
 			</p>
 			</g:if>
-			<p>
-			  <label><g:message code="formation" /></label>
-			  <span class="field_value">
-			  <g:link controller="formation" action="show" id="${studentInstance?.formation?.id}">${studentInstance?.formation?.label?.encodeAsHTML()}</g:link>
-			  </span>
-			</p>
+			<h4><g:message code="promotion" /></h4>
+			<ul>
+			  	<g:each in="${studentInstance?.promotions}" var="promotionInstance">
+				  <li>${promotionInstance?.millesime?.beginDate?.format('yyyy')} - ${promotionInstance?.millesime?.endDate?.format('yyyy')} > <g:link controller="formation" action="show" id="${promotionInstance?.formation.id}">${promotionInstance?.formation?.label?.encodeAsHTML()}</g:link></li>
+				</g:each>
+			</ul>
 			<h4><g:message code="student.internships" /></h4>
 			<g:if test="${studentInstance?.internships}">
 			<ul>
 			<g:each in="${studentInstance?.internships}" var="internshipInstance">
-				<li><g:link controller="internship" action="show" id="${internshipInstance.id}">${internshipInstance?.subject?.encodeAsHTML()}</g:link> @ <g:link controller="company" action="show" id="${internshipInstance?.company?.id}">${internshipInstance?.company?.name?.encodeAsHTML()}</g:link> (${internshipInstance?.beginAt?.encodeAsHTML()})</li>
+			  <li><g:link controller="internship" action="show" id="${internshipInstance.id}">${internshipInstance?.subject?.encodeAsHTML()}</g:link> @ <g:link controller="company" action="show" id="${internshipInstance?.company?.id}">${internshipInstance?.company?.name?.encodeAsHTML()}</g:link> (${internshipInstance?.beginAt?.format('yyyy')?.encodeAsHTML()})</li>
 			</g:each>
 			</ul>
 			</g:if>

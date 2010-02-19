@@ -8,7 +8,7 @@ import me.hcl.seekin.Auth.Role.Student
  */
 class Formation {
 
-	static hasMany = [ students : Student, promotions: Promotion]
+	static hasMany = [promotions: Promotion]
 
 	/** Label of the formation */
 	String label

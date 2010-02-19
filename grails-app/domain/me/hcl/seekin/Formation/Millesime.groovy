@@ -19,4 +19,8 @@ class Millesime {
         beginDate(nullable: false)
         endDate(nullable: false)
     }
+
+	String toString() {
+		beginDate.format('yyyy') + " - " + endDate.format('yyyy')
+	}
 }
