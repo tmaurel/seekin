@@ -5,6 +5,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="layout" content="main" />
         <title><g:message code="offer.create" /></title>
+	    <gui:resources components="accordion, autoComplete"/>
         <g:YUIButtonRessource />
     </head>
     <body>  
@@ -54,6 +55,27 @@
                       <g:select name="file.id" from="${me.hcl.seekin.Ressource.Document.list()}" optionKey="id" value="${offerInstance?.file?.id}" noSelection="['null': '']" />
 
                 </p>
+          
+                <p>
+                      <label for="author"><g:message code="offer.author" default="Author" />:</label>
+                      <g:select name="author.id" from="${me.hcl.seekin.Auth.User.list()}" optionKey="id" value="${offerInstance?.author?.id}"  />
+
+                </p>
+
+                <div>
+                      <label for="company"><g:message code="internship.company" default="Company" />:</label>
+
+                      <gui:autoComplete
+                        id="companyName"
+                        controller="company"
+                        action="listCompanyAsJSON"
+                        minQueryLength='2'
+                        queryDelay='0.5'
+                        value="${company}"
+
+                      />
+
+                </div>
           
           <div class="submit yui-skin-sam">
              <g:buildCreateButtons />

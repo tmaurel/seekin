@@ -5,6 +5,7 @@ import me.hcl.seekin.Auth.Role.Student
 import me.hcl.seekin.Auth.Role.Staff
 import me.hcl.seekin.Auth.Role.External
 import me.hcl.seekin.Company
+import me.hcl.seekin.Formation.Millesime
 
 class Internship {
 	
@@ -37,6 +38,12 @@ class Internship {
 
     /** Convocation for the oral test of the internship */
 	Convocation convocation
+
+    /** Length of the internship */
+    Integer length
+
+    /** Millesime of the internship */
+    Millesime millesime
 	
 	/** Constraints used to check if an instance is correct */
 	static constraints = {
@@ -49,6 +56,8 @@ class Internship {
 		academicTutor(nullable: true)
 		companyTutor(nullable: true)
 		convocation(nullable: true)
+        length(nullable: false)
+        millesime(nullable: false)
 	}
 
 	String toString() {

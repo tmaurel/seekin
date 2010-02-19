@@ -3,6 +3,8 @@ package me.hcl.seekin.Internship
 
 
 import grails.converters.JSON
+import me.hcl.seekin.Company
+
 class OfferController {
 
     def index = { redirect(action: "list", params: params) }
@@ -20,7 +22,19 @@ class OfferController {
     }
 
     def save = {
+
+        def company
+        if(Company.countByName(params.companyName) == 0) {
+          company = new Company()
+          company.name = params.companyName
+          company.save()
+        }
+        else {
+          company = Company.findByName(params.companyName)
+        }
+
         def offerInstance = new Offer(params)
+        offerInstance.company = company
         if (!offerInstance.hasErrors() && offerInstance.save()) {
             flash.message = "offer.created"
             flash.args = [offerInstance.id]

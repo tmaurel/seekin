@@ -48,4 +48,8 @@ class User {
 		address(nullable: true)
 		phone(nullable:true, size: 10..10)
 	}
+
+    String toString() {
+        firstName + " " + lastName 
+    }
 }

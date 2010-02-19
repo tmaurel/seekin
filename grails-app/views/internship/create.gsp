@@ -38,6 +38,12 @@
                       </p>
 
                       <p>
+                            <label for="length"><g:message code="internship.length" default="Length" />:</label>
+                            <g:textField name="length" class="field${hasErrors(bean:internshipInstance ,field:'length','error')}" value="${fieldValue(bean: internshipInstance, field: 'length')}" />
+
+                      </p>
+
+                      <p>
                             <label for="isApproval"><g:message code="internship.isApproval" default="Is Approval" />:</label>
                             <g:checkBox name="isApproval" value="${internshipInstance?.isApproval}" />
 
@@ -58,13 +64,14 @@
                       <div>
                             <label for="company"><g:message code="internship.company" default="Company" />:</label>
 
+                            <g:set var="company" value ="${(internshipInstance?.company==null)?"":internshipInstance.company} />
                             <gui:autoComplete
                               id="companyName"
                               controller="company"
                               action="listCompanyAsJSON"
                               minQueryLength='2'
                               queryDelay='0.5'
-                              value="${company}"
+                              value="${internshipInstance?.company}"
 
                             />
 

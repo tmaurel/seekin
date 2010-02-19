@@ -63,6 +63,13 @@
           
                 <p>
 
+                          <label for="author"><g:message code="offer.author" default="Author" /></label>
+                          <g:select name="author.id" from="${me.hcl.seekin.Auth.User.list()}" optionKey="id" value="${offerInstance?.author?.id}"  />
+
+                </p>
+          
+                <p>
+
                           <label for="promotions"><g:message code="offer.promotions" default="Promotions" /></label>
                           
 

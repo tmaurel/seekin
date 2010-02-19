@@ -34,6 +34,15 @@
                 </p>
 
                 <p>
+                    <label><g:message code="internship.length" default="Length" /></label>
+                    <span class="field_value">
+
+                    ${fieldValue(bean: internshipInstance, field: "length")}
+
+                    </span>
+                </p>
+
+                <p>
 
                           <label for="report"><g:message code="internship.report" default="Report" /></label>
                           <span class="field_value">

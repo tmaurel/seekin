@@ -44,12 +44,13 @@ class InternshipController {
         }
         def internshipInstance
         if(params?.offer?.id != null) {
-            println params
             def offerFromSelection = Offer.get(params.offer.id)
             internshipInstance = new Internship()
                 internshipInstance.properties = params
                 internshipInstance.subject = offerFromSelection.subject
                 internshipInstance.beginAt = offerFromSelection.beginAt
+                internshipInstance.length = offerFromSelection.length
+                internshipInstance.company = offerFromSelection.company
                 internshipInstance.fromOffer = true
         }
         else {

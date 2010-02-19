@@ -47,7 +47,7 @@
                             <label><g:message code="offer.beginAt" default="Begin At" /></label>
                             <span class="field_value">
                             
-                            <g:formatDate date="${offerInstance?.beginAt}" />
+                            ${offerInstance?.beginAt}
                             
                             </span>
                       </p>
@@ -76,6 +76,24 @@
                             
                             <g:link controller="document" action="show" id="${offerInstance?.file?.id}">${offerInstance?.file?.encodeAsHTML()}</g:link>
                             
+                            </span>
+                      </p>
+                        
+                       <p>
+                            <label><g:message code="offer.author" default="Author" /></label>
+                            <span class="field_value">
+                            
+                            <g:link controller="user" action="show" id="${offerInstance?.author?.id}">${offerInstance?.author?.encodeAsHTML()}</g:link>
+                            
+                            </span>
+                      </p>
+
+                       <p>
+                            <label><g:message code="offer.company" default="Company" /></label>
+                            <span class="field_value">
+
+                            <g:link controller="company" action="show" id="${offerInstance?.company?.id}">${offerInstance?.company?.name?.encodeAsHTML()}</g:link>
+
                             </span>
                       </p>
                         
