@@ -1,5 +1,5 @@
 
-<%@ page import="me.hcl.seekin.Convocation" %>
+<%@ page import="me.hcl.seekin.Internship.Convocation" %>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />

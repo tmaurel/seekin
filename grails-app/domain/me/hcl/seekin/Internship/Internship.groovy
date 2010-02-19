@@ -6,8 +6,6 @@ import me.hcl.seekin.Auth.Role.Staff
 import me.hcl.seekin.Auth.Role.External
 import me.hcl.seekin.Company
 
-import me.hcl.seekin.Convocation
-
 class Internship {
 	
 	/** Subject of the Internship */

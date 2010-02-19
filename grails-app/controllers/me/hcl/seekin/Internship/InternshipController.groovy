@@ -5,7 +5,6 @@ package me.hcl.seekin.Internship
 import grails.converters.JSON
 import me.hcl.seekin.Auth.Role.Staff
 import me.hcl.seekin.Auth.Role.Student
-import me.hcl.seekin.Convocation
 import me.hcl.seekin.Auth.User
 import me.hcl.seekin.Auth.UserController
 import me.hcl.seekin.Auth.Role.External

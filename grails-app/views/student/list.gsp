@@ -39,7 +39,7 @@
 			<gui:tab id="${promotion.id}" label="${promotion.formation.label}" active="${(i==0)? 1:0}">
 			  <h2>${promotion?.formation?.label} (${promotion?.millesime})</h2>
 				<gui:dataTable
-				  id="dt_${promotion.id}"
+				  id="dt${promotion.id}"
 				  draggableColumns="true"
 				  columnDefs="[
 								[key: 'lastName', sortable: true, resizeable: true, label: lastNameInternationalized],
@@ -56,7 +56,7 @@
 				  rowExpansion="false"
 				  rowsPerPage="10"
 				  sortedBy="lastName"
-				  params="[promotion:idPromotion, millesime:idMillesime]"
+				  params="[promotion:idPromotion]"
 			  />
 			</gui:tab>
 			</g:each>

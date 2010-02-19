@@ -33,25 +33,6 @@ class StudentController {
 		render(view: "list", model: [promotions: promotions, millesimes: millesimes])
     }
 
-    def create = {
-        def studentInstance = new Student()
-        studentInstance.properties = params
-        return [studentInstance: studentInstance]
-    }
-
-    def save = {
-        def studentInstance = new Student(params)
-        if (!studentInstance.hasErrors() && studentInstance.save()) {
-            flash.message = "student.created"
-            flash.args = [studentInstance.id]
-            flash.defaultMessage = "Student ${studentInstance.id} created"
-            redirect(action: "show", id: studentInstance.id)
-        }
-        else {
-            render(view: "create", model: [studentInstance: studentInstance])
-        }
-    }
-
     def show = {
         def studentInstance = Student.get(params.id)
         if (!studentInstance) {
@@ -62,75 +43,6 @@ class StudentController {
         }
         else {
             return [studentInstance: studentInstance]
-        }
-    }
-
-    def edit = {
-        def studentInstance = Student.get(params.id)
-        if (!studentInstance) {
-            flash.message = "student.not.found"
-            flash.args = [params.id]
-            flash.defaultMessage = "Student not found with id ${params.id}"
-            redirect(action: "list")
-        }
-        else {
-            return [studentInstance: studentInstance]
-        }
-    }
-
-    def update = {
-        def studentInstance = Student.get(params.id)
-        if (studentInstance) {
-            if (params.version) {
-                def version = params.version.toLong()
-                if (studentInstance.version > version) {
-                    
-                    studentInstance.errors.rejectValue("version", "student.optimistic.locking.failure", "Another user has updated this Student while you were editing")
-                    render(view: "edit", model: [studentInstance: studentInstance])
-                    return
-                }
-            }
-            studentInstance.properties = params
-            if (!studentInstance.hasErrors() && studentInstance.save()) {
-                flash.message = "student.updated"
-                flash.args = [params.id]
-                flash.defaultMessage = "Student ${params.id} updated"
-                redirect(action: "show", id: studentInstance.id)
-            }
-            else {
-                render(view: "edit", model: [studentInstance: studentInstance])
-            }
-        }
-        else {
-            flash.message = "student.not.found"
-            flash.args = [params.id]
-            flash.defaultMessage = "Student not found with id ${params.id}"
-            redirect(action: "edit", id: params.id)
-        }
-    }
-
-    def delete = {
-        def studentInstance = Student.get(params.id)
-        if (studentInstance) {
-            try {
-                studentInstance.delete()
-                flash.message = "student.deleted"
-                flash.args = [params.id]
-                flash.defaultMessage = "Student ${params.id} deleted"
-                redirect(action: "list")
-            }
-            catch (org.springframework.dao.DataIntegrityViolationException e) {
-                flash.message = "student.not.deleted"
-                flash.args = [params.id]
-                flash.defaultMessage = "Student ${params.id} could not be deleted"
-                redirect(action: "show", id: params.id)
-            }
-        }
-        else {
-            flash.message = "student.not.found"
-            flash.args = [params.id]
-            flash.defaultMessage = "Student not found with id ${params.id}"
-            redirect(action: "list")
         }
     }
 

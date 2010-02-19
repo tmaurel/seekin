@@ -1,7 +1,6 @@
 package me.hcl.seekin.Internship
 
 import grails.test.*
-import me.hcl.seekin.Convocation
 import me.hcl.seekin.Auth.Role.External
 import me.hcl.seekin.Auth.Role.Student
 import me.hcl.seekin.Auth.Role.Staff

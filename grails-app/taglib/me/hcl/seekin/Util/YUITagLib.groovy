@@ -91,7 +91,9 @@ class YUITagLib {
                         <li><a href="${createLink(controller:"offer", action:"list")}">${message(code:"offer.list")}</a></li>
                         <li><a href="${createLink(controller:"internship", action:"list")}">${message(code:"internship.list")}</a></li>
                         <li><a href="${createLink(controller:"internship", action:"create")}">${message(code:"internship.create")}</a></li>
-                        <li><a href="${createLink(controller:"company", action:"list")}">${message(code:"company.list")}</a></li>
+                        <li><a href="${createLink(controller:"report", action:"create")}">${message(code:"report.create")}</a></li>
+                        <li><a href="${createLink(controller:"student", action:"list")}">${message(code:"student.list")}</a></li>
+						<li><a href="${createLink(controller:"company", action:"list")}">${message(code:"company.list")}</a></li>
                         <li><a href="${createLink(controller:"report", action:"list")}">${message(code:"report.list")}</a></li>
                     </ul>"""
                 }
@@ -103,6 +105,7 @@ class YUITagLib {
                     """<ul>
                         <li><a href="${createLink(controller:"offer", action:"list")}">${message(code:"offer.list")}</a></li>
                         <li><a href="${createLink(controller:"offer", action:"create")}">${message(code:"offer.create")}</a></li>
+                        <li><a href="${createLink(controller:"student", action:"list")}">${message(code:"student.list")}</a></li>
                         <li><a href="${createLink(controller:"internship", action:"list")}">${message(code:"internship.list")}</a></li>
                         <li><a href="${createLink(controller:"company", action:"list")}">${message(code:"company.list")}</a></li>
                         <li><a href="${createLink(controller:"report", action:"list")}">${message(code:"report.list")}</a></li>
@@ -117,7 +120,8 @@ class YUITagLib {
                     """<ul>
                         <li><a href="${createLink(controller:"offer", action:"list")}">${message(code:"offer.list")}</a></li>
                         <li><a href="${createLink(controller:"offer", action:"create")}">${message(code:"offer.create")}</a></li>
-                        <li><a href="${createLink(controller:"company", action:"list")}">${message(code:"company.list")}</a></li>
+                        <li><a href="${createLink(controller:"student", action:"list")}">${message(code:"student.list")}</a></li>
+                        <li><a href="${createLink(controller:"company", action:"edit")}">${message(code:"company.edit")}</a></li>
                     </ul>"""
                 }
             }
