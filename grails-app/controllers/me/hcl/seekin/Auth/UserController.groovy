@@ -16,6 +16,7 @@ import org.springframework.security.DisabledException
 import org.springframework.security.context.SecurityContextHolder as SCH
 import org.springframework.security.ui.AbstractProcessingFilter
 import org.springframework.security.ui.webapp.AuthenticationProcessingFilter
+import org.hibernate.LockMode
 
 import nl.captcha.Captcha
 import nl.captcha.backgrounds.*
@@ -47,9 +48,8 @@ class UserController {
 
 	def daoAuthenticationProvider
 	def emailerService
-	
 	def jcaptchaService
-
+        def sessionFactory
 
 	/**
 	 * Default closure
@@ -71,15 +71,147 @@ class UserController {
 		else
 		{
 
-                      def user = User.findByEmail("alexis.plantin@gmail.com")
-                      println "Domain : " + user.authorities
-
-                      def principal = authenticateService.principal()
-                      println "Service : " + principal.getAuthorities()//get authorities
-
 
 		}
 	}
+
+        /**
+         * Edit Profil Closure
+         */
+        def profile = {
+
+            if(authenticateService.isLoggedIn())
+            {
+                def userInstance = authenticateService.userDomain()
+                sessionFactory.currentSession.refresh(userInstance, LockMode.NONE)
+                def ret = [userInstance:userInstance]
+                if (session.id)
+                {
+                    def role
+                    def pass = userInstance.password
+                    def promotion
+
+                    if(authenticateService.ifAllGranted("ROLE_STUDENT"))
+                    {
+                        def millesime = Millesime.findAll()
+                        millesime = millesime.find {
+                             it.current == true
+                        }
+
+                        def formations = Promotion.findAllByMillesime(millesime).collect {
+                             [
+                                 id: it.id,
+                                 value: it?.formation?.label
+                             ]
+                        }
+
+                        profile = Student.findByUser(userInstance)
+                        profile.promotions.each {
+                            if(it.millesime.current)
+                                promotion = it
+                        }
+                        ret.formations = formations
+                        ret.profile = profile
+                        ret.promotion = promotion.id
+                    }
+
+                    // If User selected "Staff"
+                    if(authenticateService.ifAllGranted("ROLE_EXTERNAL"))
+                    {
+                        profile = External.findByUser(userInstance)
+
+                        if(profile?.company != null)
+                        {
+                            ret.company = profile.company.name
+                        }
+
+                        ret.profile = profile
+                    }
+
+                    if(request.method == 'POST')
+                    {
+                         userInstance.properties = params
+
+                         if(params.password == "" && params.repassword == "")
+                         {
+                                 userInstance.password = pass
+                         }
+                         else
+                         {
+                                 // encode the password for the insertion in database
+                                 userInstance.password = authenticateService.encodePassword(params.password)
+                         }
+
+                        userInstance.validate()
+
+                        // check if the password matches the repassword
+                        if (params.password != params.repassword)
+                        {
+                                userInstance.errors.rejectValue(
+                                    'password',
+                                    'user.password.dismatch'
+                                )
+                        }
+
+                        // If everything went well
+                        if (!userInstance.hasErrors())
+                        {
+                            userInstance.showEmail = (params.showEmail)?true:false
+                            // If User selected "Student"
+                            if(authenticateService.ifAllGranted("ROLE_STUDENT"))
+                            {
+                                profile.visible = (params.visible)?true:false
+
+                                if(params.promotion != null)
+                                {
+                                    if(params.promotion.toInteger() != promotion.id && Promotion.get(params.promotion)?.millesime?.current)
+                                    {
+                                        profile.removeFromPromotions(promotion)
+                                        profile.addToPromotions(Promotion.get(params.promotion))
+                                    }
+                                }
+                                
+                            } // If User selected "Staff"
+                            if(authenticateService.ifAllGranted("ROLE_EXTERNAL"))
+                            {
+                                profile.formerStudent = (params.formerStudent)?true:false
+
+                                if(params.company != "")
+                                {
+                                    if(Company.countByName(params.company) == 0)
+                                    {
+                                        def company = new Company(phone: "")
+                                        company.name = params.company
+                                        profile.company = company
+                                        company.save()
+                                    }
+                                    else profile.company = Company.findByName(params.company)
+                                }
+                                else profile.company = null
+                            }
+                            userInstance.save(flush: true)
+                            redirect action:'index'
+                        }
+                        else
+                        {
+                            userInstance.password = pass
+                            userInstance.discard()
+                            if(authenticateService.ifAllGranted("ROLE_STUDENT"))
+                            {
+                                ret.promotion = params.promotion
+                                ret.profile.visible = params.visible
+                            }
+                            if(authenticateService.ifAllGranted("ROLE_EXTERNAL"))
+                            {
+                                ret.company = params.company
+                                ret.profile.formerStudent = params.formerStudent
+                            }
+                        }
+                    }
+                }
+                return ret
+            }
+        }
 
 	/**
 	 * List all Users
@@ -218,8 +350,6 @@ class UserController {
 			render view: 'create', model: [authorityList: Role.list(), userInstance: userInstance]
 		}
 	}
-
-	
 	
 	/* Based on LogoutController */ 
 	
@@ -230,9 +360,6 @@ class UserController {
 		// TODO  put any pre-logout code here
 		redirect(uri: '/j_spring_security_logout')
 	}
-	
-	
-	
 	
 	/* Based on LoginController */
 	
@@ -448,8 +575,6 @@ class UserController {
         }
 	
 	
-	
-	
 	/* Based on RegisterController */
 
     	/**
@@ -477,6 +602,7 @@ class UserController {
                 def userInstance = new User()
                 userInstance.address = new Address()
                 def ret
+                def company
 
                 // skip if already logged in
                 if (authenticateService.isLoggedIn()) {
@@ -515,16 +641,14 @@ class UserController {
                     } // If User selected "Other"
                     else if(params.usertype == "3")
                     {
-                        def company
 
                         // Check if the company as been specified
                         if(params.company != null)
                         {
                             if(Company.countByName(params.company) == 0)
                             {
-                                company = new Company()
+                                company = new Company(phone: "")
                                 company.name = params.company
-                                company.save()
                             }
                             else
                             {
@@ -587,6 +711,8 @@ class UserController {
                             {
                                 emailerService.buildRegistrationMail(userInstance)
                             }
+                            if(company != null)
+                                company.save()
                             userInstance.save(flush: true)
 
 //                          def auth = new AuthToken(userInstance.email, params.password)
@@ -606,35 +732,35 @@ class UserController {
 	}
 
     
-    def dataTableDataAsJSON = {
-        def list = User.list(params)
-        def ret = []
-        response.setHeader("Cache-Control", "no-store")
+        def dataTableDataAsJSON = {
+            def list = User.list(params)
+            def ret = []
+            response.setHeader("Cache-Control", "no-store")
 
-        list.each {
+            list.each {
 
-            def auth = ""
-            it.authorities.each {
-                auth += it.getRoleName() + "<br />"
+                def auth = ""
+                it.authorities.each {
+                    auth += it.getRoleName() + "<br />"
+                }
+
+                ret << [
+                    id:it.id,
+                    email:it.email,
+                    firstName: it.firstName,
+                    lastName: it.lastName,
+                    showEmail:it.showEmail,
+                    roles:auth,
+                    enabled:it.enabled,
+                    urlID:it.id
+                ]
             }
 
-            ret << [
-                id:it.id,
-                email:it.email,
-                firstName: it.firstName,
-                lastName: it.lastName,
-                showEmail:it.showEmail,
-                roles:auth,
-                enabled:it.enabled,
-                urlID:it.id
+            def data = [
+                    totalRecords: User.count(),
+                    results: ret
             ]
+
+            render data as JSON
         }
-
-        def data = [
-                totalRecords: User.count(),
-                results: ret
-        ]
-
-        render data as JSON
-    }
 }

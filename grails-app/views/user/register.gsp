@@ -101,7 +101,7 @@
                                     <g:if test="${usertype == '1'}">
                                           <p>
                                             <label for="formation"><g:message code="student.formation" /></label>
-                                            <g:select name="promotion" from="${formations}"  optionKey="id" optionValue="value"/>
+                                            <g:select name="promotion" from="${formations}"  optionKey="id" optionValue="value" value="${params.promotion}"/>
                                           </p>
                                           <p>
                                             <label for="visible"><g:message code="student.visible" /></label>
