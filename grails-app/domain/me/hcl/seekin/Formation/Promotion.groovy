@@ -17,4 +17,8 @@ class Promotion {
                 it.millesime.current == true
             }
     }
+
+    static getCurrents = {
+        Promotion.findAllByMillesime(Millesime.getCurrent())
+    }
 }

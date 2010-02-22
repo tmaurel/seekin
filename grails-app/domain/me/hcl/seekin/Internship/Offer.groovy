@@ -9,6 +9,7 @@ class Offer {
 
     static hasMany = [promotions: Promotion]
     static belongsTo = [Promotion, Company]
+    static transients = ['status']
 
     /** Subject of the Offer */
     String subject
@@ -22,8 +23,14 @@ class Offer {
     /** Length of the internship */
     Integer length
 
-    /** Status of the offer */
-    String status
+    /** Show if the offer is validated*/
+    Boolean validated
+
+    /** Show if the offer is assignated (converted into an internship) */
+    Boolean assignated
+
+    /** Explains the reason of the deny */
+    String reason
 
     /** File which details the offer */
     Document file
@@ -38,9 +45,15 @@ class Offer {
 		subject(blank: false)
 		description(blank: false)
 		beginAt(nullable: false)
+        validated(nullable: false)
+        assignated(nullable: false)
 		length(range: 1..52)
-		status(blank: false)
+		reason(nullable:true, blank: true)
         file(nullable: true)
         company(nullable: false)
+    }
+
+    String getStatus() {
+        validated==false?(reason==null?'offer.waitForValidation':'offer.unvalidated'):(assignated==false?'offer.validated':'offer.assignated')
     }
 }

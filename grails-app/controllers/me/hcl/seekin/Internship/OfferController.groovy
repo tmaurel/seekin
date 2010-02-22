@@ -4,8 +4,13 @@ package me.hcl.seekin.Internship
 
 import grails.converters.JSON
 import me.hcl.seekin.Company
+import org.hibernate.LockMode
+import me.hcl.seekin.Formation.Promotion
 
 class OfferController {
+
+    def authenticateService
+    def sessionFactory
 
     def index = { redirect(action: "list", params: params) }
 
@@ -13,6 +18,35 @@ class OfferController {
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
     def list = {
+        def status
+        if(!authenticateService.isLoggedIn()) {
+            redirect(controller: "user", action: "index")
+        }
+        else {
+            if(authenticateService.ifAnyGranted("ROLE_ADMIN,ROLE_FORMATIONMANAGER")) {
+                status = new HashSet()
+                Promotion.getCurrents().offers.each() {
+                    it.each() { it2 ->
+                        status.add it2.getStatus()
+                    }
+                }
+            }
+            else if(authenticateService.ifAnyGranted("ROLE_EXTERNAL")) {
+                def userInstance = authenticateService.userDomain()
+                sessionFactory.currentSession.refresh(userInstance, LockMode.NONE)
+                status = new HashSet()
+                Promotion.getCurrents().offers.each() {
+                    it.each() { it2 ->
+                        if(it2.author.toString() == userInstance.toString()) {
+                            status.add it2.getStatus()
+                        }
+                    }
+                }
+            }
+            else
+                status = ['offer.validated']
+		    render(view: "list", model: [status: status])
+        }
     }
 
     def create = {
@@ -129,29 +163,76 @@ class OfferController {
     }
 
     def dataTableDataAsJSON = {
-        def list = Offer.list(params)
-        def ret = []
-        response.setHeader("Cache-Control", "no-store")
+            def list = []
+            def ret = []
+            def status = new HashSet()
+            response.setHeader("Cache-Control", "no-store")
+            if(authenticateService.ifAnyGranted("ROLE_ADMIN,ROLE_FORMATIONMANAGER")) {
+                Promotion.getCurrents().offers.each() {
+                    it.each() { it2 ->
+                        if(it2.getStatus() == params.status) {
+                            status.add it2
+                        }
+                    }
+                }
+                list = status
+            }
+            else if(authenticateService.ifAnyGranted("ROLE_STAFF")) {
+                Promotion.getCurrents().offers.each() {
+                    it.each() { it2 ->
+                        if(it2.getStatus() == params.status) {
+                            status.add it2
+                        }
+                    }
+                }
+                list = status
+            }
+            else if(authenticateService.ifAnyGranted("ROLE_STUDENT")) {
+                def userInstance = authenticateService.userDomain()
+                sessionFactory.currentSession.refresh(userInstance, LockMode.NONE)
+                def student = userInstance.authorities.find {
+                    it.getRoleName() == "ROLE_STUDENT"
+                    def currentPromo = Promotion.getCurrentForStudent(it)
+                    currentPromo.offers.each() { it2 ->
+                        if(it2.getStatus() == params.status) {
+                            list.add it2
+                        }
+                    }
+                }
+            }
+            else if(authenticateService.ifAnyGranted("ROLE_EXTERNAL")) {
+                def userInstance = authenticateService.userDomain()
+                sessionFactory.currentSession.refresh(userInstance, LockMode.NONE)
+                list = Offer.findAllByAuthor(userInstance)
+                Promotion.getCurrents().offers.each() {
+                    it.each() { it2 ->
+                        if(it2.author == userInstance && it2.getStatus() == params.status) {
+                            status.add it2
+                        }
+                    }
+                }
+                list = status
+            }
+        
+            list.each {
+                ret << [
+                   id:it.id,
+                   subject:it.subject,
+                   company:it.company.toString(),
+                   beginAt:it.beginAt?.formatDate(),
+                   length:it.length,
+                   //status:it.validated==false?(it.reason==null?message(code:'offer.waitForValidation'):message(code:'offer.unvalidated')):(it.assignated==false?message(code:'offer.validated'):message(code:'offer.assignated')),
+                   status:message(code:it.getStatus()),
+                   urlID: it.id
+                ]
+            }
 
-        list.each {
-            ret << [
-               id:it.id,
-   subject:it.subject,
-   description:it.description,
-   beginAt:it.beginAt?.formatDate(),
-   length:it.length,
-   status:it.status,
-
-                urlID: it.id
+            def data = [
+                    totalRecords: Offer.count(),
+                    results: ret
             ]
-        }
 
-        def data = [
-                totalRecords: Offer.count(),
-                results: ret
-        ]
-       
-        render data as JSON
-    }
+            render data as JSON
+        }
 
 }

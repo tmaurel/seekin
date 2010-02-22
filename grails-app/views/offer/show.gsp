@@ -60,12 +60,30 @@
                             
                             </span>
                       </p>
+
+                       <p>
+                            <label><g:message code="offer.validated" default="Is Validated" /></label>
+                            <span class="field_value">
+
+                            <g:formatBoolean boolean="${internshipInstance?.validated}" />
+
+                            </span>
+                      </p>
+
+                       <p>
+                            <label><g:message code="offer.assignated" default="Is Assignated" /></label>
+                            <span class="field_value">
+
+                            <g:formatBoolean boolean="${internshipInstance?.assignated}" />
+
+                            </span>
+                      </p>
                         
                        <p>
-                            <label><g:message code="offer.status" default="Status" /></label>
+                            <label><g:message code="offer.reason" default="Reason" /></label>
                             <span class="field_value">
                             
-                            ${fieldValue(bean: offerInstance, field: "status")}
+                            ${fieldValue(bean: offerInstance, field: "reason")}
                             
                             </span>
                       </p>

@@ -45,12 +45,6 @@
                 </p>
           
                 <p>
-                      <label for="status"><g:message code="offer.status" default="Status" />:</label>
-                      <g:textField name="status" class="field${hasErrors(bean:offerInstance ,field:'status','error')}" value="${fieldValue(bean: offerInstance, field: 'status')}" />
-
-                </p>
-          
-                <p>
                       <label for="file"><g:message code="offer.file" default="File" />:</label>
                       <g:select name="file.id" from="${me.hcl.seekin.Ressource.Document.list()}" optionKey="id" value="${offerInstance?.file?.id}" noSelection="['null': '']" />
 

@@ -4,6 +4,7 @@ import me.hcl.seekin.Util.Address
 include "externals"
 include "staffs"
 include "students"
+include "admins"
 
 fixture {
 
@@ -47,7 +48,7 @@ fixture {
         lastName : "Maurel" ,
         address : thomasAddress,
         phone : "0102030405",
-        authorities : [thomasRole],
+        authorities : [thomasRole, adminRole],
 		showEmail : true
     )
 
@@ -89,4 +90,5 @@ fixture {
         phone : "0102030405",
         authorities : [hclRole]
     )
+
 }
