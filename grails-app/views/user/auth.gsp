@@ -4,7 +4,7 @@
         <g:YUIButtonRessource />
 </head>
 
-<body class="yui-skin-sam">
+<body>
 	<div id="register_form" class="yui-skin-sam">
 		<gui:expandablePanel title="${message(code:'register.form.title')}" expanded="true" bounce="false">
 			<g:form name="registerForm" url="[action:'register',controller:'user']" class="boxed_form">	

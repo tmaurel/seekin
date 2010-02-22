@@ -70,7 +70,14 @@ class UserController {
 		}
 		else
 		{
+                        def userInstance = authenticateService.userDomain()
+                        sessionFactory.currentSession.refresh(userInstance, LockMode.NONE)
 
+                        if(authenticateService.ifAllGranted("ROLE_STUDENT"))
+                        {
+                            def millesime = Millesime.getCurrent()
+                            def promotion = Promotion.getCurrentForStudent(Student.findByUser(userInstance))
+                        }
 
 		}
 	}
@@ -93,10 +100,7 @@ class UserController {
 
                     if(authenticateService.ifAllGranted("ROLE_STUDENT"))
                     {
-                        def millesime = Millesime.findAll()
-                        millesime = millesime.find {
-                             it.current == true
-                        }
+                        def millesime = Millesime.getCurrent()
 
                         def formations = Promotion.findAllByMillesime(millesime).collect {
                              [
@@ -106,10 +110,8 @@ class UserController {
                         }
 
                         profile = Student.findByUser(userInstance)
-                        profile.promotions.each {
-                            if(it.millesime.current)
-                                promotion = it
-                        }
+                        promotion = Promotion.getCurrentForStudent(profile)
+
                         ret.formations = formations
                         ret.profile = profile
                         ret.promotion = promotion.id
@@ -617,10 +619,7 @@ class UserController {
                     // If User selected "Student"
                     if(params.usertype == "1")
                     {
-                        def millesime = Millesime.findAll()
-                        millesime = millesime.find {
-                                it.current == true
-                        }
+                        def millesime = Millesime.getCurrent()
 
                         def formations = Promotion.findAllByMillesime(millesime).collect {
                             [

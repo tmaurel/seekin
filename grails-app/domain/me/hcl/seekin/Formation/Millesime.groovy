@@ -20,7 +20,13 @@ class Millesime {
         endDate(nullable: false)
     }
 
-	String toString() {
-		beginDate.format('yyyy') + " - " + endDate.format('yyyy')
-	}
+    String toString() {
+            beginDate.format('yyyy') + " - " + endDate.format('yyyy')
+    }
+
+    static getCurrent = {
+       Millesime.findAll().find {
+             it.current == true
+       }
+    }
 }

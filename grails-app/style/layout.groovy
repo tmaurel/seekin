@@ -325,6 +325,11 @@ style = {
 		'width':'36%',
 	)
 
+        '#offers_block' (
+                'float':'left',
+                'width':'36%'
+        )
+
 	'.yui-skin-sam' (
 		'margin-top':'10px',
 		'margin-bottom':'10px'

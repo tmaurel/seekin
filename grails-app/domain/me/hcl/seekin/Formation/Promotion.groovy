@@ -10,4 +10,11 @@ class Promotion {
 
     static constraints = {
     }
+
+    static getCurrentForStudent = {
+        student ->
+            student.promotions.find {
+                it.millesime.current == true
+            }
+    }
 }
