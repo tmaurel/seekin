@@ -32,33 +32,98 @@
 			<g:set var="idStatus" value="${status}" />
 			<gui:tab id="${idStatus}" label="${message(code:idStatus)}" active="${(i==0)? 1:0}">
 			  <h2><g:message code="${idStatus}" /></h2>
-				<gui:dataTable
-				  id="dt${i}"
-				  draggableColumns="true"
-                  columnDefs="[
+                <g:ifAnyGranted role="ROLE_ADMIN,ROLE_MANAGERFORMATION">
+                  <g:if test="${idStatus=='offer.waitForValidation'}">
+                    <g:form action="list">
+                      <gui:dataTable
+                        id="dt${i}"
+                        draggableColumns="true"
+                        columnDefs="[
 
-                                [key: 'id', sortable: true, resizeable: true, label: idInternationalized],
+                                      [key: 'id', sortable: true, resizeable: true, label: idInternationalized],
 
-                                [key: 'subject', sortable: true, resizeable: true, label: subjectInternationalized],
+                                      [key: 'subject', sortable: true, resizeable: true, label: subjectInternationalized],
 
-                                [key: 'company', sortable: true, resizeable: true, label: companyInternationalized],
+                                      [key: 'company', sortable: true, resizeable: true, label: companyInternationalized],
 
-                                [key: 'beginAt', sortable: true, resizeable: true, label: beginAtInternationalized],
+                                      [key: 'beginAt', sortable: true, resizeable: true, label: beginAtInternationalized],
 
-                                [key: 'length', sortable: true, resizeable: true, label: lengthInternationalized],
+                                      [key: 'length', sortable: true, resizeable: true, label: lengthInternationalized],
 
-                      [key: 'urlID', sortable: false, resizeable: false, label:'Actions', formatter: 'adminPanelFormatter']
-                  ]"
-                  controller="offer"
-                  action="dataTableDataAsJSON"
-                  paginatorConfig="[
-                      template:'{PreviousPageLink} {PageLinks} {NextPageLink} {CurrentPageReport}',
-                      pageReportTemplate:'{totalRecords} ' + message(code:'list.total.records')
-                  ]"
-                  rowExpansion="false"
-                  rowsPerPage="10"
-                  params="[status: idStatus]"
-			  />
+                            [key: 'urlID', sortable: false, resizeable: false, label:'Actions', formatter: 'validatePanelFormatter']
+                        ]"
+                        controller="offer"
+                        action="dataTableDataAsJSON"
+                        paginatorConfig="[
+                            template:'{PreviousPageLink} {PageLinks} {NextPageLink} {CurrentPageReport}',
+                            pageReportTemplate:'{totalRecords} ' + message(code:'list.total.records')
+                        ]"
+                        rowExpansion="false"
+                        rowsPerPage="10"
+                        params="[status: idStatus]"
+                      />
+                      <g:YUISubmitbutton action="list" value="validate" />
+                    </g:form>
+                  </g:if>
+                  <g:else>
+                    <gui:dataTable
+                      id="dt${i}"
+                      draggableColumns="true"
+                      columnDefs="[
+
+                                    [key: 'id', sortable: true, resizeable: true, label: idInternationalized],
+
+                                    [key: 'subject', sortable: true, resizeable: true, label: subjectInternationalized],
+
+                                    [key: 'company', sortable: true, resizeable: true, label: companyInternationalized],
+
+                                    [key: 'beginAt', sortable: true, resizeable: true, label: beginAtInternationalized],
+
+                                    [key: 'length', sortable: true, resizeable: true, label: lengthInternationalized],
+
+                          [key: 'urlID', sortable: false, resizeable: false, label:'Actions', formatter: 'adminPanelFormatter']
+                      ]"
+                      controller="offer"
+                      action="dataTableDataAsJSON"
+                      paginatorConfig="[
+                          template:'{PreviousPageLink} {PageLinks} {NextPageLink} {CurrentPageReport}',
+                          pageReportTemplate:'{totalRecords} ' + message(code:'list.total.records')
+                      ]"
+                      rowExpansion="false"
+                      rowsPerPage="10"
+                      params="[status: idStatus]"
+                  />
+                  </g:else>
+                </g:ifAnyGranted>
+                <g:ifNotGranted role="ROLE_ADMIN,ROLE_MANAGERFORMATION">
+                  <gui:dataTable
+                      id="dt${i}"
+                      draggableColumns="true"
+                      columnDefs="[
+
+                                    [key: 'id', sortable: true, resizeable: true, label: idInternationalized],
+
+                                    [key: 'subject', sortable: true, resizeable: true, label: subjectInternationalized],
+
+                                    [key: 'company', sortable: true, resizeable: true, label: companyInternationalized],
+
+                                    [key: 'beginAt', sortable: true, resizeable: true, label: beginAtInternationalized],
+
+                                    [key: 'length', sortable: true, resizeable: true, label: lengthInternationalized],
+
+                          [key: 'urlID', sortable: false, resizeable: false, label:'Actions', formatter: 'adminPanelFormatter']
+                      ]"
+                      controller="offer"
+                      action="dataTableDataAsJSON"
+                      paginatorConfig="[
+                          template:'{PreviousPageLink} {PageLinks} {NextPageLink} {CurrentPageReport}',
+                          pageReportTemplate:'{totalRecords} ' + message(code:'list.total.records')
+                      ]"
+                      rowExpansion="false"
+                      rowsPerPage="10"
+                      params="[status: idStatus]"
+                  />
+                </g:ifNotGranted>
 			</gui:tab>
 			</g:each>
 		  </gui:tabView>

@@ -18,6 +18,16 @@ class OfferController {
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
     def list = {
+
+        def offer
+        params.each {
+            if(it.key.contains("validate_") && it.value == "on") {
+                offer = Offer.get(it.key.split("_")[1].toInteger())
+                offer.validated = true
+                offer.save(flush:true)
+            }
+        }
+        
         def status
         if(!authenticateService.isLoggedIn()) {
             redirect(controller: "user", action: "index")
@@ -45,6 +55,7 @@ class OfferController {
             }
             else
                 status = ['offer.validated']
+            
 		    render(view: "list", model: [status: status])
         }
     }
