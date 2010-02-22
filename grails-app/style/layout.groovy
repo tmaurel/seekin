@@ -276,6 +276,10 @@ style = {
 		'border':'0px none #000'
 	)
 
+        'input[type=\'checkbox\']' (
+                'margin-right':'5px'
+        )
+
 	'.boxed_form .submit' (
 		'text-align':'center'
 	)

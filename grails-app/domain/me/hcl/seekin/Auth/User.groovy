@@ -23,6 +23,9 @@ class User {
 	/** Indicates if the user is enabled by an administrator */
 	boolean enabled
 
+        /** Indicatd if the user has been validated by the admin **/
+        boolean validated
+
 	/** First name */
 	String firstName
 
@@ -43,13 +46,13 @@ class User {
 		email(blank: false, unique: true, email: true)
 		password(blank: false)
 		enabled(nullable:true)
-        firstName(blank: false)
+                firstName(blank: false)
 		lastName(blank: false)
 		address(nullable: true)
 		phone(nullable:true, size: 10..10)
 	}
 
-    String toString() {
-        firstName + " " + lastName 
-    }
+        String toString() {
+            firstName + " " + lastName
+        }
 }

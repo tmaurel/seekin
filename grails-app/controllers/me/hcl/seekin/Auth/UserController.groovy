@@ -222,6 +222,24 @@ class UserController {
 
 	}
 
+ 	/**
+	 * Validate registered Users
+	 */
+	def validate = {
+            def user
+            params.each {
+                if(it.key.contains("validate_") && it.value == "on")
+                {
+                    user = User.get(it.key.split("_")[1].toInteger())
+                    user.enabled = true
+                    user.validated = true
+                    user.save(flush: true)
+                }
+            }
+
+	}
+
+
 	/**
 	 * Show user details
 	 */
@@ -695,6 +713,7 @@ class UserController {
                         def pass = authenticateService.encodePassword(params.password)
                         userInstance.password = pass
                         userInstance.enabled = false
+                        userInstance.validated = false
 
                         //Construction of the lineBar included in the email with the good size
                         String lineBar = ""
@@ -732,7 +751,20 @@ class UserController {
 
     
         def dataTableDataAsJSON = {
-            def list = User.list(params)
+            def list
+
+            if(params.enabled != null && params.validated != null)
+            {
+                list = User.createCriteria().list(params) {
+                    eq('enabled', Boolean.valueOf(params.enabled))
+                    eq('validated', Boolean.valueOf(params.validated))
+                }
+            }
+            else
+            {
+                list = User.list(params)
+            }
+            
             def ret = []
             response.setHeader("Cache-Control", "no-store")
 
@@ -750,7 +782,7 @@ class UserController {
                     lastName: it.lastName,
                     showEmail:it.showEmail,
                     roles:auth,
-                    enabled:it.enabled,
+                    enabled:it.enabled?message(code:'user.enabled'):it.validated?message(code:'user.blocked'):message(code:'user.pending'),
                     urlID:it.id
                 ]
             }
