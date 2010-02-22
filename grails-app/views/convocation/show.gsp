@@ -60,7 +60,12 @@
                             
                             </span>
                       </p>
-                        
+                      <p>
+						<label>PDF</label>
+						<span class="field_value">
+						  <g:link action="pdfGenerate" id="${convocationInstance?.id}">PDF</g:link>
+						</span>
+					  </p>
                       
                       <div class="submit yui-skin-sam">
                         <g:buildShowButtons />

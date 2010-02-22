@@ -12,7 +12,6 @@ class StudentController {
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
     def list = {
-
 		def millesimes = Millesime.findAllByBeginDateLessThan(new Date())
 		def millesimeCurrent = millesimes.find {
 			it.current == true
