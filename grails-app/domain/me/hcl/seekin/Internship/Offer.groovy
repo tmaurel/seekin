@@ -10,23 +10,23 @@ class Offer {
     static hasMany = [promotions: Promotion]
     static belongsTo = [Promotion, Company]
 
-	/** Subject of the Offer */
-	String subject
-	
-	/** Short description of the offer */
-	String description
-	
-	/** Date of the internship's beginning */
-	Date beginAt
-	
-	/** Length of the internship */
-	Integer length
-	
-	/** Status of the offer */
-	String status
-	
-	/** File which details the offer */
-	Document file
+    /** Subject of the Offer */
+    String subject
+
+    /** Short description of the offer */
+    String description
+
+    /** Date of the internship's beginning */
+    Date beginAt
+
+    /** Length of the internship */
+    Integer length
+
+    /** Status of the offer */
+    String status
+
+    /** File which details the offer */
+    Document file
 
     /** User who have created the offer */
     User author
