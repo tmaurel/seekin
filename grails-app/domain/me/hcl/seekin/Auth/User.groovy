@@ -10,7 +10,14 @@ import me.hcl.seekin.Internship.Internship
  */
 class User {
 
-    /** A user can have some Role */
+	/** Make User searchable */
+	static searchable = {
+		only = ['email','firstName','lastName','address','phone','showEmail']
+		spellCheck "include"
+		all false
+	}
+
+	/** A user can have some Role */
 	static hasMany = [ authorities : Role ]
 
 
@@ -46,7 +53,7 @@ class User {
 		email(blank: false, unique: true, email: true)
 		password(blank: false)
 		enabled(nullable:true)
-                firstName(blank: false)
+        firstName(blank: false)
 		lastName(blank: false)
 		address(nullable: true)
 		phone(nullable:true, size: 10..10)

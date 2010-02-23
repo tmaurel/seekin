@@ -7,7 +7,7 @@ import me.hcl.seekin.Util.Address
  * Role class
  */
 class Role {
-    
+	
     static belongsTo = [user: User]
 
     static transients = ['$authority','authority']

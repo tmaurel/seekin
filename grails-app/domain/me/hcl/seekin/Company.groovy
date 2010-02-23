@@ -9,7 +9,12 @@ import me.hcl.seekin.Internship.Offer
  * Company identifies a company and groups contact information
  */
 class Company {
-	
+
+	/** Make Companies searchable */
+	static searchable = {
+		spellCheck "include"
+	}
+
 	/** Name of the company */ 
 	String name
 	

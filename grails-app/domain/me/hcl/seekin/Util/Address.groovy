@@ -8,6 +8,11 @@ import me.hcl.seekin.Company
  */
 class Address {
 	
+	/** Make addresses searchable */
+	static searchable = {
+		all false
+	}
+
     static belongsTo = [ User, Company ]
 
     /** Street of the address */

@@ -87,7 +87,7 @@ style = {
 		'width':'160px'
 	)
 
-	'#menu_cont #search_bar #search_field' (
+	'#menu_cont #search_bar #q' (
 		'width':'120px',
 		'height':'18px',
 		'margin-top':'6px',
@@ -95,11 +95,11 @@ style = {
 		'padding-left':'30px',
 		'padding-right':'10px',
 		'border':'0px none #fff',
-		'color':'#ccc',
+		'color':'#000',
 		'background':'transparent url(../images/skin/field_bg.png) no-repeat left'
 	)
 
-	'#menu_cont #search_bar #search_field:focus' (
+	'#menu_cont #search_bar #q:focus' (
 		'color':selectedColor,
 		'background-position':'right'
 	)
@@ -411,5 +411,43 @@ style = {
             'padding-left':'2.25em'
         )
 
+		'#search .title' (
+			'margin': '1em 0',
+			'padding': '.3em .5em',
+			'text-align': 'right',
+			'background-color': '#eee',
+			'border-top': '1px solid darkblue'
+		)
 
+		'#search .result' (
+			'margin-bottom': '1em'
+		)
+
+		'#search .result a' (
+			'color': 'darkblue'
+		)
+
+		'#search .result .displayLink' (
+			'color': 'green'
+		)
+
+		'#search .result .name' (
+			'font-size': 'larger'
+		)
+
+		'#search .paging a.step' (
+			'padding': '0 .3em'
+		)
+
+		'#search .paging span.currentStep' (
+			'font-weight': 'bold'
+		)
+
+		'#search ul' (
+			'margin': '1em 2em'
+		)
+
+		'#search li, p' (
+			'margin-bottom': '1em'
+		)
 }

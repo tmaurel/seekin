@@ -8,6 +8,13 @@ import me.hcl.seekin.Internship.Internship
  */
 class Student extends Role {
 
+	/** Make Students searchable */
+	static searchable = {
+		user(component:true)
+		spellCheck "include"
+
+	}
+
 	static belongsTo = Promotion
     static hasMany = [ internships : Internship, promotions : Promotion ]
 
@@ -15,7 +22,10 @@ class Student extends Role {
     Boolean visible
 
     static constraints = {
-        visible(nullable: true)
+        visible(nullable: false)
     }
 
+	String toString() {
+		user?.firstName + " " + user?.lastName
+	}
 }

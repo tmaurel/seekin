@@ -8,7 +8,12 @@ import me.hcl.seekin.Company
 import me.hcl.seekin.Formation.Millesime
 
 class Internship {
-	
+
+	static searchable = {
+		student(component:true)
+		company(component:true)
+	}
+
 	/** Subject of the Internship */
 	String subject
 	
@@ -61,6 +66,6 @@ class Internship {
 	}
 
 	String toString() {
-		subject + " (" + beginAt.format("MM/yyyy") + ")"
+		subject
 	}
 }

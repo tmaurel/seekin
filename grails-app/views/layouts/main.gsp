@@ -42,9 +42,9 @@
        			<div id="menu_cont">
 					<nav:render group="menu"/>
 					<div id="search_bar">
-						<form>
-							<g:textField name="search_field" value="${message(code:'search.field.default')}"/>
-						</form>
+					  <g:form controller="search">
+							<g:textField name="q" value="${params?.q}"/>
+					  </g:form>
 					</div>
 				</div>
    			</div>

@@ -9,10 +9,12 @@ import me.hcl.seekin.Auth.Role.FormationManager
  */
 class Formation {
 
+	static searchable = true
+
 	static hasMany = [promotions: Promotion]
 
-        /** The manager of this formation */
-        FormationManager manager
+    /** The manager of this formation */
+    FormationManager manager
 
 	/** Label of the formation */
 	String label
@@ -24,10 +26,14 @@ class Formation {
 	Document file
 	
 	/** Constraints used to check if an instance is correct */
-        static constraints = {
-                    label(blank: false)
-                    description(blank: false)
-                    file(nullable: true)
-                    manager(nullable: true)
-        }
+	static constraints = {
+				label(blank: false)
+				description(blank: false)
+				file(nullable: true)
+				manager(nullable: true)
+	}
+
+	String toString() {
+		label
+	}
 }
