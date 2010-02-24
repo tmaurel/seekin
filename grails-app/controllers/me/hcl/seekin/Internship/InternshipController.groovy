@@ -139,6 +139,7 @@ class InternshipController {
             companyTutor.properties = params
             companyTutor.password = UserController.generatePwd(8)
             companyTutor.addToAuthorities(role)
+            companyTutor.save(flush:true)
         }
         else {
             companyTutor = User.findByEmail(params.email)
@@ -147,9 +148,7 @@ class InternshipController {
                 role = it
             }
         }
-        if(companyTutor.save(flush:true)) {
-            internshipInstance.companyTutor = role
-        }
+        internshipInstance.companyTutor = role
 
         internshipInstance.properties = params
         internshipInstance.company = company
@@ -163,7 +162,8 @@ class InternshipController {
             internshipInstance.student = statusStudent
             internshipInstance.isApproval = false
         }
-        if (!internshipInstance.hasErrors() && internshipInstance.save()) {
+
+        if (!internshipInstance.hasErrors() && internshipInstance.save(flush:true)) {
             flash.message = "internship.created"
             flash.args = [internshipInstance.id]
             flash.defaultMessage = "Internship ${internshipInstance.id} created"
@@ -261,55 +261,32 @@ class InternshipController {
         def status = new HashMap()
         def ret = []
         response.setHeader("Cache-Control", "no-store")
-        if(authenticateService.ifAnyGranted("ROLE_ADMIN,ROLE_FORMATIONMANAGER")) {
-            Internship.list().each() {
-                it.each() { it2 ->
-                    if(it2.getStatus(new Staff()) == params.status) {
-                        list.add it2
-                    }
-                }
-            }
-        }
-        if(authenticateService.ifAnyGranted("ROLE_STUDENT")) {
-            def userInstance = authenticateService.userDomain()
-            sessionFactory.currentSession.refresh(userInstance, LockMode.NONE)
-            Internship.list().each() {
-                it.each() { it2 ->
-                    if(it2.getStatus(new Staff()) == params.status && it2.student.user == userInstance) {
-                        list.add it2
-                    }
-                }
-            }
-        }
-        if(authenticateService.ifAnyGranted("ROLE_EXTERNAL")) {
-            def userInstance = authenticateService.userDomain()
-            sessionFactory.currentSession.refresh(userInstance, LockMode.NONE)
-            Internship.list().each() {
-                it.each() { it2 ->
-                    if(it2.getStatus(new Staff()) == params.status && it2.companyTutor.user == userInstance) {
-                        list.add it2
-                    }
-                }
-            }
-        }
-        if(authenticateService.ifAnyGranted("ROLE_STAFF")) {
-            def userInstance = authenticateService.userDomain()
-            sessionFactory.currentSession.refresh(userInstance, LockMode.NONE)
-            def statusStaff = userInstance.authorities.find {
-                it.authority == "ROLE_STAFF"
-            }
-            println statusStaff
-            Internship.list().each() {
-                it.each() { it2 ->
-                    if(it2.getStatus(statusStaff) == params.status && (it2.companyTutor.user == userInstance || it2.isApproval == true)) {
-                        println params
-                        list.add it2
-                    }
+
+        def userInstance = authenticateService.userDomain()
+        sessionFactory.currentSession.refresh(userInstance, LockMode.NONE)
+        Internship.list().each() {
+            if(authenticateService.ifAnyGranted("ROLE_ADMIN,ROLE_FORMATIONMANAGER") && it.getStatus(new Staff()) == params.status)
+                list.add it.id
+            if(authenticateService.ifAnyGranted("ROLE_STUDENT") && it.getStatus(new Staff()) == params.status && it.student.user == userInstance)
+                list.add it.id
+            if(authenticateService.ifAnyGranted("ROLE_EXTERNAL") && it.getStatus(new Staff()) == params.status && it.companyTutor.user == userInstance)
+                list.add it.id
+            if(authenticateService.ifAnyGranted("ROLE_STAFF")) {
+                def statusStaff = Staff.findByUser(userInstance)
+                if(it.getStatus(statusStaff) == params.status && (it.companyTutor.user == userInstance || it.isApproval == true)) {
+                    list.add it.id
                 }
             }
         }
 
-        list.each {
+        def list2
+        if(list.size() > 0) {
+            list2 = Internship.createCriteria().list(params) {
+                'in'('id', list)
+            }
+        }
+
+        list2.each {
             ret << [
                id:it.id,
    subject:it.subject,
@@ -326,6 +303,7 @@ class InternshipController {
                 totalRecords: list.size(),
                 results: ret
         ]
+        println data
        
         render data as JSON
     }

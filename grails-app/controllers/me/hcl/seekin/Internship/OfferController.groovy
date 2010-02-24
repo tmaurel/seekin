@@ -55,7 +55,7 @@ class OfferController {
                 status = new HashSet()
                 Promotion.getCurrents().offers.each() {
                     it.each() { it2 ->
-                        if(it2?.author.toString() == userInstance.toString()) {
+                        if(it2?.author.id == userInstance.id) {
                             status.add it2.getStatus()
                         }
                     }
@@ -300,7 +300,7 @@ class OfferController {
                 Promotion.getCurrents().offers.each() {
                     it.each() { it2 ->
                         if(it2.getStatus() == params.status) {
-                            status.add it2
+                            status.add it2.id
                         }
                     }
                 }
@@ -312,15 +312,15 @@ class OfferController {
                 sessionFactory.currentSession.refresh(userInstance, LockMode.NONE)
                 Promotion.getCurrents().offers.each() {
                     it.each() { it2 ->
-                        if(it2.author == userInstance && it2.getStatus() == params.status) {
-                            status.add it2
+                        if(it2.author.id == userInstance.id && it2.getStatus() == params.status) {
+                            status.add it2.id
                         }
                     }
                 }
                 Promotion.getCurrents().offers.each() {
                     it.each() { it2 ->
                         if(it2.getStatus() == 'offer.validated' && it2.getStatus() == params.status) {
-                            status.add it2
+                            status.add it2.id
                         }
                     }
                 }
@@ -335,7 +335,7 @@ class OfferController {
                     def currentPromo = Promotion.getCurrentForStudent(it)
                     currentPromo.offers.each() { it2 ->
                         if(it2.getStatus() == params.status) {
-                            list.add it2
+                            list.add it2.id
                         }
                     }
                 }
@@ -348,14 +348,22 @@ class OfferController {
                 Promotion.getCurrents().offers.each() {
                     it.each() { it2 ->
                         if(it2.author == userInstance && it2.getStatus() == params.status) {
-                            status.add it2
+                            status.add it2.id
                         }
                     }
                 }
                 list = status
             }
+
+            //println list
+            def list2
+            if(list.size() > 0) {
+                list2 = Offer.createCriteria().list(params) {
+                    'in'('id', list)
+                }
+            }
         
-            list.each {
+            list2.each {
                 ret << [
                    id:it.id,
                    subject:it.subject,
