@@ -16,25 +16,17 @@
       </g:if>
       <div class="yui-skin-sam" id="crud_panel">
           <g:buildListButtons />
-          
-                        <g:set var="idInternationalized" value="${message(code:'promotion.id')}" />
-                 
-                        <g:set var="millesimeInternationalized" value="${message(code:'promotion.millesime')}" />
-                 
-                        <g:set var="formationInternationalized" value="${message(code:'promotion.formation')}" />
-                 
+		  <g:set var="idInternationalized" value="${message(code:'promotion.id')}" />
+		  <g:set var="millesimeInternationalized" value="${message(code:'promotion.millesime')}" />
+		  <g:set var="formationInternationalized" value="${message(code:'promotion.formation')}" />
           <gui:dataTable
               id="dt_2"
               draggableColumns="true"
               columnDefs="[
-                  
                             [key: 'id', sortable: true, resizeable: true, label: idInternationalized],
-                     
-                            [key: 'millesime', sortable: true, resizeable: true, label: millesimeInternationalized, formatter: 'customLinkFormatter'],
-                     
                             [key: 'formation', sortable: true, resizeable: true, label: formationInternationalized, formatter: 'customLinkFormatter'],
-                     
-                  [key: 'urlID', sortable: false, resizeable: false, label:'Actions', formatter: 'adminPanelFormatter']
+                            [key: 'millesime', sortable: true, resizeable: true, label: millesimeInternationalized, formatter: 'customLinkFormatter'],
+							[key: 'urlID', sortable: false, resizeable: false, label:'Actions', formatter: 'adminPanelFormatter']
               ]"
               controller="promotion"
               action="dataTableDataAsJSON"
@@ -45,7 +37,6 @@
               rowExpansion="false"
               rowsPerPage="10"
           />
-
         </div>
     </body>
 </html>

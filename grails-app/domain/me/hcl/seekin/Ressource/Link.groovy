@@ -1,7 +1,9 @@
 package me.hcl.seekin.Ressource
 
 class Link {
-	
+
+	static searchable = true
+
 	/** Link title */
 	String title
 
@@ -15,5 +17,9 @@ class Link {
 		title(blank: false)
 		url(blank: false, url: true)
 		description(blank: false)
+	}
+
+	String toString() {
+		title
 	}
 }

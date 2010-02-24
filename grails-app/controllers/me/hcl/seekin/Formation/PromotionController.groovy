@@ -121,11 +121,10 @@ class PromotionController {
 
         list.each {
             ret << [
-               id:it.id,
-   millesime:[name:it.millesime?.id, link:g.createLink(controller: 'millesime', action: 'show', id:it.millesime?.id)],
-   formation:[name:it.formation?.id, link:g.createLink(controller: 'formation', action: 'show', id:it.formation?.id)],
-
-                urlID: it.id
+			id:it.id,
+			formation:[name:it.formation?.toString(), link:g.createLink(controller: 'formation', action: 'show', id:it.formation?.id)],
+			millesime:[name:it.millesime?.toString(), link:g.createLink(controller: 'millesime', action: 'show', id:it.millesime?.id)],
+			urlID: it.id
             ]
         }
 

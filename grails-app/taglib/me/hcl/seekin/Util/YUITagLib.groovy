@@ -84,6 +84,25 @@ class YUITagLib {
 
     def renderSubMenu = {
         out << gui.accordion(multiple:"true", bounce:"true", fade:"true") {
+
+            if(AuthorizeTools.ifAllGranted("ROLE_ADMIN")) {
+                out << gui.accordionElement(title:message(code:"admin"), selected:"true") {
+
+                    """<ul>
+                        <li><a href="${createLink(controller:"settings", action:"index")}">${message(code:"settings")}</a></li>
+                        <li><a href="${createLink(controller:"user", action:"list")}">${message(code:"user.list")}</a></li>
+						<li><a href="${createLink(controller:"formation", action:"list")}">${message(code:"formation.list")}</a></li>
+						<li><a href="${createLink(controller:"promotion", action:"list")}">${message(code:"promotion.list")}</a></li>
+						<li><a href="${createLink(controller:"company", action:"list")}">${message(code:"company.list")}</a></li>
+						<li><a href="${createLink(controller:"offer", action:"list")}">${message(code:"offer.list")}</a></li>
+						<li><a href="${createLink(controller:"internship", action:"list")}">${message(code:"internship.list")}</a></li>
+						<li><a href="${createLink(controller:"report", action:"list")}">${message(code:"report.list")}</a></li>
+						<li><a href="${createLink(controller:"document", action:"list")}">${message(code:"document.list")}</a></li>
+						<li><a href="${createLink(controller:"link", action:"list")}">${message(code:"link.list")}</a></li>
+                    </ul>"""
+                }
+            }
+			
             if(AuthorizeTools.ifAllGranted("ROLE_STUDENT")) {
                 out << gui.accordionElement(title:message(code:"student"), selected:"true") {
                     

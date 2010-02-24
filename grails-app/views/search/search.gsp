@@ -55,7 +55,7 @@
 			  <g:if test="${className == 'Student'}">
 			  <div class="result">
 				<g:set var="link" value="${createLink(controller: className[0].toLowerCase() + className[1..-1], action: 'show', id: result.id)}" />
-				<div class="name"><a href="${link}">${result.toString()}</a></div>
+				<div class="name"><span class="class_type">[<g:message code="${className}" />]</span> <a href="${link}">${result.toString()}</a></div>
 				<div class="desc">
 				  ${result?.user?.address?.encodeAsHTML()} <br />
 				  ${result?.user?.phone?.encodeAsHTML()}
@@ -66,7 +66,7 @@
 			  <g:if test="${className == 'Internship'}">
 			  <div class="result">
 				<g:set var="link" value="${createLink(controller: className[0].toLowerCase() + className[1..-1], action: 'show', id: result.id)}" />
-				<div class="name"><a href="${link}">${result.toString()}</a></div>
+				<div class="name"><span class="class_type">[<g:message code="${className}" />]</span> <a href="${link}">${result.toString()}</a></div>
 				<div class="desc">
 				  ${result?.company?.encodeAsHTML()}
 				</div>
@@ -76,7 +76,7 @@
 			  <g:if test="${className == 'Company'}">
 			  <div class="result">
 				<g:set var="link" value="${createLink(controller: className[0].toLowerCase() + className[1..-1], action: 'show', id: result.id)}" />
-				<div class="name"><a href="${link}">${result}</a></div>
+				<div class="name"><span class="class_type">[<g:message code="${className}" />]</span> <a href="${link}">${result}</a></div>
 				<div class="desc">
 				  ${result?.address} <br />
 				  ${result?.phone}
@@ -87,9 +87,20 @@
 			  <g:if test="${className == 'Formation'}">
 			  <div class="result">
 				<g:set var="link" value="${createLink(controller: className[0].toLowerCase() + className[1..-1], action: 'show', id: result.id)}" />
-				<div class="name"><a href="${link}">${result}</a></div>
+				<div class="name"><span class="class_type">[<g:message code="${className}" />]</span> <a href="${link}">${result}</a></div>
 				<div class="desc">
 				  ${result?.description} <br />
+				</div>
+				<div class="displayLink">${link}</div>
+			  </div>
+			  </g:if>
+			  <g:if test="${className == 'Link'}">
+			  <div class="result">
+				<g:set var="link" value="${createLink(controller: className[0].toLowerCase() + className[1..-1], action: 'show', id: result.id)}" />
+				<div class="name"><span class="class_type">[<g:message code="${className}" />]</span> <a href="${link}">${result}</a></div>
+				<div class="desc">
+				  ${result?.description} <br />
+				  ${result?.url}
 				</div>
 				<div class="displayLink">${link}</div>
 			  </div>
