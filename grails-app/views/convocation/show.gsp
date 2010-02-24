@@ -63,7 +63,7 @@
                       <p>
 						<label>PDF</label>
 						<span class="field_value">
-						  <g:link action="pdfGenerate" id="${convocationInstance?.id}">PDF</g:link>
+						  <g:link action="export" id="${convocationInstance?.id}">PDF</g:link>
 						</span>
 					  </p>
                       

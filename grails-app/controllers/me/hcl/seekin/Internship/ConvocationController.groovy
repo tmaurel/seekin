@@ -152,7 +152,7 @@ class ConvocationController {
         {
             def url = grailsApplication.config.grails.serverURL.toString() + "/"
             def path = ApplicationHolder.getApplication().getParentContext().getServletContext().getRealPath("convocation");
-            def gsp = new File( path,"_pdf.gsp")
+            def gsp = new File( path,"_convocation.gsp")
             def locale = LCH.getLocale()
             def dateFormat = DateFormat.getDateInstance(DateFormat.FULL, locale);
 
@@ -176,20 +176,80 @@ class ConvocationController {
         }
     }
 
-    def dataTableDataAsJSON = {
-		def promotion = Promotion.get(params.promotion)
-		def internships
-		
-		promotion?.students?.internships.each {
-			if(!it.isEmpty()) {
-				internships = it.find {
-					it2 ->
-						it2.millesime == promotion.millesime
-				}
-			}
-		}
 
-		def convocations = internships?.convocation
+    def exportPlanning = {
+
+        def promotionInstance = Promotion.get(params.id)
+        if (!promotionInstance) {
+            flash.message = "promotion.not.found"
+            flash.args = [params.id]
+            flash.defaultMessage = "Promotion not found with id ${params.id}"
+            redirect(action: "list")
+        }
+        else
+        {
+
+            def url = grailsApplication.config.grails.serverURL.toString() + "/"
+            def path = ApplicationHolder.getApplication().getParentContext().getServletContext().getRealPath("convocation");
+            def gsp = new File( path,"_planning.gsp")
+            def locale = LCH.getLocale()
+            def dateFormat = DateFormat.getDateInstance(DateFormat.SHORT, locale);
+            def internships = []
+            def model = [convocations:[]]
+
+            promotionInstance?.students?.internships.each {
+                    if(!it.isEmpty()) {
+                            it.each {
+                                if(it.millesime == promotionInstance.millesime && it.convocation != null)
+                                    internships << it
+                            }
+                    }
+            }
+
+            internships.sort {
+                p1, p2 ->
+                    p1.convocation.date <=> p2.convocation.date
+            }
+
+            internships.each {
+
+                model.convocations << [
+                    date: dateFormat.format(it.convocation.date),
+                    time: new SimpleDateFormat("HH:mm").format(it.convocation.date),
+                    name: it.student?.user?.firstName + " " + it.student?.user?.lastName,
+                    building: it.convocation.building,
+                    room: it.convocation.room,
+                    academicTutor: it.academicTutor?.user?.lastName + " " + it.academicTutor?.user?.firstName
+
+                ]
+
+            }
+            
+
+            response.setContentType "application/pdf"
+            response.setHeader "Content-Disposition", "inline;filename=planning-" +
+                                    pdfService.removeSpecialCharacters(promotionInstance.formation.label) + "-" +
+                                    pdfService.removeSpecialCharacters(promotionInstance.millesime.toString()) + ".pdf"
+
+            pdfService.buildPdf(gsp, model, response, url)
+            return
+        }
+    }
+
+    def dataTableDataAsJSON = {
+        def promotion = Promotion.get(params.promotion)
+        def internships = []
+
+        promotion?.students?.internships.each {
+                if(!it.isEmpty()) {
+                        it.each {
+                            if(it.millesime == promotion.millesime)
+                                internships << it
+                        }
+                }
+        }
+
+        def convocations = internships?.convocation
 
         def list = Convocation.list(params)
 		

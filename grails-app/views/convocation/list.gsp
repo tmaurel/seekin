@@ -64,7 +64,7 @@
 				  rowsPerPage="10"
 				  params="[promotion:idPromotion]"
 			  />
-			<g:link action="pdfGeneratePlanning" id="${promotion.id}"><g:message code="convocation.generate.planning" /></g:link>
+			<g:link action="exportPlanning" id="${promotion.id}"><g:message code="convocation.export.planning" /></g:link>
 			</gui:tab>
 			</g:each>
 		  </gui:tabView>

@@ -40,6 +40,6 @@ class PdfService {
 
     def removeSpecialCharacters(str)
     {
-        return str.replaceAll("[^a-zA-Z]+", "");
+        return str.replaceAll("[^a-zA-Z0-9]+", "");
     }
 }
