@@ -47,7 +47,7 @@
                             <label><g:message code="offer.beginAt" default="Begin At" /></label>
                             <span class="field_value">
                             
-                            ${offerInstance?.beginAt}
+                            ${offerInstance?.beginAt?.formatDate()}
                             
                             </span>
                       </p>
@@ -58,24 +58,6 @@
                             
                             ${fieldValue(bean: offerInstance, field: "length")}
                             
-                            </span>
-                      </p>
-
-                       <p>
-                            <label><g:message code="offer.validated" default="Is Validated" /></label>
-                            <span class="field_value">
-
-                            <g:formatBoolean boolean="${internshipInstance?.validated}" />
-
-                            </span>
-                      </p>
-
-                       <p>
-                            <label><g:message code="offer.assignated" default="Is Assignated" /></label>
-                            <span class="field_value">
-
-                            <g:formatBoolean boolean="${internshipInstance?.assignated}" />
-
                             </span>
                       </p>
                         
@@ -130,7 +112,12 @@
                         
                       
                       <div class="submit yui-skin-sam">
-                        <g:buildShowButtons />
+                            <g:ifNotGranted role="ROLE_STUDENT">
+                                <g:buildShowButtons />
+                            </g:ifNotGranted>
+                            <g:ifAnyGranted role="ROLE_STUDENT">
+                                <g:listButton />      
+                            </g:ifAnyGranted>
                       </div>
             </g:form>
        </body>

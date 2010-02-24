@@ -49,12 +49,6 @@
                       <g:select name="file.id" from="${me.hcl.seekin.Ressource.Document.list()}" optionKey="id" value="${offerInstance?.file?.id}" noSelection="['null': '']" />
 
                 </p>
-          
-                <p>
-                      <label for="author"><g:message code="offer.author" default="Author" />:</label>
-                      <g:select name="author.id" from="${me.hcl.seekin.Auth.User.list()}" optionKey="id" value="${offerInstance?.author?.id}"  />
-
-                </p>
 
                 <div>
                       <label for="company"><g:message code="internship.company" default="Company" />:</label>
@@ -70,7 +64,16 @@
                       />
 
                 </div>
-          
+
+                <p>
+                      <label for="promotions"><g:message code="offer.promotions" default="Promotions" />:</label>
+                      <g:select name="promotions"
+                        from="${promotionInstance}"
+                        size="5" multiple="yes" optionKey="id"
+                        optionValue="value"
+                        value="${promotionInstance}" />
+                </p>
+
           <div class="submit yui-skin-sam">
              <g:buildCreateButtons />
           </div>

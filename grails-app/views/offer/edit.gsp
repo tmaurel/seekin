@@ -18,6 +18,7 @@
       <g:form class="boxed_form" name="crud_panel" method="post" >
           <g:hiddenField name="id" value="${offerInstance?.id}" />
           <g:hiddenField name="version" value="${offerInstance?.version}" />
+          <g:hiddenField name="reason" value="${offerInstance?.reason}" />
           
                 <p>
 
@@ -53,23 +54,38 @@
                           <g:select name="file.id" from="${me.hcl.seekin.Ressource.Document.list()}" optionKey="id" value="${offerInstance?.file?.id}" noSelection="['null': '']" />
 
                 </p>
-          
+
                 <p>
-
-                          <label for="author"><g:message code="offer.author" default="Author" /></label>
-                          <g:select name="author.id" from="${me.hcl.seekin.Auth.User.list()}" optionKey="id" value="${offerInstance?.author?.id}"  />
-
+                      <label for="promotions"><g:message code="offer.promotions" default="Promotions" />:</label>
+                      <g:select name="promotions"
+                        from="${promotionInstance}"
+                        size="5" multiple="yes" optionKey="id"
+                        optionValue="value"
+                        value="${promotionInstance}" />
                 </p>
-          
-                <p>
 
-                          <label for="promotions"><g:message code="offer.promotions" default="Promotions" /></label>
-                          
+                <g:ifAnyGranted role="ROLE_ADMIN">
 
-                </p>
+                    <p>
+
+                              <label for="validated"><g:message code="offer.validated" default="Validated" /></label>
+                              <g:checkBox name="validated" value="${offerInstance?.validated}" />
+
+                    </p>
+                  
+                </g:ifAnyGranted>
           
           <div class="submit yui-skin-sam">
-            <g:buildEditButtons />
+             <g:ifAnyGranted role="ROLE_ADMIN">
+
+                <g:buildDenyButtons />
+
+             </g:ifAnyGranted>
+             <g:ifNotGranted role="ROLE_ADMIN">
+
+                <g:buildEditButtons />
+
+             </g:ifNotGranted>
           </div>
       </g:form>
     </body>

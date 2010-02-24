@@ -14,8 +14,13 @@ class Internship {
 		company(component:true)
 	}
 
+    static transients = ['status']
+
 	/** Subject of the Internship */
 	String subject
+
+    /** Description of the Internship */
+	String description
 	
 	/** Beginning of the Internship */
 	Date beginAt
@@ -49,6 +54,9 @@ class Internship {
 
     /** Millesime of the internship */
     Millesime millesime
+
+    /** Reason of the deny */
+    String reason
 	
 	/** Constraints used to check if an instance is correct */
 	static constraints = {
@@ -63,9 +71,15 @@ class Internship {
 		convocation(nullable: true)
         length(nullable: false)
         millesime(nullable: false)
+        reason(nullable:true)
+        description(nullable:true)
 	}
 
 	String toString() {
 		subject
 	}
+
+    String getStatus(Staff member) {
+        isApproval==false?(reason==null?'internship.waitForValidation':'internship.unvalidated'):(member==academicTutor?'internship.mine':'internship.validated')
+    }
 }

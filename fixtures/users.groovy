@@ -48,7 +48,7 @@ fixture {
         lastName : "Maurel" ,
         address : thomasAddress,
         phone : "0102030405",
-        authorities : [thomasRole, adminRole],
+        authorities : [adminRole],
 		showEmail : true
     )
 

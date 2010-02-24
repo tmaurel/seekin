@@ -33,6 +33,15 @@
                             
                             </span>
                       </p>
+
+                       <p>
+                            <label><g:message code="internship.description" default="Description" /></label>
+                            <span class="field_value">
+
+                            ${fieldValue(bean: internshipInstance, field: "description")}
+
+                            </span>
+                      </p>
                         
                        <p>
                             <label><g:message code="internship.beginAt" default="Begin At" /></label>

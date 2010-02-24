@@ -21,4 +21,8 @@ class Promotion {
     static getCurrents = {
         Promotion.findAllByMillesime(Millesime.getCurrent())
     }
+
+    String toString() {
+        formation.label + " " + millesime
+    }
 }

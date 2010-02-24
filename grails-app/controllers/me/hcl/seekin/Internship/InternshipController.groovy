@@ -10,10 +10,14 @@ import me.hcl.seekin.Auth.UserController
 import me.hcl.seekin.Auth.Role.External
 import me.hcl.seekin.Util.Address
 import me.hcl.seekin.Company
+import me.hcl.seekin.Formation.Millesime
+import me.hcl.seekin.Formation.Promotion
+import org.hibernate.LockMode
 
 class InternshipController {
-
-    def dateService
+    
+    def authenticateService
+    def sessionFactory
 
     def index = { redirect(action: "list", params: params) }
 
@@ -21,19 +25,70 @@ class InternshipController {
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
     def list = {
+
+        /* Controls if some internships which wait for Validation are validated by examinate params */
+        def internship
+        params.each {
+            if(it.key.contains("validate_") && it.value == "on") {
+                /* Get the offer and do the mofification before saving */
+                internship = Internship.get(it.key.split("_")[1].toInteger())
+                internship.isApproval = true
+                internship.save(flush:true)
+            }
+        }
+
+        /* If the user is not logged in, we redirect him at the index of seekin */
+        def status = new HashSet()
+        if(!authenticateService.isLoggedIn()) {
+            redirect(controller: "user", action: "index")
+        }
+        else {
+            if(authenticateService.ifAnyGranted("ROLE_ADMIN,ROLE_FORMATIONMANAGER")) {
+                //status.add 'internship.validated'
+                //status.add 'internship.unvalidated'
+                //status.add 'internship.waitForValidation'
+                Internship.list().each {
+                    status.add it.getStatus(new Staff())
+                }
+            }
+            else if(authenticateService.ifAnyGranted("ROLE_STAFF")) {
+                def userInstance = authenticateService.userDomain()
+                sessionFactory.currentSession.refresh(userInstance, LockMode.NONE)
+                def statusStaff = userInstance.authorities.find {
+                    it.authority == "ROLE_STAFF"
+                }
+                Internship.list().each {
+                    if(it.getStatus(new Staff()) == 'internship.validated')
+                        status.add it.getStatus(new Staff())
+                    if(it.getStatus(statusStaff) == 'internship.mine')
+                        status.add it.getStatus(statusStaff)                    
+                }
+                //status.add 'internship.validated'
+                //status.add 'internship.mine'
+
+            }
+            else {
+                Internship.list().each {
+                    if(it.getStatus(new Staff()) == 'internship.validated')
+                        status.add 'internship.validated'                  
+                }
+            }
+
+		    render(view: "list", model: [status: status])
+        }
     }
 
     def create = {
         def staff = Staff.list().collect {
             [
                     id: it.id,
-                    value: it.user.firstName + " " + it.user.lastName
+                    value: it.user?.firstName + " " + it.user?.lastName
             ]
         }
         def student = Student.list().collect {
             [
                     id: it.id,
-                    value: it.user.firstName + " " + it.user.lastName
+                    value: it.user?.firstName + " " + it.user?.lastName
             ]
         }
         def offer = Offer.list().collect {
@@ -52,6 +107,7 @@ class InternshipController {
                 internshipInstance.length = offerFromSelection.length
                 internshipInstance.company = offerFromSelection.company
                 internshipInstance.fromOffer = true
+                internshipInstance.description = offerFromSelection.description
         }
         else {
             internshipInstance = new Internship()
@@ -97,6 +153,16 @@ class InternshipController {
 
         internshipInstance.properties = params
         internshipInstance.company = company
+        internshipInstance.millesime = Millesime.getCurrent()
+        if(authenticateService.ifAnyGranted("ROLE_STUDENT")) {
+            def userInstance = authenticateService.userDomain()
+            sessionFactory.currentSession.refresh(userInstance, LockMode.NONE)
+            def statusStudent = userInstance.authorities.find {
+                it.authority == "ROLE_STUDENT"
+            }
+            internshipInstance.student = statusStudent
+            internshipInstance.isApproval = false
+        }
         if (!internshipInstance.hasErrors() && internshipInstance.save()) {
             flash.message = "internship.created"
             flash.args = [internshipInstance.id]
@@ -117,7 +183,7 @@ class InternshipController {
             redirect(action: "list")
         }
         else {
-            return [internshipInstance: internshipInstance, beginAt: dateService.formatDate(request, internshipInstance.beginAt), convocation: dateService.formatDate(request, internshipInstance?.convocation?.date)]
+            return [internshipInstance: internshipInstance]
         }
     }
 
@@ -130,7 +196,7 @@ class InternshipController {
             redirect(action: "list")
         }
         else {
-            return [internshipInstance: internshipInstance, convocation: dateService.formatDate(request, internshipInstance?.convocation?.date)]
+            return [internshipInstance: internshipInstance]
         }
     }
 
@@ -191,9 +257,57 @@ class InternshipController {
     }
 
     def dataTableDataAsJSON = {
-        def list = Internship.list(params)
+        def list = []
+        def status = new HashMap()
         def ret = []
         response.setHeader("Cache-Control", "no-store")
+        if(authenticateService.ifAnyGranted("ROLE_ADMIN,ROLE_FORMATIONMANAGER")) {
+            Internship.list().each() {
+                it.each() { it2 ->
+                    if(it2.getStatus(new Staff()) == params.status) {
+                        list.add it2
+                    }
+                }
+            }
+        }
+        if(authenticateService.ifAnyGranted("ROLE_STUDENT")) {
+            def userInstance = authenticateService.userDomain()
+            sessionFactory.currentSession.refresh(userInstance, LockMode.NONE)
+            Internship.list().each() {
+                it.each() { it2 ->
+                    if(it2.getStatus(new Staff()) == params.status && it2.student.user == userInstance) {
+                        list.add it2
+                    }
+                }
+            }
+        }
+        if(authenticateService.ifAnyGranted("ROLE_EXTERNAL")) {
+            def userInstance = authenticateService.userDomain()
+            sessionFactory.currentSession.refresh(userInstance, LockMode.NONE)
+            Internship.list().each() {
+                it.each() { it2 ->
+                    if(it2.getStatus(new Staff()) == params.status && it2.companyTutor.user == userInstance) {
+                        list.add it2
+                    }
+                }
+            }
+        }
+        if(authenticateService.ifAnyGranted("ROLE_STAFF")) {
+            def userInstance = authenticateService.userDomain()
+            sessionFactory.currentSession.refresh(userInstance, LockMode.NONE)
+            def statusStaff = userInstance.authorities.find {
+                it.authority == "ROLE_STAFF"
+            }
+            println statusStaff
+            Internship.list().each() {
+                it.each() { it2 ->
+                    if(it2.getStatus(statusStaff) == params.status && (it2.companyTutor.user == userInstance || it2.isApproval == true)) {
+                        println params
+                        list.add it2
+                    }
+                }
+            }
+        }
 
         list.each {
             ret << [
@@ -209,7 +323,7 @@ class InternshipController {
         }
 
         def data = [
-                totalRecords: Internship.count(),
+                totalRecords: list.size(),
                 results: ret
         ]
        

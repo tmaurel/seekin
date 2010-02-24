@@ -32,6 +32,12 @@
                       </p>
 
                       <p>
+                            <label for="description"><g:message code="internship.description" default="Description" />:</label>
+                            <g:textField name="description" class="field${hasErrors(bean:internshipInstance ,field:'description','error')}" value="${fieldValue(bean: internshipInstance, field: 'description')}" />
+
+                      </p>
+
+                      <p>
                             <label for="beginAt"><g:message code="internship.beginAt" default="Begin At" />:</label>
                             <g:datePicker name="beginAt" value="${internshipInstance?.beginAt}"  />
 
@@ -40,24 +46,6 @@
                       <p>
                             <label for="length"><g:message code="internship.length" default="Length" />:</label>
                             <g:textField name="length" class="field${hasErrors(bean:internshipInstance ,field:'length','error')}" value="${fieldValue(bean: internshipInstance, field: 'length')}" />
-
-                      </p>
-
-                      <p>
-                            <label for="isApproval"><g:message code="internship.isApproval" default="Is Approval" />:</label>
-                            <g:checkBox name="isApproval" value="${internshipInstance?.isApproval}" />
-
-                      </p>
-
-                      <p>
-                            <label for="student"><g:message code="internship.student" default="Student" />:</label>
-                            <g:select name="student.id" from="${student}" optionKey="id" optionValue="value" value="${internshipInstance?.student?.id}" noSelection="['null': '']" />
-
-                      </p>
-
-                      <p>
-                            <label for="academicTutor"><g:message code="internship.academicTutor" default="Academic Tutor" />:</label>
-                            <g:select name="academicTutor.id" from="${staff}" optionKey="id" optionValue="value" value="${internshipInstance?.academicTutor?.id}" noSelection="['null': '']" />
 
                       </p>
 
@@ -78,22 +66,44 @@
                       </div>
 
                       <p>
-                            <label for="firstName"><g:message code="user.firstName" />:</label>
+                            <label for="firstName"><g:message code="companyTutor.firstName" />:</label>
                             <g:textField name="firstName" class="field${hasErrors(bean:internshipInstance?.companyTutor?.user ,field:'firstName','error')}" value="${fieldValue(bean: internshipInstance?.companyTutor?.user, field:'firstName')}" />
 
                       </p>
 
                       <p>
-                            <label for="lastName"><g:message code="user.lastName" />:</label>
+                            <label for="lastName"><g:message code="companyTutor.lastName" />:</label>
                             <g:textField name="lastName" class="field${hasErrors(bean:internshipInstance?.companyTutor?.user ,field:'lastName','error')}" value="${fieldValue(bean: internshipInstance?.companyTutor?.user, field:'lastName')}" />
 
                       </p>
 
                       <p>
-                            <label for="email"><g:message code="user.email" />:</label>
+                            <label for="email"><g:message code="companyTutor.email" />:</label>
                             <g:textField name="email" class="field${hasErrors(bean:internshipInstance?.companyTutor?.user ,field:'firstName','error')}" value="${fieldValue(bean: internshipInstance?.companyTutor?.user, field:'firstName')}" />
 
                       </p>
+
+                      <g:ifAnyGranted role="ROLE_ADMIN,ROLE_FORMATIONMANAGER">
+
+                            <p>
+                                  <label for="student"><g:message code="internship.student" default="Student" />:</label>
+                                  <g:select name="student.id" from="${student}" optionKey="id" optionValue="value" value="${internshipInstance?.student?.id}" noSelection="['null': '']" />
+
+                            </p>
+
+                            <p>
+                                  <label for="academicTutor"><g:message code="internship.academicTutor" default="Academic Tutor" />:</label>
+                                  <g:select name="academicTutor.id" from="${staff}" optionKey="id" optionValue="value" value="${internshipInstance?.academicTutor?.id}" noSelection="['null': '']" />
+
+                            </p>
+
+                            <p>
+                                  <label for="isApproval"><g:message code="internship.isApproval" default="Is Approval" />:</label>
+                                  <g:checkBox name="isApproval" value="${internshipInstance?.isApproval}" />
+
+                            </p>
+                        
+                      </g:ifAnyGranted>
 
                 <div class="submit yui-skin-sam">
                    <g:buildCreateButtons />
