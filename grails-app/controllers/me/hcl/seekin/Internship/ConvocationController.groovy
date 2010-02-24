@@ -2,13 +2,14 @@ package me.hcl.seekin.Internship
 
 import me.hcl.seekin.Formation.*
 import grails.converters.JSON
-import grails.converters.XML
-
-import com.itextpdf.text.*
-import com.itextpdf.text.pdf.*
+import org.codehaus.groovy.grails.commons.ApplicationHolder
+import org.springframework.context.i18n.LocaleContextHolder as LCH
+import java.text.DateFormat;
+import java.text.SimpleDateFormat
 
 class ConvocationController {
-	def pdfService
+
+    def pdfService
 
     def index = { redirect(action: "list", params: params) }
 
@@ -137,63 +138,43 @@ class ConvocationController {
         }
     }
 
-	def pdfGenerate = {
-		def convocation = Convocation.get(params.id)
-		def internship = convocation?.internship
-		def student = internship?.student
-		
-		def uri = grailsAttributes.getApplicationUri(request) + "/test.pdf"
+    def export = {
 
-		Document document = new Document(PageSize.A4, 50, 50, 50, 50);
-		PdfWriter writer = PdfWriter.getInstance(document, \
-		new FileOutputStream("web-app/convocation/test.pdf"));
-		document.open();
-		document.add(new Paragraph(student?.user?.firstName + " " + student?.user?.lastName));
-		document.add(new Paragraph(internship?.subject))
-		document.add(new Paragraph(convocation?.date.toString() + " " + convocation.building + " " + convocation.room))
-		document.close();
+        def convocationInstance = Convocation.get(params.id)
+        if (!convocationInstance)
+        {
+            flash.message = "convocation.not.found"
+            flash.args = [params.id]
+            flash.defaultMessage = "Convocation not found with id ${params.id}"
+            redirect(action: "list")
+        }
+        else
+        {
+            def url = grailsApplication.config.grails.serverURL.toString() + "/"
+            def path = ApplicationHolder.getApplication().getParentContext().getServletContext().getRealPath("convocation");
+            def gsp = new File( path,"_pdf.gsp")
+            def locale = LCH.getLocale()
+            def dateFormat = DateFormat.getDateInstance(DateFormat.FULL, locale);
 
-		redirect(url: "/seekin/convocation/test.pdf")
-	}
-
-	def pdfGeneratePlanning = {
-		def promotion = Promotion.get(params.id)
-		def internships
-
-		promotion?.students?.internships.each {
-			if(!it.isEmpty()) {
-				internships = it.find {
-					it2 ->
-						it2.millesime == promotion.millesime
-				}
-			}
-		}
-
-		def convocations = internships?.convocation
-
-		def uri = grailsAttributes.getApplicationUri(request) + "/planning.pdf"
-
-		Document document = new Document(PageSize.A4, 50, 50, 50, 50);
-		PdfWriter writer = PdfWriter.getInstance(document, \
-		new FileOutputStream("web-app/convocation/planning.pdf"));
-		document.open();
-
-		convocations?.each {
-			document.add(
-				new Paragraph(
-					it?.internship?.student?.user?.firstName + " " + 
-					it?.internship?.student?.user?.lastName));
-		}
-		document.close();
-
-		redirect(url: "/seekin/convocation/planning.pdf")
-	}
-
-	def showXml = {
-		def convocation = Convocation.get(params.id)
-
-		render convocation as XML
-	}
+            def model = [:]
+            model.student = convocationInstance.internship.student.user
+            model.companyTutor = convocationInstance.internship.companyTutor.user
+            model.academicTutor = convocationInstance.internship.academicTutor.user
+            model.promotion = Promotion.getCurrentForStudent(convocationInstance.internship.student)
+            model.manager = model.promotion.formation.manager?.user
+            model.date = dateFormat.format(convocationInstance.date)
+            model.time = new SimpleDateFormat("HH:mm").format(convocationInstance.date)
+            model.convocation = convocationInstance
+            
+            response.setContentType "application/pdf"
+            response.setHeader "Content-Disposition", "inline;filename=convocation-" +
+                                    pdfService.removeSpecialCharacters(model.student.firstName) + "-" +
+                                    pdfService.removeSpecialCharacters(model.student.lastName) + ".pdf"
+                                    
+            pdfService.buildPdf(gsp, model, response, url)
+            return
+        }
+    }
 
     def dataTableDataAsJSON = {
 		def promotion = Promotion.get(params.promotion)
@@ -222,7 +203,7 @@ class ConvocationController {
 				building:it.building,
 				room:it.room,
 				internship: it.internship?.toString(),
-				pdf:[name:"<img src=\"../images/icons/pdf.png\" />", link:g.createLink(controller: 'convocation', action: 'pdfGenerate', id:it.id)],
+				pdf:[name:"<img src=\"../images/icons/pdf.png\" />", link:g.createLink(controller: 'convocation', action: 'export', id:it.id)],
 				urlID: it.id
             ]
         }
