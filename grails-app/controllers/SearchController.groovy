@@ -40,15 +40,24 @@ class SearchController {
 			}
 			try {
 				Closure qb = {
-					if(authenticateService.ifAnyGranted("ROLE_STUDENT") ||
-					   authenticateService.ifAnyGranted("ROLE_EXTERNAL"))
-					{
-						/* Only students who are set their profile as visible */
-						mustNot(term('visible',false))
-						/* Only internships whitch have been approved */
-						mustNot(term('isApproval',false))
+					if(authenticateService.ifAnyGranted("ROLE_ADMIN")) {
+						queryString(params.q)
 					}
-					queryString(params.q)
+					else {
+						if(authenticateService.ifAnyGranted("ROLE_STUDENT")) {
+							/* Only students who are set their profile as visible */
+							mustNot(term('visible',false))
+							/* Only internships whitch have been approved */
+							mustNot(term('isApproval',false))
+							queryString(params.q)
+						}
+						if(authenticateService.ifAnyGranted("ROLE_EXTERNAL")) {
+							/* External can not search internships */
+							mustNot(alias('Offer'))
+							mustNot(alias('Internship'))
+							queryString(params.q)
+						}
+					}
 				}
 
 				def searchResult = searchableService.search(qb)

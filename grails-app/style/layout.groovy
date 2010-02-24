@@ -447,7 +447,13 @@ style = {
 			'margin': '1em 2em'
 		)
 
-		'#search li, p' (
+		'#search li, #search p' (
 			'margin-bottom': '1em'
+		)
+
+		'#search .class_type' (
+			'font-size': 'x-small',
+			'color': 'darkblue',
+			'text-transform': 'uppercase'
 		)
 }
