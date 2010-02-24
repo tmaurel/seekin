@@ -8,6 +8,7 @@ import org.hibernate.LockMode
 import me.hcl.seekin.Formation.Promotion
 import org.codehaus.groovy.grails.plugins.springsecurity.Secured
 import me.hcl.seekin.Formation.Millesime
+import me.hcl.seekin.Auth.Role.Student
 
 class OfferController {
 
@@ -149,12 +150,10 @@ class OfferController {
         /* If the user is a student, he can show all offers which are validated and correspond to his promotion */
         else if(authenticateService.ifAnyGranted("ROLE_STUDENT")) {
             if(offerInstance?.validated == true && offerInstance?.assignated == false) {
-                def student = userInstance.authorities.find {
-                    it.getRoleName() == "ROLE_STUDENT"
-                    def currentPromo = Promotion.getCurrentForStudent(it)
-                    if(offerInstance.promotions.contains(currentPromo)) {
-                        showable = true
-                    }
+                def student = Student.findByUser(userInstance)
+                def currentPromo = Promotion.getCurrentForStudent(student)
+                if(offerInstance.promotions.contains(currentPromo)) {
+                    showable = true
                 }
             }
         }
@@ -330,13 +329,11 @@ class OfferController {
             else if(authenticateService.ifAnyGranted("ROLE_STUDENT")) {
                 def userInstance = authenticateService.userDomain()
                 sessionFactory.currentSession.refresh(userInstance, LockMode.NONE)
-                def student = userInstance.authorities.find {
-                    it.getRoleName() == "ROLE_STUDENT"
-                    def currentPromo = Promotion.getCurrentForStudent(it)
-                    currentPromo.offers.each() { it2 ->
-                        if(it2.getStatus() == params.status) {
-                            list.add it2.id
-                        }
+                def student = Student.findByUser(userInstance)
+                def currentPromo = Promotion.getCurrentForStudent(student)
+                currentPromo.offers.each() { it2 ->
+                    if(it2.getStatus() == params.status) {
+                        list.add it2.id
                     }
                 }
             }

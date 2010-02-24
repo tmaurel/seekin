@@ -54,9 +54,7 @@ class InternshipController {
             else if(authenticateService.ifAnyGranted("ROLE_STAFF")) {
                 def userInstance = authenticateService.userDomain()
                 sessionFactory.currentSession.refresh(userInstance, LockMode.NONE)
-                def statusStaff = userInstance.authorities.find {
-                    it.authority == "ROLE_STAFF"
-                }
+                def statusStaff = Staff.findByUser(userInstance)
                 Internship.list().each {
                     if(it.getStatus(new Staff()) == 'internship.validated')
                         status.add it.getStatus(new Staff())
@@ -143,10 +141,7 @@ class InternshipController {
         }
         else {
             companyTutor = User.findByEmail(params.email)
-            companyTutor.authorities.each {
-              if(it.class.name == "me.hcl.seekin.Auth.Role.External")
-                role = it
-            }
+            role = External.findByUser(companyTutor)
         }
         internshipInstance.companyTutor = role
 
@@ -156,13 +151,12 @@ class InternshipController {
         if(authenticateService.ifAnyGranted("ROLE_STUDENT")) {
             def userInstance = authenticateService.userDomain()
             sessionFactory.currentSession.refresh(userInstance, LockMode.NONE)
-            def statusStudent = userInstance.authorities.find {
-                it.authority == "ROLE_STUDENT"
-            }
+            def statusStudent = Staff.findByUser(userInstance)
             internshipInstance.student = statusStudent
             internshipInstance.isApproval = false
         }
 
+        internshipInstance = internshipInstance.merge()
         if (!internshipInstance.hasErrors() && internshipInstance.save(flush:true)) {
             flash.message = "internship.created"
             flash.args = [internshipInstance.id]
@@ -303,7 +297,6 @@ class InternshipController {
                 totalRecords: list.size(),
                 results: ret
         ]
-        println data
        
         render data as JSON
     }
