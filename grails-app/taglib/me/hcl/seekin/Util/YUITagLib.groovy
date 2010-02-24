@@ -17,7 +17,7 @@ class YUITagLib {
 
         out << actionSubmit(id: action, action:action, value:message(code: value))
         out << """
-            <script>
+            <script type="text/javascript">
                 yuiButton${action} = new YAHOO.widget.Button("${action}");
             </script>
         """
@@ -29,7 +29,7 @@ class YUITagLib {
 
         out << """<a id="${action}" href="${createLink(action:"${action}")}">${message(code: value)}</a>"""
         out << """
-            <script>
+            <script type="text/javascript">
                 yuiButton${action} = new YAHOO.widget.Button("${action}");
             </script>
         """
@@ -37,7 +37,7 @@ class YUITagLib {
 
     def deleteButton = {
         out << YUISubmitbutton(value:"delete", action:"delete")
-         out << """<script>
+         out << """<script type="text/javascript">
                         function submit(p_oEvent) {
                             if(yuiButtondelete.hasFocus())
                             {
