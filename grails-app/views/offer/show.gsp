@@ -97,18 +97,14 @@
                             </span>
                       </p>
                         
-                       <p>
+                       <div class="properties_list">
                             <label><g:message code="offer.promotions" default="Promotions" /></label>
-                            <span class="field_value">
-                            
                             <ul>
                             <g:each in="${offerInstance?.promotions}" var="promotionInstance">
                                 <li><g:link controller="promotion" action="show" id="${promotionInstance.id}">${promotionInstance.encodeAsHTML()}</g:link></li>
                             </g:each>
                             </ul>
-                            
-                            </span>
-                      </p>
+                      </div>
                         
                       
                       <div class="submit yui-skin-sam">

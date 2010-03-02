@@ -25,18 +25,16 @@
                             </span>
                       </p>
                         
-                       <p>
+                       <div class="properties_list">
                             <label><g:message code="promotion.students" default="Students" /></label>
-                            <span class="field_value">
                             
                             <ul>
                             <g:each in="${promotionInstance?.students}" var="studentInstance">
                                 <li><g:link controller="student" action="show" id="${studentInstance.id}">${studentInstance.encodeAsHTML()}</g:link></li>
                             </g:each>
                             </ul>
-                            
-                            </span>
-                      </p>
+
+                      </div>
                         
                        <p>
                             <label><g:message code="promotion.millesime" default="Millesime" /></label>
@@ -47,9 +45,8 @@
                             </span>
                       </p>
                         
-                       <p>
+                       <div class="properties_list">
                             <label><g:message code="promotion.offers" default="Offers" /></label>
-                            <span class="field_value">
                             
                             <ul>
                             <g:each in="${promotionInstance?.offers}" var="offerInstance">
@@ -57,8 +54,7 @@
                             </g:each>
                             </ul>
                             
-                            </span>
-                      </p>
+                      </div>
                         
                        <p>
                             <label><g:message code="promotion.formation" default="Formation" /></label>

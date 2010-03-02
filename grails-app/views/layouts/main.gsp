@@ -61,15 +61,8 @@
                     </div>
                 </g:isLoggedIn>
         </div>	
-        <div id="bar">
-                <g:isLoggedIn>
-                  <div id="bar_cont">
-                      Blabla
-                  </div>
-                </g:isLoggedIn>
-                <div id="bar_powered">
-                  <a href="http://seekin.hcl.me"><img src="${resource(dir:'images/icons',file:'powered.png')}" alt="Powered by seekin'" /></a>
-                </div>
+        <div id="bar_powered">
+            <a href="http://seekin.hcl.me"><img src="${resource(dir:'images/icons',file:'powered.png')}" alt="Powered by seekin'" /></a>
         </div>
     </body>	
 </html>

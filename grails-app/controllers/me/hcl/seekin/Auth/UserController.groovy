@@ -75,10 +75,16 @@ class UserController {
 
                         if(authenticateService.ifAllGranted("ROLE_STUDENT"))
                         {
-                            def millesime = Millesime.getCurrent()
-                            def promotion = Promotion.getCurrentForStudent(Student.findByUser(userInstance))
+                            def list = []
+                            def student = Student.findByUser(userInstance)
+                            def currentPromo = Promotion.getCurrentForStudent(student)
+                            currentPromo?.offers.each() {
+                                if(it.getStatus() == "offer.validated") {
+                                    list.add it.id
+                                }
+                            }
+                            println list
                         }
-
 		}
 	}
 
@@ -114,7 +120,7 @@ class UserController {
 
                         ret.formations = formations
                         ret.profile = profile
-                        ret.promotion = promotion.id
+                        ret.promotion = promotion?.id
                     }
 
                     // If User selected "Staff"
@@ -166,9 +172,10 @@ class UserController {
 
                                 if(params.promotion != null)
                                 {
-                                    if(params.promotion.toInteger() != promotion.id && Promotion.get(params.promotion)?.millesime?.current)
+                                    if(params.promotion.toInteger() != promotion?.id && Promotion.get(params.promotion)?.millesime?.current)
                                     {
-                                        profile.removeFromPromotions(promotion)
+                                        if(promotion?.id)
+                                            profile.removeFromPromotions(promotion)
                                         profile.addToPromotions(Promotion.get(params.promotion))
                                     }
                                 }

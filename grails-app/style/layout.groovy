@@ -173,28 +173,15 @@ style = {
 		'margin-right':'auto',
 	)
 
-	'#bar' (
-		'position':'fixed',
-		'width':'100%',
-		'height':'36px',
-		'left': '0px',
-		'bottom': '-1px',
-		'z-index':'100000'
-	)
-
-	'#bar #bar_cont' (
-		'width': '200px',
-                'float':'left',
-		'height': '36px',
-		'background-image':'url(../images/skin/bar_bg.png)',
-		'border':'1px solid #8c8c8c',	
-	)
-
-        '#bar #bar_powered' (
+        '#bar_powered' (
                 'float':'right',
+                'position':'fixed',
                 'margin-top':'3px',
                 'width':'90px',
                 'height': '36px',
+                'right': '0px',
+		'bottom': '-1px',
+		'z-index':'100000'
         )
 
 	'#main' ( 
@@ -256,7 +243,7 @@ style = {
 		'background-repeat':'repeat-y'
 	)
 
-	'.boxed_form input[type=\'text\'], .boxed_form input[type=\'password\'], .boxed_form input[type=\'checkbox\'], .boxed_form textarea' (
+	'.boxed_form input[type=\'text\'], .boxed_form input[type=\'password\'], .boxed_form textarea' (
 		'width':'50%',		
 		'height':'16px',
 		'float':'left',
@@ -273,6 +260,8 @@ style = {
         )
 
 	'.boxed_form input[type=\'checkbox\']' (
+                'float':'left',
+                'height':'20px',
 		'border':'0px none #000'
 	)
 
@@ -295,7 +284,12 @@ style = {
 		'float':'left',
                 'text-align':'left',
                 'list-style-type':'none',
+                'padding':'0px',
                 'margin-bottom':'10px'
+        )
+
+        '.boxed_form .properties_list li' (
+		'height':'20px'
         )
 
         '.boxed_form textarea' (
@@ -308,7 +302,7 @@ style = {
 
         '.field_value' (
  		'width':'50%',
-		'height':'18px',
+		'min-height':'18px',
                 'padding-left':'4px',
 		'float':'left',
 		'border':'1px solid #808080'
@@ -329,9 +323,19 @@ style = {
 		'width':'36%',
 	)
 
-        '#offers_block' (
+
+        '#home_panel' (
+                'width':'700px',
+                'min-height':'400px',
+                'clear':'both',
+                'padding-top':'60px'
+        )
+
+        '.home_block' (
                 'float':'left',
-                'width':'36%'
+                'width':'40%',
+                'padding-left':'5%',
+                'padding-right':'5%'
         )
 
 	'.yui-skin-sam' (
