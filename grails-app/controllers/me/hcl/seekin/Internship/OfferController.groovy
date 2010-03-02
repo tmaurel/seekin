@@ -200,9 +200,8 @@ class OfferController {
                 }
             }
         }
-        /* If the offer is editable, reason is set to null and the status will be waitForValidation */
+        /* If the offer is editable, we return our needed instances */
         if(editable) {
-                offerInstance.reason = null
                 return [offerInstance: offerInstance, promotionInstance: promotionInstance]
         }
         /* Else we return a flash message */
@@ -228,6 +227,7 @@ class OfferController {
                 }
             }
             offerInstance.properties = params
+            offerInstance.reason = null
             if (!offerInstance.hasErrors() && offerInstance.save()) {
                 flash.message = "offer.updated"
                 flash.args = [params.id]

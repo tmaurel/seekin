@@ -15,7 +15,10 @@
       <div class="flash_message"><g:message code="${flash.message}" args="${flash.args}" default="${flash.defaultMessage}" /></div>
       </g:if>
       <div class="yui-skin-sam" id="crud_panel">
+
+        <g:ifAnyGranted role="ROLE_STUDENT,ROLE_MANAGERFORMATION,ROLE_ADMIN">
           <g:buildListButtons />
+        </g:ifAnyGranted>
           
                         <g:set var="idInternationalized" value="${message(code:'internship.id')}" />
                  

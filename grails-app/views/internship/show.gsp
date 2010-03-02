@@ -60,6 +60,15 @@
 
                             </span>
                       </p>
+
+                       <p>
+                            <label><g:message code="internship.reason" default="Reason" /></label>
+                            <span class="field_value">
+
+                            ${fieldValue(bean: internshipInstance, field: "reason")}
+
+                            </span>
+                      </p>
                         
                        <p>
                             <label><g:message code="internship.isApproval" default="Is Approval" /></label>

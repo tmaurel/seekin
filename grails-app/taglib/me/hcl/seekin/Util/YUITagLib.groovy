@@ -51,6 +51,26 @@ class YUITagLib {
                     </script>\n"""
     }
 
+    def denyButton = {
+        out << YUISubmitbutton(value:"deny", action:"deny")
+         out << """<script type="text/javascript">
+                        function submit(p_oEvent) {
+                            if(yuiButtondeny.hasFocus())
+                            {
+                                   var bSubmit = window.prompt("${message(code: 'deny.confirm')}");
+                                   var field = YAHOO.util.Dom.get('reason');
+
+                                   field.value = bSubmit;
+
+                                   if(!bSubmit) {
+                                        YAHOO.util.Event.preventDefault(p_oEvent);
+                                   }
+                            }
+                        }
+                        YAHOO.util.Event.addListener("crud_panel", "submit", submit);
+                    </script>\n"""
+    }
+
     def listButton = { 
         out << YUILinkbutton(value:"list", action:"list")
     }
@@ -59,6 +79,13 @@ class YUITagLib {
         out << listButton()
         out << YUISubmitbutton(value:"update", action:"update")
         out << deleteButton()
+    }
+
+    def buildDenyButtons = {
+        out << listButton()
+        out << YUISubmitbutton(value:"update", action:"update")
+        out << deleteButton()
+        out << denyButton(value:"deny", action:"deny")
     }
 
     def buildShowButtons = { 

@@ -65,6 +65,15 @@ class InternshipController {
                 //status.add 'internship.mine'
 
             }
+            else if(authenticateService.ifAnyGranted("ROLE_STUDENT")) {
+                Internship.list().each {
+                    def userInstance = authenticateService.userDomain()
+                    sessionFactory.currentSession.refresh(userInstance, LockMode.NONE)
+                    if(it.student.user == userInstance) {
+                        status.add it.getStatus(new Staff())
+                    }
+                }
+            }
             else {
                 Internship.list().each {
                     if(it.getStatus(new Staff()) == 'internship.validated')
@@ -169,28 +178,72 @@ class InternshipController {
     }
 
     def show = {
+        /* We get the user logged in to verify if he is authorized to show an internship */
+        def userInstance = authenticateService.userDomain()
+        sessionFactory.currentSession.refresh(userInstance, LockMode.NONE)
+        Boolean showable = false
+
+        /* Get the offer with id parameter */
         def internshipInstance = Internship.get(params.id)
-        if (!internshipInstance) {
+        /* If the user have an external role, he is allowed to show only offers which he had created */
+        if(authenticateService.ifAnyGranted("ROLE_EXTERNAL")) {
+            if(internshipInstance?.companyTutor?.user == userInstance && internshipInstance?.isApproval == true) {
+                showable = true
+            }
+        }
+        /* If the user is the administrator, he can show all offers */
+        else if(authenticateService.ifAnyGranted("ROLE_ADMIN")) {
+            showable = true
+        }
+        /* If the user is a staff's member, he is allowed to show offers which he had created and offers that are validated */
+        else if(authenticateService.ifAnyGranted("ROLE_STAFF")) {
+            if(internshipInstance?.academicTutor?.user == userInstance && internshipInstance.isApproval == true) {
+                showable = true
+            }
+        }
+        /* If the user is a student, he can show all offers which are validated and correspond to his promotion */
+        else if(authenticateService.ifAnyGranted("ROLE_STUDENT")) {
+            if(internshipInstance?.student?.user ==  userInstance) {
+                showable = true
+            }
+        }
+
+        /* If the offer doesn't exist or is not showable, we return a flash message */
+        if (!internshipInstance || !showable) {
             flash.message = "internship.not.found"
             flash.args = [params.id]
             flash.defaultMessage = "Internship not found with id ${params.id}"
             redirect(action: "list")
         }
-        else {
+        /* Else we return our instance */
+        else if(showable) {
             return [internshipInstance: internshipInstance]
         }
     }
 
     def edit = {
+        /* We get the user logged in to verify if he is authorized to edit an internship */
+        def userInstance = authenticateService.userDomain()
+        sessionFactory.currentSession.refresh(userInstance, LockMode.NONE)
+        Boolean editable = false
+
+        /* Get the internship with id parameter */
         def internshipInstance = Internship.get(params.id)
-        if (!internshipInstance) {
+        /* If the internship is not validated, it is editable */
+        if (internshipInstance?.isApproval == false) {
+            editable = true
+        }
+
+        /* If the offer is editable, we return our needed instance */
+        if(editable) {
+                return [internshipInstance: internshipInstance]
+        }
+        /* Else we return a flash message */
+        else {
             flash.message = "internship.not.found"
             flash.args = [params.id]
             flash.defaultMessage = "Internship not found with id ${params.id}"
             redirect(action: "list")
-        }
-        else {
-            return [internshipInstance: internshipInstance]
         }
     }
 
@@ -207,6 +260,7 @@ class InternshipController {
                 }
             }
             internshipInstance.properties = params
+            internshipInstance.reason = null
             if (!internshipInstance.hasErrors() && internshipInstance.save()) {
                 flash.message = "internship.updated"
                 flash.args = [params.id]
@@ -222,6 +276,24 @@ class InternshipController {
             flash.args = [params.id]
             flash.defaultMessage = "Internship not found with id ${params.id}"
             redirect(action: "edit", id: params.id)
+        }
+    }
+
+    /* It is used when an internship is deny by the administrator */
+    def deny = {
+        /* Get the internship and set reason with params.reason before saving and redirect the user to list */
+        def internshipInstance = Internship.get(params.id)
+        if (internshipInstance) {
+            internshipInstance.reason = params.reason
+            internshipInstance.save()
+            redirect(action: "list")
+        }
+        /* Else we return a flash message */
+        else {
+            flash.message = "internship.not.found"
+            flash.args = [params.id]
+            flash.defaultMessage = "Internship not found with id ${params.id}"
+            redirect(action: "list")
         }
     }
 

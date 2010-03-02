@@ -18,6 +18,7 @@
       <g:form class="boxed_form" name="crud_panel" method="post" >
           <g:hiddenField name="id" value="${internshipInstance?.id}" />
           <g:hiddenField name="version" value="${internshipInstance?.version}" />
+          <g:hiddenField name="reason" value="${internshipInstance?.reason}" />
           
                 <p>
 
@@ -126,7 +127,17 @@
           
           
           <div class="submit yui-skin-sam">
-            <g:buildEditButtons />
+
+             <g:ifAnyGranted role="ROLE_ADMIN">
+
+                <g:buildDenyButtons />
+
+             </g:ifAnyGranted>
+             <g:ifNotGranted role="ROLE_ADMIN">
+
+                <g:buildEditButtons />
+
+             </g:ifNotGranted>
           </div>
       </g:form>
     </body>
