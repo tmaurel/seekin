@@ -6,6 +6,8 @@
         <meta name="layout" content="main" />
         <title><g:message code="user.edit"/></title>
         <g:YUIButtonRessource />
+        <yui:javascript dir="animation" file="animation-min.js" />
+        <g:javascript library="toggle" />
     </head>
     <body>
       <h2><g:message code="user.edit"/></h2>
@@ -81,6 +83,12 @@
                           <g:each var="role" in="${roles}">
                                   <li>${role.name.encodeAsHTML()}
                                           <g:checkBox name="ROLE_${role.name.toUpperCase()}" value="${role.value}"/>
+                                          <g:if test="${role.name.toUpperCase() == 'STUDENT' || role.name.toUpperCase() == 'FORMATIONMANAGER'}">
+                                              <g:select name="FORMATION_${role.name}" value='${params."FORMATION_$role.name"?:role.formation}' from="${formations}"  optionKey="id" optionValue="value" style="float:right; ${if(role.value!='on' && role.value !=true) {'visibility:hidden;width:0px;'} else {'width:200px;'} }"/>
+                                              <script type="text/javascript">
+                                                formationField('ROLE_${role.name.toUpperCase()}', 'FORMATION_${role.name}')
+                                              </script>
+                                          </g:if>
                                   </li>
                           </g:each>
                           </ul>

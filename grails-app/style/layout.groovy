@@ -280,7 +280,7 @@ style = {
 	)
 
         '.boxed_form .properties_list ul' (
-		'width':'30%',
+		'width':'50%',
 		'float':'left',
                 'text-align':'left',
                 'list-style-type':'none',

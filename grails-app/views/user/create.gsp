@@ -6,8 +6,10 @@
         <meta name="layout" content="main" />
         <title><g:message code="user.create" /></title>
         <g:YUIButtonRessource />
+        <yui:javascript dir="animation" file="animation-min.js" />
+        <g:javascript library="toggle" />
     </head>
-    <body>  
+    <body>
       <h2><g:message code="user.create" /></h2>
       <g:if test="${flash.message}">
       <div class="flash_message"><g:message code="${flash.message}" args="${flash.args}" /></div>
@@ -87,9 +89,16 @@
                           <g:each var="role" in="${roles}">
                                   <li>${role.name.encodeAsHTML()}
                                           <g:checkBox name="ROLE_${role.name.toUpperCase()}" value="${role.value}"/>
+                                          <g:if test="${role.name.toUpperCase() == 'STUDENT' || role.name.toUpperCase() == 'FORMATIONMANAGER'}">
+                                              <g:select name="FORMATION_${role.name}" value='${params."FORMATION_$role.name"}' from="${formations}"  optionKey="id" optionValue="value" style="float:right; ${if(role.value!='on') {'visibility:hidden;width:0px;'} else {'width:200px;'} }"/>
+                                              <script type="text/javascript">
+                                                formationField('ROLE_${role.name.toUpperCase()}', 'FORMATION_${role.name}')
+                                              </script>
+                                          </g:if>
                                   </li>
                           </g:each>
                           </ul>
+                          
                 </div>
           
           <div class="submit yui-skin-sam">

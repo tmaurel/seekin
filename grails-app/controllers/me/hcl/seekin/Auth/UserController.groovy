@@ -83,7 +83,6 @@ class UserController {
                                     list.add it.id
                                 }
                             }
-                            println list
                         }
 		}
 	}
@@ -106,14 +105,7 @@ class UserController {
 
                     if(authenticateService.ifAllGranted("ROLE_STUDENT"))
                     {
-                        def millesime = Millesime.getCurrent()
-
-                        def formations = Promotion.findAllByMillesime(millesime).collect {
-                             [
-                                 id: it.id,
-                                 value: it?.formation?.label
-                             ]
-                        }
+                        def formations = getFormations()
 
                         profile = Student.findByUser(userInstance)
                         promotion = Promotion.getCurrentForStudent(profile)
@@ -138,17 +130,17 @@ class UserController {
 
                     if(request.method == 'POST')
                     {
-                         userInstance.properties = params
+                        userInstance.properties = params
 
-                         if(params.password == "" && params.repassword == "")
-                         {
-                                 userInstance.password = pass
-                         }
-                         else
-                         {
-                                 // encode the password for the insertion in database
-                                 userInstance.password = authenticateService.encodePassword(params.password)
-                         }
+                        if(params.password == "" && params.repassword == "")
+                        {
+                             userInstance.password = pass
+                        }
+                        else
+                        {
+                             // encode the password for the insertion in database
+                             userInstance.password = authenticateService.encodePassword(params.password)
+                        }
 
                         userInstance.validate()
 
@@ -307,7 +299,8 @@ class UserController {
 	}
 
 	def edit = {
-                
+
+                def formations = getFormations()
 		def userInstance = User.get(params.id)
 		if (!userInstance) {
 			flash.message = "user.not.found"
@@ -316,13 +309,15 @@ class UserController {
 			return
 		}
 
-		[userInstance: userInstance, roles: buildRolesList(userInstance)]
+		[userInstance: userInstance, roles: buildRolesList(userInstance), formations: formations]
 	}
 
 	/**
 	 * Person update action.
 	 */
 	def update = {
+
+                def formations = getFormations()
 
 		def userInstance = User.get(params.id)
 		if (!userInstance) {
@@ -336,10 +331,11 @@ class UserController {
 		if (userInstance.version > version) {
 			userInstance.errors.rejectValue 'version', "userInstance.optimistic.locking.failure",
 				"Another user has updated this User while you were editing."
-				render view: 'edit', model: [userInstance: userInstance, roles: buildRolesList(userInstance)]
+				render view: 'edit', model: [userInstance: userInstance, roles: buildRolesList(userInstance), formations: formations]
 			return
 		}
-
+                
+                userInstance.properties = params
 		if (userInstance.save()) {
 			flash.message = "user.updated"
 			flash.args = [params.id]
@@ -348,13 +344,14 @@ class UserController {
 		}
 		else {
                     
-			render view: 'edit', model: [userInstance: userInstance, roles: buildParamsRolesList()]
+			render view: 'edit', model: [userInstance: userInstance, roles: buildParamsRolesList(), formations: formations]
 		}
 	}
 
 	def create = {
 
-		[userInstance: new User(password: generatePwd(8)), roles: buildParamsRolesList()]
+
+		[userInstance: new User(password: generatePwd(8)), roles: buildParamsRolesList(), formations:formations]
 	}
 
 	/**
@@ -365,6 +362,8 @@ class UserController {
                 userInstance.address = new Address()
 		userInstance.properties = params
 
+                def formations = getFormations()
+
 		if (userInstance.validate()) {
                         userInstance.password = authenticateService.encodePassword(params.password)
                         userInstance.save()
@@ -374,7 +373,7 @@ class UserController {
 			redirect action: show, id: userInstance.id
 		}
 		else {
-			render view: 'create', model: [authorityList: Role.list(), userInstance: userInstance]
+			render view: 'create', model: [userInstance: userInstance, roles: buildParamsRolesList(), formations:formations]
 		}
 	}
 	
@@ -535,22 +534,44 @@ class UserController {
                 def roles = roleService.getRoleNames()
                 def authorities = []
                 def found
+                def formation
                 
                 roles.each
                 {
+                   formation = null
                    found = false
                    for (role in userInstance.authorities)
                    {
                        if(role.getRoleName() == it)
                        {
                             found = true
+                            if(role.getRoleName() == "Student")
+                            {
+                                formation = Promotion.getCurrentForStudent(role)?.id
+                            }
+                            else if(role.getRoleName() == "FormationManager")
+                            {
+                                formation = Promotion.getCurrentForFormation(role.formation)?.id
+                            }
+
                             break
                        }
                    }
-                   authorities << [name:it, value:found]
+                   authorities << [name:it, value:found, formation:formation]
                 }
-
                 return authorities
+        }
+
+        private ArrayList getFormations()
+        {
+            def millesime = Millesime.getCurrent()
+
+            return Promotion.findAllByMillesime(millesime).collect {
+                [
+                    id: it.id,
+                    value: it?.formation?.label
+                ]
+            }
         }
 
         private void addRoles(userInstance)
@@ -561,6 +582,8 @@ class UserController {
                 def found
                 def catchedRole
                 def roleClass
+                def instance
+                def promotion
   
                 roles.each
                 {
@@ -576,16 +599,66 @@ class UserController {
                             break
                        }
                     }
-            
-                    if(value == "on" && catchedRole == null)
+                    if(value == "on" && catchedRole != null)
+                    {
+                        if(it == "Student" && params.FORMATION_Student)
+                        {
+                            promotion = Promotion.getCurrentForStudent(catchedRole)
+                            if(params.FORMATION_Student.toInteger() != promotion?.id && Promotion.get(params.FORMATION_Student)?.millesime?.current)
+                            {
+                                if(promotion?.id)
+                                    catchedRole.removeFromPromotions(promotion)
+                                catchedRole.addToPromotions(Promotion.get(params.FORMATION_Student))
+                            }
+                        }
+                        else if(it == "FormationManager" && params.FORMATION_FormationManager)
+                        {
+                            promotion = Promotion.get(params.FORMATION_FormationManager)
+                            if(promotion?.formation?.manager != catchedRole)
+                            {
+                                if(catchedRole.formation != null)
+                                {
+                                    catchedRole?.formation?.manager = null
+                                }
+                                if(promotion?.formation?.manager != null)
+                                {
+                                    promotion?.formation?.manager.delete()
+                                }
+                                promotion?.formation?.manager = catchedRole
+                            }
+                        }
+                    }
+                    else if(value == "on" && catchedRole == null)
                     {
                         Thread t = Thread.currentThread()
                         ClassLoader cl = t.getContextClassLoader()
                         roleClass = cl.loadClass("me.hcl.seekin.Auth.Role." + it)
-                        userInstance.addToAuthorities(roleClass.newInstance())
+                        instance = roleClass.newInstance()
+
+                        if(it == "Student" && params.FORMATION_Student)
+                        {
+                            promotion = Promotion.get(params.FORMATION_Student)
+                            instance.addToPromotions(promotion)
+                        }
+                        else if(it == "FormationManager" && params.FORMATION_FormationManager)
+                        {
+                            promotion = Promotion.get(params.FORMATION_FormationManager)
+                            if(promotion?.formation?.manager != null)
+                            {
+                                promotion?.formation?.manager.delete()
+                            }
+                            promotion?.formation?.manager = instance
+                        }
+                        userInstance.addToAuthorities(instance)
                     }
                     else if(value == null && catchedRole != null)
                     {
+                        if(it == "Student")
+                        {
+                            catchedRole.promotions.each {
+                                it.removeFromStudents(catchedRole)
+                            }
+                        }
                         userInstance.removeFromAuthorities(catchedRole)
                         catchedRole.delete()
                     }
@@ -644,14 +717,8 @@ class UserController {
                     // If User selected "Student"
                     if(params.usertype == "1")
                     {
-                        def millesime = Millesime.getCurrent()
 
-                        def formations = Promotion.findAllByMillesime(millesime).collect {
-                            [
-                                id: it.id,
-                                value: it?.formation?.label
-                            ]
-                        }
+                        def formations = getFormations()
 
                         role = new Student(promotions:[Promotion.get(params.promotion)], visible: (params.visible != null)?:false)
                         userInstance.addToAuthorities(role)

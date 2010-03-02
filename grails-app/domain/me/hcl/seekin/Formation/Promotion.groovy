@@ -18,6 +18,16 @@ class Promotion {
             }
     }
 
+    static getCurrentForFormation = {
+        formation ->
+            if(formation != null)
+            {
+                formation.promotions.find {
+                    it.millesime.current == true
+                }
+            }
+    }
+
     static getCurrents = {
         Promotion.findAllByMillesime(Millesime.getCurrent())
     }
