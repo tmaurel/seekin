@@ -160,7 +160,7 @@ class InternshipController {
         if(authenticateService.ifAnyGranted("ROLE_STUDENT")) {
             def userInstance = authenticateService.userDomain()
             sessionFactory.currentSession.refresh(userInstance, LockMode.NONE)
-            def statusStudent = Staff.findByUser(userInstance)
+            def statusStudent = Student.findByUser(userInstance)
             internshipInstance.student = statusStudent
             internshipInstance.isApproval = false
         }

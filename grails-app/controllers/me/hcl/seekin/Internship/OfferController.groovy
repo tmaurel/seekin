@@ -92,14 +92,17 @@ class OfferController {
 
         /* Offer creation need a company so we verify if the company type by the user exists and create and save it if not */
         def company
-        if(Company.countByName(params.companyName) == 0) {
-          company = new Company()
-          company.name = params.companyName
-          company.save()
-        }
-        /* If the company already exists we get it on company variable */
-        else {
-          company = Company.findByName(params.companyName)
+        println params.CompanyName
+        if(params.CompanyName != null) {
+            if(Company.countByName(params.companyName) == 0) {
+              company = new Company()
+              company.name = params.companyName
+              company.save()
+            }
+            /* If the company already exists we get it on company variable */
+            else {
+              company = Company.findByName(params.companyName)
+            }
         }
 
         /* We get the user logged in in userInstance to identifiate the author */
@@ -108,10 +111,12 @@ class OfferController {
 
         /* Build the offer with correct parameter and save it*/
         def offerInstance = new Offer(params)
-        offerInstance.company = company
+        //offerInstance.company = company
         offerInstance.validated = false
         offerInstance.assignated = false
         offerInstance.author = userInstance
+        println offerInstance.hasErrors()
+        println offerInstance.company
         if (!offerInstance.hasErrors() && offerInstance.save()) {
             flash.message = "offer.created"
             flash.args = [offerInstance.id]
