@@ -5,6 +5,7 @@ include "externals"
 include "staffs"
 include "students"
 include "admins"
+include "managers"
 
 fixture {
 

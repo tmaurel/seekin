@@ -5,6 +5,8 @@ import me.hcl.seekin.Formation.*
 import me.hcl.seekin.Util.Address
 import me.hcl.seekin.Util.Settings
 import me.hcl.seekin.Company
+import me.hcl.seekin.Internship.*
+import me.hcl.seekin.Ressource.*
 
 import org.springframework.security.providers.UsernamePasswordAuthenticationToken as AuthToken
 
@@ -70,20 +72,35 @@ class UserController {
 		}
 		else
 		{
-                        def userInstance = authenticateService.userDomain()
-                        sessionFactory.currentSession.refresh(userInstance, LockMode.NONE)
+			def userInstance = authenticateService.userDomain()
+			sessionFactory.currentSession.refresh(userInstance, LockMode.NONE)
 
-                        if(authenticateService.ifAllGranted("ROLE_STUDENT"))
-                        {
-                            def list = []
-                            def student = Student.findByUser(userInstance)
-                            def currentPromo = Promotion.getCurrentForStudent(student)
-                            currentPromo?.offers.each() {
-                                if(it.getStatus() == "offer.validated") {
-                                    list.add it.id
-                                }
-                            }
-                        }
+			if(authenticateService.ifAllGranted("ROLE_STUDENT"))
+			{
+				def student = Student.findByUser(userInstance)
+				def promotion = Promotion.getCurrentForStudent(student)
+				def lastOffers = []
+				def i = 0
+
+				Offer.findAll(sort: "id", order: "desc").each {
+					if(it?.promotions?.contains(promotion) && i < 5 && it?.getStatus() == "offer.validated") {
+						lastOffers.add(it)
+						++i
+					}
+				}
+
+				def studentInternships = Internship.findAllByStudent(student, [sort: "beginAt", order: "desc"])
+				def internshipsReports = Report.findAllByIsPrivate(false)
+
+				render(view: "index", model: [
+						lastOffers: lastOffers,
+						totalLastOffers: lastOffers.size(),
+						studentInternships: studentInternships,
+						totalStudentInternships: studentInternships.size(),
+						totalInternshipsReports: internshipsReports.size(),
+						totalLinks: Link.count()
+					])
+			}
 		}
 	}
 
