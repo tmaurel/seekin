@@ -135,7 +135,14 @@
                         
                       
                       <div class="submit yui-skin-sam">
-                        <g:buildShowButtons />
+                        <g:ifAnyGranted role="ROLE_ADMIN,ROLE_FORMATIONMANAGER,ROLE_STUDENT">
+                          <g:if test="${internshipInstance.isApproval == false}">
+                            <g:buildShowButtons />
+                          </g:if>
+                          <g:else>
+                            <g:buildShowWithoutEditButtons />
+                          </g:else>
+                        </g:ifAnyGranted>
                       </div>
             </g:form>
        </body>
