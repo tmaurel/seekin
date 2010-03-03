@@ -94,6 +94,11 @@ class YUITagLib {
         out << deleteButton()
     }
 
+    def buildShowWithoutEditButtons = {
+        out << listButton()
+        out << deleteButton()
+    }
+
     def buildListButtons = { 
         out << YUILinkbutton(value:"new", action:"create")
     }

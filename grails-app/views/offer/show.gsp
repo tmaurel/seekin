@@ -109,7 +109,12 @@
                       
                       <div class="submit yui-skin-sam">
                             <g:ifNotGranted role="ROLE_STUDENT">
+                              <g:if test="${offerInstance.validated == false}">
                                 <g:buildShowButtons />
+                              </g:if>
+                              <g:else>
+                                <g:buildShowWithoutEditButtons />
+                              </g:else>
                             </g:ifNotGranted>
                             <g:ifAnyGranted role="ROLE_STUDENT">
                                 <g:listButton />      
