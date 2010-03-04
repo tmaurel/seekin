@@ -53,7 +53,19 @@ class Offer {
         company(nullable: false)
     }
 
+	String toString() {
+		subject
+	}
+
     String getStatus() {
         validated==false?(reason==null?'offer.waitForValidation':'offer.unvalidated'):(assignated==false?'offer.validated':'offer.assignated')
+    }
+
+	/** Return offers waiting for validation for a promotion */
+    static getOffersWaitingForValidationForPromotion = {
+        promotion ->
+			Offer.list().findAll {
+				it.getStatus() == "offer.waitForValidation"  && it.promotions?.contains(promotion)
+			}
     }
 }

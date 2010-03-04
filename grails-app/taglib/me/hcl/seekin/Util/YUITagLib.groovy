@@ -165,6 +165,21 @@ class YUITagLib {
                 }
             }
 
+            if(AuthorizeTools.ifAllGranted("ROLE_FORMATIONMANAGER")) {
+                out << gui.accordionElement(title:message(code:"formationManager"), selected:"true") {
+
+                    """<ul>
+                        <li><a href="${createLink(controller:"offer", action:"list")}">${message(code:"offer.list")}</a></li>
+                        <li><a href="${createLink(controller:"offer", action:"create")}">${message(code:"offer.create")}</a></li>
+                        <li><a href="${createLink(controller:"student", action:"list")}">${message(code:"student.list")}</a></li>
+                        <li><a href="${createLink(controller:"internship", action:"list")}">${message(code:"internship.list")}</a></li>
+                        <li><a href="${createLink(controller:"company", action:"list")}">${message(code:"company.list")}</a></li>
+                        <li><a href="${createLink(controller:"report", action:"list")}">${message(code:"report.list")}</a></li>
+                        <li><a href="${createLink(controller:"convocation", action:"list")}">${message(code:"convocation.list")}</a></li>
+                    </ul>"""
+                }
+            }
+
             if(AuthorizeTools.ifAllGranted("ROLE_EXTERNAL")) {
                 out << gui.accordionElement(title:message(code:"external"), selected:"true") {
 

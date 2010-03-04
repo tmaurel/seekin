@@ -58,7 +58,7 @@ class UserController {
 	 */
 	def index = {
 
-                // If the user isnt logged in, redirect to auth closure
+        // If the user isnt logged in, redirect to auth closure
 		if (!isLoggedIn()) {
 			if(!Settings.get(1))
 			{
@@ -72,34 +72,105 @@ class UserController {
 		}
 		else
 		{
+
+			// Get the user instance logged in
 			def userInstance = authenticateService.userDomain()
 			sessionFactory.currentSession.refresh(userInstance, LockMode.NONE)
 
-			if(authenticateService.ifAllGranted("ROLE_STUDENT"))
-			{
+			// If the user is a student
+			if(authenticateService.ifAllGranted("ROLE_STUDENT")) {
+
+				// Get the student instance logged in
 				def student = Student.findByUser(userInstance)
+				
+				// Get the current promotion for the manager's formation
 				def promotion = Promotion.getCurrentForStudent(student)
+
 				def lastOffers = []
+				def lastInternshipReports = []
 				def i = 0
 
+				// Get all the student's internships
+				def studentInternships = Internship.findAllByStudent(student, [sort: "beginAt", order: "desc"])
+
+				// Get the five last offers for the student's promotion
 				Offer.findAll(sort: "id", order: "desc").each {
 					if(it?.promotions?.contains(promotion) && i < 5 && it?.getStatus() == "offer.validated") {
-						lastOffers.add(it)
+						lastOffers << it
 						++i
 					}
 				}
+				
+				i = 0
 
-				def studentInternships = Internship.findAllByStudent(student, [sort: "beginAt", order: "desc"])
-				def internshipsReports = Report.findAllByIsPrivate(false)
+				// Get the five last reports for the student's promotion
+				Report.findAllByIsPrivate(false,[sort: "id", order: "desc", max: 5]).each {
+					lastInternshipReports << it
+				}
 
-				render(view: "index", model: [
+				render(
+					view: "index",
+					model: [
 						lastOffers: lastOffers,
 						totalLastOffers: lastOffers.size(),
 						studentInternships: studentInternships,
+						lastInternshipReports: lastInternshipReports,
 						totalStudentInternships: studentInternships.size(),
-						totalInternshipsReports: internshipsReports.size(),
+						totalLastInternshipReports: lastInternshipReports.size(),
+						totalInternshipReports: Report.findAllByIsPrivate(false).size(),
 						totalLinks: Link.count()
 					])
+			}
+
+			// If the user is a formation manager
+			if(authenticateService.ifAllGranted("ROLE_FORMATIONMANAGER")) {
+				
+				// Get the formation manager instance logged in
+				def formationManager = FormationManager.findByUser(userInstance)
+
+				// Get the current promotion for the manager's formation
+				def promotion = Promotion.getCurrentForFormation(formationManager.formation)
+
+				// Get the offers awaiting validation for the manager's formation
+				def offersWaitingForValidation = Offer.getOffersWaitingForValidationForPromotion(promotion)
+
+				def studentsWithoutInternship = []
+				def studentsWithoutAcademicTutor = []
+				def internshipsWaitingForValidation = []
+
+				promotion?.students?.each {
+					def currentInternship = Internship.getCurrentForStudent(it)
+
+					// Get students without internship
+					if(!currentInternship) {
+						studentsWithoutInternship << it
+					}
+					else {
+						// Get students with an internship who don't have yet an academic tutor
+						if(!currentInternship.academicTutor) {
+							studentsWithoutAcademicTutor << it
+						}
+
+						// Get internships awayting validation
+						if(!currentInternship.getStatus() == "internship.waitForValidation") {
+							internshipsWaitingForValidation << currentInternship
+						}
+					}
+				}
+
+				render(
+					view: "index",
+					model: [
+						studentsWithoutInternship: studentsWithoutInternship,
+						studentsWithoutAcademicTutor: studentsWithoutAcademicTutor,
+						internshipsWaitingForValidation: internshipsWaitingForValidation,
+						offersWaitingForValidation: offersWaitingForValidation,
+						totalStudentsWithoutInternship: studentsWithoutInternship.size(),
+						totalStudentsWithoutAcademicTutor: studentsWithoutAcademicTutor.size(),
+						totalInternshipsWaitingForValidation: internshipsWaitingForValidation.size(),
+						totalOffersWaitingForValidation: offersWaitingForValidation.size(),
+					]
+				)
 			}
 		}
 	}
