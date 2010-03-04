@@ -1,46 +1,37 @@
 
-<%@ page import="me.hcl.seekin.Ressource.Link" %>
+<%@ page import="me.hcl.seekin.Ressource.EducationalDoc" %>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="layout" content="main" />
-        <title><g:message code="link.list" /></title>
+        <title><g:message code="educationalDoc.list" /></title>
         <gui:resources components="dataTable"/>
         <g:javascript src="datatable.js" />
         <g:YUIButtonRessource />
     </head>
     <body>
-      <h2><g:message code="link.list" /></h2>
+      <h2><g:message code="educationalDoc.list" /></h2>
       <g:if test="${flash.message}">
       <div class="flash_message"><g:message code="${flash.message}" args="${flash.args}" default="${flash.defaultMessage}" /></div>
       </g:if>
       <div class="yui-skin-sam" id="crud_panel">
           <g:buildListButtons />
           
-                        <g:set var="idInternationalized" value="${message(code:'link.id')}" />
+                        <g:set var="idInternationalized" value="${message(code:'educationalDoc.id')}" />
                  
-                        <g:set var="titleInternationalized" value="${message(code:'link.title')}" />
+                        <g:set var="titleInternationalized" value="${message(code:'educationalDoc.title')}" />
                  
-                        <g:set var="urlInternationalized" value="${message(code:'link.url')}" />
-                 
-                        <g:set var="descriptionInternationalized" value="${message(code:'link.description')}" />
+                        <g:set var="uriInternationalized" value="${message(code:'educationalDoc.uri')}" />
                  
           <gui:dataTable
               id="dt_2"
               draggableColumns="true"
               columnDefs="[
-                  
-                            [key: 'id', sortable: true, resizeable: true, label: idInternationalized],
-                     
-                            [key: 'title', sortable: true, resizeable: true, label: titleInternationalized],
-                     
-                            [key: 'url', sortable: true, resizeable: true, label: urlInternationalized, formatter: 'link'],
-                     
-                            [key: 'description', sortable: true, resizeable: true, label: descriptionInternationalized],
-                     
+                  [key: 'title', minWidth:600, sortable: true, resizeable: true, label: titleInternationalized],
                   [key: 'urlID', sortable: false, resizeable: false, label:'Actions', formatter: 'adminPanelFormatter']
               ]"
-              controller="link"
+              sortedBy="title"
+              controller="educationalDoc"
               action="dataTableDataAsJSON"
               paginatorConfig="[
                   template:'{PreviousPageLink} {PageLinks} {NextPageLink} {CurrentPageReport}',

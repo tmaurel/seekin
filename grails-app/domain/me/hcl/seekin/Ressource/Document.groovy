@@ -5,17 +5,21 @@ package me.hcl.seekin.Ressource
  */
 class Document {
 
-	static searchable = true
+    static searchable = true
 
-	/** Title of the document */
-	String title
+    /** Title of the document */
+    String title
+
+    /** URI of the document */
+    FileData fileData
 	
-	/** URI of the document */
-	String uri
-	
-	/** Constraints used to check if an instance is correct */
+    /** Constraints used to check if an instance is correct */
     static constraints = {
-		title(nullable: false, blank: false)
-		uri(nullable: false, blank: false)
+        title(nullable: false, blank: false)
+        fileData(nullable: false)
+    }
+
+    String toString() {
+        title
     }
 }

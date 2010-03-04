@@ -9,6 +9,6 @@ include "companies"
 include "millesimes"
 
 fixture {
-    firstInternship(Internship, subject: "First Internship", beginAt: new Date(), isApproval: false, student: nadirRole, academicTutor: hclRole, companyTutor: jobsRole, company: apple, report: firstInternshipReport, convocation: firstConvocation, length:6, millesime:m2009)
-	secondInternship(Internship, subject: "Second Internship", beginAt: new Date(), isApproval: false, reason: "it's not a good internship", student: alexisRole, academicTutor: hclRole, companyTutor: balmerRole, company: microsoft, report: secondInternshipReport, convocation: secondConvocation, length:6, millesime:m2008)
+    firstInternship(Internship, subject: "First Internship", beginAt: new Date(), isApproval: false, student: nadirRole, academicTutor: hclRole, companyTutor: jobsRole, company: apple, report: null, convocation: firstConvocation, length:6, millesime:m2009)
+	secondInternship(Internship, subject: "Second Internship", beginAt: new Date(), isApproval: false, reason: "it's not a good internship", student: alexisRole, academicTutor: hclRole, companyTutor: balmerRole, company: microsoft, report: null, convocation: secondConvocation, length:6, millesime:m2008)
 }

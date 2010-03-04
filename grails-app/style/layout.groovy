@@ -252,7 +252,7 @@ style = {
 
 
         ' .boxed_form select' (
-                'height':'20px',
+                'min-height':'20px',
                 'margin':'1px',
                 'max-width':'42%',
 		'float':'left',

@@ -38,7 +38,7 @@
                             <label><g:message code="link.url" default="Url" /></label>
                             <span class="field_value">
                             
-                            ${fieldValue(bean: linkInstance, field: "url")}
+                            <a href="${fieldValue(bean: linkInstance, field: "url")}">${fieldValue(bean: linkInstance, field: "url")}</a>
                             
                             </span>
                       </p>
