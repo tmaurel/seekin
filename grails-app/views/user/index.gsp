@@ -129,6 +129,39 @@
 			</gui:expandablePanel>
 		</div>
 		</g:ifAnyGranted>
+		<%-- STAFF HOME VIEW --%>
+		<g:ifAnyGranted role="ROLE_STAFF">
+		<%-- STAFF MY STUDENTS BLOCK --%>
+		<div class="home_block yui-skin-sam">
+			<gui:expandablePanel title="${message(code:'students.my')}" expanded="true" bounce="false">
+			  <g:if test="${totalStaffStudents > 0}">
+			  <ul>
+				<g:each var="student" in="${staffStudents}">
+				  <li><g:link controller="student" action="show" id="${student?.id}">${student}</g:link></li>
+				</g:each>
+			  </ul>
+			  </g:if>
+			  <g:else>
+				<span><g:message code="students.no" /></span>
+			  </g:else>
+			</gui:expandablePanel>
+		</div>
+		<%-- STAFF MY CONVOCATIONS BLOCK --%>
+		<div class="home_block yui-skin-sam">
+			<gui:expandablePanel title="${message(code:'convocations.my')}" expanded="true" bounce="false">
+			  <g:if test="${totalStaffConvocations > 0}">
+			  <ul>
+				<g:each var="convocation" in="${staffConvocations}">
+				  <li><g:link controller="convocation" action="show" id="${convocation?.id}">${convocation}</g:link></li>
+				</g:each>
+			  </ul>
+			  </g:if>
+			  <g:else>
+				<span><g:message code="students.no" /></span>
+			  </g:else>
+			</gui:expandablePanel>
+		</div>
+		</g:ifAnyGranted>
 	  </div>
     </body>
 </html>

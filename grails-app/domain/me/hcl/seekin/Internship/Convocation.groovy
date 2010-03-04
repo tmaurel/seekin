@@ -23,4 +23,8 @@ class Convocation {
 		building()
 		room()
 	}
+
+	String toString() {
+		date.formatDate() + " - " + internship?.subject + " - " + building + " " + room
+	}
 }

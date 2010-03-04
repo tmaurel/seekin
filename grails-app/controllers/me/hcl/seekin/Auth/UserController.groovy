@@ -172,6 +172,30 @@ class UserController {
 					]
 				)
 			}
+			
+			// If the user is a staff
+			if(authenticateService.ifAllGranted("ROLE_STAFF")) {
+
+				// Get the staff instance logged in
+				def staff = Staff.findByUser(userInstance)
+
+				// Get the students whose staff is academic tutor for the current year
+				def internships = Internship.findAllByAcademicTutorAndMillesime(staff, Millesime.getCurrent())
+				def staffStudents = internships?.student
+				
+				// Get the convocations for this internships
+				def staffConvocations = internships?.convocation
+
+				render(
+					view: "index",
+					model: [
+						staffStudents: staffStudents,
+						staffConvocations: staffConvocations,
+						totalStaffStudents: staffStudents.size(),
+						totalStaffConvocations: staffConvocations.size()
+					]
+				)
+			}
 		}
 	}
 
