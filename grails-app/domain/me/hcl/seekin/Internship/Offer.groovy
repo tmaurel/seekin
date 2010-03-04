@@ -51,6 +51,7 @@ class Offer {
 		reason(nullable:true, blank: true)
         file(nullable: true)
         company(nullable: false)
+        promotions(nullable: false)
     }
 
 	String toString() {

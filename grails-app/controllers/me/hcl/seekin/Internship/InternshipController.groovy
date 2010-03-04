@@ -48,7 +48,7 @@ class InternshipController {
                 //status.add 'internship.unvalidated'
                 //status.add 'internship.waitForValidation'
                 Internship.list().each {
-                    status.add it.getStatus(new Staff())
+                    status.add it.getStatus()
                 }
             }
             else if(authenticateService.ifAnyGranted("ROLE_STAFF")) {
@@ -56,10 +56,8 @@ class InternshipController {
                 sessionFactory.currentSession.refresh(userInstance, LockMode.NONE)
                 def statusStaff = Staff.findByUser(userInstance)
                 Internship.list().each {
-                    if(it.getStatus(new Staff()) == 'internship.validated')
-                        status.add it.getStatus(new Staff())
-                    if(it.getStatus(statusStaff) == 'internship.mine')
-                        status.add it.getStatus(statusStaff)                    
+                    if(it.getStatus() == 'internship.validated')
+                        status.add it.getStatus()
                 }
                 //status.add 'internship.validated'
                 //status.add 'internship.mine'
@@ -70,13 +68,13 @@ class InternshipController {
                     def userInstance = authenticateService.userDomain()
                     sessionFactory.currentSession.refresh(userInstance, LockMode.NONE)
                     if(it.student.user == userInstance) {
-                        status.add it.getStatus(new Staff())
+                        status.add it.getStatus()
                     }
                 }
             }
             else {
                 Internship.list().each {
-                    if(it.getStatus(new Staff()) == 'internship.validated')
+                    if(it.getStatus() == 'internship.validated')
                         status.add 'internship.validated'                  
                 }
             }
@@ -124,56 +122,135 @@ class InternshipController {
     }
 
     def save = {
+
+        def staff = Staff.list().collect {
+            [
+                    id: it.id,
+                    value: it.user?.firstName + " " + it.user?.lastName
+            ]
+        }
+        def student = Student.list().collect {
+            [
+                    id: it.id,
+                    value: it.user?.firstName + " " + it.user?.lastName
+            ]
+        }
+        def offer = Offer.list().collect {
+            [
+                    id: it.id,
+                    value: it.subject
+            ]
+        }
+        
         def internshipInstance = new Internship()
-        def company
-        if(Company.countByName(params.companyName) == 0) {
-          company = new Company()
-          company.name = params.companyName
-          company.save()
-        }
-        else {
-          company = Company.findByName(params.companyName)
-        }
-
-        def role = new External()
-        role.company = Company.findByName(params.companyName)
-        role.formerStudent = false
-
-        def companyTutor
-
-        if(User.countByEmail(params.email) == 0) {
-            companyTutor = new User()
-            companyTutor.properties = params
-            companyTutor.password = UserController.generatePwd(8)
-            companyTutor.addToAuthorities(role)
-            companyTutor.save(flush:true)
-        }
-        else {
-            companyTutor = User.findByEmail(params.email)
-            role = External.findByUser(companyTutor)
-        }
-        internshipInstance.companyTutor = role
-
         internshipInstance.properties = params
-        internshipInstance.company = company
-        internshipInstance.millesime = Millesime.getCurrent()
-        if(authenticateService.ifAnyGranted("ROLE_STUDENT")) {
-            def userInstance = authenticateService.userDomain()
-            sessionFactory.currentSession.refresh(userInstance, LockMode.NONE)
-            def statusStudent = Student.findByUser(userInstance)
-            internshipInstance.student = statusStudent
-            internshipInstance.isApproval = false
+        def company
+        
+        if(params.companyName == null || params.companyName == "") {
+            flash.message = "company.null"
+            render(
+                    view: "create",
+                    model: [
+                            internshipInstance: internshipInstance,
+                            staff: staff,
+                            student: student,
+                            offer: offer,
+                            company: params.companyName,
+                            email: params.email,
+                            firstName: params.firstName,
+                            lastName: params.lastName
+                    ]
+            )
         }
-
-        internshipInstance = internshipInstance.merge()
-        if (!internshipInstance.hasErrors() && internshipInstance.save(flush:true)) {
-            flash.message = "internship.created"
-            flash.args = [internshipInstance.id]
-            flash.defaultMessage = "Internship ${internshipInstance.id} created"
-            redirect(action: "show", id: internshipInstance.id)
+        else if (params.email == null || params.email == "" || params.firstName == null || params.firstName == "" || params.lastName == null || params.lastName == "") {
+            println "params" + params.companyName
+            flash.message = "companyTutor.null"
+            render(
+                    view: "create",
+                    model: [
+                            internshipInstance: internshipInstance,
+                            staff: staff,
+                            student: student,
+                            offer: offer,
+                            company: params.companyName,
+                            email: params.email,
+                            firstName: params.firstName,
+                            lastName: params.lastName
+                    ]
+            )
         }
         else {
-            render(view: "create", model: [internshipInstance: internshipInstance])
+
+            if(Company.countByName(params.companyName) == 0) {
+              company = new Company()
+              company.name = params.companyName
+              company.save()
+            }
+            else {
+              company = Company.findByName(params.companyName)
+            }
+
+            def role
+
+            def companyTutor
+
+            if(User.countByEmail(params.email) == 0) {
+                role = new External()
+                role.company = Company.findByName(params.companyName)
+                role.formerStudent = false
+                role.save(flush:true)
+                companyTutor = new User()
+                companyTutor.properties = params
+                companyTutor.password = UserController.generatePwd(8)
+                companyTutor.addToAuthorities(role)
+                companyTutor.save(flush:true)
+            }
+            else {
+                companyTutor = User.findByEmail(params.email)
+                role = External.findByUser(companyTutor)
+            }
+
+            internshipInstance.companyTutor = role
+
+            //internshipInstance.properties = params
+            internshipInstance.company = company
+            internshipInstance.millesime = Millesime.getCurrent()
+            if(authenticateService.ifAnyGranted("ROLE_STUDENT")) {
+                def userInstance = authenticateService.userDomain()
+                sessionFactory.currentSession.refresh(userInstance, LockMode.NONE)
+                def statusStudent = Student.findByUser(userInstance)
+                internshipInstance.student = statusStudent
+                internshipInstance.isApproval = false
+            }
+            internshipInstance = internshipInstance.merge()
+            /* Temporary solution for persistance in form */
+            if(internshipInstance == null) {
+                internshipInstance = new Internship()
+                internshipInstance.properties = params
+                internshipInstance.company = company
+                internshipInstance.millesime = Millesime.getCurrent()
+            }
+            if (!internshipInstance?.hasErrors() && internshipInstance?.save(flush:true)) {
+                flash.message = "internship.created"
+                flash.args = [internshipInstance.id]
+                flash.defaultMessage = "Internship ${internshipInstance.id} created"
+                redirect(action: "show", id: internshipInstance.id)
+            }
+            else {
+                render(
+                        view: "create",
+                        model: [
+                                internshipInstance: internshipInstance,
+                                staff: staff,
+                                student: student,
+                                offer: offer,
+                                company: params.companyName,
+                                email: params.email,
+                                firstName: params.firstName,
+                                lastName: params.lastName
+                        ]
+                )
+            }
         }
     }
 
@@ -192,7 +269,7 @@ class InternshipController {
             }
         }
         /* If the user is the administrator, he can show all offers */
-        else if(authenticateService.ifAnyGranted("ROLE_ADMIN")) {
+        else if(authenticateService.ifAnyGranted("ROLE_ADMIN,ROLE_FORMATIONMANAGER")) {
             showable = true
         }
         /* If the user is a staff's member, he is allowed to show offers which he had created and offers that are validated */
@@ -331,17 +408,15 @@ class InternshipController {
         def userInstance = authenticateService.userDomain()
         sessionFactory.currentSession.refresh(userInstance, LockMode.NONE)
         Internship.list().each() {
-            if(authenticateService.ifAnyGranted("ROLE_ADMIN,ROLE_FORMATIONMANAGER") && it.getStatus(new Staff()) == params.status)
+            if(authenticateService.ifAnyGranted("ROLE_ADMIN,ROLE_FORMATIONMANAGER") && it.getStatus() == params.status)
                 list.add it.id
-            if(authenticateService.ifAnyGranted("ROLE_STUDENT") && it.getStatus(new Staff()) == params.status && it.student.user == userInstance)
+            if(authenticateService.ifAnyGranted("ROLE_STUDENT") && it.getStatus() == params.status && it.student.user == userInstance)
                 list.add it.id
-            if(authenticateService.ifAnyGranted("ROLE_EXTERNAL") && it.getStatus(new Staff()) == params.status && it.companyTutor.user == userInstance)
+            if(authenticateService.ifAnyGranted("ROLE_EXTERNAL") && it.getStatus() == params.status && it.companyTutor.user == userInstance)
                 list.add it.id
             if(authenticateService.ifAnyGranted("ROLE_STAFF")) {
-                def statusStaff = Staff.findByUser(userInstance)
-                if(it.getStatus(statusStaff) == params.status && (it.companyTutor.user == userInstance || it.isApproval == true)) {
-                    list.add it.id
-                }
+                def staff = Staff.findByUser(userInstance)
+                list = Internship.findAllByAcademicTutorAndMillesime(staff, Millesime.getCurrent()).id
             }
         }
 

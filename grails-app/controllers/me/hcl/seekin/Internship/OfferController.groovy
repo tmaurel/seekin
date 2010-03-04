@@ -90,10 +90,31 @@ class OfferController {
 
     def save = {
 
+        /* Build the offer with correct parameter and save it*/
+        def offerInstance = new Offer(params)
+
+        /* Build the list with all current promotions for the select markup */
+        def promotionInstance = Promotion.getCurrents().collect {
+            [
+                    id: it.id,
+                    value: it.toString()
+            ]
+        }
+
         /* Offer creation need a company so we verify if the company type by the user exists and create and save it if not */
         def company
-        println params.CompanyName
-        if(params.CompanyName != null) {
+        if(params.companyName == null || params.companyName == "") {
+            flash.message = "company.null"
+            render(
+                    view: "create",
+                    model: [
+                            offerInstance: offerInstance,
+                            promotionInstance: promotionInstance,
+                            company: params.companyName
+                    ]
+            )
+        }
+        else {
             if(Company.countByName(params.companyName) == 0) {
               company = new Company()
               company.name = params.companyName
@@ -103,28 +124,31 @@ class OfferController {
             else {
               company = Company.findByName(params.companyName)
             }
-        }
 
-        /* We get the user logged in in userInstance to identifiate the author */
-        def userInstance = authenticateService.userDomain()
-        sessionFactory.currentSession.refresh(userInstance, LockMode.NONE)
+            /* We get the user logged in in userInstance to identifiate the author */
+            def userInstance = authenticateService.userDomain()
+            sessionFactory.currentSession.refresh(userInstance, LockMode.NONE)
+            offerInstance.company = company
+            offerInstance.validated = false
+            offerInstance.assignated = false
+            offerInstance.author = userInstance
 
-        /* Build the offer with correct parameter and save it*/
-        def offerInstance = new Offer(params)
-        //offerInstance.company = company
-        offerInstance.validated = false
-        offerInstance.assignated = false
-        offerInstance.author = userInstance
-        println offerInstance.hasErrors()
-        println offerInstance.company
-        if (!offerInstance.hasErrors() && offerInstance.save()) {
-            flash.message = "offer.created"
-            flash.args = [offerInstance.id]
-            flash.defaultMessage = "Offer ${offerInstance.id} created"
-            redirect(action: "show", id: offerInstance.id)
-        }
-        else {
-            render(view: "create", model: [offerInstance: offerInstance])
+            if (!offerInstance.hasErrors() && offerInstance.save()) {
+                flash.message = "offer.created"
+                flash.args = [offerInstance.id]
+                flash.defaultMessage = "Offer ${offerInstance.id} created"
+                redirect(action: "show", id: offerInstance.id)
+            }
+            else {
+                render(
+                        view: "create",
+                        model: [
+                                offerInstance: offerInstance,
+                                promotionInstance: promotionInstance,
+                                company: params.companyName
+                        ]
+                )
+            }
         }
     }
 
@@ -143,7 +167,7 @@ class OfferController {
             }
         }
         /* If the user is the administrator, he can show all offers */
-        else if(authenticateService.ifAnyGranted("ROLE_ADMIN")) {
+        else if(authenticateService.ifAnyGranted("ROLE_ADMIN,ROLE_FORMATIONMANAGER")) {
             showable = true
         }
         /* If the user is a staff's member, he is allowed to show offers which he had created and offers that are validated */
@@ -187,7 +211,7 @@ class OfferController {
         def offerInstance = Offer.get(params.id)
         def promotionInstance
         /* If the user is the author of the offer or the administrator */
-        if(offerInstance?.author == userInstance || authenticateService.ifAnyGranted("ROLE_ADMIN")) {
+        if(offerInstance?.author == userInstance || authenticateService.ifAnyGranted("ROLE_ADMIN,ROLE_FORMATIONMANAGER")) {
             /* Build a list of the current promotion */
             promotionInstance = Promotion.getCurrents().collect {
                 [

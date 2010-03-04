@@ -52,34 +52,32 @@
                       <div>
                             <label for="company"><g:message code="internship.company" default="Company" />:</label>
 
-                            <g:set var="company" value ="${(internshipInstance?.company==null)?"":internshipInstance.company} />
                             <gui:autoComplete
                               id="companyName"
                               controller="company"
                               action="listCompanyAsJSON"
                               minQueryLength='2'
                               queryDelay='0.5'
-                              value="${internshipInstance?.company}"
-
+                              value="${company}"
                             />
 
                       </div>
 
                       <p>
                             <label for="firstName"><g:message code="companyTutor.firstName" />:</label>
-                            <g:textField name="firstName" class="field${hasErrors(bean:internshipInstance?.companyTutor?.user ,field:'firstName','error')}" value="${fieldValue(bean: internshipInstance?.companyTutor?.user, field:'firstName')}" />
+                            <g:textField name="firstName" class="field${hasErrors(bean:internshipInstance?.companyTutor?.user ,field:'firstName','error')}" value="${firstName}" />
 
                       </p>
 
                       <p>
                             <label for="lastName"><g:message code="companyTutor.lastName" />:</label>
-                            <g:textField name="lastName" class="field${hasErrors(bean:internshipInstance?.companyTutor?.user ,field:'lastName','error')}" value="${fieldValue(bean: internshipInstance?.companyTutor?.user, field:'lastName')}" />
+                            <g:textField name="lastName" class="field${hasErrors(bean:internshipInstance?.companyTutor?.user ,field:'lastName','error')}" value="${lastName}" />
 
                       </p>
 
                       <p>
                             <label for="email"><g:message code="companyTutor.email" />:</label>
-                            <g:textField name="email" class="field${hasErrors(bean:internshipInstance?.companyTutor?.user ,field:'firstName','error')}" value="${fieldValue(bean: internshipInstance?.companyTutor?.user, field:'firstName')}" />
+                            <g:textField name="email" class="field${hasErrors(bean:internshipInstance?.companyTutor?.user ,field:'firstName','error')}" value="${email}" />
 
                       </p>
 
