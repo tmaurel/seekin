@@ -82,4 +82,12 @@ class Internship {
     String getStatus(Staff member) {
         isApproval==false?(reason==null?'internship.waitForValidation':'internship.unvalidated'):(member==academicTutor?'internship.mine':'internship.validated')
     }
+
+	/** Return student's internship for current millesime */
+    static getCurrentForStudent = {
+        student ->
+            student.internships.find {
+                it.millesime.current == true
+            }
+    }
 }
