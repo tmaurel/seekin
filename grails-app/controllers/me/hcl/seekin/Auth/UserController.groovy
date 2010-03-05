@@ -677,13 +677,14 @@ class UserController {
         private ArrayList getFormations()
         {
             def millesime = Millesime.getCurrent()
-
-            return Promotion.findAllByMillesime(millesime).collect {
-                [
-                    id: it.id,
-                    value: it?.formation?.label
-                ]
-            }
+			if(millesime) {
+				return Promotion.findAllByMillesime(millesime).collect {
+					[
+						id: it.id,
+						value: it?.formation?.label
+					]
+				}
+			}
         }
 
         private void addRoles(userInstance)
