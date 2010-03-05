@@ -26,7 +26,7 @@
                 </p>
           
                 <p>
-                      <label for="uri"><g:message code="educationalDoc.file" default="File" />:</label>
+                      <label for="data"><g:message code="educationalDoc.file" default="File" />:</label>
                       <input type="file" name="data"/>
 
                 </p>
@@ -39,7 +39,7 @@
                         value="${params.formations}" />
                 </p>
           
-          <div class="submit yui-skin-sam">
+          <div class="actionpad yui-skin-sam">
              <g:buildCreateButtons />
           </div>
 

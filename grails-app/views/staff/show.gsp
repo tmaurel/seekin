@@ -53,7 +53,7 @@
                       </p>
                         
                       
-                      <div class="submit yui-skin-sam">
+                      <div class="actionpad yui-skin-sam">
                         <g:buildShowButtons />
                       </div>
             </g:form>

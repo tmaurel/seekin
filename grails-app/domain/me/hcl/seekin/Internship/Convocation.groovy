@@ -15,7 +15,9 @@ class Convocation {
 	String room
 
     /** A convocation is attributed to an internship */
-	static belongsTo = [ internship : Internship ]
+	static belongsTo = Internship
+
+        Internship internship
 	
 	/** Constraints used to check if an instance is correct */
     static constraints = {

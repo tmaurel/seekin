@@ -4,14 +4,16 @@ import me.hcl.seekin.Ressource.Document
 
 class Report extends Document {
 	
-	/* Indicate if the Student wants share his Report */
-	Boolean isPrivate
-	
-	/* A report belongs to an Internship */
-	static belongsTo = [ internship : Internship ]
+    /* Indicate if the Student wants share his Report */
+    Boolean isPrivate
+
+    /* A report belongs to an Internship */
+    static belongsTo = Internship
+
+    Internship internship
 	
 	/** Constraints used to check if an instance is correct */
     static constraints = {
-		isPrivate()
-	}
+        isPrivate(nullable: true)
+    }
 }

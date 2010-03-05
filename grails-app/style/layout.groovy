@@ -223,21 +223,17 @@ style = {
 	'h2' (
 		'display':'block',
 		'width':'100%',
-		'text-align':'center',
+		'text-align':'left',
 		'font-size':'1.4em',
 		'color':selectedColor
 	)
-	
+
 	'.boxed_form label' (
-		'width':'30%',
-                'min-width':'90px',
-		'margin-left':'5%',
-		'padding-right':'5%',
-                'margin-right':'5px',
+                'min-width':'100px',
+                'margin-right':'10px',
 		'height':'20px',
 		'line-height':'20px',
 		'float':'left',
-		'text-align':'right',
 		'background-image':'url(../images/skin/gradient.png)',
 		'background-position': 'bottom right',
 		'background-repeat':'repeat-y'
@@ -272,6 +268,10 @@ style = {
 	'.boxed_form .submit' (
 		'text-align':'center'
 	)
+
+        '.boxed_form .actionpad' (
+                'text-align':'left'
+        )
 	
 	'.boxed_form p, .boxed_form div' (
 		'clear':'both',
@@ -377,12 +377,27 @@ style = {
                 'margin-top':'-5px'
         )
 
+        '.yui-navset' (
+                'margin-top':'20px'
+        )
+
+        '.yui-skin-sam .yui-navset .yui-content' (
+                'background':'transparent',
+                'border':'none',
+                'border-left':'1Px solid #000',
+                'height':'400px',
+                'padding':'20px'
+        )
+
+        '.yui-dt' (
+
+        )
+
+
         '#crud_panel' (
             'margin-top':'20px',
             'padding':'10px',
-            'margin-left':'auto',
-            'margin-right':'auto',
-            'width': '600px'
+            'width': '100%'
         )
 
         '#create a' (

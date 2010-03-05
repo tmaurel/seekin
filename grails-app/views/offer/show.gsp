@@ -107,7 +107,7 @@
                       </div>
                         
                       
-                      <div class="submit yui-skin-sam">
+                      <div class="actionpad yui-skin-sam">
                             <g:ifNotGranted role="ROLE_STUDENT">
                               <g:if test="${offerInstance.validated == false}">
                                 <g:buildShowButtons />

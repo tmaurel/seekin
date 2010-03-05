@@ -18,7 +18,7 @@
                           <g:textField name="email" value="${params.email}" />
                 </p>
 
-          <div class="submit yui-skin-sam">
+          <div class="actionpad yui-skin-sam">
             <g:buildSubmitButton action="lostPassword" value="send" />
           </div>
       </g:form>

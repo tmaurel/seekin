@@ -22,7 +22,7 @@
                     <label for='password'><g:message code="user.repassword" /></label>
                     <g:passwordField name='repassword' />
             </p>
-            <div class="submit yui-skin-sam">
+            <div class="actionpad yui-skin-sam">
               <g:buildSubmitButton action="checkCode" value="user.lostPassword.submit" />
             </div>
         </g:form>

@@ -134,7 +134,7 @@
                       </p>
                         
                       
-                      <div class="submit yui-skin-sam">
+                      <div class="actionpad yui-skin-sam">
                         <g:ifAnyGranted role="ROLE_ADMIN,ROLE_FORMATIONMANAGER,ROLE_STUDENT">
                           <g:if test="${internshipInstance.isApproval == false}">
                             <g:buildShowButtons />

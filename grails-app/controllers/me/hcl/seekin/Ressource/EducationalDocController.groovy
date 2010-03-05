@@ -20,6 +20,12 @@ class EducationalDocController {
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
     def list = {
+
+        def formations = Formation.createCriteria().list() {
+            isNotEmpty("educationalDocs")
+        }
+
+        render(view: "list", model: [formations: formations])
     }
 
     def create = {

@@ -95,7 +95,7 @@
                 </div>
 
           
-          <div class="submit yui-skin-sam">
+          <div class="actionpad yui-skin-sam">
             <g:buildEditButtons />
           </div>
       </g:form>
