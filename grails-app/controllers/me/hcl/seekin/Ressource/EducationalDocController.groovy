@@ -205,11 +205,21 @@ class EducationalDocController {
     }
 
     def dataTableDataAsJSON = {
-        def list = EducationalDoc.list(params)
+        def list = Formation.get(params.formation)?.educationalDocs.collect {
+            it.id
+        }
+
+        def list2
+        if(list.size() > 0) {
+            list2 = EducationalDoc.createCriteria().list(params) {
+                'in'('id', list)
+            }
+        }
+
         def ret = []
         response.setHeader("Cache-Control", "no-store")
 
-        list.each {
+        list2.each {
             ret << [
                 title:it.title,
                 urlID: it.id
@@ -217,7 +227,7 @@ class EducationalDocController {
         }
 
         def data = [
-                totalRecords: EducationalDoc.list(formation: params.formation).size(),
+                totalRecords: list.size(),
                 results: ret
         ]
        
