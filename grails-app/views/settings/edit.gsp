@@ -34,13 +34,6 @@
 
                 </p>
           
-                <p>
-
-                          <label for="emailAdmin"><g:message code="settings.emailAdmin" default="Email Admin" /></label>
-                          <g:textField name="emailAdmin" value="${fieldValue(bean: settingsInstance, field: 'emailAdmin')}" class="field${hasErrors(bean:settingsInstance,field:'emailAdmin','error')}"/>
-
-                </p>
-          
           <div class="actionpad yui-skin-sam">
             <g:YUISubmitbutton value="update" action="update" />
           </div>

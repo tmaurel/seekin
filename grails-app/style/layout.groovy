@@ -265,10 +265,6 @@ style = {
 		'border':'1px solid #CCC'
 	)
 
-	'.boxed_form input:hover' (
-		'border':'2px solid ' + secondColor
-	)
-
         ' .boxed_form select' (
                 'min-height':'20px',
                 'margin':'1px',
