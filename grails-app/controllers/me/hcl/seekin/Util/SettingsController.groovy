@@ -1,35 +1,54 @@
 package me.hcl.seekin.Util
 
+import me.hcl.seekin.Auth.User
+import me.hcl.seekin.Auth.Role.Admin
+
 class SettingsController {
+
+	def authenticateService
 
     def index = { redirect(action: "edit") }
 
     // the delete, save and update actions only accept POST requests
-    static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
+    static allowedMethods = [update: "POST", delete: "POST"]
 
+	// First Installation
     def install = {
         def settingsInstance = Settings.get(1)
         if(settingsInstance != null) {
             redirect(controller: "user", action: "auth")
         }
         else {
-          settingsInstance = new Settings()
-          settingsInstance.properties = params
-          return [settingsInstance: settingsInstance]
-        }
-    }
+			def adminInstance
 
-    def save = {
-        def settingsInstance = new Settings(params)
-        if (!settingsInstance.hasErrors() && settingsInstance.save()) {
-            flash.message = "settings.created"
-            flash.args = [1]
-            flash.defaultMessage = "Settings created"
-            redirect(action: "edit")
-        }
-        else {
-            render(view: "edit", model: [settingsInstance: settingsInstance])
-        }
+			if(request.method == 'POST') {
+				adminInstance = new User(
+					email: params?.emailAdmin,
+					password: authenticateService.encodePassword(params.passwordAdmin),
+					firstName: params.firstNameAdmin,
+					lastName: params.lastNameAdmin,
+					enabled: true
+				)
+
+				settingsInstance = new Settings(applicationName: params.applicationName)
+
+				if(!params.passwordAdmin && !params.repasswdAdmin) {
+					flash.message = message(code:"user.password.null")
+				}
+				else {
+					if (params.passwordAdmin != params.repasswordAdmin) {
+						flash.message = message(code:"user.password.dismatch")
+					}
+					else {
+						adminInstance.addToAuthorities(new Admin())
+						if(!settingsInstance.hasErrors() && settingsInstance.save() && !adminInstance.hasErrors() && adminInstance.save()) {
+							redirect(controller: "user", action: "auth")
+						}
+					}
+				}
+				return [settingsInstance: settingsInstance, adminInstance: adminInstance]
+			}
+		}
     }
 
     def edit = {

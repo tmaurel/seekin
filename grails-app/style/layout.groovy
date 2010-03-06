@@ -241,7 +241,9 @@ style = {
 	)
 
 	'h3' (
-		'text-align':'center',
+		'font-size':'1.4em',
+		'margin':'10px 0 10px 0',
+		'text-align':'left',
 		'color':secondColor
 	)
 
@@ -257,7 +259,7 @@ style = {
 		'width' : '200px',
 		'text-transform' : 'uppercase',
 		'font-family' : 'verdana',
-		'border-right': 'solid 3px #C3C300',
+		'border-right': 'solid 3px ' + secondColor,
 		'background-color': '#F3F3F3',
 		//'background-image':'url(../images/skin/header_bg.png)',
 		//'background-position': 'bottom right',
