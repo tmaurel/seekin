@@ -33,7 +33,7 @@
 			<g:each var="status" in="${status}" status="i">
 			<g:set var="idStatus" value="${status}" />
 			<gui:tab id="${idStatus}" label="${message(code:idStatus)}" active="${(i==0)? 1:0}">
-			  <h2><g:message code="${idStatus}" /></h2>
+			  <h3><g:message code="${idStatus}" /></h3>
                 <g:ifAnyGranted role="ROLE_ADMIN,ROLE_MANAGERFORMATION">
                   <g:if test="${idStatus=='offer.waitForValidation'}">
                     <g:form action="list">

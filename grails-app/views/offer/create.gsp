@@ -23,37 +23,37 @@
         <g:form class="boxed_form" name="crud_panel" action="save" method="post" >
 
                   <p>
-                        <label for="subject"><g:message code="offer.subject" default="Subject" />:</label>
+                        <label for="subject"><g:message code="offer.subject" default="Subject" /></label>
                         <g:textField name="subject" class="field${hasErrors(bean:offerInstance ,field:'subject','error')}" value="${fieldValue(bean: offerInstance, field: 'subject')}" />
 
                   </p>
 
                   <p>
-                        <label for="description"><g:message code="offer.description" default="Description" />:</label>
+                        <label for="description"><g:message code="offer.description" default="Description" /></label>
                         <g:textField name="description" class="field${hasErrors(bean:offerInstance ,field:'description','error')}" value="${fieldValue(bean: offerInstance, field: 'description')}" />
 
                   </p>
 
                   <p>
-                        <label for="beginAt"><g:message code="offer.beginAt" default="Begin At" />:</label>
+                        <label for="beginAt"><g:message code="offer.beginAt" default="Begin At" /></label>
                         <g:datePicker name="beginAt" value="${offerInstance?.beginAt}"  />
 
                   </p>
 
                   <p>
-                        <label for="length"><g:message code="offer.length" default="Length" />:</label>
+                        <label for="length"><g:message code="offer.length" default="Length" /></label>
                         <g:select name="length" from="${1..52}" value="${offerInstance?.length}"  />
 
                   </p>
 
                   <p>
-                        <label for="file"><g:message code="offer.file" default="File" />:</label>
+                        <label for="file"><g:message code="offer.file" default="File" /></label>
                         <g:select name="file.id" from="${me.hcl.seekin.Ressource.Document.list()}" optionKey="id" value="${offerInstance?.file?.id}" noSelection="['null': '']" />
 
                   </p>
 
                   <div>
-                        <label for="company"><g:message code="internship.company" default="Company" />:</label>
+                        <label for="company"><g:message code="internship.company" default="Company" /></label>
 
                         <gui:autoComplete
                           id="companyName"
@@ -68,7 +68,7 @@
                   </div>
 
                   <p>
-                        <label for="promotions"><g:message code="offer.promotions" default="Promotions" />:</label>
+                        <label for="promotions"><g:message code="offer.promotions" default="Promotions" /></label>
                         <g:select name="promotions"
                           from="${promotionInstance}"
                           size="5" multiple="yes" optionKey="id"

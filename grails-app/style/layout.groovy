@@ -1,4 +1,5 @@
-selectedColor = '#163281'
+selectedColor = '#22325c'
+secondColor = '#C3C300'
 
 style = {
 	
@@ -22,7 +23,15 @@ style = {
 
 	'a img' (
 		'border':'0px none #000'
-	) 
+	)
+
+	'a' (
+		'color':selectedColor,
+	)
+
+	'a:hover' (
+		'color':secondColor,
+	)
 	
 	'#header' (
 		'width':'100%', 
@@ -103,7 +112,7 @@ style = {
 		'color':selectedColor,
 		'background-position':'right'
 	)
-	
+
 	'#menu .navigation li' (
 		'height':'40px',
 		'border':'0px none #000',
@@ -118,7 +127,7 @@ style = {
 		'padding-left':'10px',
 		'padding-right':'10px',
 		'background-color': 'transparent',
-		'color':'#000',
+		'color':'white',
 		'font-size':'1.5em'
 	)
 
@@ -127,17 +136,15 @@ style = {
 	)
 
 	'#menu .navigation li.navigation_active a' ( 
-		'border-left':'1px solid #000',
-		'border-right':'1px solid #000',
 		'color':selectedColor
 	)
 
 	'#menu .navigation li.navigation_active a:hover' ( 
-
+		'color':selectedColor
 	)
 
 	'#menu .navigation li a:hover' (
-		'color':selectedColor
+		'color':secondColor,
 	)
 
 	'#menu .navigation li.navigation_active' (
@@ -164,7 +171,7 @@ style = {
 	'#menu' (
 		'margin-top':'2px',
 		'height':'40px',
-		'background-image':'url(../images/skin/bar_bg.png)'
+		// 'background-image':'url(../images/skin/bar_bg.png)'
 	)
 
 	'#menu_cont' (
@@ -186,7 +193,7 @@ style = {
 
 	'#main' ( 
 		'width':'945px',
-		'padding-top':'60px',
+		'padding-top':'20px',
 		'margin-left':'auto',
 		'margin-right':'auto',
 		'clear':'both',
@@ -197,6 +204,7 @@ style = {
 		'min-height':'20px',
 		'text-align':'center',
 		'width':'100%',
+		'margin-top':'20px'
 	)
 
         '.flash_message ul' (
@@ -211,13 +219,13 @@ style = {
         '#submenu' (
             'width':'200px',
             'float':'left',
-            'margin-top':'50px',
+            'margin-top':'30px',
         )
 
         '#content' (
             'width':'695px',
-            'margin-right':'50px',
-            'float':'left'
+            'margin-right':'20px',
+            'float':'left',
         )
 
 	'h2' (
@@ -225,27 +233,47 @@ style = {
 		'width':'100%',
 		'text-align':'left',
 		'font-size':'1.4em',
-		'color':selectedColor
+		'color':selectedColor,
+		'font': 'bold small-caps 2em Verdana, Arial, Helvetica, sans-serif',
+		'letter-spacing':'-1px',
+		'padding-top':'0',
+		'border-bottom':'2px solid' + selectedColor
+	)
+
+	'h3' (
+		'text-align':'center',
+		'color':secondColor
 	)
 
 	'.boxed_form label' (
-                'min-width':'100px',
-                'margin-right':'10px',
+        'min-width':'100px',
+        'margin-right':'10px',
 		'height':'20px',
 		'line-height':'20px',
 		'float':'left',
-		'background-image':'url(../images/skin/gradient.png)',
-		'background-position': 'bottom right',
-		'background-repeat':'repeat-y'
+		'color' : selectedColor,
+		'text-align' : 'right',
+		'padding-right' : '7px',
+		'width' : '200px',
+		'text-transform' : 'uppercase',
+		'font-family' : 'verdana',
+		'border-right': 'solid 3px #C3C300',
+		'background-color': '#F3F3F3',
+		//'background-image':'url(../images/skin/header_bg.png)',
+		//'background-position': 'bottom right',
+		//'background-repeat':'repeat-y'
 	)
 
 	'.boxed_form input[type=\'text\'], .boxed_form input[type=\'password\'], .boxed_form textarea' (
-		'width':'50%',		
-		'height':'16px',
+		'width':'55%',
+		'height':'17px',
 		'float':'left',
-		'border':'1px solid #808080'
+		'border':'1px solid #CCC'
 	)
 
+	'.boxed_form input:hover' (
+		'border':'2px solid ' + secondColor
+	)
 
         ' .boxed_form select' (
                 'min-height':'20px',
@@ -300,22 +328,32 @@ style = {
 		'text-align':'center'
 	)
 
-        '.field_value' (
+    '.field_value' (
  		'width':'50%',
-		'min-height':'18px',
-                'padding-left':'4px',
+		'height':'18px',
+        'padding-left':'4px',
 		'float':'left',
-		'border':'1px solid #808080'
+		'margin-top':'2px',
+		'border-bottom':'solid 1px ' + secondColor,
         )
 	
 	'#login_form' (
 		'width':'36%',
 		'float':'right',
 	)
+
+	'#login_form label' (
+		'width':'10px',
+		'border':'none',
+	)
 	
 	'#register_form, #profile_form' (
 		'float':'left',
 		'width':'60%',
+	)
+
+	'#register_form label' (
+		'border':'none',
 	)
 
 	'#captcha_form' (
@@ -328,14 +366,12 @@ style = {
                 'width':'700px',
                 'min-height':'400px',
                 'clear':'both',
-                'padding-top':'60px'
         )
 
         '.home_block' (
                 'float':'left',
-                'width':'40%',
-                'padding-left':'5%',
-                'padding-right':'5%'
+                'width':'48%',
+                'padding-right':'2%'
         )
 
 	'.yui-skin-sam' (
@@ -344,8 +380,8 @@ style = {
 	)
 	
 	'.yui-skin-sam .yui-panel' (
-		'margin-top':'-48px',
-		'margin-bottom':'50px'
+		'margin-top':'0px',
+		'margin-bottom':'0px'
 	)
 
         '.yui-skin-sam .yui-cms-accordion .yui-cms-item.selected .bd' (
@@ -378,15 +414,24 @@ style = {
         )
 
         '.yui-navset' (
-                'margin-top':'20px'
+                'margin-top':'20px',
+				'width':'95%',
         )
+
+		'.yui-skin-sam .yui-navset .yui-nav' (
+                'border-bottom':'solid 1px ' + selectedColor,
+        )
+
+		'.yui-skin-sam .yui-navset .yui-nav .selected a,.yui-skin-sam .yui-navset .yui-nav .selected a:hover' (
+				'background':selectedColor
+		)
 
         '.yui-skin-sam .yui-navset .yui-content' (
                 'background':'transparent',
-                'border':'none',
-                'border-left':'1Px solid #000',
+                'border' : 'none',
+				//'border':'solid 1px #CCC',
                 'height':'400px',
-                'padding':'20px'
+                'padding':'10px',
         )
 
         '.yui-dt' (
@@ -395,7 +440,6 @@ style = {
 
 
         '#crud_panel' (
-            'margin-top':'20px',
             'padding':'10px',
             'width': '100%'
         )
