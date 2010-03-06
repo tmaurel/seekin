@@ -5,31 +5,42 @@ import me.hcl.seekin.Formation.*
 import grails.converters.JSON
 
 class StudentController {
-
+	def authenticateService
+	
     def index = { redirect(action: "list", params: params) }
 
     // the delete, save and update actions only accept POST requests
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
     def list = {
-		def millesimes = Millesime.findAllByBeginDateLessThan(new Date())
-		def millesimeCurrent = millesimes.find {
-			it.current == true
-		}
-		def millesimeSelected
+        if(!authenticateService.isLoggedIn()) {
+            redirect(controller: "user", action: "index")
+        }
+		else {
+			if(authenticateService.ifAnyGranted("ROLE_ADMIN")) {
+				def millesimes = Millesime.findAllByBeginDateLessThan(new Date())
+				def millesimeCurrent = millesimes.find {
+					it.current == true
+				}
+				def millesimeSelected
 
-		if(params.idMillesime)
-		{
-			millesimeSelected = Millesime.get(params.idMillesime)
-		}
-		else
-		{
-			millesimeSelected = millesimeCurrent
-		}
+				if(params.idMillesime)
+				{
+					millesimeSelected = Millesime.get(params.idMillesime)
+				}
+				else
+				{
+					millesimeSelected = millesimeCurrent
+				}
 
-		def promotions = Promotion.findAllByMillesime(millesimeSelected)
+				def promotions = Promotion.findAllByMillesime(millesimeSelected)
 
-		render(view: "list", model: [promotions: promotions, millesimes: millesimes])
+				render(view: "list", model: [promotions: promotions, millesimes: millesimes])
+			}
+            else if(authenticateService.ifAnyGranted("ROLE_STUDENT")) {
+				redirect(controller: "user", action: "index")
+            }
+		}
     }
 
     def show = {

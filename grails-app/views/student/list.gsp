@@ -31,13 +31,11 @@
  			/>
 		  </g:form>
 		  
-		  <br />
-		  
 		  <gui:tabView id="myTabView">
 			<g:each var="promotion" in="${promotions}" status="i">
 			<g:set var="idPromotion" value="${promotion?.id}" />
 			<gui:tab id="${promotion.id}" label="${promotion.formation.label}" active="${(i==0)? 1:0}">
-			  <h2>${promotion?.formation?.label} (${promotion?.millesime})</h2>
+			  <h3>${promotion?.formation?.label} (${promotion?.millesime})</h3>
 				<gui:dataTable
 				  id="dt${promotion.id}"
 				  draggableColumns="true"

@@ -6,6 +6,7 @@
 </head>
 
 <body>
+		<h2><g:message code="profile" /></h2>
         <g:form name="registerForm" action="profile" class="boxed_form yui-skin-sam">
 
             <g:if test="${flash.message}">

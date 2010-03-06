@@ -21,8 +21,6 @@
                  
                         <g:set var="emailInternationalized" value="${message(code:'user.email')}" />
                  
-                        <g:set var="showEmailInternationalized" value="${message(code:'user.showEmail')}" />
-
                         <g:set var="roleInternationalized" value="${message(code:'user.role')}" />
 
                         <g:set var="enabledInternationalized" value="${message(code:'user.enabled')}" />
@@ -43,8 +41,6 @@
 
                             [key: 'lastName', sortable: true, resizeable: true, label: lastNameInternationalized],
                      
-                            [key: 'showEmail', sortable: true, resizeable: true, label: showEmailInternationalized],
-
                             [key: 'enabled', sortable: true, resizeable: true, label: enabledInternationalized],
 
                             [key: 'roles', sortable: false, resizeable: true, label: roleInternationalized],
