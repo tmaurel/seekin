@@ -122,11 +122,9 @@ class FormationController {
         list.each {
             ret << [
                id:it.id,
-   label:it.label,
-   description:it.description,
-   file:[name:it.file?.id, link:g.createLink(controller: 'document', action: 'show', id:it.file?.id)],
-
-                urlID: it.id
+               label:it.label,
+               description:it.description,
+               urlID: it.id
             ]
         }
 

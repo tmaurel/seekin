@@ -33,36 +33,7 @@
                           <g:textField name="description" class="field${hasErrors(bean:formationInstance ,field:'description','error')}" value="${fieldValue(bean: formationInstance, field: 'description')}" />
 
                 </p>
-
-                <p>
-
-                          <label for="file"><g:message code="formation.file" default="File" /></label>
-                          <g:select name="file.id" from="${me.hcl.seekin.Ressource.Document.list()}" optionKey="id" value="${formationInstance?.file?.id}" noSelection="['null': '']" />
-
-                </p>
           
-                <p>
-
-                          <label for="students"><g:message code="formation.students" default="Students" /></label>
-                          <g:select name="students"
-from="${me.hcl.seekin.Auth.Role.Student.list()}"
-size="5" multiple="yes" optionKey="id"
-value="${formationInstance?.students}" />
-
-
-                </p>
-          
-                <p>
-
-                          <label for="promotions"><g:message code="formation.promotions" default="Promotions" /></label>
-                          
-<g:link controller="promotion" params="['formation.id': formationInstance?.id]" action="create"><g:message code="promotion.new" default="New Promotion" /></g:link>
-<br /><g:each in="${formationInstance?.promotions}" var="promotionInstance">
-    - <g:link controller="promotion" action="show" id="${promotionInstance.id}">${promotionInstance?.encodeAsHTML()}</g:link><br />
-</g:each>
-
-
-                </p>
           
           <div class="actionpad yui-skin-sam">
             <g:buildEditButtons />

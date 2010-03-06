@@ -8,7 +8,7 @@ style = {
 	)
 	
 	'body' (
-		'background-color':'#fff',
+		'background':'#d7d8dc url(../images/skin/bg.png) repeat-y center',
 		'height':'100%',
                 '-x-system-font':'none',
                 'font-family':'arial,helvetica,clean,sans-serif',
@@ -18,7 +18,8 @@ style = {
                 'font-style':'normal',
                 'font-variant':'normal',
                 'font-weight':'normal',
-                'line-height':'1.231'
+                'line-height':'1.231',
+
 	)
 
 	'a img' (

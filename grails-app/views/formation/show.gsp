@@ -44,14 +44,6 @@
                             </span>
                       </p>
                         
-                       <p>
-                            <label><g:message code="formation.file" default="File" /></label>
-                            <span class="field_value">
-                            
-                            <g:link controller="document" action="show" id="${formationInstance?.file?.id}">${formationInstance?.file?.encodeAsHTML()}</g:link>
-                            
-                            </span>
-                      </p>
                         
                        <p>
                             <label><g:message code="formation.students" default="Students" /></label>

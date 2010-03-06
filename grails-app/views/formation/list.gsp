@@ -24,8 +24,6 @@
                  
                         <g:set var="descriptionInternationalized" value="${message(code:'formation.description')}" />
                  
-                        <g:set var="fileInternationalized" value="${message(code:'formation.file')}" />
-                 
           <gui:dataTable
               id="dt_2"
               draggableColumns="true"
@@ -36,8 +34,6 @@
                             [key: 'label', sortable: true, resizeable: true, label: labelInternationalized],
                      
                             [key: 'description', sortable: true, resizeable: true, label: descriptionInternationalized],
-                     
-                            [key: 'file', sortable: true, resizeable: true, label: fileInternationalized, formatter: 'customLinkFormatter'],
                      
                   [key: 'urlID', sortable: false, resizeable: false, label:'Actions', formatter: 'adminPanelFormatter']
               ]"

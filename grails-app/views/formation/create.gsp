@@ -32,12 +32,6 @@
 
                 </p>
           
-                <p>
-                      <label for="file"><g:message code="formation.file" default="File" />:</label>
-                      <g:select name="file.id" from="${me.hcl.seekin.Ressource.Document.list()}" optionKey="id" value="${formationInstance?.file?.id}" noSelection="['null': '']" />
-
-                </p>
-          
           <div class="actionpad yui-skin-sam">
              <g:buildCreateButtons />
           </div>
