@@ -28,12 +28,12 @@
                 </p>
           
                 <p>
-                          <label for="uri"><g:message code="educationalDoc.file" default="File" />:</label>
+                          <label for="uri"><g:message code="educationalDoc.file" default="File" /></label>
                           <input type="file" name="data" />
                 </p>
           
                 <p>
-                      <label for="formations"><g:message code="formations" default="Formations" />:</label>
+                      <label for="formations"><g:message code="formations" default="Formations" /></label>
                       <g:select name="formations"
                         from="${formations}"
                         size="5" multiple="yes" optionKey="id"

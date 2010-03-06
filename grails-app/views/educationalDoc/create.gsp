@@ -21,18 +21,18 @@
       <g:form class="boxed_form" name="crud_panel" action="save" method="post" enctype="multipart/form-data" >
           
                 <p>
-                      <label for="title"><g:message code="educationalDoc.title" default="Title" />:</label>
+                      <label for="title"><g:message code="educationalDoc.title" default="Title" /></label>
                       <g:textField name="title" class="field${hasErrors(bean:educationalDocInstance ,field:'title','error')}" value="${fieldValue(bean: educationalDocInstance, field: 'title')}" />
 
                 </p>
           
                 <p>
-                      <label for="data"><g:message code="educationalDoc.file" default="File" />:</label>
+                      <label for="data"><g:message code="educationalDoc.file" default="File" /></label>
                       <input type="file" name="data"/>
 
                 </p>
                 <p>
-                      <label for="formations"><g:message code="formations" default="Formations" />:</label>
+                      <label for="formations"><g:message code="formations" default="Formations" /></label>
                       <g:select name="formations"
                         from="${formations}"
                         size="5" multiple="yes" optionKey="id"

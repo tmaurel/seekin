@@ -509,6 +509,8 @@ style = {
 		)
 
                 '.humanMsg' (
-                        'top':'170px'
+                        'top':'auto',
+                        'bottom':'50px',
+                        'background-color':selectedColor
                 )
 }
