@@ -8,11 +8,12 @@
         <gui:resources components="dataTable"/>
         <g:javascript src="datatable.js" />
         <g:YUIButtonRessource />
+        <tm:resources />
     </head>
     <body>
       <h2><g:message code="user.validate" /></h2>
       <g:if test="${flash.message}">
-      <div class="flash_message"><g:message code="${flash.message}" args="${flash.args}" default="${flash.defaultMessage}" /></div>
+      <div class="flash_message"><g:message code="${flash.message}" transparent="true" args="${flash.args}" default="${flash.defaultMessage}" /></div>
       </g:if>
       <g:form class="yui-skin-sam" action="validate">
           <g:buildListButtons />

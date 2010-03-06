@@ -217,7 +217,7 @@ class EducationalDocController {
         }
 
         def data = [
-                totalRecords: EducationalDoc.count(),
+                totalRecords: EducationalDoc.list(formation: params.formation).size(),
                 results: ret
         ]
        

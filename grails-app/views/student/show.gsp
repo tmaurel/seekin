@@ -6,12 +6,13 @@
         <meta name="layout" content="main" />
         <title><g:message code="student.show" /></title>
         <g:YUIButtonRessource />
+        <tm:resources />
     </head>
     <body>
         <h2><g:message code="student.show" /></h2>
         <g:form class="boxed_form" name="crud_panel">
             <g:if test="${flash.message}">
-            <div class="flash_message"><g:message code="${flash.message}" args="${flash.args}" default="${flash.defaultMessage}" /></div>
+            <div class="flash_message"><g:message code="${flash.message}" transparent="true" args="${flash.args}" default="${flash.defaultMessage}" /></div>
             </g:if>
 			<h3>${studentInstance?.user?.firstName?.encodeAsHTML()} ${studentInstance?.user?.lastName?.encodeAsHTML()}</h3>
 			

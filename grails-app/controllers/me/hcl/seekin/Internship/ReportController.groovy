@@ -60,7 +60,7 @@ class ReportController {
             }
 
             reportInstance.title = params.title
-            reportInstance.isPrivate = params.isPrivate
+            reportInstance.isPrivate = (params.isPrivate)?true:false
             reportInstance.fileData = fileService.createFile(request.getFile( 'data' ))
 
             def internship = Internship.get(params.internship)
@@ -121,6 +121,7 @@ class ReportController {
                 }
             }
             reportInstance.properties = params
+            reportInstance.isPrivate = (params.isPrivate)?true:false
             if(request.getFile( 'data' ).getSize() > 0)
             {
                 reportInstance.fileData = fileService.createFile(request.getFile( 'data' ))

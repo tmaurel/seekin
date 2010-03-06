@@ -6,11 +6,12 @@
         <meta name="layout" content="main" />
         <title><g:message code="promotion.edit"/></title>
         <g:YUIButtonRessource />
+        <tm:resources />
     </head>
     <body>
       <h2><g:message code="promotion.edit"/></h2>
       <g:if test="${flash.message}">
-      <div class="flash_message"><g:message code="${flash.message}" args="${flash.args}"/></div>
+      <div class="flash_message"><g:message code="${flash.message}" transparent="true" args="${flash.args}"/></div>
       </g:if>
       <g:hasErrors bean="${promotionInstance}">
       <div class="flash_message"><g:renderErrors bean="${promotionInstance}" as="list" /></div>

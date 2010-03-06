@@ -198,14 +198,6 @@ style = {
 		'margin-right':'auto',
 		'clear':'both',
 	)
-	
-	'.flash_message' (
-		'color':'red',
-		'min-height':'20px',
-		'text-align':'left',
-		'width':'100%',
-		'margin-top':'20px'
-	)
 
         '.flash_message ul' (
                 'list-style-type':'none'
@@ -305,7 +297,6 @@ style = {
 	
 	'.boxed_form p, .boxed_form div' (
 		'clear':'both',
-		'min-height':'20px',
 		'padding':'4px'
 	)
 
@@ -440,7 +431,6 @@ style = {
 
         )
 
-
         '#crud_panel' (
             'padding':'10px',
             'width': '100%'
@@ -521,4 +511,8 @@ style = {
 			'color': 'darkblue',
 			'text-transform': 'uppercase'
 		)
+
+                '.humanMsg' (
+                        'top':'170px'
+                )
 }
