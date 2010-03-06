@@ -19,22 +19,22 @@
       <g:form class="boxed_form yui-skin-sam" method="post" >
 
                 <p>
-                      <label for="fullName"><g:message code="contact.fullName" />:</label>
+                      <label for="fullName"><g:message code="contact.fullName" /></label>
                       <g:textField name="fullName"  class="field${hasErrors(bean:contactInstance ,field:'fullName','error')}" value="${fieldValue(bean: contactInstance, field: 'fullName')}" />
 
                 </p>
                 <p>
-                      <label for="email"><g:message code="user.email" />:</label>
+                      <label for="email"><g:message code="user.email" /></label>
                       <g:textField name="email" class="field${hasErrors(bean:contactInstance ,field:'email','error')}" value="${fieldValue(bean: contactInstance, field: 'email')}" />
 
                 </p>
                 <p>
-                      <label for="subject"><g:message code="contact.subject" />:</label>
+                      <label for="subject"><g:message code="contact.subject" /></label>
                       <g:textField name="subject" value="${params.subject}" class="field${hasErrors(bean:contactInstance ,field:'subject','error')}" value="${fieldValue(bean: contactInstance, field: 'subject')}"/>
 
                 </p>
                 <p>
-                      <label for="body"><g:message code="contact.body" />:</label>
+                      <label for="body"><g:message code="contact.body" /></label>
                       <g:textArea name="body" value="${params.body}" class="field${hasErrors(bean:contactInstance ,field:'body','error')}" value="${fieldValue(bean: contactInstance, field: 'body')}"/>
 
                 </p>
