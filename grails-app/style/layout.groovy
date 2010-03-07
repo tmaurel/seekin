@@ -1,5 +1,6 @@
 selectedColor = '#22325c'
 secondColor = '#C3C300'
+thirdColor = '#121d3a'
 
 style = {
 	
@@ -48,13 +49,17 @@ style = {
 
 	'#header #banner #banner_cont' (
 		'clear':'both',
-		'width':'945px',
-		'height':'91px',
+		'width':'931px',
+		'height':'90px',
 		'padding-top':'20px',
 		'margin-left':'auto',
-		'margin-right':'auto'
+		'margin-right':'auto',
+                'padding-left':'85px',
+                'padding-right':'85px',
+                'background':'url(../images/skin/bg_header.png) repeat-y center'
+
 	)
-	
+
 	'#header #banner #banner_cont h1' (
 		'float':'left',
 		'display': 'block', 
@@ -166,17 +171,21 @@ style = {
 		'margin':'0px',
 		'margin-left':'-1px',
 		'padding':'0px',
-		'width':'786px'
+		'width':'772px'
 	)
 
 	'#menu' (
-		'margin-top':'2px',
 		'height':'40px',
 		// 'background-image':'url(../images/skin/bar_bg.png)'
 	)
 
 	'#menu_cont' (
-		'width':'945px',
+		'width':'958px',
+                'height':'100%',
+                'padding-left':'58px',
+                'padding-right':'85px',
+                'background':'url(../images/skin/bg_header.png) repeat-y center',
+                'padding-top':'2px',
 		'margin-left':'auto',
 		'margin-right':'auto',
 	)
@@ -193,7 +202,7 @@ style = {
         )
 
 	'#main' ( 
-		'width':'945px',
+		'width':'946px',
 		'padding-top':'20px',
 		'margin-left':'auto',
 		'margin-right':'auto',
