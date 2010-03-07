@@ -6,6 +6,7 @@ import me.hcl.seekin.Auth.Role.Staff
 import me.hcl.seekin.Auth.Role.External
 import me.hcl.seekin.Company
 import me.hcl.seekin.Formation.Millesime
+import org.apache.commons.lang.StringUtils
 
 class Internship {
 
@@ -76,7 +77,7 @@ class Internship {
 	}
 
 	String toString() {
-		subject
+		StringUtils.abbreviate(subject,32)
 	}
 
     String getStatus(Staff member) {

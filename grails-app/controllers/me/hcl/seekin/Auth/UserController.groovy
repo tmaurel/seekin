@@ -90,6 +90,10 @@ class UserController {
 				def lastInternshipReports = []
 				def i = 0
 
+				// Get academic tutor for the current student's internship if it exist
+				def currentInternshipAcademicTutor = Internship.getCurrentForStudent(student)?.academicTutor
+
+
 				// Get all the student's internships
 				def studentInternships = Internship.findAllByStudent(student, [sort: "beginAt", order: "desc"])
 
@@ -101,8 +105,6 @@ class UserController {
 					}
 				}
 				
-				i = 0
-
 				// Get the five last reports for the student's promotion
 				Report.findAllByIsPrivate(false,[sort: "id", order: "desc", max: 5]).each {
 					lastInternshipReports << it
@@ -113,6 +115,7 @@ class UserController {
 					model: [
 						lastOffers: lastOffers,
 						totalLastOffers: lastOffers.size(),
+						currentInternshipAcademicTutor: currentInternshipAcademicTutor,
 						studentInternships: studentInternships,
 						lastInternshipReports: lastInternshipReports,
 						totalStudentInternships: studentInternships.size(),
