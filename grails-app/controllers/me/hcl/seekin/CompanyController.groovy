@@ -160,6 +160,7 @@ class CompanyController {
                         .setTooltip("#val# of #total#<br>#percent# of 100%")
 
 
+
         //.addSlice(6.5f, "hello (6.5)")
         def companies = Internship.createCriteria().list() {
             projections {
@@ -175,7 +176,7 @@ class CompanyController {
 
 
 
-        Chart c = new Chart(message(code:'company.internship.repartition')).addElements(p)
+        Chart c = new Chart(message(code:'company.internship.repartition')).addElements(p).setBackgroundColour('#f2f2f2')
         render c;
     }
 
