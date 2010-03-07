@@ -4,6 +4,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="layout" content="main" />
         <title><g:message code="home" /></title>
+        <ofchart:resources/>
     </head>
     <body>
       <h2><g:message code="home" /></h2>
@@ -63,6 +64,12 @@
 				<li><g:message code="report.stats" /> : ${totalInternshipReports}</li>
 				<li><g:message code="link.stats" /> : ${totalLinks}</li>
 			  </ul>
+			</gui:expandablePanel>
+		</div>
+		<%-- STUDENTS COMPANY CHART BLOCK --%>
+		<div class="home_block yui-skin-sam">
+			<gui:expandablePanel title="${message(code:'stats.company')}" expanded="true" bounce="false">
+                          <ofchart:chart name="demo-chart" url="${createLink(controller: 'company', action:'piechart')}" width="325" height="200"/>
 			</gui:expandablePanel>
 		</div>
 		</g:ifAnyGranted>

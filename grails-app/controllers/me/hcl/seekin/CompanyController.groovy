@@ -1,8 +1,13 @@
 package me.hcl.seekin
 
-
-
 import grails.converters.JSON
+import jofc2.model.Chart
+import jofc2.model.axis.YAxis
+import jofc2.model.axis.XAxis
+import jofc2.model.axis.Label
+import jofc2.model.elements.PieChart
+import me.hcl.seekin.Internship.Internship
+
 class CompanyController {
 
     def index = { redirect(action: "list", params: params) }
@@ -144,6 +149,34 @@ class CompanyController {
         ]
         render jsonResult as JSON
 
+    }
+
+    def piechart = {
+        PieChart p = new PieChart()
+                        .setAnimate(true)
+                        .setStartAngle(35)
+                        .setBorder(2)
+                        .setAlpha(0.6f)                        
+                        .setTooltip("#val# of #total#<br>#percent# of 100%")
+
+
+        //.addSlice(6.5f, "hello (6.5)")
+        def companies = Internship.createCriteria().list() {
+            projections {
+                groupProperty('company')
+                count('company', 'count')
+            }
+            maxResults(10)
+            order('count','desc')
+        }.each {
+            p.addSlice(it[1], it[0].name)
+        }
+        
+
+
+
+        Chart c = new Chart(message(code:'company.internship.repartition')).addElements(p)
+        render c;
     }
 
 }
