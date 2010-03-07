@@ -1,5 +1,5 @@
 selectedColor = '#22325c'
-secondColor = '#C3C300'
+secondColor = '#d59032'
 thirdColor = '#121d3a'
 
 style = {
