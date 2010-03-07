@@ -63,8 +63,8 @@ style = {
 	'#header #banner #banner_cont h1' (
 		'float':'left',
 		'display': 'block', 
-		'width':'201px', 
-		'height':'81px', 
+		'width':'220px',
+		'height':'83px',
 		'background':'transparent url(../images/skin/logo.png) no-repeat 0 0',
 		'text-indent':'-9999px'
 	)
