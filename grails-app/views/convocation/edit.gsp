@@ -41,13 +41,6 @@
 
                 </p>
           
-                <p>
-
-                          <label for="internship"><g:message code="convocation.internship" default="Internship" /></label>
-                          <g:select name="internship.id" from="${me.hcl.seekin.Internship.Internship.list()}" optionKey="id" value="${convocationInstance?.internship?.id}"  />
-
-                </p>
-          
           <div class="actionpad yui-skin-sam">
             <g:buildEditButtons />
           </div>

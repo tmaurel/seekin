@@ -6,10 +6,17 @@ import org.codehaus.groovy.grails.commons.ApplicationHolder
 import org.springframework.context.i18n.LocaleContextHolder as LCH
 import java.text.DateFormat;
 import java.text.SimpleDateFormat
+import me.hcl.seekin.Formation.*
+import org.hibernate.LockMode
+import me.hcl.seekin.Auth.Role.FormationManager
 
 class ConvocationController {
 
     def pdfService
+
+    def authenticateService
+
+    def sessionFactory
 
     def index = { redirect(action: "list", params: params) }
 
@@ -32,27 +39,108 @@ class ConvocationController {
 			millesimeSelected = millesimeCurrent
 		}
 
-		def promotions = Promotion.findAllByMillesime(millesimeSelected)
+
+                def userInstance = authenticateService.userDomain()
+                sessionFactory.currentSession.refresh(userInstance, LockMode.NONE)
+                def promotions
+
+                if(authenticateService.ifAnyGranted("ROLE_ADMIN")) {
+                    promotions = Promotion.findAllByMillesime(millesimeSelected)
+                }
+                else if(authenticateService.ifAnyGranted("ROLE_FORMATIONMANAGER")) {
+                    def manager = FormationManager.findByUser(userInstance)
+                    promotions = Promotion.findAllByMillesimeAndFormation(millesimeSelected, manager?.formation)
+                }
 
 		render(view: "list", model: [promotions: promotions, millesimes: millesimes])
     }
 
     def create = {
         def convocationInstance = new Convocation()
-        convocationInstance.properties = params
-        return [convocationInstance: convocationInstance]
+        def internships = []
+        def userInstance = authenticateService.userDomain()
+        sessionFactory.currentSession.refresh(userInstance, LockMode.NONE)
+
+        if(authenticateService.ifAnyGranted("ROLE_ADMIN")) {
+            internships = Internship.findAllByConvocationAndMillesime(null, Millesime.getCurrent()).collect {
+                def name = it?.student?.user?.firstName + " " + it?.student?.user?.lastName
+                [
+                    id: it.id,
+                    value: name + " : " + it.subject
+                ]
+            }
+        }
+        else if(authenticateService.ifAnyGranted("ROLE_FORMATIONMANAGER")) {
+
+            def manager = FormationManager.findByUser(userInstance)
+            def students = Promotion.getCurrentForFormation(manager?.formation).students
+            students.each {
+                def internship = Internship.getCurrentForStudent(it)
+                if(internship && internship?.convocation == null)
+                {
+                    def name = it?.user?.firstName + " " + it?.user?.lastName
+                    internships << [
+                        id: internship.id,
+                        value: name + " : " + internship.subject
+                    ]
+                }
+            }
+            
+        }
+
+        if(internships.size() > 0)
+        {
+            convocationInstance.properties = params
+            return [convocationInstance: convocationInstance, internships: internships]
+        }
+        else
+        {
+            flash.message = "convocation.no.internship.found"
+            redirect(action: "list")
+        }
     }
 
     def save = {
         def convocationInstance = new Convocation(params)
+        def internships = []
+        def userInstance = authenticateService.userDomain()
+        sessionFactory.currentSession.refresh(userInstance, LockMode.NONE)
+
+        if(authenticateService.ifAnyGranted("ROLE_ADMIN")) {
+            internships = Internship.findAllByConvocationAndMillesime(null, Millesime.getCurrent()).collect {
+                def name = it?.student?.user?.firstName + " " + it?.student?.user?.lastName
+                [
+                    id: it.id,
+                    value: name + " : " + it.subject
+                ]
+            }
+        }
+        else if(authenticateService.ifAnyGranted("ROLE_FORMATIONMANAGER")) {
+
+            def manager = FormationManager.findByUser(userInstance)
+            def students = Promotion.getCurrentForFormation(manager?.formation).students
+            students.each {
+                def internship = Internship.getCurrentForStudent(it)
+                if(internship && internship?.convocation == null)
+                {
+                    def name = it?.user?.firstName + " " + it?.user?.lastName
+                    internships << [
+                        id: internship.id,
+                        value: name + " : " + internship.subject
+                    ]
+                }
+            }
+
+        }
         if (!convocationInstance.hasErrors() && convocationInstance.save()) {
+            Internship.get(params.internship.id)?.convocation = convocationInstance
             flash.message = "convocation.created"
             flash.args = [convocationInstance.id]
             flash.defaultMessage = "Convocation ${convocationInstance.id} created"
             redirect(action: "show", id: convocationInstance.id)
         }
         else {
-            render(view: "create", model: [convocationInstance: convocationInstance])
+            render(view: "create", model: [convocationInstance: convocationInstance, internships: internships])
         }
     }
 
@@ -71,6 +159,7 @@ class ConvocationController {
 
     def edit = {
         def convocationInstance = Convocation.get(params.id)
+
         if (!convocationInstance) {
             flash.message = "convocation.not.found"
             flash.args = [params.id]
@@ -117,6 +206,7 @@ class ConvocationController {
         def convocationInstance = Convocation.get(params.id)
         if (convocationInstance) {
             try {
+                convocationInstance.internship.convocation = null
                 convocationInstance.delete()
                 flash.message = "convocation.deleted"
                 flash.args = [params.id]
@@ -238,8 +328,8 @@ class ConvocationController {
 
     def dataTableDataAsJSON = {
         def promotion = Promotion.get(params.promotion)
-        def internships = []
 
+        def internships = []
         promotion?.students?.internships.each {
                 if(!it.isEmpty()) {
                         it.each {
@@ -249,27 +339,40 @@ class ConvocationController {
                 }
         }
 
-        def convocations = internships?.convocation
+        def list = []
+        internships.each {
+            if(it.convocation)
+                list << it.convocation.id
+        }
 
-        def list = Convocation.list(params)
+        def convocations = []
+        if(list.size() > 0) {
+            convocations = Convocation.createCriteria().list(params) {
+                'in'('id', list)
+            }
+        }
+
 		
         def ret = []
         response.setHeader("Cache-Control", "no-store")
 
         convocations.each {
-            ret << [
-				id:it.id,
-				date:it.date?.formatDate(),
-				building:it.building,
-				room:it.room,
-				internship: it.internship?.toString(),
-				pdf:[name:"<img src=\"../images/icons/pdf.png\" />", link:g.createLink(controller: 'convocation', action: 'export', id:it.id)],
-				urlID: it.id
-            ]
+            if(it)
+            {
+                ret << [
+                    id:it.id,
+                    date:it.date?.formatDate(),
+                    building:it.building,
+                    room:it.room,
+                    internship: it.internship?.toString(),
+                    pdf:[name:"<img src=\"../images/icons/pdf.png\" />", link:g.createLink(controller: 'convocation', action: 'export', id:it.id)],
+                    urlID: it.id
+                ]
+            }
         }
 
         def data = [
-                totalRecords: Convocation.count(),
+                totalRecords: list.size(),
                 results: ret
         ]
        

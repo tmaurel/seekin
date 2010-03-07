@@ -40,7 +40,7 @@
           
                 <p>
                       <label for="internship"><g:message code="convocation.internship" default="Internship" />:</label>
-                      <g:select name="internship.id" from="${me.hcl.seekin.Internship.Internship.list()}" optionKey="id" value="${convocationInstance?.internship?.id}"  />
+                      <g:select name="internship.id" from="${internships}" optionKey="id" optionValue="value" value="${convocationInstance?.internship?.id}"  />
 
                 </p>
           

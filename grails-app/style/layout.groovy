@@ -380,8 +380,15 @@ style = {
 	
 	'.yui-skin-sam .yui-panel' (
 		'margin-top':'0px',
-		'margin-bottom':'0px'
+		'margin-bottom':'0px',
+                'border':'1px solid ' + selectedColor
 	)
+
+//        '.yui-skin-sam .yui-panel .hd, .yui-skin-sam .yui-panel .bd, .yui-skin-sam .yui-panel .ft' (
+//                'border-color': selectedColor,
+//                'border-width': '0px 1px',
+//                'background-color':'#fff'
+//        )
 
         '.yui-skin-sam .yui-cms-accordion .yui-cms-item.selected .bd' (
                 'overflow':'visible'
