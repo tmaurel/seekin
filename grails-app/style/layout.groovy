@@ -437,6 +437,10 @@ style = {
 
         )
 
+		'.yui-skin-sam .yui-dt-liner' (
+			'white-space':'normal',
+		)
+
         '#crud_panel' (
             'padding':'10px',
             'width': '100%'

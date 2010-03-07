@@ -12,21 +12,6 @@
       <div id="home_panel">
 		<%-- STUDENTS HOME VIEW --%>
 		<g:ifAnyGranted role="ROLE_STUDENT">
-		<%-- STUDENTS LAST OFFERS BLOCK --%>
-		<div class="home_block yui-skin-sam">
-			<gui:expandablePanel title="${message(code:'offers.lasts')}" expanded="true" bounce="false">
-			  <g:if test="${totalLastOffers > 0}">
-			  <ul>
-				<g:each var="offer" in="${lastOffers}">
-				  <li><g:link controller="offer" action="show" id="${offer?.id}">${offer}</g:link></li>
-				</g:each>
-			  </ul>
-			  </g:if>
-			  <g:else>
-				<span><g:message code="offers.no" /></span>
-			  </g:else>
-			</gui:expandablePanel>
-		</div>
 		<%-- STUDENTS MY INTERNSHIPS BLOCK --%>
 		<div class="home_block yui-skin-sam">
 			<gui:expandablePanel title="${message(code:'internships.my')}" expanded="true" bounce="false">
@@ -39,6 +24,32 @@
 			  </g:if>
 			  <g:else>
 				<span><g:message code="internships.no" /></span>
+			  </g:else>
+			</gui:expandablePanel>
+		</div>
+		<g:if test="${currentInternshipAcademicTutor}">
+		<%-- STUDENTS MY TUTOR BLOCK --%>
+		<div class="home_block yui-skin-sam">
+			<gui:expandablePanel title="${message(code:'internships.myAcademicTutor')}" expanded="true" bounce="false">
+			  <p>${currentInternshipAcademicTutor?.user?.firstName?.encodeAsHTML()} ${currentInternshipAcademicTutor?.user?.lastName?.encodeAsHTML()}</p>
+			  <p>${currentInternshipAcademicTutor?.user?.address?.encodeAsHTML()}</p>
+			  <p>${currentInternshipAcademicTutor?.user?.phone}</p>
+			  <p>${currentInternshipAcademicTutor?.user?.email}</p>
+			</gui:expandablePanel>
+		</div>
+		</g:if>
+		<%-- STUDENTS LAST OFFERS BLOCK --%>
+		<div class="home_block yui-skin-sam">
+			<gui:expandablePanel title="${message(code:'offers.lasts')}" expanded="true" bounce="false">
+			  <g:if test="${totalLastOffers > 0}">
+			  <ul>
+				<g:each var="offer" in="${lastOffers}">
+				  <li><g:link controller="offer" action="show" id="${offer?.id}">${offer}</g:link></li>
+				</g:each>
+			  </ul>
+			  </g:if>
+			  <g:else>
+				<span><g:message code="offers.no" /></span>
 			  </g:else>
 			</gui:expandablePanel>
 		</div>
