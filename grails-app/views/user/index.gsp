@@ -146,6 +146,12 @@
 			  </g:else>
 			</gui:expandablePanel>
 		</div>
+                <%-- FORMATION MANAGER COMPANY CHART BLOCK --%>
+		<div class="home_block yui-skin-sam">
+			<gui:expandablePanel title="${message(code:'stats.company')}" expanded="true" bounce="false">
+                          <ofchart:chart name="demo-chart" url="${createLink(controller: 'company', action:'piechart')}" width="325" height="200"/>
+			</gui:expandablePanel>
+		</div>
 		</g:ifAnyGranted>
 		<%-- STAFF HOME VIEW --%>
 		<g:ifAnyGranted role="ROLE_STAFF">

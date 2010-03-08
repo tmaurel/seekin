@@ -12,6 +12,10 @@
 
         <h2><g:message code="internship.show" /></h2>
         <g:form class="boxed_form" name="crud_panel">
+            <g:if test ="${internshipInstance?.reason}">
+              <div class="flash_message"> ${fieldValue(bean: internshipInstance, field: "reason")}</div>
+            </g:if>
+
             <g:if test="${flash.message}">
             <div class="flash_message"><g:message code="${flash.message}" transparent="true" args="${flash.args}" default="${flash.defaultMessage}" /></div>
             </g:if>
@@ -58,15 +62,6 @@
                             <span class="field_value">
 
                             ${fieldValue(bean: internshipInstance, field: "length")}
-
-                            </span>
-                      </p>
-
-                       <p>
-                            <label><g:message code="internship.reason" default="Reason" /></label>
-                            <span class="field_value">
-
-                            ${fieldValue(bean: internshipInstance, field: "reason")}
 
                             </span>
                       </p>
@@ -124,7 +119,7 @@
                             
                             </span>
                       </p>
-                        
+                      <g:if test ="${internshipInstance?.convocation}">
                        <p>
                             <label><g:message code="internship.convocation" default="Convocation" /></label>
                             <span class="field_value">
@@ -133,7 +128,7 @@
                             
                             </span>
                       </p>
-                        
+                      </g:if>
                       
                       <div class="actionpad yui-skin-sam">
                         <g:ifAnyGranted role="ROLE_ADMIN,ROLE_FORMATIONMANAGER,ROLE_STUDENT">

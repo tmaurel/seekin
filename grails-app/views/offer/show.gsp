@@ -12,6 +12,9 @@
 
         <h2><g:message code="offer.show" /></h2>
         <g:form class="boxed_form" name="crud_panel">
+            <g:if test ="${offerInstance?.reason}">
+              <div class="flash_message"> ${fieldValue(bean: offerInstance, field: "reason")}</div>
+            </g:if>
             <g:if test="${flash.message}">
             <div class="flash_message"><g:message code="${flash.message}" transparent="true" args="${flash.args}" default="${flash.defaultMessage}" /></div>
             </g:if>
@@ -61,17 +64,8 @@
                             
                             </span>
                       </p>
-                        
-                       <p>
-                            <label><g:message code="offer.reason" default="Reason" /></label>
-                            <span class="field_value">
-                            
-                            ${fieldValue(bean: offerInstance, field: "reason")}
-                            
-                            </span>
-                      </p>
-                        
-                       <p>
+
+                      <p>
                             <label><g:message code="offer.file" default="File" /></label>
                             <span class="field_value">
                             

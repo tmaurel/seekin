@@ -35,7 +35,7 @@
 			<g:set var="idStatus" value="${status}" />
 			<gui:tab id="${idStatus}" label="${message(code:idStatus)}" active="${(i==0)? 1:0}">
 			  <h3><g:message code="${idStatus}" /></h3>
-                <g:ifAnyGranted role="ROLE_ADMIN,ROLE_MANAGERFORMATION">
+                <g:ifAnyGranted role="ROLE_ADMIN,ROLE_FORMATIONMANAGER">
                   <g:if test="${idStatus=='offer.waitForValidation'}">
                     <g:form action="list">
                       <gui:dataTable
@@ -98,7 +98,7 @@
                   />
                   </g:else>
                 </g:ifAnyGranted>
-                <g:ifNotGranted role="ROLE_ADMIN,ROLE_MANAGERFORMATION">
+                <g:ifNotGranted role="ROLE_ADMIN,ROLE_FORMATIONMANAGER">
                   <gui:dataTable
                       id="dt${i}"
                       draggableColumns="true"

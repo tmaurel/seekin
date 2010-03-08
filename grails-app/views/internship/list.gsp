@@ -17,44 +17,48 @@
       </g:if>
       <div class="yui-skin-sam" id="crud_panel">
 
-        <g:ifAnyGranted role="ROLE_STUDENT,ROLE_MANAGERFORMATION,ROLE_ADMIN">
+        <g:ifAnyGranted role="ROLE_STUDENT,ROLE_FORMATIONMANAGER,ROLE_ADMIN">
           <g:buildListButtons />
         </g:ifAnyGranted>
           
-                        <g:set var="idInternationalized" value="${message(code:'internship.id')}" />
-                 
-                        <g:set var="subjectInternationalized" value="${message(code:'internship.subject')}" />
-                 
-                        <g:set var="beginAtInternationalized" value="${message(code:'internship.beginAt')}" />
-                 
-                        <g:set var="isApprovalInternationalized" value="${message(code:'internship.isApproval')}" />
-                 
-                        <g:set var="reportInternationalized" value="${message(code:'internship.report')}" />
-                 
-                        <g:set var="studentInternationalized" value="${message(code:'internship.student')}" />
+          <g:set var="idInternationalized" value="${message(code:'internship.id')}" />
+          <g:set var="subjectInternationalized" value="${message(code:'internship.subject')}" />
+          <g:set var="beginAtInternationalized" value="${message(code:'internship.beginAt')}" />
+          <g:set var="isApprovalInternationalized" value="${message(code:'internship.isApproval')}" />
+          <g:set var="reportInternationalized" value="${message(code:'internship.report')}" />
+          <g:set var="studentInternationalized" value="${message(code:'internship.student')}" />
+          <g:set var="millesimeInternationalized" value="${message(code:'millesime')}" />
 
-
+          <g:ifAnyGranted role="ROLE_FORMATIONMANAGER,ROLE_ADMIN,ROLE_STAFF">
+          <br/><br/>
+          <g:form name="millesime_form" action="list">
+            <g:select name="idMillesime"
+                              from="${millesimes}"
+                              optionKey="id"
+                              onChange="millesime_form.submit()"
+                              noSelection="['null': millesimeInternationalized]"
+            />
+          </g:form>
+          </g:ifAnyGranted>
+           <g:set var="idMillesime" value="${params.idMillesime}"/>
            <gui:tabView id="myTabView">
 			<g:each var="status" in="${status}" status="i">
 			<g:set var="idStatus" value="${status}" />
 			<gui:tab id="${idStatus}" label="${message(code:idStatus)}" active="${(i==0)? 1:0}">
 			  <h3><g:message code="${idStatus}" /></h3>
-                <g:ifAnyGranted role="ROLE_ADMIN,ROLE_MANAGERFORMATION">
+                <g:ifAnyGranted role="ROLE_ADMIN,ROLE_FORMATIONMANAGER">
                   <g:if test="${idStatus=='internship.waitForValidation'}">
                     <g:form action="list">
                        <gui:dataTable
                             id="dt_${i}"
                             draggableColumns="true"
                             columnDefs="[
-
-                                          [key: 'id', sortable: true, resizeable: true, label: idInternationalized],
-
                                           [key: 'subject', sortable: true, resizeable: true, label: subjectInternationalized],
 
                                           [key: 'beginAt', sortable: true, resizeable: true, label: beginAtInternationalized],
 
                                           [key: 'isApproval', sortable: true, resizeable: true, label: isApprovalInternationalized],
-
+                                          
                                           [key: 'report', sortable: true, resizeable: true, label: reportInternationalized, formatter: 'customLinkFormatter'],
 
                                           [key: 'student', sortable: true, resizeable: true, label: studentInternationalized, formatter: 'customLinkFormatter'],
@@ -69,8 +73,10 @@
                             ]"
                             rowExpansion="false"
                             rowsPerPage="10"
-                            params="[status: idStatus]"
+                            params="[status: idStatus, idMillesime:idMillesime]"
+                            sortedBy="beginAt"
                         />
+                       <br />
                       <g:YUISubmitbutton action="list" value="validate" />
                     </g:form>
                   </g:if>
@@ -79,9 +85,6 @@
                             id="dt_${i}"
                             draggableColumns="true"
                             columnDefs="[
-
-                                          [key: 'id', sortable: true, resizeable: true, label: idInternationalized],
-
                                           [key: 'subject', sortable: true, resizeable: true, label: subjectInternationalized],
 
                                           [key: 'beginAt', sortable: true, resizeable: true, label: beginAtInternationalized],
@@ -102,18 +105,16 @@
                             ]"
                             rowExpansion="false"
                             rowsPerPage="10"
-                            params="[status: idStatus]"
+                            params="[status: idStatus, idMillesime:idMillesime]"
+                            sortedBy="beginAt"
                         />
                   </g:else>
               </g:ifAnyGranted>
-              <g:ifNotGranted role="ROLE_ADMIN,ROLE_MANAGERFORMATION">
+              <g:ifNotGranted role="ROLE_ADMIN,ROLE_FORMATIONMANAGER">
                        <gui:dataTable
                             id="dt_${i}"
                             draggableColumns="true"
                             columnDefs="[
-
-                                          [key: 'id', sortable: true, resizeable: true, label: idInternationalized],
-
                                           [key: 'subject', sortable: true, resizeable: true, label: subjectInternationalized],
 
                                           [key: 'beginAt', sortable: true, resizeable: true, label: beginAtInternationalized],
@@ -134,7 +135,8 @@
                             ]"
                             rowExpansion="false"
                             rowsPerPage="10"
-                            params="[status: idStatus]"
+                            params="[status: idStatus, idMillesime:idMillesime]"
+                            sortedBy="beginAt"
                         />
               </g:ifNotGranted>
         </gui:tab>

@@ -10,6 +10,8 @@ import me.hcl.seekin.Internship.Offer
  */
 class Company {
 
+        static belongsTo = Internship
+
 	/** Make Companies searchable */
 	static searchable = {
 		spellCheck "include"

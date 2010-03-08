@@ -167,14 +167,12 @@ class CompanyController {
                 groupProperty('company')
                 count('company', 'count')
             }
+            eq('isApproval', true)
             maxResults(10)
             order('count','desc')
         }.each {
             p.addSlice(it[1], it[0].name)
         }
-        
-
-
 
         Chart c = new Chart(message(code:'company.internship.repartition')).addElements(p).setBackgroundColour('#f2f2f2')
         render c;

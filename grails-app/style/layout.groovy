@@ -206,6 +206,10 @@ style = {
 		'clear':'both',
 	)
 
+        '.flash_message' (
+                'color':'red'
+        )
+
         '.flash_message ul' (
                 'list-style-type':'none'
         )

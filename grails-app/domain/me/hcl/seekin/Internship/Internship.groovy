@@ -10,45 +10,45 @@ import org.apache.commons.lang.StringUtils
 
 class Internship {
 
-	static searchable = {
-		student(component:true)
-		company(component:true)
-	}
+    static searchable = {
+            student(component:true)
+            company(component:true)
+    }
 
     static transients = ['status']
 
-	/** Subject of the Internship */
-	String subject
+    /** Subject of the Internship */
+    String subject
 
     /** Description of the Internship */
-	String description
-	
-	/** Beginning of the Internship */
-	Date beginAt
-	
-	/** Indicate if the Internship is approved by Staff member */
-	Boolean isApproval
+    String description
+
+    /** Beginning of the Internship */
+    Date beginAt
+
+    /** Indicate if the Internship is approved by Staff member */
+    Boolean isApproval
 
     /** Indicates if the internship is from an offer which was posted on seekin */
     Boolean fromOffer
 
-        /** Student who is concerned by the internship */
-	Student student
+    /** Student who is concerned by the internship */
+    Student student
 
     /** Tutor who is member of the university */
-	Staff academicTutor
+    Staff academicTutor
 
-    /** Tutor who is member of the company which posts the internship */  
-	External companyTutor
+    /** Tutor who is member of the company which posts the internship */
+    External companyTutor
 
-	/** Company where the student will do this internship */
-	Company company
+    /** Company where the student will do this internship */
+    Company company
 
-	/** Report of the Internship */
-	Report report
+    /** Report of the Internship */
+    Report report
 
     /** Convocation for the oral test of the internship */
-	Convocation convocation
+    Convocation convocation
 
     /** Length of the internship */
     Integer length
@@ -59,26 +59,26 @@ class Internship {
     /** Reason of the deny */
     String reason
 	
-	/** Constraints used to check if an instance is correct */
-	static constraints = {
-		subject(blank: false)
-		beginAt(nullable: false)
-		isApproval()
-		fromOffer(nullable: true)
-		report(nullable: true)
-		student(nullable: false)
-		academicTutor(nullable: true)
-		companyTutor(nullable: true)
-		convocation(nullable: true)
+    /** Constraints used to check if an instance is correct */
+    static constraints = {
+        subject(blank: false)
+        beginAt(nullable: false)
+        isApproval()
+        fromOffer(nullable: true)
+        report(nullable: true)
+        student(nullable: false)
+        academicTutor(nullable: true)
+        companyTutor(nullable: true)
+        convocation(nullable: true)
         length(nullable: false)
         millesime(nullable: false)
         reason(nullable:true)
         description(nullable:true)
-	}
+    }
 
-	String toString() {
-		StringUtils.abbreviate(subject,32)
-	}
+    String toString() {
+            StringUtils.abbreviate(subject,32)
+    }
 
     String getStatus(Staff member) {
         isApproval==false?(reason==null?'internship.waitForValidation':'internship.unvalidated'):(member==academicTutor?'internship.mine':'internship.validated')
@@ -91,4 +91,5 @@ class Internship {
                 it.millesime.current == true
             }
     }
+
 }
