@@ -9,11 +9,13 @@ import me.hcl.seekin.Formation.Promotion
 import org.codehaus.groovy.grails.plugins.springsecurity.Secured
 import me.hcl.seekin.Formation.Millesime
 import me.hcl.seekin.Auth.Role.Student
+import me.hcl.seekin.Ressource.Document
 
 class OfferController {
 
     def authenticateService
     def sessionFactory
+    def fileService
 
     def index = { redirect(action: "list", params: params) }
 
@@ -103,8 +105,43 @@ class OfferController {
 
         /* Offer creation need a company so we verify if the company type by the user exists and create and save it if not */
         def company
-        if(params.companyName == null || params.companyName == "") {
-            flash.message = "company.null"
+        if(params.companyName != null && params.companyName != "")
+        {
+            if(Company.countByName(params.companyName) == 0) {
+              company = new Company()
+              company.name = params.companyName
+            }
+            else {
+              company = Company.findByName(params.companyName)
+            }
+            offerInstance.company = company
+        }
+
+        /* We get the user logged in in userInstance to identifiate the author */
+        def userInstance = authenticateService.userDomain()
+        sessionFactory.currentSession.refresh(userInstance, LockMode.NONE)
+        offerInstance.company = company
+        offerInstance.validated = false
+        offerInstance.assignated = false
+        offerInstance.author = userInstance
+
+        if (!offerInstance.hasErrors() && offerInstance.save()) {
+
+            if(request.getFile( 'data' ).getSize() > 0)
+            {
+                def document = new Document()
+                document.title = params.subject
+                document.fileData = fileService.createFile(request.getFile( 'data' ))
+                offerInstance.file = document
+                document.save(flush: true)
+            }
+
+            flash.message = "offer.created"
+            flash.args = [offerInstance.id]
+            flash.defaultMessage = "Offer ${offerInstance.id} created"
+            redirect(action: "show", id: offerInstance.id)
+        }
+        else {
             render(
                     view: "create",
                     model: [
@@ -114,42 +151,7 @@ class OfferController {
                     ]
             )
         }
-        else {
-            if(Company.countByName(params.companyName) == 0) {
-              company = new Company()
-              company.name = params.companyName
-              company.save()
-            }
-            /* If the company already exists we get it on company variable */
-            else {
-              company = Company.findByName(params.companyName)
-            }
-
-            /* We get the user logged in in userInstance to identifiate the author */
-            def userInstance = authenticateService.userDomain()
-            sessionFactory.currentSession.refresh(userInstance, LockMode.NONE)
-            offerInstance.company = company
-            offerInstance.validated = false
-            offerInstance.assignated = false
-            offerInstance.author = userInstance
-
-            if (!offerInstance.hasErrors() && offerInstance.save()) {
-                flash.message = "offer.created"
-                flash.args = [offerInstance.id]
-                flash.defaultMessage = "Offer ${offerInstance.id} created"
-                redirect(action: "show", id: offerInstance.id)
-            }
-            else {
-                render(
-                        view: "create",
-                        model: [
-                                offerInstance: offerInstance,
-                                promotionInstance: promotionInstance,
-                                company: params.companyName
-                        ]
-                )
-            }
-        }
+        
     }
 
     def show = {
@@ -210,6 +212,7 @@ class OfferController {
         /* Get the offer with id parameter */
         def offerInstance = Offer.get(params.id)
         def promotionInstance
+        def selectedPromotions = offerInstance.promotions.collect { it.id }
         /* If the user is the author of the offer or the administrator */
         if(offerInstance?.author == userInstance || authenticateService.ifAnyGranted("ROLE_ADMIN,ROLE_FORMATIONMANAGER")) {
             /* Build a list of the current promotion */
@@ -231,7 +234,7 @@ class OfferController {
         }
         /* If the offer is editable, we return our needed instances */
         if(editable) {
-                return [offerInstance: offerInstance, promotionInstance: promotionInstance]
+                return [offerInstance: offerInstance, promotionInstance: promotionInstance, selectedPromotions:selectedPromotions]
         }
         /* Else we return a flash message */
         else {
@@ -244,6 +247,16 @@ class OfferController {
     }
 
     def update = {
+
+        /* Build the list with all current promotions for the select markup */
+        def promotionInstance = Promotion.getCurrents().collect {
+            [
+                    id: it.id,
+                    value: it.toString()
+            ]
+        }
+
+
         def offerInstance = Offer.get(params.id)
         if (offerInstance) {
             if (params.version) {
@@ -255,16 +268,42 @@ class OfferController {
                     return
                 }
             }
-            offerInstance.properties = params
+
+            offerInstance.subject = params.subject
+            offerInstance.description = params.description
+            offerInstance.beginAt = params.beginAt
+            offerInstance.length = params.length.toInteger()
+            offerInstance.validated = (params.validated)?true:false
             offerInstance.reason = null
+
             if (!offerInstance.hasErrors() && offerInstance.save()) {
+
+                def promos = offerInstance.promotions.collect {
+                    it.id
+                }
+                promos.each { Promotion.get(it)?.removeFromOffers(offerInstance) }
+                params.promotions.each { Promotion.get(it)?.addToOffers(offerInstance) }
+
+                if(request.getFile( 'data' ).getSize() > 0)
+                {
+                    if(offerInstance.file)
+                        offerInstance.file.delete()
+
+                    def document = new Document()
+                    document.title = params.subject
+                    document.fileData = fileService.createFile(request.getFile( 'data' ))
+                    document.save(flush: true)
+                    offerInstance.file = document
+                }
+
+
                 flash.message = "offer.updated"
                 flash.args = [params.id]
                 flash.defaultMessage = "Offer ${params.id} updated"
                 redirect(action: "show", id: offerInstance.id)
             }
             else {
-                render(view: "edit", model: [offerInstance: offerInstance])
+                render(view: "edit", model: [offerInstance: offerInstance, promotionInstance: promotionInstance])
             }
         }
         else {

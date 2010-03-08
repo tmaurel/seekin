@@ -21,7 +21,7 @@
       </g:hasErrors>
 
       <div class = "yui-skin-sam">
-        <g:form class="boxed_form" name="crud_panel" action="save" method="post" >
+        <g:form class="boxed_form" name="crud_panel" action="save" method="post" enctype="multipart/form-data" >
 
                   <p>
                         <label for="subject"><g:message code="offer.subject" default="Subject" /></label>
@@ -48,9 +48,8 @@
                   </p>
 
                   <p>
-                        <label for="file"><g:message code="offer.file" default="File" /></label>
-                        <g:select name="file.id" from="${me.hcl.seekin.Ressource.Document.list()}" optionKey="id" value="${offerInstance?.file?.id}" noSelection="['null': '']" />
-
+                        <label for="data"><g:message code="offer.file" default="File" />:</label>
+                        <input type="file" name="data"/>
                   </p>
 
                   <div>

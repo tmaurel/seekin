@@ -16,7 +16,7 @@
       <g:hasErrors bean="${offerInstance}">
       <div class="flash_message"><g:renderErrors bean="${offerInstance}" as="list" /></div>
       </g:hasErrors>
-      <g:form class="boxed_form" name="crud_panel" method="post" >
+      <g:form class="boxed_form" name="crud_panel" method="post" enctype="multipart/form-data" >
           <g:hiddenField name="id" value="${offerInstance?.id}" />
           <g:hiddenField name="version" value="${offerInstance?.version}" />
           <g:hiddenField name="reason" value="${offerInstance?.reason}" />
@@ -50,10 +50,8 @@
                 </p>
           
                 <p>
-
-                          <label for="file"><g:message code="offer.file" default="File" /></label>
-                          <g:select name="file.id" from="${me.hcl.seekin.Ressource.Document.list()}" optionKey="id" value="${offerInstance?.file?.id}" noSelection="['null': '']" />
-
+                      <label for="data"><g:message code="offer.file" default="File" />:</label>
+                      <input type="file" name="data"/>
                 </p>
 
                 <p>
@@ -62,9 +60,9 @@
                         from="${promotionInstance}"
                         size="5" multiple="yes" optionKey="id"
                         optionValue="value"
-                        value="${promotionInstance}" />
+                        value="${selectedPromotions?:params.promotions}" />
                 </p>
-
+                
                 <g:ifAnyGranted role="ROLE_ADMIN">
 
                     <p>

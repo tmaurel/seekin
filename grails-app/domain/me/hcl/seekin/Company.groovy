@@ -10,7 +10,7 @@ import me.hcl.seekin.Internship.Offer
  */
 class Company {
 
-        static belongsTo = Internship
+        static belongsTo = [Internship, Offer]
 
 	/** Make Companies searchable */
 	static searchable = {
