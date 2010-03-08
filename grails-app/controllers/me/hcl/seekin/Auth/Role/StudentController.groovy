@@ -37,9 +37,9 @@ class StudentController {
 
 				render(view: "list", model: [promotions: promotions, millesimes: millesimes])
 			}
-            else if(authenticateService.ifAnyGranted("ROLE_STUDENT")) {
-				redirect(controller: "user", action: "index")
-            }
+                        else if(authenticateService.ifAnyGranted("ROLE_STUDENT")) {
+                                            redirect(controller: "user", action: "index")
+                        }
 		}
     }
 
@@ -58,21 +58,22 @@ class StudentController {
 
     def dataTableDataAsJSON = {
 
-		def promotion = Promotion.get(params.promotion)
-		def list = promotion.students.user
+        def promotion = Promotion.get(params.promotion)
+        def list = promotion.students.user.collect {
+            it.id
+        }
 
-		list.sort {
-			p1, p2 ->
-				if(params.order == "desc")
-					p2."$params.sort" <=> p1."$params.sort"
-				else if(params.order == "asc")
-					p1."$params.sort" <=> p2."$params.sort"
-		}
+        def students = []
+        if(list.size() > 0) {
+            students = User.createCriteria().list(params) {
+                'in'('id', list)
+            }
+        }
 
         def ret = []
         response.setHeader("Cache-Control", "no-store")
 
-        list.each {
+        students.each {
             ret << [
 				firstName: it.firstName,
 				lastName: it.lastName,
@@ -82,9 +83,9 @@ class StudentController {
         }
 
         def data = [
-                totalRecords: list.size(),
-                results: ret
-		]
+            totalRecords: list.size(),
+            results: ret
+        ]
        
         render data as JSON
     }

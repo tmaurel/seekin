@@ -60,5 +60,6 @@
 			</gui:tab>
 			</g:each>
 		  </gui:tabView>
+      </div>
     </body>
 </html>
