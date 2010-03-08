@@ -9,7 +9,7 @@ style = {
 	)
 	
 	'body' (
-		'background':'#d7d8dc url(../images/skin/bg.png) repeat-y center',
+		'background':'#DADADA url(../images/skin/bg.png) repeat-y center',
 		'height':'100%',
                 '-x-system-font':'none',
                 'font-family':'arial,helvetica,clean,sans-serif',
@@ -120,7 +120,6 @@ style = {
 	)
 
 	'#menu .navigation li' (
-		'height':'40px',
 		'border':'0px none #000',
 		'background-color': 'transparent'
 	)
@@ -128,8 +127,8 @@ style = {
 	'#menu .navigation li a' (
 		'display':'inline-block',
 		'padding':'0',
-		'height':'36px',
-		'line-height':'36px',
+		'height':'40px',
+		'line-height':'40px',
 		'padding-left':'10px',
 		'padding-right':'10px',
 		'background-color': 'transparent',
@@ -159,19 +158,18 @@ style = {
 	)
 
 	'#menu .navigation li' (
-
+		'height':'40px'
 	)
 
 	'#menu .navigation ul' (
-		'list-style-position':'outside'
+		'list-style-position':'outside',
 		)
 	
 	'#menu .navigation' (
 		'float':'left',
-		'margin':'0px',
-		'margin-left':'-1px',
-		'padding':'0px',
-		'width':'772px'
+		'padding':'0',
+		'width':'772px',
+		'margin':'0 0 0 -3px',
 	)
 
 	'#menu' (
@@ -185,7 +183,6 @@ style = {
                 'padding-left':'58px',
                 'padding-right':'85px',
                 'background':'url(../images/skin/bg_header.png) repeat-y center',
-                'padding-top':'2px',
 		'margin-left':'auto',
 		'margin-right':'auto',
 	)
@@ -203,7 +200,7 @@ style = {
 
 	'#main' ( 
 		'width':'946px',
-		'padding-top':'20px',
+		'padding-top':'10px',
 		'margin-left':'auto',
 		'margin-right':'auto',
 		'clear':'both',
@@ -225,7 +222,7 @@ style = {
         )
 
         '#content' (
-            'width':'695px',
+            'width':'725px',
             'margin-right':'20px',
             'float':'left',
         )
@@ -329,7 +326,7 @@ style = {
 
     '.field_value' (
  		'width':'50%',
-		'height':'18px',
+		'min-height':'18px',
         'padding-left':'4px',
 		'float':'left',
 		'margin-top':'2px',
@@ -381,14 +378,11 @@ style = {
 	'.yui-skin-sam .yui-panel' (
 		'margin-top':'0px',
 		'margin-bottom':'0px',
-                'border':'1px solid ' + selectedColor
+        'border':'1px solid #AAA'
 	)
-
-//        '.yui-skin-sam .yui-panel .hd, .yui-skin-sam .yui-panel .bd, .yui-skin-sam .yui-panel .ft' (
-//                'border-color': selectedColor,
-//                'border-width': '0px 1px',
-//                'background-color':'#fff'
-//        )
+        '.yui-skin-sam .yui-panel .hd, .yui-skin-sam .yui-panel .bd, .yui-skin-sam .yui-panel .ft' (
+                'border-color': '#AAA',
+        )
 
         '.yui-skin-sam .yui-cms-accordion .yui-cms-item.selected .bd' (
                 'overflow':'visible'

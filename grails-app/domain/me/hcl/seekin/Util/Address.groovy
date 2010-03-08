@@ -25,9 +25,9 @@ class Address {
     String town
 
     static constraints = {
-      street(blank: false)
-      zipCode(blank: false, matches: /\d+/)
-      town(blank: false)
+      street(blank: true)
+      zipCode(blank: true, matches: /\d+/)
+      town(blank: true)
     }
 
 	String toString() {

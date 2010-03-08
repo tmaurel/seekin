@@ -34,13 +34,6 @@
 
                 </p>
           
-                <p>
-
-                          <label for="current"><g:message code="millesime.current" default="Current" /></label>
-                          <g:checkBox name="current" value="${millesimeInstance?.current}" />
-
-                </p>
-          
           <div class="actionpad yui-skin-sam">
             <g:buildEditButtons />
           </div>

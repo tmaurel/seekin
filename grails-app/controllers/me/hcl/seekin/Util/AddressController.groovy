@@ -41,7 +41,7 @@ class AddressController {
             redirect(action: "list")
         }
         else {
-            return [addressInstance: addressInstance]
+            redirect(url:"http://maps.google.fr/maps?q="+addressInstance.toString())
         }
     }
 

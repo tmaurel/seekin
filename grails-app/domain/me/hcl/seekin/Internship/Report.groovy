@@ -16,4 +16,8 @@ class Report extends Document {
     static constraints = {
         isPrivate(nullable: true)
     }
+
+	String toString() {
+		title
+	}
 }

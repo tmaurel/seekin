@@ -20,7 +20,6 @@ class User {
 	/** A user can have some Role */
 	static hasMany = [ authorities : Role ]
 
-
     /** Email which is used as a login */
 	String email
 
@@ -30,8 +29,8 @@ class User {
 	/** Indicates if the user is enabled by an administrator */
 	boolean enabled
 
-        /** Indicatd if the user has been validated by the admin **/
-        boolean validated
+	/** Indicatd if the user has been validated by the admin **/
+	boolean validated
 
 	/** First name */
 	String firstName

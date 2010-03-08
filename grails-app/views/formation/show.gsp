@@ -44,20 +44,6 @@
                             </span>
                       </p>
                         
-                        
-                       <p>
-                            <label><g:message code="formation.students" default="Students" /></label>
-                            <span class="field_value">
-                            
-                            <ul>
-                            <g:each in="${formationInstance?.students}" var="studentInstance">
-                                <li><g:link controller="student" action="show" id="${studentInstance.id}">${studentInstance.encodeAsHTML()}</g:link></li>
-                            </g:each>
-                            </ul>
-                            
-                            </span>
-                      </p>
-                        
                        <p>
                             <label><g:message code="formation.promotions" default="Promotions" /></label>
                             <span class="field_value">
