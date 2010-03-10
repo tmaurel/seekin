@@ -59,7 +59,7 @@
 		</g:if>
 		<%-- STUDENTS LAST OFFERS BLOCK --%>
 		<div class="home_block yui-skin-sam">
-			<gui:expandablePanel title="${message(code:'offers.lasts')}" expanded="true" bounce="false">
+			<gui:expandablePanel title="${message(code:'offers.last')}" expanded="true" bounce="false">
 			  <g:if test="${totalLastOffers > 0}">
 			  <ul>
 				<g:each var="offer" in="${lastOffers}">
