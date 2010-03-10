@@ -1,5 +1,5 @@
 import me.hcl.seekin.Ressource.Link
 
 fixture {
-	firstLink(Link, title: "YouPorn", url: "http://youporn.com", description: "The best sex ever")
+	firstLink(Link, title: "Monster", url: "http://monster.com", description: "Find jobs & interns.")
 }

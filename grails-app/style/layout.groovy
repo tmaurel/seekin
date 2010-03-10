@@ -279,7 +279,6 @@ style = {
 	'.boxed_form input[type=\'text\'], .boxed_form input[type=\'password\'], .boxed_form textarea' (
 		'width':'55%',
 		'height':'17px',
-		'float':'left',
 		'border':'1px solid #CCC'
 	)
 
@@ -287,12 +286,10 @@ style = {
                 'min-height':'20px',
                 'margin':'1px',
                 'max-width':'42%',
-		'float':'left',
 		'border':'1px solid #808080'
         )
 
 	'.boxed_form input[type=\'checkbox\']' (
-                'float':'left',
                 'height':'20px',
 		'border':'0px none #000'
 	)
@@ -345,28 +342,42 @@ style = {
         )
 	
 	'#login_form' (
-		'width':'36%',
+		'width':'38%',
 		'float':'right',
 	)
 
 	'#login_form label' (
-		'width':'10px',
-		'border':'none',
+		'min-width':'0',
+		'width':'110px',
 	)
-	
+
 	'#register_form, #profile_form' (
 		'float':'left',
 		'width':'60%',
 	)
 
-	'#register_form label' (
-		'border':'none',
-	)
-
 	'#captcha_form' (
 		'float':'right',
-		'width':'36%',
+		'width':'38%',
 	)
+
+	'#captcha_form img' (
+		'float':'right',
+		'margin-right':'10px',
+	)
+
+	'#captcha_form label' (
+		'min-width':'0',
+		'width':'60px',
+		'margin-top':'14px',
+	)
+
+	'#captcha_form input' (
+		'margin-top':'14px',
+		'width':'80px',
+	)
+
+
 
 
         '#home_panel' (
