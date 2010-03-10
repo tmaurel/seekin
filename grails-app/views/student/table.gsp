@@ -1,7 +1,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <title><g:message code="formationManager.table" /></title>
+        <title><g:message code="student.table" /></title>
         <gui:resources components="accordion"/>
         <g:javascript library="yui" />
         <gui:resources components="dataTable"/>
@@ -19,8 +19,8 @@
       <div class="flash_message"><g:message code="${flash.message}" transparent="true" args="${flash.args}" /></div>
       </g:if>
       <g:set var="millesimeInternationalized" value="${message(code:'millesime')}" />
-      <g:formRemote name="buildTable" class="yui-skin-sam left_menu" url="[controller:'formationManager',action:'buildTable']">
-        <gui:expandablePanel title="${message(code:'formationManager.table.projections')}" expanded="true" bounce="false">
+      <g:form name="buildTable" class="yui-skin-sam left_menu">
+        <gui:expandablePanel title="${message(code:'student.table.projections')}" expanded="true" bounce="false">
 
           <g:each var="projection" in="${projections}">
             <input type="checkbox" id="${projection}" name="${projection}" value="on"/>
@@ -32,14 +32,14 @@
             />
           <input id="submit" type="submit" value="submit" style="display:none;"/>
         </gui:expandablePanel>
-      </g:formRemote>
+      </g:form>
       <div id="dataTable" class="yui-skin-sam">
         <gui:dataTable
               id="dt_fm"
               draggableColumns="true"
               columnDefs="${columnDefs}"
-              controller="formationManager"
-              action="dataTableDataAsJSON"
+              controller="student"
+              action="tableAsJSON"
               rowExpansion="false"
               paginatorConfig="[
                   template:'',
