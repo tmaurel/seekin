@@ -40,16 +40,16 @@
                                     <p>
                                             <label for='captcha'><g:message code="register.form.captcha" /></label>
                                             <g:textField name="captcha" />
+											<img src="${createLink(action:'generateCaptcha')}" alt="Captcha" /><br />
                                     </p>
-                                    <p class="submit">
-                                            <img src="${createLink(action:'generateCaptcha')}" alt="Captcha" /><br />
-                                            <g:buildSubmitButton value="register.form.submit" action="register"/>
-                                    </p>
+									<p class="submit">
+									        <g:buildSubmitButton value="register.form.submit" action="register"/>
+									</p>
                             </div>
                     </gui:expandablePanel>
 
-                </div>
-                <div id="profile_form" class="yui-skin-sam">
+              </div>
+              <div id="profile_form" class="yui-skin-sam">
                       <gui:expandablePanel title="${message(code:'register.form.profile')}" expanded="true" bounce="false">
                             <div class="boxed_form">
                                     <p>
@@ -110,7 +110,6 @@
                                     </g:if>
                             </div>
                     </gui:expandablePanel>
-
                 </div>
         </g:form>
 </body>

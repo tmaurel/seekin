@@ -835,7 +835,6 @@ class UserController {
                 .addText()
                 .gimp()
                 .addNoise()
-                .addBorder()
                 .build()
             session.captcha = captcha
             // Write the captcha
@@ -962,8 +961,8 @@ class UserController {
 //                          def auth = new AuthToken(userInstance.email, params.password)
 //                          def authtoken = daoAuthenticationProvider.authenticate(auth)
 //                          SCH.context.authentication = authtoken
-                            flash.message = message(code:"user.waiting.approval")
-                            
+
+							redirect uri: '/user/registerSuccess'
                         }
                         else
                         {
@@ -975,63 +974,64 @@ class UserController {
                }
 	}
 
-    
-        def dataTableDataAsJSON = {
-            def list = []
+	def registerSuccess = { }
 
-            if(params.enabled != null && params.validated != null)
-            {
-				if(authenticateService.ifAnyGranted("ROLE_ADMIN")) {
-					list = User.createCriteria().list(params) {
-						eq('enabled', Boolean.valueOf(params.enabled))
-						eq('validated', Boolean.valueOf(params.validated))
+	def dataTableDataAsJSON = {
+		def list = []
+
+		if(params.enabled != null && params.validated != null)
+		{
+			if(authenticateService.ifAnyGranted("ROLE_ADMIN")) {
+				list = User.createCriteria().list(params) {
+					eq('enabled', Boolean.valueOf(params.enabled))
+					eq('validated', Boolean.valueOf(params.validated))
+				}
+			}
+			else if(authenticateService.ifAnyGranted("ROLE_FORMATIONMANAGER"))
+			{
+				def userInstance = authenticateService.userDomain()
+				sessionFactory.currentSession.refresh(userInstance, LockMode.NONE)
+				def formationManager = FormationManager.findByUser(userInstance)
+				def promotion = Promotion.getCurrentForFormation(formationManager.formation)
+				promotion?.students?.each {
+					if(!it?.user?.enabled && !it?.user?.validated) {
+						list << it?.user
 					}
 				}
-				else if(authenticateService.ifAnyGranted("ROLE_FORMATIONMANAGER"))
-				{
-					def userInstance = authenticateService.userDomain()
-					sessionFactory.currentSession.refresh(userInstance, LockMode.NONE)
-					def formationManager = FormationManager.findByUser(userInstance)
-					def promotion = Promotion.getCurrentForFormation(formationManager.formation)
-					promotion?.students?.each {
-						if(!it?.user?.enabled && !it?.user?.validated) {
-							list << it?.user
-						}
-					}
-				}
-            }
-            else
-            {
-                list = User.list(params)
-            }
+			}
+		}
+		else
+		{
+			list = User.list(params)
+		}
 
-            def ret = []
-            response.setHeader("Cache-Control", "no-store")
+		def ret = []
+		response.setHeader("Cache-Control", "no-store")
 
-            list.each {
+		list.each {
 
-                def auth = ""
-                it.authorities.each {
-                    auth += it.getRoleName() + "<br />"
-                }
+			def auth = ""
+			it.authorities.each {
+				auth += it.getRoleName() + "<br />"
+			}
 
-                ret << [
-                    id:it.id,
-                    email:it.email,
-                    firstName: it.firstName,
-                    lastName: it.lastName,
-                    showEmail:it.showEmail,
-                    roles:auth,
-                    enabled:it.enabled?message(code:'user.enabled'):it.validated?message(code:'user.blocked'):message(code:'user.pending'),
-                    urlID:it.id
-                ]
-            }
+			ret << [
+				id:it.id,
+				email:it.email,
+				firstName: it.firstName,
+				lastName: it.lastName,
+				showEmail:it.showEmail,
+				roles:auth,
+				enabled:it.enabled?message(code:'user.enabled'):it.validated?message(code:'user.blocked'):message(code:'user.pending'),
+				urlID:it.id
+			]
+		}
 
-            def data = [
-                    totalRecords: User.count(),
-                    results: ret
-            ]
+		def data = [
+				totalRecords: User.count(),
+				results: ret
+		]
 
-            render data as JSON
-        }
+		render data as JSON
+	}
 }
