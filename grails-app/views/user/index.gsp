@@ -10,6 +10,25 @@
       <h2><g:message code="home" /></h2>
       <br />
       <div id="home_panel">
+	  <%-- ADMIN HOME VIEW --%>
+		  <g:ifAnyGranted role="ROLE_ADMIN">
+	  <%-- ADMIN USERS WAITING FOR VALIDATION --%>
+			<div class="home_block yui-skin-sam">
+			  <gui:expandablePanel title="${message(code:'users.waitingForValidation')}" expanded="true" bounce="false">
+				<g:if test="${totalUsersWaitingForValidation > 0}">
+				  <ul>
+					<g:each var="user" in="${usersWaitingForValidation}">
+					  <li>${user}</li>
+					</g:each>
+				  </ul>
+				  <g:link controller="user" action="validate"><g:message code="users.validate" /></g:link>
+				</g:if>
+				<g:else>
+				  <span><g:message code="users.no" /></span>
+				</g:else>
+			  </gui:expandablePanel>
+			</div>
+		  </g:ifAnyGranted>
 		<%-- STUDENTS HOME VIEW --%>
 		<g:ifAnyGranted role="ROLE_STUDENT">
 		<%-- STUDENTS MY INTERNSHIPS BLOCK --%>
@@ -86,6 +105,22 @@
 		</g:ifAnyGranted>
 		<%-- FORMATION MANAGER HOME VIEW --%>
 		<g:ifAnyGranted role="ROLE_FORMATIONMANAGER">
+		<%-- FORMATION MANAGER STUDENTS WAITING FOR VALIDATION --%>
+		<div class="home_block yui-skin-sam">
+		  <gui:expandablePanel title="${message(code:'students.waitingForValidation')}" expanded="true" bounce="false">
+			<g:if test="${totalStudentsWaitingForValidation > 0}">
+			  <ul>
+				<g:each var="student" in="${studentsWaitingForValidation}">
+				  <li>${student}</li>
+				</g:each>
+			  </ul>
+			  <g:link controller="user" action="validate"><g:message code="students.validate" /></g:link>
+			</g:if>
+			<g:else>
+			  <span><g:message code="users.no" /></span>
+			</g:else>
+		  </gui:expandablePanel>
+		</div>
 		<%-- FORMATION MANAGER STUDENTS WITHOUT INTERNSHIP BLOCK --%>
 		<div class="home_block yui-skin-sam">
 			<gui:expandablePanel title="${message(code:'students.withoutInternship')}" expanded="true" bounce="false">

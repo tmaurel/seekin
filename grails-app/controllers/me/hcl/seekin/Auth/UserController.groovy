@@ -77,6 +77,26 @@ class UserController {
 			def userInstance = authenticateService.userDomain()
 			sessionFactory.currentSession.refresh(userInstance, LockMode.NONE)
 
+
+
+			// If the user is an admin
+			if(authenticateService.ifAllGranted("ROLE_ADMIN")) {
+
+				// Get the admin instance logged in
+				def admin = Admin.findByUser(userInstance)
+
+				// Get the users waiting for validation
+				def usersWaitingForValidation = User.findAllByEnabledAndValidated(false,false)
+
+				render(
+					view: "index",
+					model: [
+						usersWaitingForValidation: usersWaitingForValidation,
+						totalUsersWaitingForValidation: usersWaitingForValidation.size(),
+					]
+				)
+			}
+			
 			// If the user is a student
 			if(authenticateService.ifAllGranted("ROLE_STUDENT")) {
 
@@ -122,7 +142,8 @@ class UserController {
 						totalLastInternshipReports: lastInternshipReports.size(),
 						totalInternshipReports: Report.findAllByIsPrivate(false).size(),
 						totalLinks: Link.count()
-					])
+					]
+				)
 			}
 
 			// If the user is a formation manager
@@ -137,12 +158,21 @@ class UserController {
 				// Get the offers awaiting validation for the manager's formation
 				def offersWaitingForValidation = Offer.getOffersWaitingForValidationForPromotion(promotion)
 
+				// Get students awaiting for validation who belongs to the same formation as manager
+				def studentsWaitingForValidation = []
+
 				def studentsWithoutInternship = []
 				def studentsWithoutAcademicTutor = []
 				def internshipsWaitingForValidation = []
 
 				promotion?.students?.each {
+
+					// TODO ignore internship refused
 					def currentInternship = Internship.getCurrentForStudent(it)
+
+					if(!it?.user?.enabled && !it?.user?.validated) {
+						studentsWaitingForValidation << it
+					}
 
 					// Get students without internship
 					if(!currentInternship) {
@@ -168,6 +198,8 @@ class UserController {
 						studentsWithoutAcademicTutor: studentsWithoutAcademicTutor,
 						internshipsWaitingForValidation: internshipsWaitingForValidation,
 						offersWaitingForValidation: offersWaitingForValidation,
+						studentsWaitingForValidation: studentsWaitingForValidation,
+						totalStudentsWaitingForValidation: studentsWaitingForValidation.size(),
 						totalStudentsWithoutInternship: studentsWithoutInternship.size(),
 						totalStudentsWithoutAcademicTutor: studentsWithoutAcademicTutor.size(),
 						totalInternshipsWaitingForValidation: internshipsWaitingForValidation.size(),
@@ -836,8 +868,12 @@ class UserController {
 
                         def formations = getFormations()
 
-                        role = new Student(promotions:[Promotion.get(params.promotion)], visible: (params.visible != null)?:false)
-                        userInstance.addToAuthorities(role)
+                        role = new Student(visible: (params.visible != null)?:false)
+						if(role && Promotion.get(params.promotion)) {
+							role.addToPromotions(Promotion.get(params.promotion))
+						}
+
+						userInstance.addToAuthorities(role)
                         ret = [userInstance: userInstance, usertype: params.usertype, formations:formations]
                     } // If User selected "Staff"
                     else if(params.usertype == "2")
@@ -941,20 +977,34 @@ class UserController {
 
     
         def dataTableDataAsJSON = {
-            def list
+            def list = []
 
             if(params.enabled != null && params.validated != null)
             {
-                list = User.createCriteria().list(params) {
-                    eq('enabled', Boolean.valueOf(params.enabled))
-                    eq('validated', Boolean.valueOf(params.validated))
-                }
+				if(authenticateService.ifAnyGranted("ROLE_ADMIN")) {
+					list = User.createCriteria().list(params) {
+						eq('enabled', Boolean.valueOf(params.enabled))
+						eq('validated', Boolean.valueOf(params.validated))
+					}
+				}
+				else if(authenticateService.ifAnyGranted("ROLE_FORMATIONMANAGER"))
+				{
+					def userInstance = authenticateService.userDomain()
+					sessionFactory.currentSession.refresh(userInstance, LockMode.NONE)
+					def formationManager = FormationManager.findByUser(userInstance)
+					def promotion = Promotion.getCurrentForFormation(formationManager.formation)
+					promotion?.students?.each {
+						if(!it?.user?.enabled && !it?.user?.validated) {
+							list << it?.user
+						}
+					}
+				}
             }
             else
             {
                 list = User.list(params)
             }
-            
+
             def ret = []
             response.setHeader("Cache-Control", "no-store")
 

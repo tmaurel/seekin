@@ -99,14 +99,14 @@ style = {
 	
 	'#menu_cont #search_bar' (
 		'float':'right',
-		'width':'160px'
+		'width':'160px',
+		'margin-top':'5px',
 	)
 
 	'#menu_cont #search_bar #q' (
 		'width':'120px',
 		'height':'18px',
 		'margin-top':'6px',
-		'padding-top':'4px',
 		'padding-left':'30px',
 		'padding-right':'10px',
 		'border':'0px none #fff',
@@ -248,6 +248,13 @@ style = {
 		'margin':'10px 0 10px 0',
 		'text-align':'left',
 		'color':secondColor
+	)
+
+	'h4' (
+		'font-size':'1.2em',
+		'margin':'10px 0 10px 20px',
+		'text-align':'left',
+		'color':selectedColor
 	)
 
 	'.boxed_form label' (
@@ -482,23 +489,18 @@ style = {
         )
 
 		'#search .title' (
-			'margin': '1em 0',
+			'margin-bottom': '1em',
 			'padding': '.3em .5em',
 			'text-align': 'right',
-			'background-color': '#eee',
-			'border-top': '1px solid darkblue'
+			'background-color': '#F3F3F3',
 		)
 
 		'#search .result' (
 			'margin-bottom': '1em'
 		)
 
-		'#search .result a' (
-			'color': 'darkblue'
-		)
-
 		'#search .result .displayLink' (
-			'color': 'green'
+			'color': secondColor
 		)
 
 		'#search .result .name' (
@@ -523,13 +525,23 @@ style = {
 
 		'#search .class_type' (
 			'font-size': 'x-small',
-			'color': 'darkblue',
+			'color': secondColor,
 			'text-transform': 'uppercase'
 		)
 
-                '.humanMsg' (
-                        'top':'auto',
-                        'bottom':'50px',
-                        'background-color':selectedColor
-                )
+		'#search #q' (
+			'width':'300px',
+			'font-size':'1.2em',
+			'border':'solid 1px #D3D3D3',
+			'color':selectedColor,
+		)
+		'#search select' (
+			'font-size':'1.5em',
+		)
+
+		'.humanMsg' (
+				'top':'auto',
+				'bottom':'50px',
+				'background-color':selectedColor
+		)
 }

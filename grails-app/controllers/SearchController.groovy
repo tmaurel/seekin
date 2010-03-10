@@ -21,7 +21,7 @@ import me.hcl.seekin.Company
 
 
 /**
- * Basic web interface for Grails Searchable Plugin 
+ * Basic web interface for Grails Searchable Plugin
  *
  * @author Maurice Nicholson
  */
@@ -32,35 +32,66 @@ class SearchController {
     /**
      * Index page with search form and results
      */
-    def search = {		
+    def search = {
 		if(authenticateService.isLoggedIn())
 		{
-			if (!params.q?.trim()) {
-				return [:]
-			}
-			try {
-				Closure qb = {
-					queryString(params.q)
-					// TODO Add search permission for the other ROLE
-					if(authenticateService.ifAnyGranted("ROLE_STUDENT")) {
-						/* Only students who are set their profile as visible */
-						mustNot(term('visible',false))
-						/* Only internships whitch have been approved */
-						mustNot(term('isApproval',false))
+			def searchResult
+
+			if (params.q?.trim()) {
+				try {
+					Closure qb = {
+						queryString(params.q)
+						// TODO Add search permission for the other ROLE
+						if(authenticateService.ifAnyGranted("ROLE_STUDENT")) {
+							/* Only students who are set their profile as visible */
+							mustNot(term('visible',false))
+							/* Only internships whitch have been approved */
+							mustNot(term('isApproval',false))
+						}
+						if(authenticateService.ifAnyGranted("ROLE_EXTERNAL")) {
+							/* External can not search internships */
+							mustNot(alias('Internship'))
+							mustNot(alias('Offer'))
+						}
 					}
-					if(authenticateService.ifAnyGranted("ROLE_EXTERNAL")) {
-						/* External can not search internships */
-						mustNot(alias('Internship'))
-						mustNot(alias('Offer'))
+
+					if(params.domain)
+					{
+						switch(params.domain) {
+							case 'all':
+								searchResult = searchableService.search(qb)
+								break
+							case 'student':
+								searchResult = Student.search(qb)
+								break
+							case 'internship':
+								searchResult = Internship.search(qb)
+								break
+							case 'company':
+								println 'toto'
+								searchResult = Company.search(qb)
+								break
+							default:
+								searchResult = searchableService.search(qb)
+								break
+						}
 					}
+					else
+					{
+						searchResult = searchableService.search(qb)
+					}
+
+				} catch (SearchEngineQueryParseException ex) {
+					return [parseException: true]
 				}
-
-				def searchResult = searchableService.search(qb)
-
-				return [searchResult: searchResult]
-			} catch (SearchEngineQueryParseException ex) {
-				return [parseException: true]
 			}
+			render(
+				view: 'search',
+				model: [
+					searchableDomain: ['all','student','internship','company'],
+					searchResult: searchResult,
+				]
+			)
 		}
 		else {
 			redirect(controller:'user', action:'auth')

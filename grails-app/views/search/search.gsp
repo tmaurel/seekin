@@ -7,12 +7,23 @@
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <meta name="layout" content="main" />
     <title><g:if test="${params.q && params.q?.trim() != ''}">${params.q} - </g:if>Grails Searchable Plugin</title>
+	<g:YUIButtonRessource />
   </head>
   <body>
 	<div id="search">
 	  <h2><g:message code="results" /></h2>
 	  <div style="clear: both; display: none;" class="hint">See <a href="http://lucene.apache.org/java/docs/queryparsersyntax.html">Lucene query syntax</a> for advanced queries</div>
 	  <div>
+		<div>
+		  <g:form name="search-form" action="search" class="yui-skin-sam">
+			<g:textField name="q" value="${params?.q}"/>
+			<g:select name="domain"
+					  from="${searchableDomain}"
+					  value="${params?.domain}"
+			/>
+			<g:submitButton name="search" value="Search" />
+		  </g:form>
+		</div>
 		<g:set var="haveQuery" value="${params.q?.trim()}" />
 		<g:set var="haveResults" value="${searchResult?.results}" />
 		<div class="title">
@@ -58,7 +69,7 @@
 				<div class="name"><span class="class_type">[<g:message code="${className}" />]</span> <a href="${link}">${result.toString()}</a></div>
 				<div class="desc">
 				  ${result?.user?.address?.encodeAsHTML()} <br />
-				  ${result?.user?.phone?.encodeAsHTML()}
+				  ${result?.user?.phone?.encodeAsHTML()} <br />
 				</div>
 				<div class="displayLink">${link}</div>
 			  </div>
@@ -68,7 +79,7 @@
 				<g:set var="link" value="${createLink(controller: className[0].toLowerCase() + className[1..-1], action: 'show', id: result.id)}" />
 				<div class="name"><span class="class_type">[<g:message code="${className}" />]</span> <a href="${link}">${result.toString()}</a></div>
 				<div class="desc">
-				  ${result?.company?.encodeAsHTML()}
+				  ${result?.company?.encodeAsHTML()} - ${result?.student?.encodeAsHTML()}
 				</div>
 				<div class="displayLink">${link}</div>
 			  </div>
