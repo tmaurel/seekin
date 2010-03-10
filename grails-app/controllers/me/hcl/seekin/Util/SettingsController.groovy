@@ -33,7 +33,7 @@ class SettingsController {
 				settingsInstance = new Settings(applicationName: params.applicationName)
 
 				if(!params.passwordAdmin && !params.repasswdAdmin) {
-					flash.message = message(code:"user.password.null")
+					flash.message = message(code:"user.password.nullable.error")
 				}
 				else {
 					if (params.passwordAdmin != params.repasswordAdmin) {
