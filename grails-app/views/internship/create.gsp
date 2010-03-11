@@ -7,7 +7,8 @@
         <title><g:message code="internship.create" /></title>
         <g:YUIButtonRessource />
         <tm:resources />
-	    <gui:resources components="accordion, autoComplete, tabView"/>
+        <gui:resources components="accordion, autoComplete, tabView"/>
+        <yui:javascript dir="json" file="json-min.js" />
     </head>
     <body>  
       <h2><g:message code="internship.create" /></h2>
@@ -65,6 +66,30 @@
                       </div>
 
                       <p>
+                            <label for="street"><g:message code="address.street" /></label>
+                            <g:textField name="street" class="field${hasErrors(bean:internshipInstance?.address ,field:'street','error')}" value="${params.street}" />
+
+                      </p>
+
+                      <p>
+                            <label for="town"><g:message code="address.town" /></label>
+                            <g:textField name="town" class="field${hasErrors(bean:internshipInstance?.address ,field:'town','error')}" value="${params.town}" />
+
+                      </p>
+
+                      <p>
+                            <label for="zipCode"><g:message code="address.zipCode" /></label>
+                            <g:textField name="zipCode" class="field${hasErrors(bean:internshipInstance?.address ,field:'zipCode','error')}" value="${params.zipCode}" />
+
+                      </p>
+
+                      <p>
+                            <label for="phone"><g:message code="company.phone" /></label>
+                            <g:textField name="phone" class="field${hasErrors(bean:internshipInstance ,field:'phone','error')}" value="${params.phone}" />
+
+                      </p>
+
+                      <p>
                             <label for="firstName"><g:message code="companyTutor.firstName" /></label>
                             <g:textField name="firstName" class="field${hasErrors(bean:internshipInstance ,field:'companyTutor.user.firstName','error')}" value="${firstName}" />
 
@@ -120,6 +145,55 @@
           </gui:tab>
         </gui:tabView>
       </div>
+      <script type="text/javascript">
+        var handleSuccess = function(o){
+          var messages = [];
 
+          // Use the JSON Utility to parse the data returned from the server
+          try {
+            messages = YAHOO.lang.JSON.parse(o.responseText);
+          }
+          catch (x) {
+            alert("JSON Parse failed!");
+          return;
+          }
+
+          for (var i = 0, len = messages.length; i < len; ++i) {
+                var m = messages[i];
+                var input = YAHOO.util.Dom.get(m.key);
+                var value = m.value;
+                if(input)
+                  input.value = value;
+          }
+          
+        }
+
+        var handleFailure = function(o){
+            
+        }
+
+        function companySelectHandler(sType, aArgs) {
+          var oMyAcInstance = aArgs[0];
+          var elListItem = aArgs[1];
+          var aData = aArgs[2];
+          var id = aData[1];
+          var sUrl = "${createLink(controller:'company', action:'getAddress')}/" + id;
+          var request = YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
+        };
+
+        function initHandler () {
+          GRAILSUI.companyName.itemSelectEvent.subscribe(companySelectHandler);
+        };
+
+        var callback =
+        {
+          success:handleSuccess,
+          failure:handleFailure,
+          argument: { foo:"foo", bar:"bar" }
+        };
+
+        YAHOO.util.Event.onDOMReady(initHandler);
+        
+      </script>
     </body>
 </html>
