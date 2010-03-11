@@ -15,6 +15,34 @@ class CompanyController {
     // the delete, save and update actions only accept POST requests
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
+
+    def getAddress = {
+        def companyInstance = Company.get(params.id)
+        if (companyInstance) {
+            def internship = Internship.findByCompany(companyInstance)
+            if(internship?.address)
+            {
+                def address = [
+                    [
+                        key     :   'street',
+                        value   :   internship.address.street
+                    ],
+                    [
+                        key     :   'town',
+                        value   :   internship.address.town
+                    ],
+                    [
+                        key     :   'zipCode',
+                        value   :   internship.address.zipCode
+                    ]
+                ]
+
+                render address as JSON
+            }
+            
+        }
+    }
+
     def list = {
     }
 

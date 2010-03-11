@@ -191,6 +191,16 @@ class InternshipController {
             internshipInstance.company = company
         }
 
+        def address = Address.find("from Address as a where a.street=? and a.town=? and a.zipCode=?", [params.street, params.town, params.zipCode])
+        if(address)
+        {
+            internshipInstance.address = address
+        }
+        else
+        {
+            internshipInstance.address = new Address(street: params.street, town: params.town, zipCode: params.zipCode)
+        }
+
         internshipInstance.validate()
 
         if (params.email == null || params.email == "") {
@@ -347,6 +357,17 @@ class InternshipController {
             }
             internshipInstance.properties = params
             internshipInstance.reason = null
+
+            def address = Address.find("from Address as a where a.street=? and a.town=? and a.zipCode=?", [params.street, params.town, params.zipCode])
+            if(address)
+            {
+                internshipInstance.address = address
+            }
+            else
+            {
+                internshipInstance.address = new Address(street: params.street, town: params.town, zipCode: params.zipCode)
+            }
+
             if (!internshipInstance.hasErrors() && internshipInstance.save()) {
                 flash.message = "internship.updated"
                 flash.args = [params.id]

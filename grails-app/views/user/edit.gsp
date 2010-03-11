@@ -82,8 +82,9 @@
                           <label><g:message code="user.authorities" default="Authorities" /></label>
                           <ul>
                           <g:each var="role" in="${roles}">
-                                  <li>${role.name.encodeAsHTML()}
+                                  <li>
                                           <g:checkBox name="ROLE_${role.name.toUpperCase()}" value="${role.value}"/>
+                                          ${role.name.encodeAsHTML()}
                                           <g:if test="${role.name.toUpperCase() == 'STUDENT' || role.name.toUpperCase() == 'FORMATIONMANAGER'}">
                                               <g:select name="FORMATION_${role.name}" value='${params."FORMATION_$role.name"?:role.formation}' from="${formations}"  optionKey="id" optionValue="value" style="float:right; ${if(role.value!='on' && role.value !=true) {'visibility:hidden;width:0px;'} else {'width:200px;'} }"/>
                                               <script type="text/javascript">

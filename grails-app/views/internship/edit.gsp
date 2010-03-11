@@ -92,6 +92,30 @@
 
                       </span>
                 </p>
+
+                <p>
+                      <label for="street"><g:message code="address.street" /></label>
+                      <g:textField name="street" class="field${hasErrors(bean:internshipInstance?.address ,field:'street','error')}" value="${fieldValue(bean: internshipInstance?.address, field: 'street')}" />
+
+                </p>
+
+                <p>
+                      <label for="town"><g:message code="address.town" /></label>
+                      <g:textField name="town" class="field${hasErrors(bean:internshipInstance?.address ,field:'town','error')}" value="${fieldValue(bean: internshipInstance?.address, field: 'town')}" />
+
+                </p>
+
+                <p>
+                      <label for="zipCode"><g:message code="address.zipCode" /></label>
+                      <g:textField name="zipCode" class="field${hasErrors(bean:internshipInstance?.address ,field:'zipCode','error')}" value="${fieldValue(bean: internshipInstance?.address, field: 'zipCode')}" />
+
+                </p>
+
+                <p>
+                      <label for="phone"><g:message code="company.phone" /></label>
+                      <g:textField name="phone" class="field${hasErrors(bean:internshipInstance ,field:'phone','error')}" value="${fieldValue(bean: internshipInstance, field: 'phone')}" />
+
+                </p>
           
                 <p>
 
@@ -103,7 +127,7 @@
                           </span>
 
                 </p>
-          
+                <g:if test ="${internshipInstance?.convocation}">
                 <p>
 
                           <label for="convocation"><g:message code="internship.convocation" default="Convocation" /></label>
@@ -114,7 +138,7 @@
                           </span>
 
                 </p>
-
+                </g:if>
                 <g:ifAnyGranted role="ROLE_ADMIN,ROLE_FORMATIONMANAGER">
 
                           <p>

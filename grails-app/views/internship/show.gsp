@@ -110,7 +110,44 @@
 
                             </span>
                       </p>
-                        
+
+
+                       <p>
+                            <label><g:message code="address.street" default="Street" /></label>
+                            <span class="field_value">
+
+                            ${fieldValue(bean: internshipInstance?.address, field: "street")}
+
+                            </span>
+                      </p>
+
+                       <p>
+                            <label><g:message code="address.town" default="Town" /></label>
+                            <span class="field_value">
+
+                            ${fieldValue(bean: internshipInstance?.address, field: "town")}
+
+                            </span>
+                      </p>
+
+                       <p>
+                            <label><g:message code="address.zipCode" default="Zip Code" /></label>
+                            <span class="field_value">
+
+                            ${fieldValue(bean: internshipInstance?.address, field: "zipCode")}
+
+                            </span>
+                      </p>
+                      
+                       <p>
+                            <label><g:message code="company.phone" default="Phone" /></label>
+                            <span class="field_value">
+
+                            ${fieldValue(bean: internshipInstance, field: "phone")}
+
+                            </span>
+                      </p>
+
                        <p>
                             <label><g:message code="internship.companyTutor" default="Company Tutor" /></label>
                             <span class="field_value">

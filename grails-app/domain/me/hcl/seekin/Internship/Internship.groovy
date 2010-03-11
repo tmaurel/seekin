@@ -7,6 +7,7 @@ import me.hcl.seekin.Auth.Role.External
 import me.hcl.seekin.Company
 import me.hcl.seekin.Formation.Millesime
 import org.apache.commons.lang.StringUtils
+import me.hcl.seekin.Util.Address
 
 class Internship {
 
@@ -58,7 +59,16 @@ class Internship {
 
     /** Reason of the deny */
     String reason
-	
+
+    /** Where the internship will take place **/
+    Address address
+
+    /** Phone number to contact the company **/
+    String phone
+
+    /** Will embed the address in the Internship table */
+    static embedded = ['address']
+
     /** Constraints used to check if an instance is correct */
     static constraints = {
         subject(blank: false)
@@ -74,6 +84,8 @@ class Internship {
         millesime(nullable: false)
         reason(nullable:true)
         description(nullable:true)
+        address(nullable:true)
+        phone(nullable:true)
     }
 
     String toString() {
