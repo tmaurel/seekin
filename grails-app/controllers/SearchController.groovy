@@ -17,7 +17,10 @@
 import org.compass.core.engine.SearchEngineQueryParseException
 import me.hcl.seekin.Auth.Role.Student
 import me.hcl.seekin.Internship.Internship
+import me.hcl.seekin.Internship.Offer
 import me.hcl.seekin.Company
+import me.hcl.seekin.Ressource.Link
+import me.hcl.seekin.Formation.Formation
 
 
 /**
@@ -41,16 +44,18 @@ class SearchController {
 				try {
 					Closure qb = {
 						queryString(params.q)
-						// TODO Add search permission for the other ROLE
 						if(authenticateService.ifAnyGranted("ROLE_STUDENT")) {
 							/* Only students who are set their profile as visible */
 							mustNot(term('visible',false))
 							/* Only internships whitch have been approved */
 							mustNot(term('isApproval',false))
+							mustNot(term('validated',false))
+							mustNot(term('assignated',true))
 						}
 						if(authenticateService.ifAnyGranted("ROLE_EXTERNAL")) {
 							/* External can not search internships */
 							mustNot(alias('Internship'))
+							/* External can not search offers */
 							mustNot(alias('Offer'))
 						}
 					}
@@ -59,36 +64,45 @@ class SearchController {
 					{
 						switch(params.domain) {
 							case 'all':
-								searchResult = searchableService.search(qb)
+								searchResult = searchableService.search(qb,params)
 								break
 							case 'student':
-								searchResult = Student.search(qb)
-								break
-							case 'internship':
-								searchResult = Internship.search(qb)
+								searchResult = Student.search(qb,params)
 								break
 							case 'company':
-								println 'toto'
-								searchResult = Company.search(qb)
+								searchResult = Company.search(qb,params)
+								break
+							case 'internship':
+								searchResult = Internship.search(qb,params)
+								break
+							case 'offer':
+								searchResult = Offer.search(qb,params)
+								break
+							case 'formation':
+								searchResult = Formation.search(qb,params)
+								break
+							case 'link':
+								searchResult = Link.search(qb,params)
 								break
 							default:
-								searchResult = searchableService.search(qb)
+								searchResult = searchableService.search(qb,params)
 								break
 						}
 					}
 					else
 					{
-						searchResult = searchableService.search(qb)
+						searchResult = searchableService.search(qb,params)
 					}
 
 				} catch (SearchEngineQueryParseException ex) {
 					return [parseException: true]
 				}
 			}
+
 			render(
 				view: 'search',
 				model: [
-					searchableDomain: ['all','student','internship','company'],
+					searchableDomain: ['all','student','company','internship','offer','formation','link'],
 					searchResult: searchResult,
 				]
 			)

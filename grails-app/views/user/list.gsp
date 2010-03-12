@@ -17,17 +17,11 @@
       </g:if>
       <div class="yui-skin-sam" id="crud_panel">
           <g:buildListButtons />
-          
                         <g:set var="idInternationalized" value="${message(code:'user.id')}" />
-                 
                         <g:set var="emailInternationalized" value="${message(code:'user.email')}" />
-                 
                         <g:set var="roleInternationalized" value="${message(code:'user.role')}" />
-
                         <g:set var="enabledInternationalized" value="${message(code:'user.enabled')}" />
-                 
                         <g:set var="firstNameInternationalized" value="${message(code:'user.firstName')}" />
-                 
                         <g:set var="lastNameInternationalized" value="${message(code:'user.lastName')}" />
                  
           <gui:dataTable
@@ -35,17 +29,10 @@
               draggableColumns="true"
               columnDefs="[
                             [key: 'id', sortable: true, resizeable: true, label: idInternationalized],
-                     
                             [key: 'email', sortable: true, resizeable: true, label: emailInternationalized],
-
                             [key: 'firstName', sortable: true, resizeable: true, label: firstNameInternationalized],
-
                             [key: 'lastName', sortable: true, resizeable: true, label: lastNameInternationalized],
-                     
-                            [key: 'enabled', sortable: true, resizeable: true, label: enabledInternationalized],
-
                             [key: 'roles', sortable: false, resizeable: true, label: roleInternationalized],
-                     
                             [key: 'urlID', sortable: false, resizeable: false, label:'Actions', formatter: 'adminPanelFormatter']
               ]"
               controller="user"
