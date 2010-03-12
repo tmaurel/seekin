@@ -24,14 +24,14 @@
                 <p>
 
                           <label for="subject"><g:message code="internship.subject" default="Subject" /></label>
-                          <g:textField name="subject" class="field${hasErrors(bean:internshipInstance ,field:'subject','error')}" value="${fieldValue(bean: internshipInstance, field: 'subject')}" />
+                          <g:textField name="subject" class="field${hasErrors(bean:internshipInstance ,field:'subject','error')}" value="${internshipInstance?.subject}" />
 
                 </p>
 
                 <p>
 
                           <label for="description"><g:message code="internship.description" default="Description" /></label>
-                          <g:textField name="description" class="field${hasErrors(bean:internshipInstance ,field:'description','error')}" value="${fieldValue(bean: internshipInstance, field: 'description')}" />
+                          <g:textField name="description" class="field${hasErrors(bean:internshipInstance ,field:'description','error')}" value="${internshipInstance?.description}" />
 
                 </p>
           
@@ -95,25 +95,25 @@
 
                 <p>
                       <label for="street"><g:message code="address.street" /></label>
-                      <g:textField name="street" class="field${hasErrors(bean:internshipInstance?.address ,field:'street','error')}" value="${fieldValue(bean: internshipInstance?.address, field: 'street')}" />
+                      <g:textField name="street" class="field${hasErrors(bean:internshipInstance?.address ,field:'street','error')}" value="${internshipInstance?.address.street}" />
 
                 </p>
 
                 <p>
                       <label for="town"><g:message code="address.town" /></label>
-                      <g:textField name="town" class="field${hasErrors(bean:internshipInstance?.address ,field:'town','error')}" value="${fieldValue(bean: internshipInstance?.address, field: 'town')}" />
+                      <g:textField name="town" class="field${hasErrors(bean:internshipInstance?.address ,field:'town','error')}" value="${internshipInstance?.address.town}" />
 
                 </p>
 
                 <p>
                       <label for="zipCode"><g:message code="address.zipCode" /></label>
-                      <g:textField name="zipCode" class="field${hasErrors(bean:internshipInstance?.address ,field:'zipCode','error')}" value="${fieldValue(bean: internshipInstance?.address, field: 'zipCode')}" />
+                      <g:textField name="zipCode" class="field${hasErrors(bean:internshipInstance?.address ,field:'zipCode','error')}" value="${internshipInstance?.address.zipCode}" />
 
                 </p>
 
                 <p>
                       <label for="phone"><g:message code="company.phone" /></label>
-                      <g:textField name="phone" class="field${hasErrors(bean:internshipInstance ,field:'phone','error')}" value="${fieldValue(bean: internshipInstance, field: 'phone')}" />
+                      <g:textField name="phone" class="field${hasErrors(bean:internshipInstance ,field:'phone','error')}" value="${internshipInstance.phone}" />
 
                 </p>
           

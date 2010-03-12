@@ -22,13 +22,13 @@
           
                 <p>
                       <label for="label"><g:message code="formation.label" default="Label" />:</label>
-                      <g:textField name="label" class="field${hasErrors(bean:formationInstance ,field:'label','error')}" value="${fieldValue(bean: formationInstance, field: 'label')}" />
+                      <g:textField name="label" class="field${hasErrors(bean:formationInstance ,field:'label','error')}" value="${formationInstance.label}" />
 
                 </p>
           
                 <p>
                       <label for="description"><g:message code="formation.description" default="Description" />:</label>
-                      <g:textField name="description" class="field${hasErrors(bean:formationInstance ,field:'description','error')}" value="${fieldValue(bean: formationInstance, field: 'description')}" />
+                      <g:textField name="description" class="field${hasErrors(bean:formationInstance ,field:'description','error')}" value="${formationInstance.description}" />
 
                 </p>
           
