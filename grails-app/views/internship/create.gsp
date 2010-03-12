@@ -29,13 +29,13 @@
 
                       <p>
                             <label for="subject"><g:message code="internship.subject" default="Subject" /></label>
-                            <g:textField name="subject" class="field${hasErrors(bean:internshipInstance ,field:'subject','error')}" value="${fieldValue(bean: internshipInstance, field: 'subject')}" />
+                            <g:textField name="subject" class="field${hasErrors(bean:internshipInstance ,field:'subject','error')}" value="${internshipInstance?.subject}" />
 
                       </p>
 
                       <p>
                             <label for="description"><g:message code="internship.description" default="Description" /></label>
-                            <g:textField name="description" class="field${hasErrors(bean:internshipInstance ,field:'description','error')}" value="${fieldValue(bean: internshipInstance, field: 'description')}" />
+                            <g:textField name="description" class="field${hasErrors(bean:internshipInstance ,field:'description','error')}" value="${internshipInstance?.description}" />
 
                       </p>
 
@@ -47,7 +47,7 @@
 
                       <p>
                             <label for="length"><g:message code="internship.length" default="Length" /></label>
-                            <g:textField name="length" class="field${hasErrors(bean:internshipInstance ,field:'length','error')}" value="${fieldValue(bean: internshipInstance, field: 'length')}" />
+                            <g:textField name="length" class="field${hasErrors(bean:internshipInstance ,field:'length','error')}" value="${internshipInstance.length}" />
 
                       </p>
 

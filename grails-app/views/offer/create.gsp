@@ -25,13 +25,13 @@
 
                   <p>
                         <label for="subject"><g:message code="offer.subject" default="Subject" /></label>
-                        <g:textField name="subject" class="field${hasErrors(bean:offerInstance ,field:'subject','error')}" value="${fieldValue(bean: offerInstance, field: 'subject')}" />
+                        <g:textField name="subject" class="field${hasErrors(bean:offerInstance ,field:'subject','error')}" value="${offerInstance.subject}" />
 
                   </p>
 
                   <p>
                         <label for="description"><g:message code="offer.description" default="Description" /></label>
-                        <g:textField name="description" class="field${hasErrors(bean:offerInstance ,field:'description','error')}" value="${fieldValue(bean: offerInstance, field: 'description')}" />
+                        <g:textField name="description" class="field${hasErrors(bean:offerInstance ,field:'description','error')}" value="${offerInstance.description}" />
 
                   </p>
 

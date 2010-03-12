@@ -23,20 +23,20 @@
 		<h3><g:message code="settings.application" /></h3>
 		<p>
 			  <label for="applicationName"><g:message code="settings.applicationName" default="Application Name" /></label>
-			  <g:textField name="applicationName" value="${fieldValue(bean: settingsInstance, field: 'applicationName')}" />
+			  <g:textField name="applicationName" value="${settingsInstance.applicationName}" />
 		</p>
 		<h3><g:message code="settings.admin" /></h3>
 		<p>
 			  <label for="emailAdmin"><g:message code="user.email" /></label>
-			  <g:textField name="emailAdmin" value="${fieldValue(bean: adminInstance, field: 'email')}" />
+			  <g:textField name="emailAdmin" value="${adminInstance.email}" />
 		</p>
 		<p>
 			  <label for="firstNameAdmin"><g:message code="user.firstName" /></label>
-			  <g:textField name="firstNameAdmin" value="${fieldValue(bean: adminInstance, field: 'firstName')}" />
+			  <g:textField name="firstNameAdmin" value="${adminInstance.firstName}" />
 		</p>
 		<p>
 			  <label for="lastNameAdmin"><g:message code="user.lastName" /></label>
-			  <g:textField name="lastNameAdmin" value="${fieldValue(bean: adminInstance, field: 'lastName')}" />
+			  <g:textField name="lastNameAdmin" value="${adminInstance.lastName}" />
 		</p>
 		<p>
 			  <label for="passwordAdmin"><g:message code="user.password" /></label>

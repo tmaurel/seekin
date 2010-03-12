@@ -23,7 +23,7 @@
                 <p>
 
                           <label for="name"><g:message code="company.name" default="Name" /></label>
-                          <g:textField name="name" class="field${hasErrors(bean:companyInstance ,field:'name','error')}" value="${fieldValue(bean: companyInstance, field: 'name')}" />
+                          <g:textField name="name" class="field${hasErrors(bean:companyInstance ,field:'name','error')}" value="${companyInstance.name}" />
 
                 </p>
           
@@ -37,7 +37,7 @@
                 <p>
 
                           <label for="phone"><g:message code="company.phone" default="Phone" /></label>
-                          <g:textField name="phone" class="field${hasErrors(bean:companyInstance ,field:'phone','error')}" maxlength="10" value="${fieldValue(bean: companyInstance, field: 'phone')}" />
+                          <g:textField name="phone" class="field${hasErrors(bean:companyInstance ,field:'phone','error')}" maxlength="10" value="${companyInstance.phone}" />
 
                 </p>
           

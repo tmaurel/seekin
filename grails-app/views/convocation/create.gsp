@@ -28,13 +28,13 @@
           
                 <p>
                       <label for="building"><g:message code="convocation.building" default="Building" />:</label>
-                      <g:textField name="building" class="field${hasErrors(bean:convocationInstance ,field:'building','error')}" value="${fieldValue(bean: convocationInstance, field: 'building')}" />
+                      <g:textField name="building" class="field${hasErrors(bean:convocationInstance ,field:'building','error')}" value="${convocationInstance.building}" />
 
                 </p>
           
                 <p>
                       <label for="room"><g:message code="convocation.room" default="Room" />:</label>
-                      <g:textField name="room" class="field${hasErrors(bean:convocationInstance ,field:'room','error')}" value="${fieldValue(bean: convocationInstance, field: 'room')}" />
+                      <g:textField name="room" class="field${hasErrors(bean:convocationInstance ,field:'room','error')}" value="${convocationInstance.room}" />
 
                 </p>
           

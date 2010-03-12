@@ -23,7 +23,7 @@
                 <p>
 
                           <label for="applicationName"><g:message code="settings.applicationName" default="Application Name" /></label>
-                          <g:textField name="applicationName" value="${fieldValue(bean: settingsInstance, field: 'applicationName')}" class="field${hasErrors(bean:settingsInstance,field:'applicationName','error')}"/>
+                          <g:textField name="applicationName" value="${settingsInstance.applicationName}" class="field${hasErrors(bean:settingsInstance,field:'applicationName','error')}"/>
 
                 </p>
           
