@@ -84,6 +84,16 @@
 				<div class="displayLink">${link}</div>
 			  </div>
 			  </g:if>
+			  <g:if test="${className == 'Offer'}">
+			  <div class="result">
+				<g:set var="link" value="${createLink(controller: className[0].toLowerCase() + className[1..-1], action: 'show', id: result.id)}" />
+				<div class="name"><span class="class_type">[<g:message code="${className}" />]</span> <a href="${link}">${result.toString()}</a></div>
+				<div class="desc">
+				  ${result?.company?.encodeAsHTML()}
+				</div>
+				<div class="displayLink">${link}</div>
+			  </div>
+			  </g:if>
 			  <g:if test="${className == 'Company'}">
 			  <div class="result">
 				<g:set var="link" value="${createLink(controller: className[0].toLowerCase() + className[1..-1], action: 'show', id: result.id)}" />

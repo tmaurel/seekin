@@ -618,7 +618,7 @@ class UserController {
                             student.addToPromotions(promotion)
                             user.enabled = false
                             user.validated = false
-                            flash.message = message(code:"user.renewed.waiting.approval")
+                            redirect action: 'registerSuccess'
                         }
                         else
                         {
@@ -1017,7 +1017,7 @@ class UserController {
 //                          def authtoken = daoAuthenticationProvider.authenticate(auth)
 //                          SCH.context.authentication = authtoken
 
-							redirect uri: '/user/registerSuccess'
+							redirect action: 'registerSuccess'
                         }
                         else
                         {
