@@ -18,6 +18,7 @@ import org.springframework.security.DisabledException
 import org.springframework.security.context.SecurityContextHolder as SCH
 import org.springframework.security.ui.AbstractProcessingFilter
 import org.springframework.security.ui.webapp.AuthenticationProcessingFilter
+import org.springframework.security.AccountExpiredException
 import org.hibernate.LockMode
 
 import nl.captcha.Captcha
@@ -76,8 +77,6 @@ class UserController {
 			// Get the user instance logged in
 			def userInstance = authenticateService.userDomain()
 			sessionFactory.currentSession.refresh(userInstance, LockMode.NONE)
-
-
 
 			// If the user is an admin
 			if(authenticateService.ifAllGranted("ROLE_ADMIN")) {
@@ -572,19 +571,75 @@ class UserController {
 		def msg = ''
                 // Get the reason why auth failed
 		def exception = session[AbstractProcessingFilter.SPRING_SECURITY_LAST_EXCEPTION_KEY]
-		if (exception) {
-                        // If the user has been disabled
-			if (exception instanceof DisabledException) {
-				msg = message(code:"user.login.validation.disabled", args:["${username}"])
-			} // If the login or password is wrong
-			else {
-				msg = message(code:"user.login.validation.invalid", args:["${username}"])
-			}
-		}
-		
-		flash.message = msg
-		redirect action: auth, params: params
+
+                // If the user account has expired
+                if(exception && exception instanceof AccountExpiredException) {
+                        redirect action:renewal, params: [username: username]
+
+                }
+                else
+                {
+                    if (exception) {
+
+                            // If the user has been disabled
+                            if (exception instanceof DisabledException) {
+                                    msg = message(code:"user.login.validation.disabled", args:["${username}"])
+                            } // If the login or password is wrong
+                            else {
+                                    msg = message(code:"user.login.validation.invalid", args:["${username}"])
+                            }
+                    }
+
+                    flash.message = msg
+                    redirect action: auth, params: params
+                }
 	}
+
+
+        def renewal = {
+            def formations = getFormations()
+
+            if(request.method == 'POST')
+            {
+                def username = params.username
+                def password = authenticateService.encodePassword(params.password)
+                def promotion = Promotion.get(params.promotion)
+
+                def user = User.findByEmailAndPassword(username, password)
+
+                if(user)
+                {
+                    def student = Student.findByUser(user)
+                    if(student)
+                    {
+                        def current = Promotion.getCurrentForStudent(student)
+                        if(!current && promotion)
+                        {
+                            student.addToPromotions(promotion)
+                            user.enabled = false
+                            user.validated = false
+                            flash.message = message(code:"user.renewed.waiting.approval")
+                        }
+                        else
+                        {
+                            flash.message = message(code:"user.not.expired")
+                        }
+                    }
+                    else
+                    {
+                        flash.message = message(code:"user.not.student")
+                    }
+                }
+                else
+                {
+                    flash.message = message(code:"user.not.found")
+                }
+            }
+
+
+            return [formations: formations, username: params.username]
+        }
+
 
 	/**
 	 * Lost password form
@@ -1012,7 +1067,22 @@ class UserController {
 
 			def auth = ""
 			it.authorities.each {
-				auth += it.getRoleName() + "<br />"
+                            
+                                if(it.authority == "ROLE_STUDENT")
+                                {
+                                    def prom = Promotion.getCurrentForStudent(it)
+                                    auth += it.getRoleName()
+                                    if(prom)
+                                        auth += " : " + prom
+                                }
+                                else if(it.authority == "ROLE_FORMATIONMANAGER")
+                                {
+                                    auth += it.getRoleName() + " : " + it.formation + "<br />"
+                                }
+                                else
+                                {
+                                    auth += it.getRoleName() + "<br />"
+                                }
 			}
 
 			ret << [
