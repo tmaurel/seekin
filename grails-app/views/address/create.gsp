@@ -22,19 +22,19 @@
           
                 <p>
                       <label for="street"><g:message code="address.street" default="Street" />:</label>
-                      <g:textField name="street" class="field${hasErrors(bean:addressInstance ,field:'street','error')}" value="${fieldValue(bean: addressInstance, field: 'street')}" />
+                      <g:textField name="street" class="field${hasErrors(bean:addressInstance ,field:'street','error')}" value="${addressInstance.street}" />
 
                 </p>
           
                 <p>
                       <label for="zipCode"><g:message code="address.zipCode" default="Zip Code" />:</label>
-                      <g:textField name="zipCode" class="field${hasErrors(bean:addressInstance ,field:'zipCode','error')}" value="${fieldValue(bean: addressInstance, field: 'zipCode')}" />
+                      <g:textField name="zipCode" class="field${hasErrors(bean:addressInstance ,field:'zipCode','error')}" value="${addressInstance.zipCode}" />
 
                 </p>
           
                 <p>
                       <label for="town"><g:message code="address.town" default="Town" />:</label>
-                      <g:textField name="town" class="field${hasErrors(bean:addressInstance ,field:'town','error')}" value="${fieldValue(bean: addressInstance, field: 'town')}" />
+                      <g:textField name="town" class="field${hasErrors(bean:addressInstance ,field:'town','error')}" value="${addressInstance.town}" />
 
                 </p>
           

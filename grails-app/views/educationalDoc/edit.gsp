@@ -23,7 +23,7 @@
                 <p>
 
                           <label for="title"><g:message code="educationalDoc.title" default="Title" /></label>
-                          <g:textField name="title" class="field${hasErrors(bean:educationalDocInstance ,field:'title','error')}" value="${fieldValue(bean: educationalDocInstance, field: 'title')}" />
+                          <g:textField name="title" class="field${hasErrors(bean:educationalDocInstance ,field:'title','error')}" value="${educationalDocInstance.title}" />
 
                 </p>
           

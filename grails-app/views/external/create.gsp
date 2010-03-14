@@ -40,7 +40,7 @@
           
                 <p>
                       <label for="authority"><g:message code="external.authority" default="Authority" />:</label>
-                      <g:textField name="authority" value="${fieldValue(bean: externalInstance, field: 'authority')}" class="field${hasErrors(bean:externalInstance ,field:'authority','error')}"/>
+                      <g:textField name="authority" value="${externalInstance.authority}" class="field${hasErrors(bean:externalInstance ,field:'authority','error')}"/>
 
                 </p>
           
