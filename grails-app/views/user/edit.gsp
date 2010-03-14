@@ -83,7 +83,15 @@
                           <ul>
                           <g:each var="role" in="${roles}">
                                   <li>
-                                          <g:checkBox name="ROLE_${role.name.toUpperCase()}" value="${role.value}"/>
+                                          <g:set var="current" value="${role.name.toUpperCase() == 'STUDENT' || role.name.toUpperCase() == 'STAFF' || role.name.toUpperCase() == 'EXTERNAL'}"/>
+                                          <g:if test="${role.value && current}">
+                                              <g:hiddenField name="ROLE_${role.name.toUpperCase()}" value="${role.value}" />
+                                              <g:checkBox name="ROLE2_${role.name.toUpperCase()}" value="${role.value}" disabled="${true}"/>
+                                          </g:if>
+                                          <g:else>
+                                              <g:checkBox name="ROLE_${role.name.toUpperCase()}" value="${role.value}"/>
+                                          </g:else>
+
                                           ${role.name.encodeAsHTML()}
                                           <g:if test="${role.name.toUpperCase() == 'STUDENT' || role.name.toUpperCase() == 'FORMATIONMANAGER'}">
                                               <g:select name="FORMATION_${role.name}" value='${params."FORMATION_$role.name"?:role.formation}' from="${formations}"  optionKey="id" optionValue="value" style="float:right; ${if(role.value!='on' && role.value !=true) {'visibility:hidden;width:0px;'} else {'width:200px;'} }"/>

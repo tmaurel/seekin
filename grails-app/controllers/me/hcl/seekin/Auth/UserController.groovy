@@ -403,7 +403,23 @@ class UserController {
                 // get all roles associated to the user
 		def roleNames = ""
 		for (role in userInstance.authorities) {
-			roleNames += role.getRoleName() + " "
+
+                    if(role.authority == "ROLE_STUDENT")
+                    {
+                        def prom = Promotion.getCurrentForStudent(role)
+                        roleNames += role.getRoleName()
+                        if(prom)
+                            roleNames += " : " + prom
+                    }
+                    else if(role.authority == "ROLE_FORMATIONMANAGER")
+                    {
+                        roleNames += role.getRoleName() + " : " + role.formation + "<br />"
+                    }
+                    else
+                    {
+                        roleNames += role.getRoleName() + "<br />"
+                    }
+                    
 		}
 
                 // build a string from the address
@@ -793,6 +809,7 @@ class UserController {
                     catchedRole = null
                     name = "ROLE_$it".toUpperCase()
                     value = params."$name"
+                    def test = value == "on" || value == "true"
 
                     for (role in userInstance.authorities)
                     {
@@ -802,7 +819,7 @@ class UserController {
                             break
                        }
                     }
-                    if(value == "on" && catchedRole != null)
+                    if(test && catchedRole != null)
                     {
                         if(it == "Student" && params.FORMATION_Student)
                         {
@@ -831,7 +848,7 @@ class UserController {
                             }
                         }
                     }
-                    else if(value == "on" && catchedRole == null)
+                    else if(test && catchedRole == null)
                     {
                         Thread t = Thread.currentThread()
                         ClassLoader cl = t.getContextClassLoader()
