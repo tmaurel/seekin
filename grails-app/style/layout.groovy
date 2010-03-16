@@ -99,9 +99,102 @@ style = {
 	
 	'#menu_cont #search_bar' (
 		'float':'right',
-		'width':'160px',
-		'margin-top':'5px',
+		'width':'210px',
 	)
+
+        '#menu_cont #search_bar a' (
+                'display':'block',
+                'float':'left',
+                'position':'relative',
+                'height':'18px',
+                'padding-top':'11px',
+                'padding-bottom':'11px',
+                'padding-left':'10px',
+                'padding-right':'10px',
+                'text-align':'center',
+                'width':'20px',
+        )
+
+        '#menu_cont #search_bar .message_opened' (
+                'background-image':'url(../images/skin/bar_selected_bg.png)'
+        )
+
+        '#menu_cont #search_bar #message_link' (
+                'width':'20px',
+                'height':'30px',
+                'background-image':'url(../images/icons/message.png)',
+                'background-repeat':'no-repeat',
+        )
+
+        '#menu_cont #search_bar #message_link #message_link_unread' (
+                'width':'11px',
+                'height':'14px',
+                'background-image':'url(../images/icons/unread.png)',
+                'background-repeat':'no-repeat',
+                'text-align':'center',
+                'font-size':'11px',
+                'color':'#fff',
+                'float':'right',
+                'padding-right':'2px',
+                'padding-top':'1px',
+                'margin-top':'7px'
+        )
+
+        '#menu_cont #search_bar a' (
+                'text-decoration':'none',
+                'color':'#fff'
+        )
+
+        '#menu_cont #search_bar a:hover' (
+                'text-decoration':'none',
+                'color':'#fff'
+        )
+
+        '#content #message_popup' (
+                'position':'relative',
+                'left':'0px',
+                'width':'923px',
+                'height':'340px',
+                'border':'1px solid #000',
+                'border-top':'none',
+                'z-index':'10',
+                'margin-top':'-10px',
+                'background-color':'#fff',
+                'display':'none',
+                'padding-left':'20px',
+                'padding-top':'1px'
+        )
+
+        '.message_unread' (
+                'display':'block',
+                'width':'20px',
+                'height':'18px',
+                'background-image':'url(../images/icons/message.png)',
+                'background-position':'right',
+                'margin-left':'10px'
+        )
+
+        '.message_read' (
+                'display':'block',
+                'width':'20px',
+                'height':'18px',
+                'background-image':'url(../images/icons/message.png)',
+                'background-position':'top center',
+                'margin-left':'10px'
+        )
+
+        '#message_popup #messageTabView' (
+                'height':'270px'
+        )
+
+        '#message_popup #messageTabView .yui-content' (
+                'height':'230px'
+        )
+
+        '#menu_cont #search_bar form' (
+                'margin-top':'4px',
+                'float':'right'
+        )
 
 	'#menu_cont #search_bar #q' (
 		'width':'120px',
@@ -168,7 +261,6 @@ style = {
 	'#menu .navigation' (
 		'float':'left',
 		'padding':'0',
-		'width':'772px',
 		'margin':'0 0 0 -3px',
 	)
 
@@ -437,7 +529,7 @@ style = {
 
         '.yui-navset' (
                 'margin-top':'20px',
-				'width':'95%',
+                'width':'95%',
         )
 
 		'.yui-skin-sam .yui-navset .yui-nav' (
