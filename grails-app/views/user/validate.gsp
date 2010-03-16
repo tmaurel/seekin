@@ -5,9 +5,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="layout" content="main" />
         <title><g:message code="user.validate" /></title>
-        <gui:resources components="dataTable"/>
-        <g:javascript src="datatable.js" />
-        <g:YUIButtonRessource />
+        
         <tm:resources />
     </head>
     <body>

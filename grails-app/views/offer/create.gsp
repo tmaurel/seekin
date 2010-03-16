@@ -5,8 +5,8 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="layout" content="main" />
         <title><g:message code="offer.create" /></title>
-	    <gui:resources components="accordion, autoComplete"/>
-        <g:YUIButtonRessource />
+	    <gui:resources components="autoComplete"/>
+        
         <tm:resources />
     </head>
     <body>  

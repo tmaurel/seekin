@@ -39,6 +39,8 @@ class ContactController {
             }
 
         }
+
+        return [contactInstance: cmd]
     }
 
     /**

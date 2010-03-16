@@ -5,7 +5,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="layout" content="main" />
         <title><g:message code="user.create" /></title>
-        <g:YUIButtonRessource />
+        
         <yui:javascript dir="animation" file="animation-min.js" />
         <g:javascript library="toggle" />
         <tm:resources />

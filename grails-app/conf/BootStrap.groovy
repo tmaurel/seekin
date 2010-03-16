@@ -28,6 +28,20 @@ class BootStrap {
 
 			return delegate.format(pattern)
 		}
+
+		Date.metaClass.formatDateHour = { ->
+
+			def locale = LCH.getLocale()
+			def pattern
+			if(locale.toString() == "fr") {
+				pattern = "dd/MM/yyyy HH:mm"
+			}
+			else {
+				pattern = "MM/dd/yyyy HH:mm"
+			}
+
+			return delegate.format(pattern)
+		}
 		
      }
      def destroy = {
