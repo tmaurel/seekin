@@ -638,9 +638,6 @@ style = {
 			'border':'solid 1px #D3D3D3',
 			'color':selectedColor,
 		)
-		'#search select' (
-			'font-size':'1.5em',
-		)
 
 		'.humanMsg' (
 				'top':'auto',
