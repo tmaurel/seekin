@@ -5,9 +5,9 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="layout" content="main" />
         <title><g:message code="internship.create" /></title>
-        <g:YUIButtonRessource />
+        
         <tm:resources />
-        <gui:resources components="accordion, autoComplete, tabView"/>
+        <gui:resources components="autoComplete"/>
         <yui:javascript dir="json" file="json-min.js" />
     </head>
     <body>  

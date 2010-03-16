@@ -5,9 +5,8 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="layout" content="main" />
         <title><g:message code="internship.list" /></title>
-        <gui:resources components="dataTable, tabView"/>
         <g:javascript src="datatable.js" />
-        <g:YUIButtonRessource />
+        
         <tm:resources />
     </head>
     <body>

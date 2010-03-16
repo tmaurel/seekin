@@ -4,6 +4,8 @@ import me.hcl.seekin.Auth.User
 import me.hcl.seekin.Util.Address
 import me.hcl.seekin.Auth.Role.Role
 import me.hcl.seekin.Internship.Internship
+import me.hcl.seekin.Message.*
+
 
 /**
  * User domain class.
@@ -18,7 +20,7 @@ class User {
 	}
 
 	/** A user can have some Role */
-	static hasMany = [ authorities : Role ]
+	static hasMany = [ authorities : Role, boxes: MessageBox ]
 
     /** Email which is used as a login */
 	String email
@@ -60,5 +62,20 @@ class User {
 
         String toString() {
             firstName + " " + lastName
+        }
+
+        def beforeInsert = {
+            def inbox = new InBox()
+            def sent = new SentBox()
+            def trash = new TrashBox()
+
+            this.addToBoxes(inbox)
+            this.addToBoxes(sent)
+            this.addToBoxes(trash)
+
+        }
+        
+        static mapping = {
+            boxes sort:"label"
         }
 }

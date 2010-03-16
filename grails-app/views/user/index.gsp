@@ -5,10 +5,14 @@
         <meta name="layout" content="main" />
         <title><g:message code="home" /></title>
         <ofchart:resources/>
+        <tm:resources/>
     </head>
     <body>
       <h2><g:message code="home" /></h2>
       <br />
+      <g:if test="${flash.message}">
+      <div class="flash_message"><g:message code="${flash.message}" transparent="true" args="${flash.args}" default="${flash.defaultMessage}" /></div>
+      </g:if>
       <div id="home_panel">
 	  <%-- ADMIN HOME VIEW --%>
 		  <g:ifAnyGranted role="ROLE_ADMIN">

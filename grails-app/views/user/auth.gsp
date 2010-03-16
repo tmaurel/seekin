@@ -1,7 +1,7 @@
 <head>
 	<meta name='layout' content='main' />
 	<title><g:message code="login.page.title" /></title>
-        <g:YUIButtonRessource />
+        
 </head>
 
 <body>
