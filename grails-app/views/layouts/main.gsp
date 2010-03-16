@@ -160,27 +160,6 @@
                             </gui:tabView>
                             <g:YUISubmitbutton action="list" value="delete" />
                             </g:form>
-                             <script type="text/javascript">
-                               
-                              function refreshDataSource(dataTable)
-                              {
-                                  var oCallback = {
-                                      success : dataTable.onDataReturnInitializeTable,
-                                      failure : dataTable.onDataReturnInitializeTable,
-                                      scope : dataTable,
-                                      argument: dataTable.getState() // data payload that will be returned to the callback function
-                                  };
-
-                                  dataTable.getDataSource().sendRequest(
-                                    "sort=${columnDefs[0]['key']}&order=ASC",
-                                    oCallback
-                                  );
-                              }
-
-
-
-
-                             </script>
                         </div>
                 </g:isLoggedIn>
                     <g:layoutBody />
