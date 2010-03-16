@@ -5,7 +5,7 @@
         <gui:resources components="accordion"/>
         <g:javascript library="yui" />
         <gui:resources components="dataTable"/>
-        
+        <g:YUIButtonRessource />
         <style type="text/css">
 
           .left_menu {
