@@ -139,7 +139,7 @@
                                         columnDefs="[
                                             [key: 'delete', sortable: true, resizeable: false, label: '', width: 12, formatter: 'messageDelete'],
                                             [key: 'subject', sortable: true, resizeable: true, label: subjectInternationalized, width: 500, formatter: 'messageFormatter'],
-                                            [key: 'author', sortable: true, resizeable: true, label: authorInternationalized, width: 140, formatter: 'messageFormatter'],
+                                            [key: 'author', sortable: true, resizeable: true, label: authorInternationalized, width: 120, formatter: 'messageFormatter'],
                                             [key: 'dateCreated', sortable: true, resizeable: true, label: dateInternationalized, width: 100, formatter: 'messageFormatter'],
                                             [key: 'urlID', sortable: false, resizeable: false, label:'Actions', formatter: 'messagePanelFormatter']
                                         ]"

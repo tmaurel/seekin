@@ -16,7 +16,6 @@ class MessageController {
         {
             // Get the user instance logged in
             def userInstance = authenticateService.userDomain()
-            sessionFactory.currentSession.merge(userInstance)
 
             def copyInstance = MessageCopy.get(params.id)
 
@@ -36,6 +35,7 @@ class MessageController {
                     {
                         copyInstance.status = MessageCopy.MESSAGE_READ
                         copyInstance.save()
+                        
                     }
                     return [messageInstance: messageInstance]
                 }
@@ -56,7 +56,6 @@ class MessageController {
         {
             // Get the user instance logged in
             def userInstance = authenticateService.userDomain()
-            sessionFactory.currentSession.merge(userInstance)
 
             def inbox = InBox.findByOwner(userInstance)
 
@@ -82,7 +81,7 @@ class MessageController {
         {
             // Get the user instance logged in
             def userInstance = authenticateService.userDomain()
-            sessionFactory.currentSession.merge(userInstance)
+
 
             def box = MessageBox.get(params.idBox)
 
