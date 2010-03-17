@@ -15,6 +15,7 @@
         <g:javascript library="application" />
         <g:javascript library="prototype" />
         <g:javascript library="datatable" />
+        <yui:javascript dir="json" file="json-min.js" />
         <g:YUIButtonRessource />
         <nav:resources/>	
     </head>
@@ -49,8 +50,10 @@
                         <nav:render group="menu"/>
                         <div id="search_bar">
                           <g:isLoggedIn>
-
+                            <g:set var="user" value="${User.get(loggedInUserInfo(field:'id').toString().toInteger())}" />
+                            <g:set var="boxes" value="${user.boxes}" />
                             <script type="text/javascript">
+                              
                               function toggleMessagePanel() {
                                 var link = $('message_link');
                                 var cont = link.getOffsetParent();
@@ -99,10 +102,74 @@
                               YAHOO.widget.DataTable.Formatter.messageFormatter = messageFormatter;
                               YAHOO.widget.DataTable.Formatter.messageDelete = messageDelete;
 
+                              function refreshDataSource(dataTable)
+                              {
+                                  var state = dataTable.getState();
+                                  var paginator = state.pagination;
+                                  var max = paginator.rowsPerPage;
+                                  var offset = paginator.recordOffset;
+                                  var dir;
+                                  var custom = dataTable.customQueryString;
+                                  
+                                  if(state.sortedBy.dir == YAHOO.widget.DataTable.CLASS_ASC)
+                                    dir = "asc"
+                                  else
+                                    dir = "desc"
+
+                                  var oCallback = {
+                                      success : dataTable.onDataReturnInitializeTable,
+                                      failure : dataTable.onDataReturnInitializeTable,
+                                      scope : dataTable,
+                                      argument: state // data payload that will be returned to the callback function
+                                  };
+
+                                  dataTable.getDataSource().sendRequest(
+                                    custom + "&sort=" + state.sortedBy.key + "&order=" + dir + "&max=" + max + "&offset=" + offset,
+                                    oCallback
+                                  );
+
+                              }
+
+                              function refreshDataTables(o)
+                              {
+                                  <g:each in="${boxes}" var="box" status="i">
+                                  refreshDataSource(GRAILSUI.dt_message${box.id});
+                                  </g:each>
+
+                                  var messages = [];
+
+                                  // Use the JSON Utility to parse the data returned from the server
+                                  try {
+                                    messages = YAHOO.lang.JSON.parse(o.responseText);
+                                  }
+                                  catch (x) {
+                                    alert("JSON Parse failed!");
+                                  return;
+                                  }
+
+                                  for (var i = 0, len = messages.length; i < len; ++i) {
+                                        var m = messages[i];
+                                        var input = YAHOO.util.Dom.get("label_box" + m.key);
+                                        var inner = input.innerHTML;
+                                        var pattern =/<strong>(\S+)\s\((\d+)\)<\/strong>/;
+                                        var match = inner.match(pattern);
+                                        if(match)
+                                        {
+                                            if(m.value > 0)
+                                                input.innerHTML = "<strong>" + RegExp.$1 + " (" + m.value + ")</strong>"
+                                            else
+                                                input.innerHTML = RegExp.$1
+                                        }
+                                        else
+                                        {
+                                            if(m.value > 0)
+                                                input.innerHTML = "<strong>" + inner + " (" + m.value + ")</strong>"
+                                        }
+
+                                  }
+                              }
+
                           </script>
-                            
-                          <g:set var="user" value="${User.get(loggedInUserInfo(field:'id').toString().toInteger())}" />
-                          <g:set var="boxes" value="${user.boxes}" />
                           <g:link controller="message" action="list" onClick="toggleMessagePanel(); return false;" >
                               <div id="message_link">
                                   <g:set var="total_unread" value="${MessageBox.getUnreadMessagesForUser(user).size()}" />
@@ -126,40 +193,61 @@
                             <g:set var="subjectInternationalized" value="${message(code:'message.subject')}" />
                             <g:set var="authorInternationalized" value="${message(code:'message.author')}" />
                             <g:set var="dateInternationalized" value="${message(code:'message.date')}" />
-                            <g:form action="list">
-                            <gui:tabView id="messageTabView">
+
+                            <g:formRemote name="messageRemote" url="[controller:'message',action:'delete']" onComplete="refreshDataTables(e);">
+                            <gui:tabView id="messageTabView" >
                               <g:each in="${boxes}" var="box" status="i">
+
+
+                                  <g:if test="${box.label != MessageBox.MESSAGEBOX_TRASH}">
+                                  <g:set var="columnDefs" value="[
+                                                  [key: 'delete', sortable: true, resizeable: false, label: '', width: 12, formatter: 'messageDelete'],
+                                                  [key: 'subject', sortable: true, resizeable: true, label: subjectInternationalized, width: 470, formatter: 'messageFormatter'],
+                                                  [key: 'author', sortable: true, resizeable: true, label: authorInternationalized, width: 140, formatter: 'messageFormatter'],
+                                                  [key: 'dateCreated', sortable: true, resizeable: true, label: dateInternationalized, width: 110, formatter: 'messageFormatter'],
+                                                  [key: 'urlID', sortable: false, resizeable: false, label:'Actions', formatter: 'messagePanelFormatter']
+                                              ]" />
+                                  </g:if>
+                                  <g:else>
+                                  <g:set var="columnDefs" value="[
+                                                  [key: 'subject', sortable: true, resizeable: true, label: subjectInternationalized, width: 470, formatter: 'messageFormatter'],
+                                                  [key: 'author', sortable: true, resizeable: true, label: authorInternationalized, width: 140, formatter: 'messageFormatter'],
+                                                  [key: 'dateCreated', sortable: true, resizeable: true, label: dateInternationalized, width: 110, formatter: 'messageFormatter'],
+                                                  [key: 'urlID', sortable: false, resizeable: false, label:'Actions', formatter: 'messagePanelFormatter']
+                                              ]" />
+                                  </g:else>
+
                                   <g:set var="idBox" value="${box.id}" />
                                   <g:set var="count" value="${box.getUnreadMessages().size()}" />
                                   <g:set var="label" value="${(count > 0)? '<strong>' + message(code:box.label) + ' (' + count + ')</strong>' : message(code:box.label)}" />
-                                  <gui:tab label="${label}" active="${(box.label==MessageBox.MESSAGEBOX_INBOX)? 1:0}">
-                                      <gui:dataTable
-                                        id="dt${box.id}"
+                                  <gui:tab id="box${box.id}" label="${label}" active="${(box.label==MessageBox.MESSAGEBOX_INBOX)? 1:0}">
+                                    <div id="dt-paginator${box.id}" class="yui-skin-sam yui-pg-container"></div>
+                                    <gui:dataTable
+                                        id="dt_message${box.id}"
                                         draggableColumns="true"
-                                        columnDefs="[
-                                            [key: 'delete', sortable: true, resizeable: false, label: '', width: 12, formatter: 'messageDelete'],
-                                            [key: 'subject', sortable: true, resizeable: true, label: subjectInternationalized, width: 500, formatter: 'messageFormatter'],
-                                            [key: 'author', sortable: true, resizeable: true, label: authorInternationalized, width: 120, formatter: 'messageFormatter'],
-                                            [key: 'dateCreated', sortable: true, resizeable: true, label: dateInternationalized, width: 100, formatter: 'messageFormatter'],
-                                            [key: 'urlID', sortable: false, resizeable: false, label:'Actions', formatter: 'messagePanelFormatter']
-                                        ]"
+                                        columnDefs="${columnDefs}"
                                         controller="message"
                                         action="dataTableDataAsJSON"
-                                        paginatorConfig="[
-                                                template:'{PreviousPageLink} {PageLinks} {NextPageLink} {CurrentPageReport}',
-                                                pageReportTemplate:'{totalRecords} ' + message(code:'list.total.records')
-                                        ]"
+                                        paginatorConfig='[
+                                                template:"{PreviousPageLink} {PageLinks} {NextPageLink} {CurrentPageReport}",
+                                                pageReportTemplate:"{totalRecords} " + message(code:"messages"),
+                                                containers: "dt-paginator${box.id}"
+                                        ]'
                                         rowExpansion="false"
-                                        rowsPerPage="5"
+                                        rowsPerPage="6"
                                         sortedBy="dateCreated"
                                         sortOrder="desc"
                                         params="[idBox:idBox]"
                                       />
                                   </gui:tab>
+                                  
                             </g:each>
                             </gui:tabView>
-                            <g:YUISubmitbutton action="list" value="delete" />
-                            </g:form>
+                            <input id="messageDelete" type="submit" value="${message(code:'delete')}"/>
+                              <script type="text/javascript">
+                                  yuiButtonMessageDelete = new YAHOO.widget.Button("messageDelete");
+                              </script>
+                            </g:formRemote>
                         </div>
                 </g:isLoggedIn>
                     <g:layoutBody />

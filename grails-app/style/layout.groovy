@@ -581,7 +581,7 @@ style = {
             'padding-left':'2.25em'
         )
 
-        '#delete button' (
+        '#delete button, #messageDelete button' (
             'background':'url(../images/icons/minus.png) 6% 40% no-repeat',
             'padding-left':'2.25em'
         )

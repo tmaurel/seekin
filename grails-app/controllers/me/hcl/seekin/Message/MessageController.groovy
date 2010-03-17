@@ -49,6 +49,73 @@ class MessageController {
         }
     }
 
+    def delete = {
+
+        if (authenticateService.isLoggedIn())
+        {
+            // Get the user instance logged in
+            def userInstance = authenticateService.userDomain()
+
+            def copy
+
+            params.each {
+                if(it.key.contains("delete_") && it.value == "on")
+                {
+                    copy = MessageCopy.get(it.key.split("_")[1].toInteger())
+                    if(copy?.box?.owner?.id == userInstance.id)
+                    {
+                        def trash = TrashBox.findByOwner(userInstance)
+                        if(trash)
+                        {
+                            copy.box.removeFromMessages(copy)
+                            trash.addToMessages(copy)
+                            trash.save(flush:true)
+                        }
+                    }
+                }
+            }
+
+            response.setHeader("Cache-Control", "no-store")
+
+            def d = MessageBox.createCriteria().list()
+            {
+                eq('owner', userInstance)
+
+                messages {
+                    projections {
+                        count('box', 'count')
+                    }
+                    eq('status', MessageCopy.MESSAGE_UNREAD)
+                }
+                groupProperty('id')
+            }
+
+            def query = "SELECT messagebox.id, count(message.id)"
+            query += " FROM MessageBox as messagebox"
+            query += " LEFT OUTER JOIN messagebox.messages as message"
+            query += "      WITH message.status = '" + MessageCopy.MESSAGE_UNREAD + "'"
+            query += " WHERE messagebox.owner = " + userInstance.id
+            query += " GROUP BY messagebox.id"
+
+
+            def list = sessionFactory.currentSession.createQuery(query).list()
+
+            println list
+
+            def ret = []
+            
+            list.each {
+                def val = [
+                    key: it[0],
+                    value: it[1]
+                ]
+                ret << val
+            }
+
+            render ret as JSON
+        }
+    }
+
 
     def addData = {
 
@@ -58,6 +125,7 @@ class MessageController {
             def userInstance = authenticateService.userDomain()
 
             def inbox = InBox.findByOwner(userInstance)
+            def sent = SentBox.findByOwner(userInstance)
 
             def copy = new MessageCopy(
                             message: new Message(
@@ -70,6 +138,19 @@ class MessageController {
             copy.save()
             
             copy.message.addToRecipients(User.get(1))
+
+            def copy2 = new MessageCopy(
+                            message: new Message(
+                                author: userInstance,
+                                subject: "OLOL",
+                                body: "OLOOOOOL"
+                            ),
+                            box:sent
+                        )
+            copy2.save()
+
+            copy2.message.addToRecipients(User.get(1))
+
 
         }
 
