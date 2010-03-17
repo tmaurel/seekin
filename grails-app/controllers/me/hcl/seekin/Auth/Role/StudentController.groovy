@@ -119,8 +119,9 @@ class StudentController {
 
         def columnDefs = projections.collect {
             def key = it.replaceAll(/\./, '_')
-            [key: key, sortable: true, resizeable: true, label: it, formatter:'managerTableFormatter']
+            [key: key, sortable: true, resizeable: true, label: "${message(code:it)}", formatter:'managerTableFormatter']
         }
+        println columnDefs
 
         return [projections: projections, columnDefs: columnDefs, millesimes:millesimes]
     }
