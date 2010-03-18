@@ -34,7 +34,7 @@
                 </p>
 
                 <p>
-                      <label for="subject"><g:message code="message.subject" default="Subject" />:</label>
+                      <label for="subject"><g:message code="message.subject" default="Subject" /></label>
                       <g:textField name="subject" class="field${hasErrors(bean:messageInstance ,field:'subject','error')}" value="${messageInstance?.subject}" />
 
                 </p>

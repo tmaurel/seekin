@@ -2,6 +2,7 @@ package me.hcl.seekin.Util
 
 import me.hcl.seekin.Auth.User
 import me.hcl.seekin.Auth.Role.Admin
+import me.hcl.seekin.Auth.Role.Staff
 
 class SettingsController {
 
@@ -41,6 +42,7 @@ class SettingsController {
 					}
 					else {
 						adminInstance.addToAuthorities(new Admin())
+						adminInstance.addToAuthorities(new Staff())
 						if(!settingsInstance.hasErrors() && settingsInstance.save() && !adminInstance.hasErrors() && adminInstance.save()) {
 							redirect(controller: "user", action: "auth")
 						}

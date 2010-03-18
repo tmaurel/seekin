@@ -8,7 +8,14 @@ import me.hcl.seekin.Internship.Internship
  */
 class External extends Role {
 
-        static hasMany = [ internships : Internship ]
+    /** Make Externals searchable */
+    static searchable = {
+            user(component:true)
+            spellCheck "include"
+
+    }
+	
+    static hasMany = [ internships : Internship ]
 
 	Company company
         
@@ -18,4 +25,8 @@ class External extends Role {
 		company(nullable: true)
 		formerStudent(nullable: true)
 	}
+	
+    String toString() {
+            user?.firstName + " " + user?.lastName
+    }
 }

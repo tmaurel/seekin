@@ -446,10 +446,9 @@ style = {
     '.field_value' (
  		'width':'50%',
 		'min-height':'18px',
-                'padding-left':'4px',
-		'float':'left',
+        'padding-left':'4px',
 		'margin-top':'2px',
-		'border-bottom':'solid 1px ' + secondColor,
+		'border-bottom':'solid 1px #CCCCCC',
         )
 	
 	'#login_form' (

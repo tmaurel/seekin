@@ -46,8 +46,9 @@ class StaffController {
     }
 
     def edit = {
-        def staffInstance = Staff.get(params.id)
-        if (!staffInstance) {
+		def userInstance = User.get(params.id)
+        def staffInstance = Staff.findByUser(userInstance)
+		if (!staffInstance) {
             flash.message = "staff.not.found"
             flash.args = [params.id]
             flash.defaultMessage = "Staff not found with id ${params.id}"

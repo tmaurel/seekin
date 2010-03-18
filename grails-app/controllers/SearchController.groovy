@@ -15,7 +15,7 @@
  */
 
 import org.compass.core.engine.SearchEngineQueryParseException
-import me.hcl.seekin.Auth.Role.Student
+import me.hcl.seekin.Auth.Role.*
 import me.hcl.seekin.Internship.Internship
 import me.hcl.seekin.Internship.Offer
 import me.hcl.seekin.Company
@@ -69,6 +69,12 @@ class SearchController {
 							case 'student':
 								searchResult = Student.search(qb,params)
 								break
+							case 'staff':
+								searchResult = Staff.search(qb,params)
+								break
+							case 'external':
+								searchResult = External.search(qb,params)
+								break
 							case 'company':
 								searchResult = Company.search(qb,params)
 								break
@@ -102,7 +108,7 @@ class SearchController {
 			render(
 				view: 'search',
 				model: [
-					searchableDomain: ['all','student','company','internship','offer','formation','link'],
+					searchableDomain: ['all','student','staff','external','company','internship','offer','formation','link'],
 					searchResult: searchResult,
 				]
 			)

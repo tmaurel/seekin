@@ -7,9 +7,19 @@ import me.hcl.seekin.Internship.Internship
  */
 class Staff extends Role {
 
+    /** Make Staff searchable */
+    static searchable = {
+            user(component:true)
+            spellCheck "include"
+
+    }
+	
     static hasMany = [ internships : Internship ]
 
     static constraints = {
     }
-  
+
+	String toString() {
+            user?.firstName + " " + user?.lastName
+    }
 }
