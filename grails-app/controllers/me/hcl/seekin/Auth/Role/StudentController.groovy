@@ -68,7 +68,8 @@ class StudentController {
     }
 
     def show = {
-        def studentInstance = Student.get(params.id)
+		def userInstance = User.get(params.id)
+        def studentInstance = Student.findByUser(userInstance)
         if (!studentInstance) {
             flash.message = "student.not.found"
             flash.args = [params.id]
@@ -116,6 +117,7 @@ class StudentController {
 
     def table = {
         def millesimes = Millesime.findAllByBeginDateLessThan(new Date())
+        def millesimeCurrent = Millesime.getCurrent()
 
         def columnDefs = projections.collect {
             def key = it.replaceAll(/\./, '_')
@@ -123,7 +125,7 @@ class StudentController {
         }
         println columnDefs
 
-        return [projections: projections, columnDefs: columnDefs, millesimes:millesimes]
+        return [projections: projections, columnDefs: columnDefs, millesimes: millesimes, millesimeCurrent: millesimeCurrent]
     }
 
     def tableAsJSON = {

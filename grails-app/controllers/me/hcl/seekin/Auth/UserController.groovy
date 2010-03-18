@@ -395,46 +395,63 @@ class UserController {
 	 * Show user details
 	 */
 	def show = {
-                // get the user using the url id
 		def userInstance = User.get(params.id)
-                // if the user doesnt exit, show error message
-		if (!userInstance) {
-			flash.message = "user.not.found"
-			flash.args = [params.id]
-                        // redirect to the list of users
-			redirect(action: "list")
-			return
+		if(authenticateService.ifAnyGranted("ROLE_ADMIN, ROLE_FORMATIONMANAGER"))
+		{
+			// get the user using the url id
+			// if the user doesnt exit, show error message
+			if (!userInstance) {
+				flash.message = "user.not.found"
+				flash.args = [params.id]
+				// redirect to the list of users
+				redirect(action: "list")
+				return
+			}
+
+			// get all roles associated to the user
+			def roleNames = ""
+			for (role in userInstance.authorities) {
+
+						if(role.authority == "ROLE_STUDENT")
+						{
+							def prom = Promotion.getCurrentForStudent(role)
+							roleNames += role.getRoleName()
+							if(prom)
+								roleNames += " : " + prom
+						}
+						else if(role.authority == "ROLE_FORMATIONMANAGER")
+						{
+							roleNames += role.getRoleName() + " : " + role.formation + "<br />"
+						}
+						else
+						{
+							roleNames += role.getRoleName() + "<br />"
+						}
+
+			}
+
+					// build a string from the address
+					def userAddress = ""
+					userAddress += userInstance?.address?.street + " "
+					userAddress += userInstance?.address?.town + " "
+					userAddress += userInstance?.address?.zipCode
+
+			[userInstance: userInstance, address: userAddress, roleNames: roleNames]
 		}
-
-                // get all roles associated to the user
-		def roleNames = ""
-		for (role in userInstance.authorities) {
-
-                    if(role.authority == "ROLE_STUDENT")
-                    {
-                        def prom = Promotion.getCurrentForStudent(role)
-                        roleNames += role.getRoleName()
-                        if(prom)
-                            roleNames += " : " + prom
-                    }
-                    else if(role.authority == "ROLE_FORMATIONMANAGER")
-                    {
-                        roleNames += role.getRoleName() + " : " + role.formation + "<br />"
-                    }
-                    else
-                    {
-                        roleNames += role.getRoleName() + "<br />"
-                    }
-                    
+		else
+		{
+			userInstance?.authorities?.each {
+				if(it instanceof Student) {
+					redirect controller: "student", action: "show", id: userInstance?.id
+				}
+				else if(it instanceof Staff) {
+					redirect controller: "staff", action: "show", id: userInstance?.id
+				}
+				else if(it instanceof External) {
+					redirect controller: "external", action: "show", id: userInstance?.id
+				}
+			}
 		}
-
-                // build a string from the address
-                def userAddress = ""
-                userAddress += userInstance?.address?.street + " "
-                userAddress += userInstance?.address?.town + " "
-                userAddress += userInstance?.address?.zipCode
-          
-		[userInstance: userInstance, address: userAddress, roleNames: roleNames]
 	}
 
 	/**

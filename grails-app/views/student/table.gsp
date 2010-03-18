@@ -26,9 +26,10 @@
             <input type="checkbox" id="${projection}" name="${projection}" value="on"/>
           </g:each>
           <g:select name="idMillesime"
-                              from="${millesimes}"
-                              optionKey="id"
-                              onChange="refreshDataSource()"
+					from="${millesimes}"
+					optionKey="id"
+					onChange="refreshDataSource()"
+					value="${millesimeCurrent}"
             />
           <input id="submit" type="submit" value="submit" style="display:none;"/>
         </gui:expandablePanel>

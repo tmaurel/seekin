@@ -1,10 +1,13 @@
 package me.hcl.seekin.Auth.Role
 
+import me.hcl.seekin.Auth.User
+
 
 
 import grails.converters.JSON
 class ExternalController {
-
+	def authenticateService
+	
     def index = { redirect(action: "list", params: params) }
 
     // the delete, save and update actions only accept POST requests
@@ -33,16 +36,25 @@ class ExternalController {
     }
 
     def show = {
-        def externalInstance = External.get(params.id)
-        if (!externalInstance) {
-            flash.message = "external.not.found"
-            flash.args = [params.id]
-            flash.defaultMessage = "External not found with id ${params.id}"
-            redirect(action: "list")
-        }
-        else {
-            return [externalInstance: externalInstance]
-        }
+		// Externals people can not see public profile of the others externals
+		if(authenticateService.ifAnyGranted("ROLE_EXTERNAL"))
+		{
+			redirect uri: "/"
+		}
+		else
+        {
+			def userInstance = User.get(params.id)
+			def externalInstance = External.findByUser(userInstance)
+			if (!externalInstance) {
+				flash.message = "external.not.found"
+				flash.args = [params.id]
+				flash.defaultMessage = "External not found with id ${params.id}"
+				redirect(action: "list")
+			}
+			else {
+				return [externalInstance: externalInstance]
+			}
+		}
     }
 
     def edit = {
