@@ -9,7 +9,6 @@ security {
 	requestMapClass = "me.hcl.seekin.Auth.RequestMap"
 	
 	useRequestMapDomainClass = false
-	
 	useControllerAnnotations = true 
 	
 	defaultRole = "ROLE_ROLE"
@@ -22,12 +21,12 @@ security {
 
 
         // Mail conf
-        useMail = false
-        mailHost = 'localhost'
-        mailUsername = 'user@localhost'
-        mailPassword = 'sungod'
+        useMail = true
+        mailHost = 'smtp.free.fr'
+        mailUsername = 'seekin.hcl@free.fr'
+        mailPassword = 'hcljunior'
         mailProtocol = 'smtp'
-        mailFrom = 'user@localhost'
+        mailFrom = 'webmaster@hcl.me'
         mailPort = 25
 	
 }

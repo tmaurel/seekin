@@ -2,6 +2,7 @@ package me.hcl.seekin.Util
 
 import javax.mail.MessagingException
 import org.codehaus.groovy.grails.commons.ConfigurationHolder
+import org.springframework.context.i18n.LocaleContextHolder as LCH
 import org.springframework.mail.MailException
 import org.springframework.mail.SimpleMailMessage
 import me.hcl.seekin.Auth.User
@@ -21,6 +22,8 @@ import me.hcl.seekin.Util.Settings
 class EmailerService {
 
 	boolean transactional = false
+
+        def messageSource
 
 	def mailSender
 	def mailMessage // a "prototype" email instance
@@ -62,16 +65,14 @@ class EmailerService {
 	 */
         def buildContactMail(message) {
 
-            def mail = Settings.get(1)?.emailAdmin
-
             def email = [
-                    to: [mail], // 'to' expects a List, NOT a single email address
+                    to: [ConfigurationHolder.config.security.mailFrom], // 'to' expects a List, NOT a single email address
                     subject: message.subject,
-                    text: """ From : ${message.fullName} <${message.email}>\n 
-                              Content : ${message.body} """ // 'text' is the email body
+                    text: """ From : ${message.fullName} <${message.email}>
+Content : ${message.body} """ // 'text' is the email body
                     ]
 
-            //sendEmails([email])
+            sendEmails([email])
        }
 
 
@@ -107,18 +108,26 @@ class EmailerService {
 	 * @param user instance of the newly registered user
 	 */
        def buildRegistrationMail(user) {
-           flash.message = message(code:"user.email.content.text1") + """
 
-            ${request.scheme}://${request.serverName}:${request.serverPort}${request.contextPath}
+            def locale = LCH.getLocale();
+            Object[] args = {}
 
-            ${message(code:"user.email.content.text2")}
-            ${lineBar}
-            ${message(code:"user.email")}: ${user.email}"""
+            //Construction of the lineBar included in the email with the good size
+            String lineBar = ""
+            messageSource.resolveCode("user.email.content.text2", locale).format(args).size().times{lineBar += "-"}
+
+            def msg = """
+${messageSource.resolveCode("user.email.content.text1", locale).format(args)}
+${ConfigurationHolder.config.grails.serverURL}
+
+${messageSource.resolveCode("user.email.content.text2", locale).format(args)}
+${lineBar}
+${messageSource.resolveCode("user.email", locale).format(args)}: ${user.email}"""
 
             def email = [
                     to: [user.email], // 'to' expects a List, NOT a single email address
-                    subject: "[${request.contextPath}] "+ message(code:"user.email.subject"),
-                    text: flash.message // 'text' is the email body
+                    subject: "[${Settings.get(1)?.applicationName}] "+ messageSource.resolveCode("user.email.subject", locale).format(args),
+                    text: msg // 'text' is the email body
                     ]
                     
             sendEmails([email])
@@ -142,10 +151,11 @@ class EmailerService {
 
             def email = [
                     to: [user.email], // 'to' expects a List, NOT a single email address
-                    subject: "TODO",
+                    subject: "[${Settings.get(1)?.applicationName}] "+ messageSource.resolveCode("user.lostPassword", locale).format(args),
                     text: baseUrl + "/user/checkCode/" + encodedUrl // 'text' is the email body
                     ]
-            //sendEmails([email])
+
+            sendEmails([email])
         }
 
     	/**

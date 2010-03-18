@@ -372,6 +372,7 @@ class UserController {
 	 */
 	def validate = {
             def user
+            def config = authenticateService.securityConfig
             params.each {
                 if(it.key.contains("validate_") && it.value == "on")
                 {
@@ -379,6 +380,11 @@ class UserController {
                     user.enabled = true
                     user.validated = true
                     user.save(flush: true)
+                    // If we use confirmation mail
+                    if (config.security.useMail)
+                    {
+                        emailerService.buildRegistrationMail(user)
+                    }
                 }
             }
 
@@ -986,8 +992,6 @@ class UserController {
                     }
                     else if(request.method == 'POST')
                     {
-                        def config = authenticateService.securityConfig
-
                         userInstance.validate()
 
                         // check if the password matches the repassword
@@ -1012,20 +1016,9 @@ class UserController {
                         userInstance.enabled = false
                         userInstance.validated = false
 
-                        //Construction of the lineBar included in the email with the good size
-                        String lineBar = ""
-                        message(code:"user.email.content.text2").size().times{lineBar += "-"}
-
-
                         // If everything went well
                         if (!userInstance.hasErrors())
                         {
-                            
-                            // If we use confirmation mail
-                            if (config.security.useMail)
-                            {
-                                emailerService.buildRegistrationMail(userInstance)
-                            }
                             if(company != null)
                                 company.save()
                             userInstance.save(flush: true)
@@ -1034,7 +1027,7 @@ class UserController {
 //                          def authtoken = daoAuthenticationProvider.authenticate(auth)
 //                          SCH.context.authentication = authtoken
 
-							redirect action: 'registerSuccess'
+                            redirect action: 'registerSuccess'
                         }
                         else
                         {

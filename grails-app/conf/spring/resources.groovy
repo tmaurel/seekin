@@ -23,4 +23,25 @@ beans = {
             sessionFactory = ref('sessionFactory')
             authenticateService = ref('authenticateService')
     }
+
+
+    if (conf.useMail) {
+        mailSender(org.springframework.mail.javamail.JavaMailSenderImpl) {
+            host = conf.mailHost
+            username = conf.mailUsername
+            password = conf.mailPassword
+            protocol = conf.mailProtocol
+            port = conf.mailPort
+            if (conf.javaMailProperties) {
+                    javaMailProperties = conf.javaMailProperties as Properties
+            }
+            defaultEncoding = "UTF-8"
+        }
+
+        mailMessage(org.springframework.mail.SimpleMailMessage) {
+            from = conf.mailFrom
+        }
+    }
+
+
 }
