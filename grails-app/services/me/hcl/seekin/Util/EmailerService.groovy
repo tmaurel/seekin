@@ -114,19 +114,19 @@ Content : ${message.body} """ // 'text' is the email body
 
             //Construction of the lineBar included in the email with the good size
             String lineBar = ""
-            messageSource.resolveCode("user.email.content.text2", locale).format(args).size().times{lineBar += "-"}
+            messageSource.resolveCode("user.email.content.text2", locale)?.format(args).size().times{lineBar += "-"}
 
             def msg = """
-${messageSource.resolveCode("user.email.content.text1", locale).format(args)}
+${messageSource.resolveCode("user.email.content.text1", locale)?.format(args)}
 ${ConfigurationHolder.config.grails.serverURL}
 
-${messageSource.resolveCode("user.email.content.text2", locale).format(args)}
+${messageSource.resolveCode("user.email.content.text2", locale)?.format(args)}
 ${lineBar}
-${messageSource.resolveCode("user.email", locale).format(args)}: ${user.email}"""
+${messageSource.resolveCode("user.email", locale)?.format(args)}: ${user.email}"""
 
             def email = [
                     to: [user.email], // 'to' expects a List, NOT a single email address
-                    subject: "[${Settings.get(1)?.applicationName}] "+ messageSource.resolveCode("user.email.subject", locale).format(args),
+                    subject: "[${Settings.get(1)?.applicationName}] "+ messageSource.resolveCode("user.email.subject", locale)?.format(args),
                     text: msg // 'text' is the email body
                     ]
                     
@@ -141,6 +141,9 @@ ${messageSource.resolveCode("user.email", locale).format(args)}: ${user.email}""
 	 */
         def buildLostPwdEmail(user) {
 
+            def locale = LCH.getLocale();
+            Object[] args = {}
+
             /* Build the code */
             def encodedUrl = buildLostPwdURL(user)
 
@@ -151,7 +154,7 @@ ${messageSource.resolveCode("user.email", locale).format(args)}: ${user.email}""
 
             def email = [
                     to: [user.email], // 'to' expects a List, NOT a single email address
-                    subject: "[${Settings.get(1)?.applicationName}] "+ messageSource.resolveCode("user.lostPassword", locale).format(args),
+                    subject: "[${Settings.get(1)?.applicationName}] "+ messageSource.resolveCode("user.lostPassword", locale)?.format(args),
                     text: baseUrl + "/user/checkCode/" + encodedUrl // 'text' is the email body
                     ]
 
