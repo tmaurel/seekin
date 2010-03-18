@@ -191,6 +191,15 @@ style = {
                 'height':'230px'
         )
 
+        '.quoted_message' (
+                'border':'solid 1px ' + secondColor,
+                'background-color': '#ffecd3',
+                'padding':'5px',
+                'margin-left':'50px',
+                'margin-right':'50px',
+                'margin-bottom':'30px'
+        )
+
         '#menu_cont #search_bar form' (
                 'margin-top':'4px',
                 'float':'right'
@@ -349,6 +358,16 @@ style = {
 		'color':selectedColor
 	)
 
+        '.field_full_value' (
+                'width':'90%',
+                'margin-left':'4px',
+		'min-height':'18px',
+                'padding':'20px',
+		'margin-top':'30px',
+                'margin-bottom':'10px',
+		'border':'solid 1px ' + secondColor,
+        )
+
 	'.boxed_form label' (
         'min-width':'100px',
         'margin-right':'10px',
@@ -427,7 +446,7 @@ style = {
     '.field_value' (
  		'width':'50%',
 		'min-height':'18px',
-        'padding-left':'4px',
+                'padding-left':'4px',
 		'float':'left',
 		'margin-top':'2px',
 		'border-bottom':'solid 1px ' + secondColor,
@@ -571,7 +590,7 @@ style = {
             'padding-left':'2.25em'
         )
 
-        '#save button' (
+        '#save button, #reply button' (
             'background':'url(../images/icons/save.png) 10% 40% no-repeat',
             'padding-left':'2.25em'
         )

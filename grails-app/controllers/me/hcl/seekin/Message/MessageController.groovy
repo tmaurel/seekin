@@ -47,6 +47,52 @@ class MessageController {
             }
 
         }
+        else
+            redirect(controller:"user", action:"auth")
+    }
+
+    def write = {
+
+        if (authenticateService.isLoggedIn())
+        {
+            // Get the user instance logged in
+            def userInstance = authenticateService.userDomain()
+            def messageInstance = new Message()
+
+            if(params.id)
+            {
+                def recipient = User.get(params.id)
+                if(recipient)
+                {
+                    messageInstance.addToRecipients(recipient)
+                }
+            }
+
+            return [messageInstance: messageInstance]
+        }
+    }
+
+    def reply = {
+
+        if (authenticateService.isLoggedIn())
+        {
+            // Get the user instance logged in
+            def userInstance = authenticateService.userDomain()
+            def messageInstance = new Message()
+
+            if(params.id)
+            {
+                def cmessage = Message.get(params.id)
+                messageInstance.addToRecipients(cmessage.author)
+                messageInstance.subject = "Re :" + cmessage.subject
+                messageInstance.body = """
+\n\n\n${g.renderOriginalMessageStart()}
+${message(code:'message.from')} : ${cmessage.author}
+${cmessage.body}
+${g.renderOriginalMessageEnd()}"""
+            }
+            render view: 'write', model: [messageInstance: messageInstance]
+        }
     }
 
     def delete = {
@@ -131,7 +177,16 @@ class MessageController {
                             message: new Message(
                                 author: userInstance,
                                 subject: "OLOL",
-                                body: "OLOOOOOL"
+                                body: """
+Toto 1
+\n\n\n${g.renderOriginalMessageStart()}
+${message(code:'message.from')} : Toto
+Toto 2
+\n\n\n${g.renderOriginalMessageStart()}
+${message(code:'message.from')} : Toto
+Toto 3
+${g.renderOriginalMessageEnd()}
+${g.renderOriginalMessageEnd()}"""
                             ),
                             box:inbox
                         )

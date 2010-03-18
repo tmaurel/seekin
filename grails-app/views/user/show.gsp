@@ -34,6 +34,17 @@
                             
                             </span>
                       </p>
+
+                       <p>
+                            <label><g:message code="message.private" default="Private Message" /></label>
+                            <span class="field_value">
+
+                            <g:link controller="message" action="write" params='[id:"${fieldValue(bean: userInstance, field: "id")}"]'>
+                                <img src="${resource(dir:'images/icons',file:'private_msg.png')}" alt="${message(code:'message.private')}"/>
+                            </g:link>
+
+                            </span>
+                      </p>
                         
                        <p>
                             <label><g:message code="user.enabled" default="Enabled" /></label>
@@ -118,7 +129,7 @@
                             </span>
                       </p>
                         
-                      
+                      <br />
                       <div class="actionpad yui-skin-sam">
                         <g:buildShowButtons />
                       </div>
