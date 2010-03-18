@@ -84,7 +84,7 @@ class MessageController {
             {
                 def cmessage = Message.get(params.id)
                 messageInstance.addToRecipients(cmessage.author)
-                messageInstance.subject = "Re :" + cmessage.subject
+                messageInstance.subject = "Re : " + cmessage.subject
                 messageInstance.body = """
 \n\n\n${g.renderOriginalMessageStart()}
 ${message(code:'message.from')} : ${cmessage.author}
@@ -92,6 +92,81 @@ ${cmessage.body}
 ${g.renderOriginalMessageEnd()}"""
             }
             render view: 'write', model: [messageInstance: messageInstance]
+        }
+    }
+
+    def save = {
+        if (authenticateService.isLoggedIn())
+        {
+            // Get the user instance logged in
+            def userInstance = authenticateService.userDomain()
+
+            def messageInstance = new Message()
+            messageInstance.subject = params.subject
+            messageInstance.body = params.body
+            messageInstance.author = userInstance
+            def rec
+            if(params.recipients?.class?.isArray())
+            {
+                params.recipients?.each {
+                    rec = User.get(it.toInteger())
+                    if(rec)
+                        messageInstance.addToRecipients(rec)
+                }
+            }
+            else
+            {
+                rec = User.get(params.recipients?.toInteger())
+                    if(rec)
+                        messageInstance.addToRecipients(rec)
+            }
+
+            if (messageInstance.validate() && !messageInstance.hasErrors()) {
+
+                def errors = 0
+                def sentbox = SentBox.findByOwner(userInstance)
+
+                def sent = new MessageCopy(
+                                message: messageInstance,
+                                box: sentbox,
+                                status: MessageCopy.MESSAGE_READ
+                            )
+
+                if(sent.save())
+                {
+                    messageInstance?.recipients?.each {
+                        def inbox = InBox.findByOwner(it)
+                        if(inbox)
+                        {
+                            def msg = new MessageCopy(
+                                            message: messageInstance,
+                                            box: inbox
+                                        )
+                            if(!msg.save())
+                                ++errors
+                        }
+                        else ++errors
+                    }
+                }
+                else ++errors
+
+                if(!errors)
+                {
+                    flash.message = "message.sent"
+                    flash.defaultMessage = "Message sent"
+                    redirect(action: "show", id: sent.id)
+                }
+                else
+                {
+                    flash.message = "message.creation.error"
+                    redirect(controller:"user", action: "index")
+                }
+
+            }
+            else {
+                render(view: "write", model: [messageInstance: messageInstance])
+            }
+
         }
     }
 

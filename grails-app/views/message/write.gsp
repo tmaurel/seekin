@@ -22,8 +22,8 @@
                 <p>
                       <label><g:message code="message.recipients" default="Recipients" /></label>
                       <span class="field_value">
-                      <g:hiddenField name="recipients" value="${messageInstance?.recipients?.id}" />
                       <g:each in="${messageInstance?.recipients}" var="recipient" status="i">
+                          <g:hiddenField name="recipients" value="${recipient?.id}" />
                           <g:if test="${i > 0}">
                             ,
                           </g:if>
