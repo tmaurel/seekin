@@ -237,55 +237,6 @@ ${g.renderOriginalMessageEnd()}"""
         }
     }
 
-
-    def addData = {
-
-        if (authenticateService.isLoggedIn())
-        {
-            // Get the user instance logged in
-            def userInstance = authenticateService.userDomain()
-
-            def inbox = InBox.findByOwner(userInstance)
-            def sent = SentBox.findByOwner(userInstance)
-
-            def copy = new MessageCopy(
-                            message: new Message(
-                                author: userInstance,
-                                subject: "OLOL",
-                                body: """
-Toto 1
-\n\n\n${g.renderOriginalMessageStart()}
-${message(code:'message.from')} : Toto
-Toto 2
-\n\n\n${g.renderOriginalMessageStart()}
-${message(code:'message.from')} : Toto
-Toto 3
-${g.renderOriginalMessageEnd()}
-${g.renderOriginalMessageEnd()}"""
-                            ),
-                            box:inbox
-                        )
-            copy.save()
-            
-            copy.message.addToRecipients(User.get(1))
-
-            def copy2 = new MessageCopy(
-                            message: new Message(
-                                author: userInstance,
-                                subject: "OLOL",
-                                body: "OLOOOOOL"
-                            ),
-                            box:sent
-                        )
-            copy2.save()
-
-            copy2.message.addToRecipients(User.get(1))
-
-
-        }
-
-    }
-
     def dataTableDataAsJSON = {
 
         if (authenticateService.isLoggedIn())
