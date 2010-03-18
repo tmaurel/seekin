@@ -19,5 +19,15 @@ security {
 	errorPage = "/user/accessDenied"
 	userName = "email"
 	password = "password"
+
+
+        // Mail conf
+        useMail = false
+        mailHost = 'localhost'
+        mailUsername = 'user@localhost'
+        mailPassword = 'sungod'
+        mailProtocol = 'smtp'
+        mailFrom = 'user@localhost'
+        mailPort = 25
 	
 }
