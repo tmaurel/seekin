@@ -22,7 +22,6 @@ var validatePanelFormatter = function(elLiner, oRecord, oColumn, oData) {
   elLiner.innerHTML += "<a href=\"show/" + id + "\"><img src=\"../images/icons/show.png\" /></a>";
 };
 
-
 YAHOO.widget.DataTable.Formatter.customLinkFormatter = customLinkFormatter;
 YAHOO.widget.DataTable.Formatter.adminPanelFormatter = adminPanelFormatter;
 YAHOO.widget.DataTable.Formatter.validatePanelFormatter = validatePanelFormatter;

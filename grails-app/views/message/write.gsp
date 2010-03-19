@@ -47,7 +47,7 @@
 
 
           <div class="actionpad yui-skin-sam">
-             <g:YUISubmitbutton action="save" value="send" />
+             <g:YUISubmitbutton action="save" value="${message(code:'send')}" />
           </div>
 
       </g:form>

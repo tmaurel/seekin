@@ -55,7 +55,7 @@
 
                       <br/>
                       <div class="actionpad yui-skin-sam">
-                          <g:YUISubmitbutton action="reply" value="reply" />
+                          <g:YUISubmitbutton action="reply" value="${message(code:'reply')}" />
                           
                       </div>
             </g:form>

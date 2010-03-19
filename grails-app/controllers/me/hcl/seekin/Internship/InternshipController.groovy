@@ -11,6 +11,7 @@ import me.hcl.seekin.Company
 import me.hcl.seekin.Formation.Millesime
 import me.hcl.seekin.Formation.Promotion
 import org.hibernate.LockMode
+import me.hcl.seekin.Formation.Formation
 
 class InternshipController {
     
@@ -99,6 +100,48 @@ class InternshipController {
                 render(view: "list", model: [status: status])
             }
         }
+    }
+
+    def assignate = {
+        def internship
+
+        params.each {
+            if(it.key.contains("tutor")) {
+                def list = []
+                Internship.findAllByMillesimeAndAcademicTutor(Millesime.getCurrent(), null).each {
+                    if(Promotion.getCurrentForStudent(it.student).formation.id == params.nameFormation?.toInteger()) {
+                        list.add it.id
+                    }
+                }
+                def i = 0
+                it.value.toInteger().each { it2 ->
+                    internship = Internship.get(list[i])
+                    internship.academicTutor = Staff.get(it2.toInteger())
+                    internship.save()
+                    i++
+                }
+            }
+        }
+        def staff = Staff.list().collect {
+            [
+                    id: it.id,
+                    value: it.user?.firstName + " " + it.user?.lastName
+            ]
+        }
+        def noSelect = ['null': '']
+        def formations = new HashSet()
+        if(authenticateService.ifAnyGranted("ROLE_ADMIN")) {
+            def internships = Internship.findAllByMillesimeAndAcademicTutor(Millesime.getCurrent(), null)
+            internships.each {
+                formations.add Promotion.getCurrentForStudent(it.student)?.formation
+            }
+        }
+        else if(authenticateService.ifAnyGranted("ROLE_FORMATIONMANAGER")) {
+            def userInstance = authenticateService.userDomain()
+            sessionFactory.currentSession.refresh(userInstance, LockMode.NONE)
+            formations = FormationManager.findByUser(userInstance).formation
+        }
+        return [staff: staff, noSelect: noSelect, formations: formations]
     }
 
     def create = {
@@ -427,6 +470,41 @@ class InternshipController {
             flash.defaultMessage = "Internship not found with id ${params.id}"
             redirect(action: "list")
         }
+    }
+
+    def dataTableAsJSON = {
+        def list = []
+        Internship.findAllByMillesimeAndAcademicTutor(Millesime.getCurrent(), null).each {
+            if(Promotion.getCurrentForStudent(it.student).formation.id == params.formation.toInteger()) {
+                list.add it.id
+            }
+        }
+
+        def list2
+        if(list.size() > 0) {
+            list2 = Internship.createCriteria().list(params) {
+                'in'('id', list)
+            }
+        }
+
+
+        def ret = []
+        response.setHeader("Cache-Control", "no-store")
+
+        list2.each {
+            ret << [
+               id:it.id,
+               subject:it.subject,
+               student:[name:it.student?.user?.firstName + " " + it.student?.user?.lastName, link:g.createLink(controller: 'user', action: 'show', id:it.student?.id)],
+            ]
+        }
+
+        def data = [
+                totalRecords: list.size(),
+                results: ret
+        ]
+
+        render data as JSON
     }
 
     def dataTableDataAsJSON = {
