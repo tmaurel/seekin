@@ -65,10 +65,7 @@ class Internship {
 
     /** Phone number to contact the company **/
     String phone
-
-    /** Will embed the address in the Internship table */
-    static embedded = ['address']
-
+    
     /** Constraints used to check if an instance is correct */
     static constraints = {
         subject(blank: false)

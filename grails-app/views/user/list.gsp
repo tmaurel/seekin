@@ -15,6 +15,7 @@
       </g:if>
       <div class="yui-skin-sam" id="crud_panel">
           <g:buildListButtons />
+          <g:YUILinkbutton action="validate" value="validate" />
                         <g:set var="idInternationalized" value="${message(code:'user.id')}" />
                         <g:set var="emailInternationalized" value="${message(code:'user.email')}" />
                         <g:set var="roleInternationalized" value="${message(code:'user.role')}" />

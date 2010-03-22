@@ -74,7 +74,22 @@ class CompanyController {
             redirect(action: "list")
         }
         else {
-            return [companyInstance: companyInstance]
+
+            def addresses = new HashSet()
+            companyInstance.internships.each {
+                if(it?.address)
+                    addresses.add it?.address
+            }
+
+            println addresses
+
+            def phones = new HashSet()
+            companyInstance.internships.each {
+                if(it?.phone)
+                    phones.add it?.phone
+            }
+
+            return [companyInstance: companyInstance, addresses: addresses, phones: phones]
         }
     }
 
@@ -156,7 +171,6 @@ class CompanyController {
 
             ret << [
                 name:it.name,
-                phone:it.phone,
                 urlID:it.id
             ]
         }

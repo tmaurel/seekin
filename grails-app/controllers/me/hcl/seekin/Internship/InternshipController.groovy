@@ -14,7 +14,7 @@ import org.hibernate.LockMode
 import me.hcl.seekin.Formation.Formation
 
 class InternshipController {
-    
+
     def authenticateService
     def sessionFactory
 
@@ -90,7 +90,7 @@ class InternshipController {
                 }
 
                 render(view: "list", model: [status: status, millesimes: millesimes])
-                
+
             }
             else if(authenticateService.ifAnyGranted("ROLE_STUDENT")) {
                 def student = Student.findByUser(userInstance)
@@ -103,54 +103,35 @@ class InternshipController {
     }
 
     def assignate = {
+
         def internship
+
         params.each {
-            if(it.key.contains("tutor") && it.value != 'null') {
-                def list = []
-                Internship.findAllByMillesimeAndAcademicTutor(Millesime.getCurrent(), null).each {
-                    if(Promotion.getCurrentForStudent(it.student).formation.id == params.nameFormation?.toInteger()) {
-                        list.add it.id
-                    }
-                }
-                def i = 0
-                it.value.toInteger().each { it2 ->
-                    internship = Internship.get(list[i])
-                    internship.academicTutor = Staff.get(it2.toInteger())
+            if(it.key.contains("assignate_")) {
+                def internshipId = it.key.split("_")[1].toInteger()
+
+                internship = Internship.get(internshipId)
+                if(internship)
+                {
+                    if(it.value != "null")
+                        internship.academicTutor = Staff.get(it.value.toInteger())
+                    else
+                        internship.academicTutor = null
                     internship.save()
-                    i++
                 }
             }
         }
-        /*def staff = Staff.list().collect {
-            [
-                    id: it.id,
-                    value: it.user?.firstName + " " + it.user?.lastName
-            ]
-        }*/
-        def staff = []
-        Staff.list().each {
-            if(it?.user?.enabled == true) {
-                def map = [
-                    id: it.id,
-                    value: it.user?.firstName + " " + it.user?.lastName    
-                ]
-                staff.add map
-            }
-        }
-        def noSelect = ['null': '']
+
         def formations = new HashSet()
         if(authenticateService.ifAnyGranted("ROLE_ADMIN")) {
-            def internships = Internship.findAllByMillesimeAndAcademicTutor(Millesime.getCurrent(), null)
-            internships.each {
-                formations.add Promotion.getCurrentForStudent(it.student)?.formation
-            }
+            formations = Promotion.getCurrents().formation
         }
         else if(authenticateService.ifAnyGranted("ROLE_FORMATIONMANAGER")) {
             def userInstance = authenticateService.userDomain()
             sessionFactory.currentSession.refresh(userInstance, LockMode.NONE)
             formations = FormationManager.findByUser(userInstance).formation
         }
-        return [staff: staff, noSelect: noSelect, formations: formations]
+        return [formations: formations]
     }
 
     def create = {
@@ -216,7 +197,7 @@ class InternshipController {
                     value: it.subject
             ]
         }
-        
+
         def internshipInstance = new Internship()
 
         if(authenticateService.ifAnyGranted("ROLE_STUDENT")) {
@@ -226,7 +207,7 @@ class InternshipController {
             internshipInstance.student = statusStudent
             internshipInstance.isApproval = false
         }
-        
+
         internshipInstance.properties = params
         internshipInstance.millesime = Millesime.getCurrent()
 
@@ -298,7 +279,7 @@ class InternshipController {
             }
 
             internshipInstance.companyTutor = role
-            
+
             if ((internshipInstance = internshipInstance?.merge(flush: true))) {
                 flash.message = "internship.created"
                 flash.args = [internshipInstance.id]
@@ -401,7 +382,7 @@ class InternshipController {
             if (params.version) {
                 def version = params.version.toLong()
                 if (internshipInstance.version > version) {
-                    
+
                     internshipInstance.errors.rejectValue("version", "internship.optimistic.locking.failure", "Another user has updated this Internship while you were editing")
                     render(view: "edit", model: [internshipInstance: internshipInstance])
                     return
@@ -483,7 +464,7 @@ class InternshipController {
 
     def dataTableAsJSON = {
         def list = []
-        Internship.findAllByMillesimeAndAcademicTutor(Millesime.getCurrent(), null).each {
+        Internship.findAllByMillesime(Millesime.getCurrent()).each {
             if(Promotion.getCurrentForStudent(it.student).formation.id == params.formation.toInteger()) {
                 list.add it.id
             }
@@ -505,6 +486,7 @@ class InternshipController {
                id:it.id,
                subject:it.subject,
                student:[name:it.student?.user?.firstName + " " + it.student?.user?.lastName, link:g.createLink(controller: 'user', action: 'show', id:it.student?.id)],
+               urlID: it.id
             ]
         }
 
@@ -600,6 +582,32 @@ class InternshipController {
         ]
 
         render data as JSON
+    }
+
+    def getAcademicTutorList = {
+        def internshipInstance = Internship.get(params.id)
+
+        if(internshipInstance)
+        {
+            response.setHeader("Cache-Control", "no-store")
+
+            def staff = Staff.list().collect {
+                [
+                        id: it.id,
+                        value: it.user?.firstName + " " + it.user?.lastName
+                ]
+            }
+
+            def list = g.select(
+                            name:'assignate_' + internshipInstance.id,
+                            from:staff,
+                            optionKey:'id',
+                            optionValue:'value',
+                            value:internshipInstance.academicTutor?.id,
+                            noSelection:[null: ''])
+
+            render list
+        }
     }
 
 }

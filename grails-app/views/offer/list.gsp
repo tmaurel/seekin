@@ -17,8 +17,6 @@
         <g:ifNotGranted role="ROLE_STUDENT">
           <g:buildListButtons />
         </g:ifNotGranted>
-          
-                        <g:set var="idInternationalized" value="${message(code:'offer.id')}" />
                  
                         <g:set var="subjectInternationalized" value="${message(code:'offer.subject')}" />
                  
@@ -40,9 +38,6 @@
                         id="dt${i}"
                         draggableColumns="true"
                         columnDefs="[
-
-                                      [key: 'id', sortable: true, resizeable: true, label: idInternationalized],
-
                                       [key: 'subject', sortable: true, resizeable: true, label: subjectInternationalized],
 
                                       [key: 'company', sortable: true, resizeable: true, label: companyInternationalized],
@@ -62,6 +57,7 @@
                         rowExpansion="false"
                         rowsPerPage="10"
                         params="[status: idStatus]"
+                        sortedBy="beginAt"
                       />
                       <g:YUISubmitbutton action="list" value="validate" />
                     </g:form>
@@ -71,9 +67,6 @@
                       id="dt${i}"
                       draggableColumns="true"
                       columnDefs="[
-
-                                    [key: 'id', sortable: true, resizeable: true, label: idInternationalized],
-
                                     [key: 'subject', sortable: true, resizeable: true, label: subjectInternationalized],
 
                                     [key: 'company', sortable: true, resizeable: true, label: companyInternationalized],
@@ -93,6 +86,7 @@
                       rowExpansion="false"
                       rowsPerPage="10"
                       params="[status: idStatus]"
+                      sortedBy="beginAt"
                   />
                   </g:else>
                 </g:ifAnyGranted>
@@ -101,9 +95,6 @@
                       id="dt${i}"
                       draggableColumns="true"
                       columnDefs="[
-
-                                    [key: 'id', sortable: true, resizeable: true, label: idInternationalized],
-
                                     [key: 'subject', sortable: true, resizeable: true, label: subjectInternationalized],
 
                                     [key: 'company', sortable: true, resizeable: true, label: companyInternationalized],
@@ -123,6 +114,7 @@
                       rowExpansion="false"
                       rowsPerPage="10"
                       params="[status: idStatus]"
+                      sortedBy="beginAt"
                   />
                 </g:ifNotGranted>
 			</gui:tab>

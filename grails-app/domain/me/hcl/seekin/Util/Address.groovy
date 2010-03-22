@@ -10,7 +10,7 @@ class Address {
 	
 	/** Make addresses searchable */
 
-    static belongsTo = [ User, Company ]
+    static belongsTo = [ User, Company, Internship ]
 
     /** Street of the address */
     String street

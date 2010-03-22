@@ -430,7 +430,6 @@ class OfferController {
         
             list2.each {
                 ret << [
-                   id:it.id,
                    subject:it.subject,
                    company:it.company.toString(),
                    beginAt:it.beginAt?.formatDate(),

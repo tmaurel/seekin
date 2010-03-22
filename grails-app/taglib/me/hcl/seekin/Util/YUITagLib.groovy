@@ -121,16 +121,10 @@ class YUITagLib {
                 out << gui.accordionElement(title:message(code:"admin"), selected:"true") {
 
                     """<ul>
-                        <li><a href="${createLink(controller:"settings", action:"index")}">${message(code:"settings")}</a></li>
-                        <li><a href="${createLink(controller:"user", action:"list")}">${message(code:"user.list")}</a></li>
-						<li><a href="${createLink(controller:"formation", action:"list")}">${message(code:"formation.list")}</a></li>
-						<li><a href="${createLink(controller:"promotion", action:"list")}">${message(code:"promotion.list")}</a></li>
-						<li><a href="${createLink(controller:"company", action:"list")}">${message(code:"company.list")}</a></li>
-						<li><a href="${createLink(controller:"offer", action:"list")}">${message(code:"offer.list")}</a></li>
-						<li><a href="${createLink(controller:"internship", action:"list")}">${message(code:"internship.list")}</a></li>
-						<li><a href="${createLink(controller:"report", action:"list")}">${message(code:"report.list")}</a></li>
-						<li><a href="${createLink(controller:"document", action:"list")}">${message(code:"document.list")}</a></li>
-						<li><a href="${createLink(controller:"link", action:"list")}">${message(code:"link.list")}</a></li>
+                        <li><img src="${resource(dir:'images/icons',file:'settings.png')}" alt="${message(code:"settings")}" /> <a href="${createLink(controller:"settings", action:"index")}">${message(code:"settings")}</a></li>
+                        <li><img src="${resource(dir:'images/icons',file:'users.png')}" alt="${message(code:"user.list")}" /> <a href="${createLink(controller:"user", action:"list")}">${message(code:"user.list")}</a></li>
+                        <li><img src="${resource(dir:'images/icons',file:'formations.png')}" alt="${message(code:"formation.list")}" /> <a href="${createLink(controller:"formation", action:"list")}">${message(code:"formation.list")}</a></li>
+                        <li><img src="${resource(dir:'images/icons',file:'millesimes.png')}" alt="${message(code:"millesime.list")}" /> <a href="${createLink(controller:"millesime", action:"list")}">${message(code:"millesime.list")}</a></li>
                     </ul>"""
                 }
             }
@@ -139,13 +133,9 @@ class YUITagLib {
                 out << gui.accordionElement(title:message(code:"student"), selected:"true") {
                     
                     """<ul>
-                        <li><a href="${createLink(controller:"offer", action:"list")}">${message(code:"offer.list")}</a></li>
-                        <li><a href="${createLink(controller:"internship", action:"list")}">${message(code:"internship.list")}</a></li>
-                        <li><a href="${createLink(controller:"internship", action:"create")}">${message(code:"internship.create")}</a></li>
-                        <li><a href="${createLink(controller:"report", action:"create")}">${message(code:"report.create")}</a></li>
-                        <li><a href="${createLink(controller:"student", action:"list")}">${message(code:"student.list")}</a></li>
-						<li><a href="${createLink(controller:"company", action:"list")}">${message(code:"company.list")}</a></li>
-                        <li><a href="${createLink(controller:"report", action:"list")}">${message(code:"report.list")}</a></li>
+                        <li><img src="${resource(dir:'images/icons',file:'offers.png')}" alt="${message(code:"offer.list")}" /> <a href="${createLink(controller:"offer", action:"list")}">${message(code:"offer.list")}</a></li>
+                        <li><img src="${resource(dir:'images/icons',file:'internships.png')}" alt="${message(code:"internship.list")}" /> <a href="${createLink(controller:"internship", action:"list")}">${message(code:"internship.list")}</a></li>
+                        <li><img src="${resource(dir:'images/icons',file:'reports.png')}" alt="${message(code:"report.list")}" /> <a href="${createLink(controller:"report", action:"list")}">${message(code:"report.list")}</a></li>
                     </ul>"""
                 }
             }

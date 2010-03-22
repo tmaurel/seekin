@@ -111,7 +111,6 @@
                             </span>
                       </p>
 
-
                        <p>
                             <label><g:message code="address.street" default="Street" /></label>
                             <span class="field_value">

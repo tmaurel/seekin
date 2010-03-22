@@ -16,9 +16,14 @@
 
         var assignPanelFormatter = function(elLiner, oRecord, oColumn, oData) {
           var id = oData;
-          elLiner.innerHTML = "${select(name:'tutor', from:staff, optionKey:'id', optionValue:'value', value:0, noSelection:noSelect)?.toString()?.replaceAll('"', "'")?.replaceAll("\r\n","")}";
-          elLiner.innerHTML += " <a href=\"show/" + id + "\"><img src=\"../images/icons/show.png\" /></a>";
-          
+          new Ajax.Request("${createLink(action:'getAcademicTutorList')}", {
+                method: 'POST',
+                postBody: "id=" + id,
+                onSuccess: function(response) {
+                   elLiner.innerHTML += response.responseText
+                   elLiner.innerHTML += " <a href=\"show/" + id + "\"><img src=\"../images/icons/show.png\" /></a>";
+                }
+             });
         };
 
         YAHOO.widget.DataTable.Formatter.assignPanelFormatter = assignPanelFormatter;
@@ -35,13 +40,15 @@
                         <g:set var="subjectInternationalized" value="${message(code:'internship.subject')}" />
 
                         <g:set var="studentInternationalized" value="${message(code:'internship.student')}" />
-                 
+
+
+          <g:form action="assignate">
           <gui:tabView id="myTabView">
             <g:each var="formation" in="${formations}" status="i">
               <g:set var="idFormation" value="${formation?.id}" />
               <gui:tab id="${formation.id}" label="${formation.label}" active="${(i==0)? 1:0}">
               <h2>${formation?.label}</h2>
-              <g:form action="assignate">
+              
                 <g:hiddenField name="nameFormation" value="${idFormation}" />
                 <gui:dataTable
                     id="dt_${idFormation}"
@@ -66,11 +73,12 @@
                     rowsPerPage="10"
                     params="[formation:idFormation]"
                 />
-                <g:YUISubmitbutton action="assignate" value="validate" />
-              </g:form>
+                
               </gui:tab>
             </g:each>
           </gui:tabView>
+          <g:YUISubmitbutton action="assignate" value="validate" />
+          </g:form>
         </div>
     </body>
 </html>

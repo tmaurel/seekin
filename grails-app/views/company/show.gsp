@@ -35,38 +35,42 @@
                             </span>
                       </p>
                         
-                       <p>
+                       <div class="properties_list">
                             <label><g:message code="company.address" default="Address" /></label>
-                            <span class="field_value">
-                            
-                            <g:link controller="address" action="show" id="${companyInstance?.address?.id}">${companyInstance?.address?.encodeAsHTML()}</g:link>
-                            
-                            </span>
-                      </p>
+                             <ul>
+                            <g:if test="${companyInstance?.address}">
+                              <li><g:link controller="address" action="show" id="${companyInstance?.address?.id}">${companyInstance?.address?.encodeAsHTML()}</g:link></li>
+                            </g:if>
+                            <g:each in="${addresses}" var="address">
+                                <li><g:link controller="address" action="show" id="${address?.id}">${address?.encodeAsHTML()}</g:link></li>
+                            </g:each>
+                            </ul>
+                      </div>
                         
-                       <p>
+                       <div class="properties_list">
                             <label><g:message code="company.phone" default="Phone" /></label>
-                            <span class="field_value">
-                            
-                            ${fieldValue(bean: companyInstance, field: "phone")}
-                            
-                            </span>
-                      </p>
+                             <ul>
+                            <g:if test="${companyInstance?.phone}">
+                              <li>${companyInstance?.phone?.encodeAsHTML()}</li>
+                            </g:if>
+                            <g:each in="${phones}" var="phone">
+                                <li>${phone?.encodeAsHTML()}</li>
+                            </g:each>
+                            </ul>
+                      </div>
                         
-                       <p>
+                       <div class="properties_list">
                             <label><g:message code="company.employees" default="Employees" /></label>
-                            <span class="field_value">
-                            
+                           
                             <ul>
                             <g:each in="${companyInstance?.employees}" var="userInstance">
                                 <li><g:link controller="user" action="show" id="${userInstance.id}">${userInstance.encodeAsHTML()}</g:link></li>
                             </g:each>
                             </ul>
-                            
-                            </span>
-                      </p>
+
+                      </div>
                         
-                      
+                      <br />
                       <div class="actionpad yui-skin-sam">
                         <g:buildShowButtons />
                       </div>

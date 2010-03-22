@@ -326,6 +326,37 @@ style = {
             'margin-top':'30px',
         )
 
+        '#submenu img' (
+            'float':'left',
+            'margin-right':'10px',
+            'margin-top':'-2px'
+        )
+
+        '#submenu a' (
+            'text-decoration':'none',
+        )
+
+        '#submenu a:hover' (
+            'text-decoration':'none',
+        )
+
+        '#submenu .yui-panel .bd' (
+            'background-image':'url(../images/skin/menu_bg.png)',
+        )
+
+        '#submenu li' (
+            'height':'17px',
+            'padding':'4px',
+            'list-style':'none'
+        )
+
+        '#submenu ul' (
+            'padding':'0px',
+            'margin':'0px',
+            'margin-top':'-5px',
+            'margin-bottom':'-7px'
+        )
+
         '#content' (
             'width':'725px',
             'margin-right':'20px',
@@ -562,7 +593,6 @@ style = {
                 'background':'transparent',
                 'border' : 'none',
 				//'border':'solid 1px #CCC',
-                'height':'400px',
                 'padding':'10px',
         )
 

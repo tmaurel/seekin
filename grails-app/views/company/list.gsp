@@ -26,9 +26,7 @@
               columnDefs="[
                      
                             [key: 'name', sortable: true, resizeable: true, label: nameInternationalized],
-                     
-                            [key: 'phone', sortable: true, resizeable: true, label: phoneInternationalized],
-                     
+                                         
                   [key: 'urlID', sortable: false, resizeable: false, label:'Actions', formatter: 'adminPanelFormatter']
               ]"
               controller="company"
