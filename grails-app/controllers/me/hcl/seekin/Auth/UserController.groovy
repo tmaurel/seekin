@@ -551,7 +551,7 @@ class UserController {
 
 		if (userInstance.validate()) {
                         userInstance.password = authenticateService.encodePassword(params.password)
-                        user.validated = true
+                        userInstance.validated = true
                         userInstance.save()
 			flash.message = "user.created"
 			flash.args = [userInstance.id]
