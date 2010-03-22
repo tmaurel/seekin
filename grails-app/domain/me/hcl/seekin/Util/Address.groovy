@@ -2,6 +2,7 @@ package me.hcl.seekin.Util
 
 import me.hcl.seekin.Auth.User
 import me.hcl.seekin.Company
+import me.hcl.seekin.Internship.Internship
 
 /*
  * Address
