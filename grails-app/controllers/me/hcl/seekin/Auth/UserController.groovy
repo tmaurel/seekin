@@ -4,7 +4,7 @@ import me.hcl.seekin.Auth.Role.*
 import me.hcl.seekin.Formation.*
 import me.hcl.seekin.Util.Address
 import me.hcl.seekin.Util.Settings
-import me.hcl.seekin.Company
+import me.hcl.seekin.Internship.Company
 import me.hcl.seekin.Internship.*
 import me.hcl.seekin.Ressource.*
 
@@ -25,6 +25,7 @@ import nl.captcha.Captcha
 import nl.captcha.backgrounds.*
 import nl.captcha.servlet.CaptchaServletUtil
 import grails.converters.JSON
+import org.codehaus.groovy.grails.plugins.springsecurity.Secured
 
 
 /**
@@ -360,9 +361,11 @@ class UserController {
             }
         }
 
+
 	/**
 	 * List all Users
 	 */
+        @Secured(['ROLE_ADMIN'])
 	def list = {
 
 	}
@@ -370,6 +373,7 @@ class UserController {
  	/**
 	 * Validate registered Users
 	 */
+        @Secured(['ROLE_ADMIN','ROLE_FORMATIONMANAGER'])
 	def validate = {
             def user
             def config = authenticateService.securityConfig
@@ -387,7 +391,6 @@ class UserController {
                     }
                 }
             }
-
 	}
 
 
@@ -395,76 +398,91 @@ class UserController {
 	 * Show user details
 	 */
 	def show = {
-		def userInstance = User.get(params.id)
-		if(authenticateService.ifAnyGranted("ROLE_ADMIN, ROLE_FORMATIONMANAGER"))
-		{
-			// get the user using the url id
-			// if the user doesnt exit, show error message
-			if (!userInstance) {
-				flash.message = "user.not.found"
-				flash.args = [params.id]
-				// redirect to the list of users
-				redirect(action: "list")
-				return
-			}
+            def userInstance = User.get(params.id)
+            if(authenticateService.ifAnyGranted("ROLE_ADMIN,ROLE_FORMATIONMANAGER"))
+            {
+                    // get the user using the url id
+                    // if the user doesnt exit, show error message
+                    if (!userInstance) {
+                            flash.message = "user.not.found"
+                            flash.args = [params.id]
+                            // redirect to the list of users
+                            redirect(action: "list")
+                            return
+                    }
 
-			// get all roles associated to the user
-			def roleNames = ""
-			for (role in userInstance.authorities) {
+                    // get all roles associated to the user
+                    def roleNames = ""
+                    for (role in userInstance.authorities) {
 
-						if(role.authority == "ROLE_STUDENT")
-						{
-							def prom = Promotion.getCurrentForStudent(role)
-							roleNames += role.getRoleName()
-							if(prom)
-								roleNames += " : " + prom
-						}
-						else if(role.authority == "ROLE_FORMATIONMANAGER")
-						{
-							roleNames += role.getRoleName() + " : " + role.formation + "<br />"
-						}
-						else
-						{
-							roleNames += role.getRoleName() + "<br />"
-						}
+                        if(role.authority == "ROLE_STUDENT")
+                        {
+                                def prom = Promotion.getCurrentForStudent(role)
+                                roleNames += role.getRoleName()
+                                if(prom)
+                                        roleNames += " : " + prom
+                        }
+                        else if(role.authority == "ROLE_FORMATIONMANAGER")
+                        {
+                                roleNames += role.getRoleName() + " : " + role.formation + "<br />"
+                        }
+                        else
+                        {
+                                roleNames += role.getRoleName() + "<br />"
+                        }
 
-			}
+                    }
 
-					// build a string from the address
-					def userAddress = ""
-					userAddress += userInstance?.address?.street + " "
-					userAddress += userInstance?.address?.town + " "
-					userAddress += userInstance?.address?.zipCode
+                    // build a string from the address
+                    def userAddress = ""
+                    userAddress += userInstance?.address?.street + " "
+                    userAddress += userInstance?.address?.town + " "
+                    userAddress += userInstance?.address?.zipCode
 
-			[userInstance: userInstance, address: userAddress, roleNames: roleNames]
-		}
-		else
-		{
-			userInstance?.authorities?.each {
-				if(it instanceof Student) {
-					redirect controller: "student", action: "show", id: userInstance?.id
-				}
-				else if(it instanceof Staff) {
-					redirect controller: "staff", action: "show", id: userInstance?.id
-				}
-				else if(it instanceof External) {
-					redirect controller: "external", action: "show", id: userInstance?.id
-				}
-			}
-		}
+                    [userInstance: userInstance, address: userAddress, roleNames: roleNames]
+            }
+            else
+            {
+                    userInstance?.authorities?.each {
+                            if(it instanceof Student) {
+                                    redirect controller: "student", action: "show", id: userInstance?.id
+                            }
+                            else if(it instanceof Staff) {
+                                    redirect controller: "staff", action: "show", id: userInstance?.id
+                            }
+                            else if(it instanceof External) {
+                                    redirect controller: "external", action: "show", id: userInstance?.id
+                            }
+                    }
+            }
 	}
 
 	/**
 	 * Person delete action. Before removing an existing userInstance,
 	 * he should be removed from those authorities which he is involved.
 	 */
+        @Secured(['ROLE_ADMIN','ROLE_FORMATIONMANAGER'])
 	def delete = {
 
-		def userInstance = User.get(params.id)
-		if (userInstance) {
+                def userInstance = User.get(params.id)
+                def ok = true
+
+                if(authenticateService.ifAnyGranted("ROLE_FORMATIONMANAGER"))
+                {
+                    ok = false
+                    def user = authenticateService.userDomain()
+                    def formation = FormationManager.findByUser(user)?.formation
+                    def student = Student.findByUser(userInstance)
+                    if(student && Promotion.getCurrentForStudent(student)?.formation == formation)
+                    {
+                        ok = true
+                    }
+                }
+
+		if (userInstance && ok) {
 			def authPrincipal = authenticateService.principal()
 			//avoid self-delete if the logged-in user is an admin
-			if (!(authPrincipal instanceof String) && authPrincipal.email == userInstance.email) {
+			if (!(authPrincipal instanceof String) && authPrincipal?.domainClass?.email == userInstance.email) {
                             flash.message = "user.not.deleted"
                             flash.args = [params.id]
                             redirect(action: "show", id: params.id)
@@ -473,7 +491,11 @@ class UserController {
 				userInstance.delete()
 				flash.message = "user.deleted"
 				flash.args = [params.id]
-				redirect(action: "list")
+
+                                if(authenticateService.ifAnyGranted("ROLE_FORMATIONMANAGER"))
+                                    redirect(action: "validate")
+                                else
+                                    redirect(action: "list")
 			}
 		}
 		else {
@@ -483,6 +505,7 @@ class UserController {
 		}
 	}
 
+        @Secured(['ROLE_ADMIN'])
 	def edit = {
 
                 def formations = getFormations()
@@ -500,6 +523,7 @@ class UserController {
 	/**
 	 * Person update action.
 	 */
+        @Secured(['ROLE_ADMIN'])
 	def update = {
 
                 def formations = getFormations()
@@ -533,6 +557,7 @@ class UserController {
 		}
 	}
 
+        @Secured(['ROLE_ADMIN'])
 	def create = {
 
 
@@ -542,6 +567,7 @@ class UserController {
 	/**
 	 * Person save action.
 	 */
+        @Secured(['ROLE_ADMIN'])
 	def save = {
 		def userInstance = new User()
                 userInstance.address = new Address()
@@ -578,6 +604,7 @@ class UserController {
 	/**
 	 * Show the login page.
 	 */
+        @Secured(['IS_AUTHENTICATED_ANONYMOUSLY'])
 	def auth = {
 		
 		noCache response
@@ -593,6 +620,7 @@ class UserController {
 	/**
 	 * Show denied page.
 	 */
+        @Secured(['IS_AUTHENTICATED_ANONYMOUSLY'])
 	def accessDenied = {
 		if (isLoggedIn() && authenticationTrustResolver.isRememberMe(SCH.context?.authentication)) {
 			// have cookie but the page is guarded with IS_AUTHENTICATED_FULLY
@@ -604,6 +632,7 @@ class UserController {
 	/**
 	 * Login failed
 	 */
+        @Secured(['IS_AUTHENTICATED_ANONYMOUSLY'])
 	def authFail = {
 
                 // Get the username
@@ -635,7 +664,10 @@ class UserController {
                 }
 	}
 
-
+	/**
+	 * Renew expired account
+	 */
+        @Secured(['IS_AUTHENTICATED_ANONYMOUSLY'])
         def renewal = {
             def formations = getFormations()
 
@@ -684,6 +716,7 @@ class UserController {
 	/**
 	 * Lost password form
 	 */
+        @Secured(['IS_AUTHENTICATED_ANONYMOUSLY'])
         def lostPassword = {
 
                 if(request.method == 'POST')
@@ -704,6 +737,7 @@ class UserController {
  	/**
 	 * Form to check the Url Code and enter a new password
 	 */
+        @Secured(['IS_AUTHENTICATED_ANONYMOUSLY'])
         def checkCode = {
 
                 def code = params.id
@@ -924,6 +958,7 @@ class UserController {
     	/**
 	 * Captcha generation
 	 */
+        @Secured(['IS_AUTHENTICATED_ANONYMOUSLY'])
         def generateCaptcha = {
             // Generate a captcha of 150px X 50px with gimp, noise and border
             // And add the associated text to the current user session
@@ -941,6 +976,7 @@ class UserController {
 	/**
 	 * User Registration Top page.
 	 */
+        @Secured(['IS_AUTHENTICATED_ANONYMOUSLY'])
 	def register = {
                 def userInstance = new User()
                 userInstance.address = new Address()
@@ -1056,8 +1092,10 @@ class UserController {
                }
 	}
 
+        @Secured(['IS_AUTHENTICATED_ANONYMOUSLY'])
 	def registerSuccess = { }
 
+        @Secured(['ROLE_ADMIN','ROLE_FORMATIONMANAGER'])
 	def dataTableDataAsJSON = {
 		def list = []
 

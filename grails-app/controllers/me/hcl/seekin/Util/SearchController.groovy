@@ -14,11 +14,13 @@
  * limitations under the License.
  */
 
+package me.hcl.seekin.Util
+
 import org.compass.core.engine.SearchEngineQueryParseException
 import me.hcl.seekin.Auth.Role.*
 import me.hcl.seekin.Internship.Internship
 import me.hcl.seekin.Internship.Offer
-import me.hcl.seekin.Company
+import me.hcl.seekin.Internship.Company
 import me.hcl.seekin.Ressource.Link
 import me.hcl.seekin.Formation.Formation
 

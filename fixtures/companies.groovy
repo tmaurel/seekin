@@ -1,4 +1,4 @@
-import me.hcl.seekin.Company
+import me.hcl.seekin.Internship.Company
 import me.hcl.seekin.Util.Address
 
 fixture {

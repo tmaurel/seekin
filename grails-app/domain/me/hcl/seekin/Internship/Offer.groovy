@@ -3,7 +3,7 @@ package me.hcl.seekin.Internship
 import me.hcl.seekin.Ressource.Document
 import me.hcl.seekin.Formation.Promotion
 import me.hcl.seekin.Auth.User
-import me.hcl.seekin.Company
+import me.hcl.seekin.Internship.Company
 
 class Offer {
 

@@ -4,6 +4,7 @@ import me.hcl.seekin.Auth.User
 import me.hcl.seekin.Formation.*
 import grails.converters.JSON
 import org.hibernate.FetchMode as FM
+import org.codehaus.groovy.grails.plugins.springsecurity.Secured
 
 class StudentController {
 
@@ -33,38 +34,38 @@ class StudentController {
 	
     def index = { redirect(action: "list", params: params) }
 
-    // the delete, save and update actions only accept POST requests
-    static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
-
+    @Secured(['ROLE_ADMIN', 'ROLE_FORMATIONMANAGER'])
     def list = {
-        if(!authenticateService.isLoggedIn()) {
-            redirect(controller: "user", action: "index")
+
+        def millesimes = Millesime.findAllByBeginDateLessThan(new Date())
+        def millesimeCurrent = millesimes.find {
+                it.current == true
         }
-		else {
-			if(authenticateService.ifAnyGranted("ROLE_ADMIN")) {
-				def millesimes = Millesime.findAllByBeginDateLessThan(new Date())
-				def millesimeCurrent = millesimes.find {
-					it.current == true
-				}
-				def millesimeSelected
+        def millesimeSelected
 
-				if(params.idMillesime)
-				{
-					millesimeSelected = Millesime.get(params.idMillesime)
-				}
-				else
-				{
-					millesimeSelected = millesimeCurrent
-				}
+        if(params.idMillesime)
+        {
+                millesimeSelected = Millesime.get(params.idMillesime)
+        }
+        else
+        {
+                millesimeSelected = millesimeCurrent
+        }
 
-				def promotions = Promotion.findAllByMillesime(millesimeSelected)
+        def promotions
 
-				render(view: "list", model: [promotions: promotions, millesimes: millesimes])
-			}
-                        else if(authenticateService.ifAnyGranted("ROLE_STUDENT")) {
-                                            redirect(controller: "user", action: "index")
-                        }
-		}
+        if(authenticateService.ifAnyGranted('ROLE_ADMIN'))
+            promotions = Promotion.findAllByMillesime(millesimeSelected)
+        else
+        {
+            def userInstance = authenticateService.userDomain()
+            def manager = FormationManager.findByUser(userInstance)
+
+            promotions = Promotion.findAllByMillesimeAndFormation(millesimeSelected, manager?.formation)
+        }
+
+        render(view: "list", model: [promotions: promotions, millesimes: millesimes])
+				
     }
 
     def show = {
@@ -81,6 +82,7 @@ class StudentController {
         }
     }
 
+    @Secured(['ROLE_ADMIN', 'ROLE_FORMATIONMANAGER'])
     def dataTableDataAsJSON = {
 
         def promotion = Promotion.get(params.promotion)
@@ -115,6 +117,7 @@ class StudentController {
         render data as JSON
     }
 
+    @Secured(['ROLE_ADMIN', 'ROLE_FORMATIONMANAGER'])
     def table = {
         def millesimes = Millesime.findAllByBeginDateLessThan(new Date())
         def millesimeCurrent = Millesime.getCurrent()
@@ -128,6 +131,7 @@ class StudentController {
         return [projections: projections, columnDefs: columnDefs, millesimes: millesimes, millesimeCurrent: millesimeCurrent]
     }
 
+    @Secured(['ROLE_ADMIN', 'ROLE_FORMATIONMANAGER'])
     def tableAsJSON = {
 
         def millesimeCurrent = Millesime.getCurrent()

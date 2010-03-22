@@ -28,5 +28,15 @@ security {
 	mailProtocol = 'smtp'
 	mailFrom = 'webmaster@hcl.me'
 	mailPort = 25
+
+
+       controllerAnnotationStaticRules = [
+          '/':['IS_AUTHENTICATED_REMEMBERED'],
+          '/**/js/**': ['IS_AUTHENTICATED_ANONYMOUSLY'],
+          '/**/css/**': ['IS_AUTHENTICATED_ANONYMOUSLY'],
+          '/**/images/**': ['IS_AUTHENTICATED_ANONYMOUSLY'],
+          '/**': ['IS_AUTHENTICATED_REMEMBERED'],
+       ]
+
 	
 }

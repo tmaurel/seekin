@@ -30,7 +30,7 @@
                 <p>
 
                           <label for="company"><g:message code="external.company" default="Company" /></label>
-                          <g:select name="company.id" from="${me.hcl.seekin.Company.list()}" optionKey="id" value="${externalInstance?.company?.id}" noSelection="['null': '']" />
+                          <g:select name="company.id" from="${me.hcl.seekin.Internship.Company.list()}" optionKey="id" value="${externalInstance?.company?.id}" noSelection="['null': '']" />
 
                 </p>
           

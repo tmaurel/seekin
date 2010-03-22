@@ -2,7 +2,7 @@ package me.hcl.seekin.Util
 
 import org.codehaus.groovy.grails.plugins.springsecurity.AuthorizeTools
 
-class YUITagLib {
+class YUISeekinTagLib {
 
     def YUIButtonRessource = {
         out << yui.javascript(dir:'yahoo-dom-event', file:'yahoo-dom-event.js')

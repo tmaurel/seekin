@@ -1,6 +1,6 @@
 package me.hcl.seekin.Auth.Role
 
-import me.hcl.seekin.Company
+import me.hcl.seekin.Internship.Company
 import me.hcl.seekin.Internship.Internship
 
 /*

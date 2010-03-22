@@ -1,8 +1,8 @@
-package me.hcl.seekin
+package me.hcl.seekin.Internship
 
 import grails.test.*
 
-class SecuredControllerTests extends ControllerUnitTestCase {
+class CompanyControllerTests extends ControllerUnitTestCase {
     protected void setUp() {
         super.setUp()
     }

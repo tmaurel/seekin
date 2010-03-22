@@ -4,7 +4,7 @@ import me.hcl.seekin.Auth.User
 import me.hcl.seekin.Auth.Role.Student
 import me.hcl.seekin.Auth.Role.Staff
 import me.hcl.seekin.Auth.Role.External
-import me.hcl.seekin.Company
+import me.hcl.seekin.Internship.Company
 import me.hcl.seekin.Formation.Millesime
 import org.apache.commons.lang.StringUtils
 import me.hcl.seekin.Util.Address

@@ -1,9 +1,8 @@
-package me.hcl.seekin
+package me.hcl.seekin.Internship
 
 import me.hcl.seekin.Auth.User
 import me.hcl.seekin.Util.Address
-import me.hcl.seekin.Internship.Internship
-import me.hcl.seekin.Internship.Offer
+
 
 /*
  * Company identifies a company and groups contact information

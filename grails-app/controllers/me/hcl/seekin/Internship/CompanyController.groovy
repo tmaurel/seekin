@@ -1,4 +1,4 @@
-package me.hcl.seekin
+package me.hcl.seekin.Internship
 
 import grails.converters.JSON
 import jofc2.model.Chart
@@ -6,7 +6,7 @@ import jofc2.model.axis.YAxis
 import jofc2.model.axis.XAxis
 import jofc2.model.axis.Label
 import jofc2.model.elements.PieChart
-import me.hcl.seekin.Internship.Internship
+
 
 class CompanyController {
 

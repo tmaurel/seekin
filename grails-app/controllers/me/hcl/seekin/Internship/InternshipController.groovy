@@ -7,7 +7,7 @@ import me.hcl.seekin.Auth.Role.*
 import me.hcl.seekin.Auth.User
 import me.hcl.seekin.Auth.UserController
 import me.hcl.seekin.Util.Address
-import me.hcl.seekin.Company
+import me.hcl.seekin.Internship.Company
 import me.hcl.seekin.Formation.Millesime
 import me.hcl.seekin.Formation.Promotion
 import org.hibernate.LockMode
@@ -269,7 +269,7 @@ class InternshipController {
                 role.save(flush:true)
                 companyTutor = new User()
                 companyTutor.properties = params
-                companyTutor.password = UserController.generatePwd(8)
+                companyTutor.password = authenticateService.encodePassword(UserController.generatePwd(8))
                 companyTutor.addToAuthorities(role)
                 companyTutor.save(flush:true)
             }

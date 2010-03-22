@@ -1,4 +1,4 @@
-package me.hcl.seekin
+package me.hcl.seekin.Internship
 
 import grails.test.*
 import me.hcl.seekin.Util.Address

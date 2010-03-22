@@ -3,7 +3,7 @@ package me.hcl.seekin.Internship
 
 
 import grails.converters.JSON
-import me.hcl.seekin.Company
+import me.hcl.seekin.Internship.Company
 import org.hibernate.LockMode
 import me.hcl.seekin.Formation.Promotion
 import org.codehaus.groovy.grails.plugins.springsecurity.Secured

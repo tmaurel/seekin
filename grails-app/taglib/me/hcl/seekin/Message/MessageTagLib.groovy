@@ -1,4 +1,4 @@
-package me.hcl.seekin
+package me.hcl.seekin.Message
 
 class MessageTagLib {
     

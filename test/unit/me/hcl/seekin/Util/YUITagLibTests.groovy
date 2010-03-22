@@ -2,7 +2,7 @@ package me.hcl.seekin.Util
 
 import grails.test.*
 
-class YUITagLibTests extends TagLibUnitTestCase {
+class YUISeekinTagLibTests extends TagLibUnitTestCase {
     protected void setUp() {
         super.setUp()
     }
