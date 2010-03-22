@@ -23,7 +23,7 @@
                 <p>
 
                           <label for="beginDate"><g:message code="millesime.beginDate" default="Begin Date" /></label>
-                          <g:datePicker name="beginDate" value="${millesimeInstance?.beginDate}"  />
+                          <g:datePicker name="beginDate" value="${millesimeInstance?.beginDate}" precision="day" />
 
                 </p>
           

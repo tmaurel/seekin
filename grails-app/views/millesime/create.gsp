@@ -21,14 +21,14 @@
       <g:form class="boxed_form" name="crud_panel" action="save" method="post" >
           
                 <p>
-                      <label for="beginDate"><g:message code="millesime.beginDate" default="Begin Date" />:</label>
-                      <g:datePicker name="beginDate" value="${millesimeInstance?.beginDate}"  />
+                      <label for="beginDate"><g:message code="millesime.beginDate" default="Begin Date" /></label>
+                      <g:datePicker name="beginDate" value="${millesimeInstance?.beginDate}" precision="day" />
 
                 </p>
           
                 <p>
-                      <label for="endDate"><g:message code="millesime.endDate" default="End Date" />:</label>
-                      <g:datePicker name="endDate" value="${millesimeInstance?.endDate}"  />
+                      <label for="endDate"><g:message code="millesime.endDate" default="End Date" /></label>
+                      <g:datePicker name="endDate" value="${millesimeInstance?.endDate}" precision="day" />
 
                 </p>
           

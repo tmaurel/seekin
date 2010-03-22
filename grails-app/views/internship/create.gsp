@@ -41,7 +41,7 @@
 
                       <p>
                             <label for="beginAt"><g:message code="internship.beginAt" default="Begin At" /></label>
-                            <g:datePicker name="beginAt" value="${internshipInstance?.beginAt}"  />
+                            <g:datePicker name="beginAt" value="${internshipInstance?.beginAt}" precision="day" />
 
                       </p>
 

@@ -5,7 +5,7 @@ import me.hcl.seekin.Ressource.Document
 class Report extends Document {
 	
     /* Indicate if the Student wants share his Report */
-    Boolean isPrivate
+    Boolean isPrivate = false
 
     /* A report belongs to an Internship */
     static belongsTo = Internship

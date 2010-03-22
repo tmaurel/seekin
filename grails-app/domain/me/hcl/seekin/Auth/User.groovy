@@ -14,9 +14,8 @@ class User {
 
 	/** Make User searchable */
 	static searchable = {
-		only = ['email','firstName','lastName','address','phone','showEmail']
+		only = ['email','firstName','lastName','phone','showEmail']
 		spellCheck "include"
-		all false
 	}
 
 	/** A user can have some Role */
@@ -29,10 +28,10 @@ class User {
 	String password
 
 	/** Indicates if the user is enabled by an administrator */
-	boolean enabled
+	boolean enabled = false
 
-	/** Indicatd if the user has been validated by the admin **/
-	boolean validated
+	/** Indicate if the user has been validated by the admin **/
+	boolean validated = false
 
 	/** First name */
 	String firstName
@@ -47,17 +46,17 @@ class User {
 	String phone
 
     /** Indicates if the user wants to share his email */
-	boolean showEmail
+	boolean showEmail = true
 
 	/** Constraints used to check if an instance is correct */
 	static constraints = {
 		email(blank: false, unique: true, email: true)
-		password(blank: false)
+		password(blank: false, minSize: 6)
 		enabled(nullable:true)
-        firstName(blank: false)
-		lastName(blank: false)
-		address(nullable: true)
-		phone(nullable:true, size: 10..10)
+        firstName(blank: false, maxSize: 30)
+		lastName(blank: false, maxSize: 30)
+		address(nullable: false)
+		phone(nullable:true, maxSize: 15)
 	}
 
         String toString() {

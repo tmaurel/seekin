@@ -20,13 +20,13 @@ security {
 	password = "password"
 
 
-        // Mail conf
-        useMail = true
-        mailHost = 'smtp.free.fr'
-        mailUsername = 'seekin.hcl@free.fr'
-        mailPassword = 'hcljunior'
-        mailProtocol = 'smtp'
-        mailFrom = 'webmaster@hcl.me'
-        mailPort = 25
+	// Mail conf
+	useMail = true
+	mailHost = 'smtp.free.fr'
+	mailUsername = 'seekin.hcl@free.fr'
+	mailPassword = 'hcljunior'
+	mailProtocol = 'smtp'
+	mailFrom = 'webmaster@hcl.me'
+	mailPort = 25
 	
 }

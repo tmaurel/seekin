@@ -19,9 +19,9 @@ class External extends Role {
 
 	Company company
         
-	Boolean formerStudent
+	Boolean formerStudent = false
 
-        static constraints = {
+	static constraints = {
 		company(nullable: true)
 		formerStudent(nullable: true)
 	}

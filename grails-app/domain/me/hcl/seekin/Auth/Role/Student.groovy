@@ -19,7 +19,7 @@ class Student extends Role {
     static hasMany = [ internships : Internship, promotions : Promotion ]
 
     /** Visible ? **/
-    Boolean visible
+    Boolean visible = true
 
     static constraints = {
         visible(nullable: false)

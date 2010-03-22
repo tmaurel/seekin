@@ -37,13 +37,13 @@
 
                   <p>
                         <label for="beginAt"><g:message code="offer.beginAt" default="Begin At" /></label>
-                        <g:datePicker name="beginAt" value="${offerInstance?.beginAt}"  />
+                        <g:datePicker name="beginAt" value="${offerInstance?.beginAt}" precision="day"  />
 
                   </p>
 
                   <p>
                         <label for="length"><g:message code="offer.length" default="Length" /></label>
-                        <g:select name="length" from="${1..52}" value="${offerInstance?.length}"  />
+                        <g:select name="length" from="${1..52}" value="${offerInstance?.length}" />
 
                   </p>
 

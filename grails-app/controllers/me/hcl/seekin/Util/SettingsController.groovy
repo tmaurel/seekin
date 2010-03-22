@@ -28,7 +28,8 @@ class SettingsController {
 					password: authenticateService.encodePassword(params.passwordAdmin),
 					firstName: params.firstNameAdmin,
 					lastName: params.lastNameAdmin,
-					enabled: true
+					enabled: true,
+					address: new Address(street: params.streetAdmin, town: params.townAdmin, zipCode: params.zipCodeAdmin)
 				)
 
 				settingsInstance = new Settings(applicationName: params.applicationName)
@@ -43,7 +44,7 @@ class SettingsController {
 					else {
 						adminInstance.addToAuthorities(new Admin())
 						adminInstance.addToAuthorities(new Staff())
-						if(!settingsInstance.hasErrors() && settingsInstance.save() && !adminInstance.hasErrors() && adminInstance.save()) {
+						if(!adminInstance.hasErrors() && adminInstance.save() && !settingsInstance.hasErrors() && settingsInstance.save()) {
 							redirect(controller: "user", action: "auth")
 						}
 					}

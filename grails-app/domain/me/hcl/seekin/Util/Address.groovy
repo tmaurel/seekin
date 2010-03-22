@@ -9,9 +9,6 @@ import me.hcl.seekin.Company
 class Address {
 	
 	/** Make addresses searchable */
-	static searchable = {
-		all false
-	}
 
     static belongsTo = [ User, Company ]
 
@@ -25,9 +22,9 @@ class Address {
     String town
 
     static constraints = {
-      street(blank: true)
-      zipCode(blank: true, matches: /\d+/)
-      town(blank: true)
+      street(blank: false)
+      zipCode(blank: false, matches: /\d+/)
+      town(blank: false)
     }
 
 	String toString() {

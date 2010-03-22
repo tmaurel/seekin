@@ -23,20 +23,32 @@
 		<h3><g:message code="settings.application" /></h3>
 		<p>
 			  <label for="applicationName"><g:message code="settings.applicationName" default="Application Name" /></label>
-			  <g:textField name="applicationName" value="${settingsInstance.applicationName}" />
+			  <g:textField name="applicationName" value="${settingsInstance?.applicationName}" />
 		</p>
 		<h3><g:message code="settings.admin" /></h3>
 		<p>
 			  <label for="emailAdmin"><g:message code="user.email" /></label>
-			  <g:textField name="emailAdmin" value="${adminInstance.email}" />
+			  <g:textField name="emailAdmin" value="${adminInstance?.email}" />
 		</p>
 		<p>
 			  <label for="firstNameAdmin"><g:message code="user.firstName" /></label>
-			  <g:textField name="firstNameAdmin" value="${adminInstance.firstName}" />
+			  <g:textField name="firstNameAdmin" value="${adminInstance?.firstName}" />
 		</p>
 		<p>
 			  <label for="lastNameAdmin"><g:message code="user.lastName" /></label>
-			  <g:textField name="lastNameAdmin" value="${adminInstance.lastName}" />
+			  <g:textField name="lastNameAdmin" value="${adminInstance?.lastName}" />
+		</p>
+		<p>
+			  <label for="streetAdmin"><g:message code="address.street" /></label>
+			  <g:textField name="streetAdmin" value="${adminInstance?.address?.street}" />
+		</p>
+		<p>
+			  <label for="townAdmin"><g:message code="address.town" /></label>
+			  <g:textField name="townAdmin" value="${adminInstance?.address?.town}" />
+		</p>
+		<p>
+			  <label for="zipCodeAdmin"><g:message code="address.zipCode" /></label>
+			  <g:textField name="zipCodeAdmin" value="${adminInstance?.address?.zipCode}" />
 		</p>
 		<p>
 			  <label for="passwordAdmin"><g:message code="user.password" /></label>
