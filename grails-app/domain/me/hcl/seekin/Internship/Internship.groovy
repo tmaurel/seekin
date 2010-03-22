@@ -89,8 +89,8 @@ class Internship {
             StringUtils.abbreviate(subject,32)
     }
 
-    String getStatus(Staff member) {
-        isApproval==false?(reason==null?'internship.waitForValidation':'internship.unvalidated'):(member==academicTutor?'internship.mine':'internship.validated')
+    String getStatus() {
+        isApproval==false?(reason==null?'internship.waitForValidation':'internship.unvalidated'):'internship.validated'
     }
 
 	/** Return student's internship for current millesime */
