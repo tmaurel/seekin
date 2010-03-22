@@ -551,6 +551,7 @@ class UserController {
 
 		if (userInstance.validate()) {
                         userInstance.password = authenticateService.encodePassword(params.password)
+                        user.validated = true
                         userInstance.save()
 			flash.message = "user.created"
 			flash.args = [userInstance.id]
@@ -966,14 +967,11 @@ class UserController {
 						if(role && Promotion.get(params.promotion)) {
 							role.addToPromotions(Promotion.get(params.promotion))
 						}
-
-						userInstance.addToAuthorities(role)
                         ret = [userInstance: userInstance, usertype: params.usertype, formations:formations]
                     } // If User selected "Staff"
                     else if(params.usertype == "2")
                     {
                         role = new Staff()
-                        userInstance.addToAuthorities(role)
                         ret = [userInstance: userInstance, usertype: params.usertype]
                     } // If User selected "Other"
                     else if(params.usertype == "3")
@@ -993,7 +991,6 @@ class UserController {
                             }
                         }
                         role = new External(company: company, formerStudent: (params.formerStudent != null)?:false)
-                        userInstance.addToAuthorities(role)
                         ret = [userInstance: userInstance, usertype: params.usertype, company: params.company]
                     }
                     else
@@ -1039,6 +1036,8 @@ class UserController {
                             if(company != null)
                                 company.save()
                             userInstance.save(flush: true)
+                            if(role)
+                                userInstance.addToAuthorities(role)
 
 //                          def auth = new AuthToken(userInstance.email, params.password)
 //                          def authtoken = daoAuthenticationProvider.authenticate(auth)
