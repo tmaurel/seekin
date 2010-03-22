@@ -964,9 +964,6 @@ class UserController {
                         def formations = getFormations()
 
                         role = new Student(visible: (params.visible != null)?:false)
-						if(role && Promotion.get(params.promotion)) {
-							role.addToPromotions(Promotion.get(params.promotion))
-						}
                         ret = [userInstance: userInstance, usertype: params.usertype, formations:formations]
                     } // If User selected "Staff"
                     else if(params.usertype == "2")
@@ -1035,9 +1032,13 @@ class UserController {
                         {
                             if(company != null)
                                 company.save()
-                            userInstance.save(flush: true)
-                            if(role)
-                                userInstance.addToAuthorities(role)
+                            if(userInstance.save(flush: true)) {
+								if(role && Promotion.get(params.promotion))
+								{
+									role.addToPromotions(Promotion.get(params.promotion))
+									userInstance.addToAuthorities(role)
+								}
+							}
 
 //                          def auth = new AuthToken(userInstance.email, params.password)
 //                          def authtoken = daoAuthenticationProvider.authenticate(auth)
@@ -1124,7 +1125,7 @@ class UserController {
 		}
 
 		def data = [
-				totalRecords: User.count(),
+				totalRecords: list.size(),
 				results: ret
 		]
 
