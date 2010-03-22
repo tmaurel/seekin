@@ -38,13 +38,6 @@
 			<label for="phone"><g:message code="company.phone" default="Phone" /></label>
 			<g:textField name="phone" class="field${hasErrors(bean:companyInstance ,field:'phone','error')}" maxlength="10" value="${companyInstance.phone}" />
 		  </p>
-		  <p>
-			<label for="employees"><g:message code="company.employees" default="Employees" /></label>
-			<g:select name="employees"
-from="${me.hcl.seekin.Auth.User.list()}"
-size="5" multiple="yes" optionKey="id"
-value="${companyInstance?.employees}" />
-		  </p>
           <div class="actionpad yui-skin-sam">
             <g:buildEditButtons />
           </div>

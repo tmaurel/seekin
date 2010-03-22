@@ -20,7 +20,7 @@ environments {
 	development {
 		dataSource {
 			driverClassName = "org.hsqldb.jdbcDriver"
-			dbCreate = "create"
+			dbCreate = "create-drop"
 			url = "jdbc:hsqldb:file:prodDb;shutdown=true"
 		}
 	}
