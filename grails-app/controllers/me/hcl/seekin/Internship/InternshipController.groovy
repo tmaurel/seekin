@@ -104,9 +104,8 @@ class InternshipController {
 
     def assignate = {
         def internship
-
         params.each {
-            if(it.key.contains("tutor")) {
+            if(it.key.contains("tutor") && it.value != 'null') {
                 def list = []
                 Internship.findAllByMillesimeAndAcademicTutor(Millesime.getCurrent(), null).each {
                     if(Promotion.getCurrentForStudent(it.student).formation.id == params.nameFormation?.toInteger()) {
@@ -122,11 +121,21 @@ class InternshipController {
                 }
             }
         }
-        def staff = Staff.list().collect {
+        /*def staff = Staff.list().collect {
             [
                     id: it.id,
                     value: it.user?.firstName + " " + it.user?.lastName
             ]
+        }*/
+        def staff = []
+        Staff.list().each {
+            if(it?.user?.enabled == true) {
+                def map = [
+                    id: it.id,
+                    value: it.user?.firstName + " " + it.user?.lastName    
+                ]
+                staff.add map
+            }
         }
         def noSelect = ['null': '']
         def formations = new HashSet()
