@@ -2,8 +2,11 @@ package me.hcl.seekin.Internship
 
 import org.hibernate.LockMode
 import me.hcl.seekin.Auth.Role.Student
-
 import grails.converters.JSON
+import me.hcl.seekin.Auth.Role.*
+import me.hcl.seekin.Formation.Promotion
+import org.codehaus.groovy.grails.plugins.springsecurity.Secured
+
 class ReportController {
 
     def authenticateService
@@ -15,60 +18,129 @@ class ReportController {
     // the delete, save and update actions only accept POST requests
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
+    @Secured(['ROLE_ADMIN','ROLE_FORMATIONMANAGER', 'ROLE_STUDENT', 'ROLE_STAFF'])
     def list = {
     }
 
+    @Secured(['ROLE_ADMIN','ROLE_FORMATIONMANAGER', 'ROLE_STUDENT'])
     def create = {
         def reportInstance = new Report()
         reportInstance.properties = params
         
         def userInstance = authenticateService.userDomain()
         sessionFactory.currentSession.refresh(userInstance, LockMode.NONE)
-        // Get the student instance logged in
-        def student = Student.findByUser(userInstance)
 
-        if(student)
+        def internships = []
+
+        if(authenticateService.ifAnyGranted("ROLE_STUDENT"))
         {
-            def internships = Internship.createCriteria().list() {
-                isNull("report")
-                eq("student", student)
-            }
-            if(internships.size() > 0)
-                return [reportInstance: reportInstance, internships: internships]
-            else
+            // Get the student instance logged in
+            def student = Student.findByUser(userInstance)
+
+            if(student)
             {
-                flash.message = "report.no.internship.found"
-                redirect action: "list"
+                internships = Internship.createCriteria().list() {
+                    isNull("report")
+                    eq("student", student)
+                }
             }
         }
-        else redirect action:list
+        else if(authenticateService.ifAnyGranted("ROLE_FORMATIONMANAGER"))
+        {
+            def manager = FormationManager.findByUser(userInstance)
+
+            if(manager)
+            {
+                def students = []
+                def promotions = Promotion.findAllByFormation(manager?.formation)
+                promotions.each {
+                    it.students.each {
+                        students << it
+                    }
+                }
+
+                internships = Internship.createCriteria().list() {
+                    'in'('student', students)
+                    isNull("report")
+                }
+            }
+        }
+        else
+        {
+                internships = Internship.createCriteria().list() {
+                    isNull("report")
+                }
+        }
+
+        if(internships.size() > 0)
+            return [reportInstance: reportInstance, internships: internships]
+        else
+        {
+            flash.message = "report.no.internship.found"
+            redirect action: "list"
+        }
+   
     }
 
+    @Secured(['ROLE_ADMIN','ROLE_FORMATIONMANAGER', 'ROLE_STUDENT'])
     def save = {
         def reportInstance = new Report()
 
         def userInstance = authenticateService.userDomain()
         sessionFactory.currentSession.refresh(userInstance, LockMode.NONE)
-        // Get the student instance logged in
-        def student = Student.findByUser(userInstance)
 
-        if(student)
+        def internships = []
+
+        if(authenticateService.ifAnyGranted("ROLE_STUDENT"))
         {
-            def internships = Internship.createCriteria().list() {
-                isNull("report")
-                eq("student", student)
-            }
+            // Get the student instance logged in
+            def student = Student.findByUser(userInstance)
 
+            if(student)
+            {
+                internships = Internship.createCriteria().list() {
+                    isNull("report")
+                    eq("student", student)
+                }
+            }
+        }
+        else if(authenticateService.ifAnyGranted("ROLE_FORMATIONMANAGER"))
+        {
+            def manager = FormationManager.findByUser(userInstance)
+
+            if(manager)
+            {
+                def students = []
+                def promotions = Promotion.findAllByFormation(manager?.formation)
+                promotions.each {
+                    it.students.each {
+                        students << it
+                    }
+                }
+
+                internships = Internship.createCriteria().list() {
+                    'in'('student', students)
+                    isNull("report")
+                }
+            }
+        }
+        else
+        {
+                internships = Internship.createCriteria().list() {
+                    isNull("report")
+                }
+        }
+
+        if(internships.size() > 0)
+        {
             reportInstance.title = params.title
             reportInstance.isPrivate = (params.isPrivate)?true:false
             reportInstance.fileData = fileService.createFile(request.getFile( 'data' ))
 
             def internship = Internship.get(params.internship)
-
             reportInstance.internship = internship
 
-            if (internship?.student == student && !reportInstance.hasErrors() && (internship.report = reportInstance.save())) {
-                println reportInstance.internship
+            if (!reportInstance.hasErrors() && (internship.report = reportInstance.save())) {
                 flash.message = "report.created"
                 flash.args = [reportInstance.id]
                 flash.defaultMessage = "Report ${reportInstance.id} created"
@@ -78,45 +150,131 @@ class ReportController {
                 render(view: "create", model: [reportInstance: reportInstance, internships: internships])
             }
         }
-        else redirect action:list
+        else
+        {
+            flash.message = "report.no.internship.found"
+            redirect action: "list"
+        }
     }
 
     def show = {
         def reportInstance = Report.get(params.id)
-        if (!reportInstance) {
+
+        def ok = true
+        def keep = true
+
+        def userInstance = authenticateService.userDomain()
+
+        if(authenticateService.ifAnyGranted("ROLE_STUDENT")) {
+            ok = false
+            def student = Student.findByUser(userInstance)
+
+            if(reportInstance?.internship?.student?.id == student?.id)
+                ok = true
+        }
+        else if(authenticateService.ifAnyGranted("ROLE_FORMATIONMANAGER"))
+        {
+            ok = false
+            def manager = FormationManager.findByUser(userInstance)
+
+            def promotion =  reportInstance?.internship?.student?.promotions.find {
+                it.millesime?.id == reportInstance?.internship?.millesime?.id
+            }
+
+            if(promotion?.formation?.id == manager?.formation?.id)
+                ok = true
+        }
+        else if(authenticateService.ifAnyGranted("ROLE_EXTERNAL"))
+        {
+            keep = false
+            def external = External.findByUser(userInstance)
+            if(reportInstance?.internship?.companyTutor?.id == external?.id)
+                keep = true
+        }
+
+        if (!reportInstance || !keep) {
             flash.message = "report.not.found"
             flash.args = [params.id]
             flash.defaultMessage = "Report not found with id ${params.id}"
             redirect(action: "list")
         }
         else {
-            println reportInstance.internship.report
-            return [reportInstance: reportInstance]
+            return [reportInstance: reportInstance, ok: ok]
         }
     }
 
+    @Secured(['ROLE_ADMIN','ROLE_FORMATIONMANAGER', 'ROLE_STUDENT'])
     def edit = {
         def reportInstance = Report.get(params.id)
-        if (!reportInstance) {
+
+        def ok = true
+        def userInstance = authenticateService.userDomain()
+
+        if(authenticateService.ifAnyGranted("ROLE_STUDENT")) {
+            ok = false
+            def student = Student.findByUser(userInstance)
+
+            if(reportInstance?.internship?.student?.id == student?.id)
+                ok = true
+        }
+        else if(authenticateService.ifAnyGranted("ROLE_FORMATIONMANAGER"))
+        {
+            ok = false
+            def manager = FormationManager.findByUser(userInstance)
+
+            def promotion =  reportInstance?.internship?.student?.promotions.find {
+                it.millesime?.id == reportInstance?.internship?.millesime?.id
+            }
+
+            if(promotion?.formation?.id == manager?.formation?.id)
+                ok = true
+        }
+
+        if (!reportInstance || !ok) {
             flash.message = "report.not.found"
             flash.args = [params.id]
             flash.defaultMessage = "Report not found with id ${params.id}"
             redirect(action: "list")
         }
         else {
-            return [reportInstance: reportInstance]
+            return [reportInstance: reportInstance, ok: ok]
         }
     }
 
+    @Secured(['ROLE_ADMIN','ROLE_FORMATIONMANAGER', 'ROLE_STUDENT'])
     def update = {
         def reportInstance = Report.get(params.id)
-        if (reportInstance) {
+
+        def ok = true
+        def userInstance = authenticateService.userDomain()
+
+        if(authenticateService.ifAnyGranted("ROLE_STUDENT")) {
+            ok = false
+            def student = Student.findByUser(userInstance)
+
+            if(reportInstance?.internship?.student?.id == student?.id)
+                ok = true
+        }
+        else if(authenticateService.ifAnyGranted("ROLE_FORMATIONMANAGER"))
+        {
+            ok = false
+            def manager = FormationManager.findByUser(userInstance)
+
+            def promotion =  reportInstance?.internship?.student?.promotions.find {
+                it.millesime?.id == reportInstance?.internship?.millesime?.id
+            }
+
+            if(promotion?.formation?.id == manager?.formation?.id)
+                ok = true
+        }
+
+        if (reportInstance && ok) {
             if (params.version) {
                 def version = params.version.toLong()
                 if (reportInstance.version > version) {
                     
                     reportInstance.errors.rejectValue("version", "report.optimistic.locking.failure", "Another user has updated this Report while you were editing")
-                    render(view: "edit", model: [reportInstance: reportInstance])
+                    render(view: "edit", model: [reportInstance: reportInstance, ok: ok])
                     return
                 }
             }
@@ -134,7 +292,7 @@ class ReportController {
                 redirect(action: "show", id: reportInstance.id)
             }
             else {
-                render(view: "edit", model: [reportInstance: reportInstance])
+                render(view: "edit", model: [reportInstance: reportInstance, ok: ok])
             }
         }
         else {
@@ -145,9 +303,24 @@ class ReportController {
         }
     }
 
+    @Secured(['ROLE_ADMIN','ROLE_FORMATIONMANAGER'])
     def delete = {
         def reportInstance = Report.get(params.id)
-        if (reportInstance) {
+        def ok = true
+        def userInstance = authenticateService.userDomain()
+        if(authenticateService.ifAnyGranted("ROLE_FORMATIONMANAGER"))
+        {
+            ok = false
+            def manager = FormationManager.findByUser(userInstance)
+            def promotion =  reportInstance?.internship?.student?.promotions.find {
+                it.millesime?.id == reportInstance?.internship?.millesime?.id
+            }
+
+            if(promotion?.formation?.id == manager?.formation?.id)
+                ok = true
+        }
+
+        if (reportInstance && ok) {
             try {
                 reportInstance.internship.report = null
                 reportInstance.delete()
@@ -171,6 +344,7 @@ class ReportController {
         }
     }
 
+    @Secured(['ROLE_ADMIN','ROLE_FORMATIONMANAGER', 'ROLE_STUDENT', 'ROLE_STAFF'])
     def dataTableDataAsJSON = {
         def list = Report.list(params)
         def ret = []

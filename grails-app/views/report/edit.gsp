@@ -41,10 +41,28 @@
 
                 </p>
           
-          
-          <div class="actionpad yui-skin-sam">
-            <g:buildEditButtons />
-          </div>
+           <div class="actionpad yui-skin-sam">
+           <g:ifAnyGranted role="ROLE_ADMIN">
+                <g:buildEditButtons />
+            </g:ifAnyGranted>
+
+            <g:ifAnyGranted role="ROLE_FORMATIONMANAGER">
+                <g:listButton />
+                <g:if test="${ok}">
+                <g:YUISubmitbutton value="update" action="update" />
+                <g:deleteButton />
+                </g:if>
+            </g:ifAnyGranted>
+
+             <g:ifAnyGranted role="ROLE_STUDENT">
+                <g:listButton />
+                <g:if test="${ok}">
+                <g:YUISubmitbutton value="update" action="update" />
+                </g:if>
+             </g:ifAnyGranted>
+           </div>
+
+
       </g:form>
     </body>
 </html>
