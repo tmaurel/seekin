@@ -93,7 +93,12 @@ class OfferController {
     def save = {
 
         /* Build the offer with correct parameter and save it*/
-        def offerInstance = new Offer(params)
+        def offerInstance = new Offer()
+
+        offerInstance.subject = params.subject
+        offerInstance.description = params.description
+        offerInstance.beginAt = params.beginAt
+        offerInstance.length = params.length.toInteger()
 
         /* Build the list with all current promotions for the select markup */
         def promotionInstance = Promotion.getCurrents().collect {
@@ -117,6 +122,7 @@ class OfferController {
             offerInstance.company = company
         }
 
+
         /* We get the user logged in in userInstance to identifiate the author */
         def userInstance = authenticateService.userDomain()
         sessionFactory.currentSession.refresh(userInstance, LockMode.NONE)
@@ -125,23 +131,39 @@ class OfferController {
         offerInstance.assignated = false
         offerInstance.author = userInstance
 
+        offerInstance.validate()
+
+        if (params.promotions == null || params.promotions == "") {
+            offerInstance.errors.rejectValue(
+                'promotions',
+                'offer.promotions.nullable.error'
+            )
+        }
+
         if (!offerInstance.hasErrors()) {
 
-            offerInstance = offerInstance.merge()
-
-            if(request.getFile( 'data' ).getSize() > 0)
+            if ((offerInstance = offerInstance?.merge(flush: true))) 
             {
-                def document = new Document()
-                document.title = params.subject
-                document.fileData = fileService.createFile(request.getFile( 'data' ))
-                offerInstance.file = document
-                document.save(flush: true)
-            }
+                params.promotions.each {
+                    def promo = Promotion.get(it)
+                    if(promo)
+                        promo.addToOffers(offerInstance)
+                }
 
-            flash.message = "offer.created"
-            flash.args = [offerInstance.id]
-            flash.defaultMessage = "Offer ${offerInstance.id} created"
-            redirect(action: "show", id: offerInstance.id)
+                if(request.getFile( 'data' ).getSize() > 0)
+                {
+                    def document = new Document()
+                    document.title = params.subject
+                    document.fileData = fileService.createFile(request.getFile( 'data' ))
+                    offerInstance.file = document
+                    document.save(flush: true)
+                }
+
+                flash.message = "offer.created"
+                flash.args = [offerInstance.id]
+                flash.defaultMessage = "Offer ${offerInstance.id} created"
+                redirect(action: "show", id: offerInstance.id)
+            }
         }
         else {
             render(

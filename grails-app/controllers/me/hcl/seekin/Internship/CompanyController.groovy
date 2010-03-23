@@ -75,6 +75,75 @@ class CompanyController {
         }
     }
 
+    def edit = {
+        def companyInstance = Company.get(params.id)
+        if (!companyInstance) {
+            flash.message = "company.not.found"
+            flash.args = [params.id]
+            flash.defaultMessage = "Company not found with id ${params.id}"
+            redirect(action: "list")
+        }
+        else {
+            return [companyInstance: companyInstance]
+        }
+    }
+
+    def update = {
+        def companyInstance = Company.get(params.id)
+        if (companyInstance) {
+            if (params.version) {
+                def version = params.version.toLong()
+                if (companyInstance.version > version) {
+
+                    companyInstance.errors.rejectValue("version", "company.optimistic.locking.failure", "Another user has updated this Company while you were editing")
+                    render(view: "edit", model: [companyInstance: companyInstance])
+                    return
+                }
+            }
+            companyInstance.properties = params
+            if (!companyInstance.hasErrors() && companyInstance.save()) {
+                flash.message = "company.updated"
+                flash.args = [params.id]
+                flash.defaultMessage = "Company ${params.id} updated"
+                redirect(action: "show", id: companyInstance.id)
+            }
+            else {
+                render(view: "edit", model: [companyInstance: companyInstance])
+            }
+        }
+        else {
+            flash.message = "company.not.found"
+            flash.args = [params.id]
+            flash.defaultMessage = "Company not found with id ${params.id}"
+            redirect(action: "edit", id: params.id)
+        }
+    }
+
+    def delete = {
+        def companyInstance = Company.get(params.id)
+        if (companyInstance) {
+            try {
+                companyInstance.delete()
+                flash.message = "company.deleted"
+                flash.args = [params.id]
+                flash.defaultMessage = "Company ${params.id} deleted"
+                redirect(action: "list")
+            }
+            catch (org.springframework.dao.DataIntegrityViolationException e) {
+                flash.message = "company.not.deleted"
+                flash.args = [params.id]
+                flash.defaultMessage = "Company ${params.id} could not be deleted"
+                redirect(action: "show", id: params.id)
+            }
+        }
+        else {
+            flash.message = "company.not.found"
+            flash.args = [params.id]
+            flash.defaultMessage = "Company not found with id ${params.id}"
+            redirect(action: "list")
+        }
+    }
+
     def dataTableDataAsJSON = {
         def list = Company.list(params)
         def ret = []
