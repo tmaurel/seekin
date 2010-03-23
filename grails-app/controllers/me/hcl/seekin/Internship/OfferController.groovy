@@ -127,8 +127,17 @@ class OfferController {
         def userInstance = authenticateService.userDomain()
         sessionFactory.currentSession.refresh(userInstance, LockMode.NONE)
         offerInstance.company = company
-        offerInstance.validated = false
-        offerInstance.assignated = false
+
+		/* An offer is directly validated if the author is an admin or a formation manager */
+		if(authenticateService.ifAnyGranted("ROLE_ADMIN,ROLE_FORMATIONMANAGER")) {
+			offerInstance.validated = true
+		}
+		else {
+			offerInstance.validated = false
+		}
+
+		offerInstance.assignated = false
+        
         offerInstance.author = userInstance
 
         offerInstance.validate()
