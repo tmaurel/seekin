@@ -65,7 +65,7 @@
 			  <g:set var="className" value="${ClassUtils.getShortName(result.getClass())}" />
 			  <g:if test="${className == 'Student'}">
 			  <div class="result">
-				<g:set var="link" value="${createLink(controller: className[0].toLowerCase() + className[1..-1], action: 'show', id: result.id)}" />
+				<g:set var="link" value="${createLink(controller: 'user', action: 'show', id: result?.user?.id)}" />
 				<div class="name"><span class="class_type">[<g:message code="${className}" />]</span> <a href="${link}">${result.toString()}</a></div>
 				<div class="desc">
 				  <g:if test="${result?.visible}" >
@@ -78,7 +78,7 @@
 			  </g:if>
 			  <g:if test="${className == 'Staff'}">
 			  <div class="result">
-				<g:set var="link" value="${createLink(controller: className[0].toLowerCase() + className[1..-1], action: 'show', id: result.id)}" />
+				<g:set var="link" value="${createLink(controller: 'user', action: 'show', id: result?.user?.id)}" />
 				<div class="name"><span class="class_type">[<g:message code="${className}" />]</span> <a href="${link}">${result.toString()}</a></div>
 				<div class="desc">
 				  ${result?.user?.address?.encodeAsHTML()} <br />
@@ -89,7 +89,7 @@
 			  </g:if>
 			  <g:if test="${className == 'External'}">
 			  <div class="result">
-				<g:set var="link" value="${createLink(controller: className[0].toLowerCase() + className[1..-1], action: 'show', id: result.id)}" />
+				<g:set var="link" value="${createLink(controller: 'user', action: 'show', id: result?.user?.id)}" />
 				<div class="name"><span class="class_type">[<g:message code="${className}" />]</span> <a href="${link}">${result.toString()}</a></div>
 				<div class="desc">
 				  ${result?.user?.address?.encodeAsHTML()} <br />

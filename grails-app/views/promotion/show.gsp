@@ -31,7 +31,7 @@
                             
                             <ul>
                             <g:each in="${promotionInstance?.students}" var="studentInstance">
-                                <li><g:link controller="student" action="show" id="${studentInstance.id}">${studentInstance.encodeAsHTML()}</g:link></li>
+                                <li><g:link controller="user" action="show" id="${studentInstance.user?.id}">${studentInstance.encodeAsHTML()}</g:link></li>
                             </g:each>
                             </ul>
 

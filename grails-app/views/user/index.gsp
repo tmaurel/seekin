@@ -131,7 +131,7 @@
 			  <g:if test="${totalStudentsWithoutInternship > 0}">
 			  <ul>
 				<g:each var="student" in="${studentsWithoutInternship}">
-				  <li><g:link controller="student" action="show" id="${student?.id}">${student}</g:link></li>
+				  <li><g:link controller="user" action="show" id="${student?.user?.id}">${student}</g:link></li>
 				</g:each>
 			  </ul>
 			  </g:if>
@@ -146,7 +146,7 @@
 			  <g:if test="${totalStudentsWithoutAcademicTutor > 0}">
 			  <ul>
 				<g:each var="student" in="${studentsWithoutAcademicTutor}">
-				  <li><g:link controller="student" action="show" id="${student?.id}">${student}</g:link></li>
+				  <li><g:link controller="user" action="show" id="${student?.user?.id}">${student}</g:link></li>
 				</g:each>
 			  </ul>
 			  </g:if>
@@ -200,7 +200,7 @@
 			  <g:if test="${totalStaffStudents > 0}">
 			  <ul>
 				<g:each var="student" in="${staffStudents}">
-				  <li><g:link controller="student" action="show" id="${student?.id}">${student}</g:link></li>
+				  <li><g:link controller="user" action="show" id="${student?.user?.id}">${student}</g:link></li>
 				</g:each>
 			  </ul>
 			  </g:if>
