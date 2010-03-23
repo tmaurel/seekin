@@ -27,8 +27,6 @@ class MessageController {
 
                 def messageInstance = copyInstance.message
 
-
-
                 if(messageInstance.author.id == userInstance.id || messageInstance.recipients.id.contains(userInstance.id))
                 {
                     if(copyInstance.status == MessageCopy.MESSAGE_UNREAD)
@@ -83,13 +81,19 @@ class MessageController {
             if(params.id)
             {
                 def cmessage = Message.get(params.id)
-                messageInstance.addToRecipients(cmessage.author)
-                messageInstance.subject = "Re : " + cmessage.subject
-                messageInstance.body = """
+
+                if(cmessage?.recipients?.id?.contains(userInstance.id))
+                {
+
+                    messageInstance.addToRecipients(cmessage.author)
+                    messageInstance.subject = "Re : " + cmessage.subject
+                    messageInstance.body = """
 \n\n\n${g.renderOriginalMessageStart()}
 ${message(code:'message.from')} : ${cmessage.author}
 ${cmessage.body}
 ${g.renderOriginalMessageEnd()}"""
+                }
+
             }
             render view: 'write', model: [messageInstance: messageInstance]
         }

@@ -1,8 +1,8 @@
 package me.hcl.seekin.Ressource
 
-
-
 import grails.converters.JSON
+import org.codehaus.groovy.grails.plugins.springsecurity.Secured
+
 class LinkController {
 
 
@@ -21,12 +21,14 @@ class LinkController {
     def list = {
     }
 
+    @Secured(['ROLE_ADMIN', 'ROLE_FORMATIONMANAGER'])
     def create = {
         def linkInstance = new Link()
         linkInstance.properties = params
         return [linkInstance: linkInstance]
     }
 
+    @Secured(['ROLE_ADMIN', 'ROLE_FORMATIONMANAGER'])
     def save = {
         def linkInstance = new Link(params)
         if (!linkInstance.hasErrors() && linkInstance.save()) {
@@ -53,6 +55,7 @@ class LinkController {
         }
     }
 
+    @Secured(['ROLE_ADMIN', 'ROLE_FORMATIONMANAGER'])
     def edit = {
         def linkInstance = Link.get(params.id)
         if (!linkInstance) {
@@ -66,6 +69,7 @@ class LinkController {
         }
     }
 
+    @Secured(['ROLE_ADMIN', 'ROLE_FORMATIONMANAGER'])
     def update = {
         def linkInstance = Link.get(params.id)
         if (linkInstance) {
@@ -97,6 +101,7 @@ class LinkController {
         }
     }
 
+    @Secured(['ROLE_ADMIN', 'ROLE_FORMATIONMANAGER'])
     def delete = {
         def linkInstance = Link.get(params.id)
         if (linkInstance) {
@@ -129,12 +134,9 @@ class LinkController {
 
         list.each {
             ret << [
-               id:it.id,
-   title:it.title,
-   url:it.url,
-   description:it.description,
-
-                urlID: it.id
+               title:it.title,
+               url:it.url,
+               urlID: it.id
             ]
         }
 

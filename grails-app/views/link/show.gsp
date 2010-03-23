@@ -55,7 +55,12 @@
                         
                       
                       <div class="actionpad yui-skin-sam">
-                        <g:buildShowButtons />
+                        <g:ifAnyGranted role="ROLE_ADMIN,ROLE_FORMATIONMANAGER">
+                            <g:buildShowButtons />
+                        </g:ifAnyGranted>
+                        <g:ifNotGranted role="ROLE_ADMIN,ROLE_FORMATIONMANAGER">
+                            <g:listButton />
+                        </g:ifNotGranted>
                       </div>
             </g:form>
        </body>

@@ -14,8 +14,10 @@
       <div class="flash_message"><g:message code="${flash.message}" transparent="true" args="${flash.args}" default="${flash.defaultMessage}" /></div>
       </g:if>
       <div class="yui-skin-sam" id="crud_panel">
-          <g:buildListButtons />
-          
+          <g:ifAnyGranted role="ROLE_ADMIN,ROLE_FORMATIONMANAGER">
+            <g:buildListButtons />
+          </g:ifAnyGranted>
+        
                         <g:set var="idInternationalized" value="${message(code:'link.id')}" />
                  
                         <g:set var="titleInternationalized" value="${message(code:'link.title')}" />
@@ -28,14 +30,8 @@
               id="dt_2"
               draggableColumns="true"
               columnDefs="[
-                  
-                            [key: 'id', sortable: true, resizeable: true, label: idInternationalized],
-                     
                             [key: 'title', sortable: true, resizeable: true, label: titleInternationalized],
-                     
                             [key: 'url', sortable: true, resizeable: true, label: urlInternationalized, formatter: 'link'],
-                     
-                            [key: 'description', sortable: true, resizeable: true, label: descriptionInternationalized],
                      
                   [key: 'urlID', sortable: false, resizeable: false, label:'Actions', formatter: 'adminPanelFormatter']
               ]"
@@ -47,7 +43,8 @@
               ]"
               rowExpansion="false"
               rowsPerPage="10"
-          />
+              sortedBy="title"
+              />
 
         </div>
     </body>

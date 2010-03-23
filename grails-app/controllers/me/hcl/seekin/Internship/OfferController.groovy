@@ -125,7 +125,9 @@ class OfferController {
         offerInstance.assignated = false
         offerInstance.author = userInstance
 
-        if (!offerInstance.hasErrors() && offerInstance.save()) {
+        if (!offerInstance.hasErrors()) {
+
+            offerInstance = offerInstance.merge()
 
             if(request.getFile( 'data' ).getSize() > 0)
             {
