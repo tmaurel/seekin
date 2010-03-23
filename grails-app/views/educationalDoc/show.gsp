@@ -41,10 +41,15 @@
                                     <img src="${resource(dir:'images/icons',file:'dl.png')}" alt="Download" />
                             </g:link>
                       </p>
-                      
-                      <div class="actionpad yui-skin-sam">
-                        <g:buildShowButtons />
-                      </div>
+
+                       <div class="actionpad yui-skin-sam">
+                       <g:ifAnyGranted role="ROLE_ADMIN,ROLE_FORMATIONMANAGER">
+                            <g:buildShowButtons />
+                        </g:ifAnyGranted>
+                        <g:ifNotGranted role="ROLE_ADMIN,ROLE_FORMATIONMANAGER">
+                            <g:listButton />
+                        </g:ifNotGranted>
+                       </div>
             </g:form>
        </body>
 </html>

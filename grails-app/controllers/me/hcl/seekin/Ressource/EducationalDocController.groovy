@@ -2,10 +2,14 @@ package me.hcl.seekin.Ressource
 
 import grails.converters.JSON
 import me.hcl.seekin.Formation.*
+import me.hcl.seekin.Auth.Role.FormationManager
+import org.codehaus.groovy.grails.plugins.springsecurity.Secured
 
 class EducationalDocController {
 
     def fileService
+
+    def authenticateService
 
     static navigation = [
 		group:'menu',
@@ -28,12 +32,28 @@ class EducationalDocController {
         render(view: "list", model: [formations: formations])
     }
 
+    @Secured(['ROLE_ADMIN', 'ROLE_FORMATIONMANAGER'])
     def create = {
-        def formations = Formation.list().collect {
-            [
-                    id: it.id,
-                    value: it.toString()
+
+        def formations = []
+
+        if(authenticateService.ifAnyGranted("ROLE_FORMATIONMANAGER"))
+        {
+            def userInstance = authenticateService.userDomain()
+            def manager = FormationManager.findByUser(userInstance)
+            formations << [
+                id: manager?.formation?.id,
+                value: manager?.formation?.toString()
             ]
+        }
+        else
+        {
+            formations = Formation.list().collect {
+                [
+                        id: it.id,
+                        value: it.toString()
+                ]
+            }
         }
 
         def educationalDocInstance = new EducationalDoc()
@@ -41,12 +61,28 @@ class EducationalDocController {
         return [educationalDocInstance: educationalDocInstance, formations: formations]
     }
 
+    @Secured(['ROLE_ADMIN', 'ROLE_FORMATIONMANAGER'])
     def save = {
-        def formations = Formation.list().collect {
-            [
-                    id: it.id,
-                    value: it.toString()
+        
+        def formations = []
+
+        if(authenticateService.ifAnyGranted("ROLE_FORMATIONMANAGER"))
+        {
+            def userInstance = authenticateService.userDomain()
+            def manager = FormationManager.findByUser(userInstance)
+            formations << [
+                id: manager?.formation?.id,
+                value: manager?.formation?.toString()
             ]
+        }
+        else
+        {
+            formations = Formation.list().collect {
+                [
+                        id: it.id,
+                        value: it.toString()
+                ]
+            }
         }
 
         def educationalDocInstance = new EducationalDoc()
@@ -86,16 +122,39 @@ class EducationalDocController {
         }
     }
 
+    @Secured(['ROLE_ADMIN', 'ROLE_FORMATIONMANAGER'])
     def edit = {
-        def formations = Formation.list().collect {
-            [
-                    id: it.id,
-                    value: it.toString()
-            ]
+
+        def ok = false
+        def formations = []
+        def educationalDocInstance = EducationalDoc.get(params.id)
+
+        if(authenticateService.ifAnyGranted("ROLE_FORMATIONMANAGER"))
+        {
+            def userInstance = authenticateService.userDomain()
+            def manager = FormationManager.findByUser(userInstance)
+            formations = educationalDocInstance.formations.collect {
+                [
+                        id: it.id,
+                        value: it.toString()
+                ]
+            }
+
+            if(educationalDocInstance.formations.contains(manager?.formation))
+                ok = true
+        }
+        else
+        {
+            formations = Formation.list().collect {
+                [
+                        id: it.id,
+                        value: it.toString()
+                ]
+            }
+            ok = true
         }
 
-        def educationalDocInstance = EducationalDoc.get(params.id)
-        if (!educationalDocInstance) {
+        if (!educationalDocInstance || !ok) {
             flash.message = "educationalDoc.not.found"
             flash.args = [params.id]
             flash.defaultMessage = "EducationalDoc not found with id ${params.id}"
@@ -111,16 +170,39 @@ class EducationalDocController {
         }
     }
 
+    @Secured(['ROLE_ADMIN', 'ROLE_FORMATIONMANAGER'])
     def update = {
-        def formations = Formation.list().collect {
-            [
-                    id: it.id,
-                    value: it.toString()
-            ]
+
+        def ok = false
+        def formations = []
+        def educationalDocInstance = EducationalDoc.get(params.id)
+
+        if(authenticateService.ifAnyGranted("ROLE_FORMATIONMANAGER"))
+        {
+            def userInstance = authenticateService.userDomain()
+            def manager = FormationManager.findByUser(userInstance)
+            formations = educationalDocInstance.formations.collect {
+                [
+                        id: it.id,
+                        value: it.toString()
+                ]
+            }
+
+            if(educationalDocInstance.formations.contains(manager?.formation))
+                ok = true
+        }
+        else
+        {
+            formations = Formation.list().collect {
+                [
+                        id: it.id,
+                        value: it.toString()
+                ]
+            }
+            ok = true
         }
 
-        def educationalDocInstance = EducationalDoc.get(params.id)
-        if (educationalDocInstance) {
+        if (educationalDocInstance && ok) {
             if (params.version) {
                 def version = params.version.toLong()
                 if (educationalDocInstance.version > version) {
@@ -170,9 +252,26 @@ class EducationalDocController {
         }
     }
 
+    @Secured(['ROLE_ADMIN', 'ROLE_FORMATIONMANAGER'])
     def delete = {
+
+        def ok = false
         def educationalDocInstance = EducationalDoc.get(params.id)
-        if (educationalDocInstance) {
+
+        if(authenticateService.ifAnyGranted("ROLE_FORMATIONMANAGER"))
+        {
+            def userInstance = authenticateService.userDomain()
+            def manager = FormationManager.findByUser(userInstance)
+
+            if(educationalDocInstance.formations.contains(manager?.formation))
+                ok = true
+        }
+        else
+        {
+            ok = true
+        }
+
+        if (educationalDocInstance && ok) {
             try {
 
                 def ids = educationalDocInstance.formations.collect {

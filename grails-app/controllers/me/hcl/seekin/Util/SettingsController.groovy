@@ -3,6 +3,7 @@ package me.hcl.seekin.Util
 import me.hcl.seekin.Auth.User
 import me.hcl.seekin.Auth.Role.Admin
 import me.hcl.seekin.Auth.Role.Staff
+import org.codehaus.groovy.grails.plugins.springsecurity.Secured
 
 class SettingsController {
 
@@ -11,9 +12,10 @@ class SettingsController {
     def index = { redirect(action: "edit") }
 
     // the delete, save and update actions only accept POST requests
-    static allowedMethods = [update: "POST", delete: "POST"]
+    static allowedMethods = [update: "POST"]
 
-	// First Installation
+    // First Installation
+    @Secured(['IS_AUTHENTICATED_ANONYMOUSLY'])
     def install = {
         def settingsInstance = Settings.get(1)
         if(settingsInstance != null) {
@@ -54,6 +56,7 @@ class SettingsController {
 		}
     }
 
+    @Secured(['ROLE_ADMIN'])
     def edit = {
         def settingsInstance = Settings.get(1)
         if (!settingsInstance) {
@@ -66,6 +69,7 @@ class SettingsController {
         }
     }
 
+    @Secured(['ROLE_ADMIN'])
     def update = {
         def settingsInstance = Settings.get(1)
         if (settingsInstance) {

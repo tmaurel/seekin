@@ -3,6 +3,7 @@ package me.hcl.seekin.Util
 import nl.captcha.Captcha
 import nl.captcha.backgrounds.*
 import nl.captcha.servlet.CaptchaServletUtil
+import org.codehaus.groovy.grails.plugins.springsecurity.Secured
 
 class ContactController {
 
@@ -15,6 +16,7 @@ class ContactController {
 
     def emailerService
 
+    @Secured(['IS_AUTHENTICATED_ANONYMOUSLY'])
     def index = { ContactCommand cmd ->
 
         if(request.method == 'POST')
@@ -46,6 +48,7 @@ class ContactController {
     /**
      * Captcha generation
      */
+    @Secured(['IS_AUTHENTICATED_ANONYMOUSLY'])
     def generateCaptcha = {
         // Generate a captcha of 150px X 50px with gimp, noise and border
         // And add the associated text to the current user session

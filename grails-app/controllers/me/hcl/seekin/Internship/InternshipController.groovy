@@ -69,7 +69,7 @@ class InternshipController {
                 {
                     def manager = FormationManager.findByUser(userInstance)
                     def promotion = Promotion.findByMillesimeAndFormation(millesimeSelected, manager?.formation)
-                    if(promotion?.students.size() > 0)
+                    if(promotion?.students?.size() > 0)
                     {
                         def internships = Internship.createCriteria().list() {
                             'in'('student', promotion?.students)
@@ -264,7 +264,7 @@ class InternshipController {
 
             if(User.countByEmail(params.email) == 0) {
                 role = new External()
-                role.company = Company.findByName(params.companyName)
+                role.company = company
                 role.formerStudent = false
                 role.save(flush:true)
                 companyTutor = new User()
