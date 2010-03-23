@@ -53,10 +53,15 @@
                             </span>
                       </p>
                         
-                      
+                      <br/>
                       <div class="actionpad yui-skin-sam">
-                        <g:buildShowButtons />
-                      </div>
+                       <g:ifAnyGranted role="ROLE_ADMIN">
+                            <g:buildShowButtons />
+                        </g:ifAnyGranted>
+                        <g:ifNotGranted role="ROLE_ADMIN">
+                            <g:listButton />
+                        </g:ifNotGranted>
+                       </div>
             </g:form>
        </body>
 </html>

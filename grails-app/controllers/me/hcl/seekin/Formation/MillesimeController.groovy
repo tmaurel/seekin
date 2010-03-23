@@ -1,8 +1,8 @@
 package me.hcl.seekin.Formation
 
-
-
 import grails.converters.JSON
+import org.codehaus.groovy.grails.plugins.springsecurity.Secured
+
 class MillesimeController {
 
     def index = { redirect(action: "list", params: params) }
@@ -13,12 +13,14 @@ class MillesimeController {
     def list = {
     }
 
+    @Secured(['ROLE_ADMIN'])
     def create = {
         def millesimeInstance = new Millesime()
         millesimeInstance.properties = params
         return [millesimeInstance: millesimeInstance]
     }
 
+    @Secured(['ROLE_ADMIN'])
     def save = {
         def millesimeInstance = new Millesime(params)
         if (!millesimeInstance.hasErrors() && millesimeInstance.save()) {
@@ -45,6 +47,7 @@ class MillesimeController {
         }
     }
 
+    @Secured(['ROLE_ADMIN'])
     def edit = {
         def millesimeInstance = Millesime.get(params.id)
         if (!millesimeInstance) {
@@ -58,6 +61,7 @@ class MillesimeController {
         }
     }
 
+    @Secured(['ROLE_ADMIN'])
     def update = {
         def millesimeInstance = Millesime.get(params.id)
         if (millesimeInstance) {
@@ -89,6 +93,7 @@ class MillesimeController {
         }
     }
 
+    @Secured(['ROLE_ADMIN'])
     def delete = {
         def millesimeInstance = Millesime.get(params.id)
         if (millesimeInstance) {

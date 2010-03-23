@@ -125,6 +125,7 @@ class YUISeekinTagLib {
                         <li><img src="${resource(dir:'images/icons',file:'users.png')}" alt="${message(code:"user.list")}" /> <a href="${createLink(controller:"user", action:"list")}">${message(code:"user.list")}</a></li>
                         <li><img src="${resource(dir:'images/icons',file:'formations.png')}" alt="${message(code:"formation.list")}" /> <a href="${createLink(controller:"formation", action:"list")}">${message(code:"formation.list")}</a></li>
                         <li><img src="${resource(dir:'images/icons',file:'millesimes.png')}" alt="${message(code:"millesime.list")}" /> <a href="${createLink(controller:"millesime", action:"list")}">${message(code:"millesime.list")}</a></li>
+                        <li><img src="${resource(dir:'images/icons',file:'promotions.png')}" alt="${message(code:"promotion.list")}" /> <a href="${createLink(controller:"promotion", action:"list")}">${message(code:"promotion.list")}</a></li>
                     </ul>"""
                 }
             }

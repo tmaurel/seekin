@@ -22,13 +22,13 @@
           
                 <p>
                       <label for="millesime"><g:message code="promotion.millesime" default="Millesime" />:</label>
-                      <g:select name="millesime.id" from="${me.hcl.seekin.Formation.Millesime.list()}" optionKey="id" value="${promotionInstance?.millesime?.id}"  />
+                      <g:select name="millesime.id" from="${me.hcl.seekin.Formation.Millesime.list()}" optionKey="id" value="${params.millesime}"  />
 
                 </p>
           
                 <p>
                       <label for="formation"><g:message code="promotion.formation" default="Formation" />:</label>
-                      <g:select name="formation.id" from="${me.hcl.seekin.Formation.Formation.list()}" optionKey="id" value="${promotionInstance?.formation?.id}"  />
+                      <g:select name="formation.id" from="${formations}" optionKey="id" value="${params.formation}"  />
 
                 </p>
           

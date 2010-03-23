@@ -1,8 +1,8 @@
 package me.hcl.seekin.Formation
 
-
-
 import grails.converters.JSON
+import org.codehaus.groovy.grails.plugins.springsecurity.Secured
+
 class FormationController {
 
     def index = { redirect(action: "list", params: params) }
@@ -13,12 +13,15 @@ class FormationController {
     def list = {
     }
 
+
+    @Secured(['ROLE_ADMIN'])
     def create = {
         def formationInstance = new Formation()
         formationInstance.properties = params
         return [formationInstance: formationInstance]
     }
 
+    @Secured(['ROLE_ADMIN'])
     def save = {
         def formationInstance = new Formation(params)
         if (!formationInstance.hasErrors() && formationInstance.save()) {
@@ -45,6 +48,7 @@ class FormationController {
         }
     }
 
+    @Secured(['ROLE_ADMIN'])
     def edit = {
         def formationInstance = Formation.get(params.id)
         if (!formationInstance) {
@@ -58,6 +62,7 @@ class FormationController {
         }
     }
 
+    @Secured(['ROLE_ADMIN'])
     def update = {
         def formationInstance = Formation.get(params.id)
         if (formationInstance) {
@@ -89,6 +94,7 @@ class FormationController {
         }
     }
 
+    @Secured(['ROLE_ADMIN'])
     def delete = {
         def formationInstance = Formation.get(params.id)
         if (formationInstance) {

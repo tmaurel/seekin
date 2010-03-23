@@ -1,8 +1,9 @@
 package me.hcl.seekin.Formation
 
-
-
 import grails.converters.JSON
+import org.codehaus.groovy.grails.plugins.springsecurity.Secured
+import me.hcl.seekin.Auth.Role.FormationManager
+
 class PromotionController {
 
     def index = { redirect(action: "list", params: params) }
@@ -10,15 +11,34 @@ class PromotionController {
     // the delete, save and update actions only accept POST requests
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
+    def authenticateService
+    
     def list = {
     }
 
+    @Secured(['ROLE_ADMIN', 'ROLE_FORMATIONMANAGER'])
     def create = {
         def promotionInstance = new Promotion()
         promotionInstance.properties = params
-        return [promotionInstance: promotionInstance]
+
+        def formations = []
+
+        if(authenticateService.ifAnyGranted("ROLE_FORMATIONMANAGER"))
+        {
+            def userInstance = authenticateService.userDomain()
+            def manager = FormationManager.findByUser(userInstance)
+            formations << manager?.formation
+        }
+        else
+        {
+            formations = Formation.list()
+        }
+
+
+        return [promotionInstance: promotionInstance, formations: formations]
     }
 
+    @Secured(['ROLE_ADMIN', 'ROLE_FORMATIONMANAGER'])
     def save = {
         def promotionInstance = new Promotion(params)
         if (!promotionInstance.hasErrors() && promotionInstance.save()) {
@@ -28,7 +48,19 @@ class PromotionController {
             redirect(action: "show", id: promotionInstance.id)
         }
         else {
-            render(view: "create", model: [promotionInstance: promotionInstance])
+            def formations = []
+
+            if(authenticateService.ifAnyGranted("ROLE_FORMATIONMANAGER"))
+            {
+                def userInstance = authenticateService.userDomain()
+                def manager = FormationManager.findByUser(userInstance)
+                formations << manager?.formation
+            }
+            else
+            {
+                formations = Formation.list()
+            }
+            render(view: "create", model: [promotionInstance: promotionInstance, formations: formations])
         }
     }
 
@@ -45,53 +77,22 @@ class PromotionController {
         }
     }
 
-    def edit = {
-        def promotionInstance = Promotion.get(params.id)
-        if (!promotionInstance) {
-            flash.message = "promotion.not.found"
-            flash.args = [params.id]
-            flash.defaultMessage = "Promotion not found with id ${params.id}"
-            redirect(action: "list")
-        }
-        else {
-            return [promotionInstance: promotionInstance]
-        }
-    }
-
-    def update = {
-        def promotionInstance = Promotion.get(params.id)
-        if (promotionInstance) {
-            if (params.version) {
-                def version = params.version.toLong()
-                if (promotionInstance.version > version) {
-                    
-                    promotionInstance.errors.rejectValue("version", "promotion.optimistic.locking.failure", "Another user has updated this Promotion while you were editing")
-                    render(view: "edit", model: [promotionInstance: promotionInstance])
-                    return
-                }
-            }
-            promotionInstance.properties = params
-            if (!promotionInstance.hasErrors() && promotionInstance.save()) {
-                flash.message = "promotion.updated"
-                flash.args = [params.id]
-                flash.defaultMessage = "Promotion ${params.id} updated"
-                redirect(action: "show", id: promotionInstance.id)
-            }
-            else {
-                render(view: "edit", model: [promotionInstance: promotionInstance])
-            }
-        }
-        else {
-            flash.message = "promotion.not.found"
-            flash.args = [params.id]
-            flash.defaultMessage = "Promotion not found with id ${params.id}"
-            redirect(action: "edit", id: params.id)
-        }
-    }
-
+    @Secured(['ROLE_ADMIN', 'ROLE_FORMATIONMANAGER'])
     def delete = {
         def promotionInstance = Promotion.get(params.id)
-        if (promotionInstance) {
+
+        def ok = true
+
+        if(authenticateService.ifAnyGranted("ROLE_FORMATIONMANAGER"))
+        {
+            ok = false
+            def user = authenticateService.userDomain()
+            def formation = FormationManager.findByUser(user)?.formation
+            if(promotionInstance?.formation == formation)
+                ok = true
+        }
+
+        if (promotionInstance && ok) {
             try {
                 promotionInstance.delete()
                 flash.message = "promotion.deleted"

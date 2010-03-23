@@ -44,23 +44,23 @@
                             </span>
                       </p>
                         
-                       <p>
+                       <div class="properties_list">
                             <label><g:message code="formation.promotions" default="Promotions" /></label>
-                            <span class="field_value">
-                            
                             <ul>
                             <g:each in="${formationInstance?.promotions}" var="promotionInstance">
                                 <li><g:link controller="promotion" action="show" id="${promotionInstance.id}">${promotionInstance.encodeAsHTML()}</g:link></li>
                             </g:each>
                             </ul>
-                            
-                            </span>
-                      </p>
-                        
-                      
-                      <div class="actionpad yui-skin-sam">
-                        <g:buildShowButtons />
                       </div>
+                      <br/>
+                       <div class="actionpad yui-skin-sam">
+                       <g:ifAnyGranted role="ROLE_ADMIN">
+                            <g:buildShowButtons />
+                        </g:ifAnyGranted>
+                        <g:ifNotGranted role="ROLE_ADMIN">
+                            <g:listButton />
+                        </g:ifNotGranted>
+                       </div>
             </g:form>
        </body>
 </html>
