@@ -74,13 +74,14 @@ class UserController {
 		}
 		else
 		{
-
+			def model = [:]
+			
 			// Get the user instance logged in
 			def userInstance = authenticateService.userDomain()
 			sessionFactory.currentSession.refresh(userInstance, LockMode.NONE)
 
 			// If the user is an admin
-			if(authenticateService.ifAllGranted("ROLE_ADMIN")) {
+			if(authenticateService.ifAnyGranted("ROLE_ADMIN")) {
 
 				// Get the admin instance logged in
 				def admin = Admin.findByUser(userInstance)
@@ -88,17 +89,12 @@ class UserController {
 				// Get the users waiting for validation
 				def usersWaitingForValidation = User.findAllByEnabledAndValidated(false,false)
 
-				render(
-					view: "index",
-					model: [
-						usersWaitingForValidation: usersWaitingForValidation,
-						totalUsersWaitingForValidation: usersWaitingForValidation.size(),
-					]
-				)
+				model["usersWaitingForValidation"] = usersWaitingForValidation
+				model["totalUsersWaitingForValidation"] = usersWaitingForValidation.size()
 			}
 			
 			// If the user is a student
-			if(authenticateService.ifAllGranted("ROLE_STUDENT")) {
+			if(authenticateService.ifAnyGranted("ROLE_STUDENT")) {
 
 				// Get the student instance logged in
 				def student = Student.findByUser(userInstance)
@@ -130,24 +126,19 @@ class UserController {
 					lastInternshipReports << it
 				}
 
-				render(
-					view: "index",
-					model: [
-						lastOffers: lastOffers,
-						totalLastOffers: lastOffers.size(),
-						currentInternshipAcademicTutor: currentInternshipAcademicTutor,
-						studentInternships: studentInternships,
-						lastInternshipReports: lastInternshipReports,
-						totalStudentInternships: studentInternships.size(),
-						totalLastInternshipReports: lastInternshipReports.size(),
-						totalInternshipReports: Report.findAllByIsPrivate(false).size(),
-						totalLinks: Link.count()
-					]
-				)
+				model["lastOffers"] = lastOffers
+				model["totalLastOffers"] = lastOffers.size()
+				model["currentInternshipAcademicTutor"] = currentInternshipAcademicTutor
+				model["studentInternships"] = studentInternships
+				model["lastInternshipReports"] = lastInternshipReports
+				model["totalStudentInternships"] = studentInternships.size()
+				model["totalLastInternshipReports"] = lastInternshipReports.size()
+				model["totalInternshipReports"] = Report.findAllByIsPrivate(false).size()
+				model["totalLinks"] = Link.count()
 			}
 
 			// If the user is a formation manager
-			if(authenticateService.ifAllGranted("ROLE_FORMATIONMANAGER")) {
+			if(authenticateService.ifAnyGranted("ROLE_FORMATIONMANAGER")) {
 				
 				// Get the formation manager instance logged in
 				def formationManager = FormationManager.findByUser(userInstance)
@@ -190,26 +181,21 @@ class UserController {
 						}
 					}
 				}
-
-				render(
-					view: "index",
-					model: [
-						studentsWithoutInternship: studentsWithoutInternship,
-						studentsWithoutAcademicTutor: studentsWithoutAcademicTutor,
-						internshipsWaitingForValidation: internshipsWaitingForValidation,
-						offersWaitingForValidation: offersWaitingForValidation,
-						studentsWaitingForValidation: studentsWaitingForValidation,
-						totalStudentsWaitingForValidation: studentsWaitingForValidation.size(),
-						totalStudentsWithoutInternship: studentsWithoutInternship.size(),
-						totalStudentsWithoutAcademicTutor: studentsWithoutAcademicTutor.size(),
-						totalInternshipsWaitingForValidation: internshipsWaitingForValidation.size(),
-						totalOffersWaitingForValidation: offersWaitingForValidation.size(),
-					]
-				)
+				
+				model["studentsWithoutInternship"] = studentsWithoutInternship
+				model["studentsWithoutAcademicTutor"] = studentsWithoutAcademicTutor
+				model["internshipsWaitingForValidation"] = internshipsWaitingForValidation
+				model["offersWaitingForValidation"] = offersWaitingForValidation
+				model["studentsWaitingForValidation"] = studentsWaitingForValidation
+				model["totalStudentsWaitingForValidation"] = studentsWaitingForValidation.size()
+				model["totalStudentsWithoutInternship"] = studentsWithoutInternship.size()
+				model["totalStudentsWithoutAcademicTutor"] = studentsWithoutAcademicTutor.size()
+				model["totalInternshipsWaitingForValidation"] = internshipsWaitingForValidation.size()
+				model["totalOffersWaitingForValidation"] = offersWaitingForValidation.size()
 			}
 			
 			// If the user is a staff
-			if(authenticateService.ifAllGranted("ROLE_STAFF")) {
+			if(authenticateService.ifAnyGranted("ROLE_STAFF")) {
 
 				// Get the staff instance logged in
 				def staff = Staff.findByUser(userInstance)
@@ -221,16 +207,12 @@ class UserController {
 				// Get the convocations for this internships
 				def staffConvocations = internships?.convocation
 
-				render(
-					view: "index",
-					model: [
-						staffStudents: staffStudents,
-						staffConvocations: staffConvocations,
-						totalStaffStudents: staffStudents.size(),
-						totalStaffConvocations: staffConvocations.size()
-					]
-				)
+				model["staffStudents"] = staffStudents
+				model["staffConvocations"] = staffConvocations
+				model["totalStaffStudents"] = staffStudents.size()
+				model["totalStaffConvocations"] = staffConvocations.size()
 			}
+			render(view: "index", model: model)
 		}
 	}
 

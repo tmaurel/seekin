@@ -121,7 +121,7 @@
 			  <g:link controller="user" action="validate"><g:message code="students.validate" /></g:link>
 			</g:if>
 			<g:else>
-			  <span><g:message code="users.no" /></span>
+			  <span><g:message code="students.no" /></span>
 			</g:else>
 		  </gui:expandablePanel>
 		</div>
