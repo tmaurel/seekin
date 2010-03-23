@@ -162,6 +162,7 @@ class ReportController {
 
         def ok = true
         def keep = true
+        def visible = true
 
         def userInstance = authenticateService.userDomain()
 
@@ -171,6 +172,9 @@ class ReportController {
 
             if(reportInstance?.internship?.student?.id == student?.id)
                 ok = true
+
+            if(reportInstance?.isPrivate)
+                visible = false
         }
         else if(authenticateService.ifAnyGranted("ROLE_FORMATIONMANAGER"))
         {
@@ -190,6 +194,9 @@ class ReportController {
             def external = External.findByUser(userInstance)
             if(reportInstance?.internship?.companyTutor?.id == external?.id)
                 keep = true
+
+            if(reportInstance?.isPrivate)
+                visible = false
         }
 
         if (!reportInstance || !keep) {
@@ -199,7 +206,7 @@ class ReportController {
             redirect(action: "list")
         }
         else {
-            return [reportInstance: reportInstance, ok: ok]
+            return [reportInstance: reportInstance, ok: ok, visible: visible]
         }
     }
 

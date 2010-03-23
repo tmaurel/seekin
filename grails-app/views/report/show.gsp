@@ -11,7 +11,14 @@
     <body>
 
         <h2><g:message code="report.show" /></h2>
+
         <g:form class="boxed_form" name="crud_panel">
+
+        <g:if test="${!visible}">
+            <g:message code="report.isPrivate" />
+        </g:if>
+        <g:else>
+
             <g:if test="${flash.message}">
             <div class="flash_message"><g:message code="${flash.message}" transparent="true" args="${flash.args}" default="${flash.defaultMessage}" /></div>
             </g:if>
@@ -49,6 +56,7 @@
                                     <img src="${resource(dir:'images/icons',file:'dl.png')}" alt="Download" />
                             </g:link>
                       </p>
+          </g:else>
 
                      <div class="actionpad yui-skin-sam">
                       <g:ifAnyGranted role="ROLE_ADMIN">
