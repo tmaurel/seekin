@@ -55,7 +55,7 @@ class User {
 		enabled(nullable:true)
         firstName(blank: false, maxSize: 30)
 		lastName(blank: false, maxSize: 30)
-		address(nullable: false)
+		address(nullable: true)
 		phone(nullable:true, maxSize: 15)
 	}
 

@@ -21,13 +21,15 @@ security {
 
 
 	// Mail conf
-	useMail = true
+	useMail = false
+	/*
 	mailHost = 'smtp.free.fr'
 	mailUsername = 'seekin.hcl@free.fr'
 	mailPassword = 'hcljunior'
 	mailProtocol = 'smtp'
 	mailFrom = 'webmaster@hcl.me'
 	mailPort = 25
+	*/
 
 
        controllerAnnotationStaticRules = [

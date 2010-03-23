@@ -264,6 +264,7 @@ class InternshipController {
 
             if(User.countByEmail(params.email) == 0) {
                 role = new External()
+				company.save()
                 role.company = company
                 role.formerStudent = false
                 role.save(flush:true)

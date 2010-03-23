@@ -1,6 +1,6 @@
 package me.hcl.seekin.Internship
 
-import me.hcl.seekin.Auth.User
+import me.hcl.seekin.Auth.Role.External
 import me.hcl.seekin.Util.Address
 
 
@@ -29,7 +29,7 @@ class Company {
 	/** A company may be ossociate with many internships */
     /** A company may propose many offers */
 
-	static hasMany = [ employees : User, internships : Internship, offers: Offer]
+	static hasMany = [ employees : External, internships : Internship, offers: Offer]
 
 	/** Constraints used to check if an instance is correct */
     static constraints = {
