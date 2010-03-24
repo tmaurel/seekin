@@ -165,17 +165,41 @@
                             </span>
                       </p>
                       </g:if>
-                      
-                      <div class="actionpad yui-skin-sam">
-                        <g:ifAnyGranted role="ROLE_ADMIN,ROLE_FORMATIONMANAGER,ROLE_STUDENT">
+
+
+                     <div class="actionpad yui-skin-sam">
+
+                     <g:ifAnyGranted role="ROLE_STAFF,ROLE_EXTERNAL">
+                        <g:listButton />
+                     </g:ifAnyGranted>
+
+                      <g:ifAnyGranted role="ROLE_ADMIN">
                           <g:if test="${internshipInstance.isApproval == false}">
-                            <g:buildShowButtons />
+                          <g:YUISubmitbutton value="edit" action="edit" />
                           </g:if>
-                          <g:else>
-                            <g:buildShowWithoutEditButtons />
-                          </g:else>
-                        </g:ifAnyGranted>
-                      </div>
+                          <g:deleteButton />
+                      </g:ifAnyGranted>
+
+
+                      <g:ifNotGranted role="ROLE_ADMIN">
+                      <g:ifAnyGranted role="ROLE_FORMATIONMANAGER">
+                        <g:if test="${internshipInstance.isApproval == false}">
+                          <g:YUISubmitbutton value="edit" action="edit" />
+                        </g:if>
+                        <g:deleteButton />
+                          
+                      </g:ifAnyGranted>
+                      </g:ifNotGranted>
+
+                       <g:ifAnyGranted role="ROLE_STUDENT">
+                          <g:listButton />
+                          <g:if test="${internshipInstance.isApproval == false}">
+                            <g:YUISubmitbutton value="edit" action="edit" />
+                            <g:deleteButton />
+                          </g:if>
+                       </g:ifAnyGranted>
+
+                     </div>
             </g:form>
        </body>
 </html>

@@ -45,7 +45,8 @@
            <g:ifAnyGranted role="ROLE_ADMIN">
                 <g:buildEditButtons />
             </g:ifAnyGranted>
-
+             
+            <g:ifNotGranted role="ROLE_ADMIN">
             <g:ifAnyGranted role="ROLE_FORMATIONMANAGER">
                 <g:listButton />
                 <g:if test="${ok}">
@@ -53,6 +54,7 @@
                 <g:deleteButton />
                 </g:if>
             </g:ifAnyGranted>
+            </g:ifNotGranted>
 
              <g:ifAnyGranted role="ROLE_STUDENT">
                 <g:listButton />

@@ -149,12 +149,12 @@
 
           <div class="actionpad yui-skin-sam">
 
-             <g:ifAnyGranted role="ROLE_ADMIN">
+             <g:ifAnyGranted role="ROLE_ADMIN,ROLE_FORMATIONMANAGER">
 
                 <g:buildDenyButtons />
 
              </g:ifAnyGranted>
-             <g:ifNotGranted role="ROLE_ADMIN">
+             <g:ifNotGranted role="ROLE_ADMIN,ROLE_FORMATIONMANAGER">
 
                 <g:buildEditButtons />
 

@@ -1,7 +1,7 @@
 package me.hcl.seekin.Internship
 
 
-
+import org.codehaus.groovy.grails.plugins.springsecurity.Secured
 import grails.converters.JSON
 import me.hcl.seekin.Auth.Role.*
 import me.hcl.seekin.Auth.User
@@ -99,9 +99,17 @@ class InternshipController {
                 }
                 render(view: "list", model: [status: status])
             }
+            else if(authenticateService.ifAnyGranted("ROLE_EXTERNAL")) {
+                def external = External.findByUser(userInstance)
+                external.internships.each {
+                    status.add it.getStatus()
+                }
+                render(view: "list", model: [status: status])
+            }
         }
     }
 
+    @Secured(['ROLE_ADMIN','ROLE_FORMATIONMANAGER'])
     def assignate = {
 
         def internship
@@ -134,6 +142,7 @@ class InternshipController {
         return [formations: formations]
     }
 
+    @Secured(['ROLE_ADMIN','ROLE_FORMATIONMANAGER', 'ROLE_STUDENT'])
     def create = {
         def staff = Staff.list().collect {
             [
@@ -175,6 +184,7 @@ class InternshipController {
         return [internshipInstance: internshipInstance, staff: staff, student: student, offer: offer, company: internshipInstance.company]
     }
 
+    @Secured(['ROLE_ADMIN','ROLE_FORMATIONMANAGER', 'ROLE_STUDENT'])
     def save = {
 
         def staff = Staff.list().collect {
@@ -298,6 +308,7 @@ class InternshipController {
     }
 
     def show = {
+        
         /* We get the user logged in to verify if he is authorized to show an internship */
         def userInstance = authenticateService.userDomain()
         sessionFactory.currentSession.refresh(userInstance, LockMode.NONE)
@@ -307,17 +318,28 @@ class InternshipController {
         def internshipInstance = Internship.get(params.id)
         /* If the user have an external role, he is allowed to show only offers which he had created */
         if(authenticateService.ifAnyGranted("ROLE_EXTERNAL")) {
-            if(internshipInstance?.companyTutor?.user == userInstance && internshipInstance?.isApproval == true) {
+            if(internshipInstance?.companyTutor?.user == userInstance) {
                 showable = true
             }
         }
         /* If the user is the administrator, he can show all offers */
-        else if(authenticateService.ifAnyGranted("ROLE_ADMIN,ROLE_FORMATIONMANAGER")) {
+        else if(authenticateService.ifAnyGranted("ROLE_ADMIN")) {
             showable = true
+        }
+        else if(authenticateService.ifAnyGranted("ROLE_FORMATIONMANAGER")) {
+
+            def manager = FormationManager.findByUser(userInstance)
+
+            def promotion = internshipInstance?.student?.promotions.find {
+                it.millesime?.id == internshipInstance?.millesime?.id
+            }
+
+            if(promotion?.formation?.id == manager?.formation?.id)
+                showable = true
         }
         /* If the user is a staff's member, he is allowed to show offers which he had created and offers that are validated */
         else if(authenticateService.ifAnyGranted("ROLE_STAFF")) {
-            if(internshipInstance?.academicTutor?.user == userInstance && internshipInstance.isApproval == true) {
+            if(internshipInstance?.academicTutor?.user == userInstance) {
                 showable = true
             }
         }
@@ -341,7 +363,9 @@ class InternshipController {
         }
     }
 
+    @Secured(['ROLE_ADMIN','ROLE_FORMATIONMANAGER', 'ROLE_STUDENT'])
     def edit = {
+
         /* We get the user logged in to verify if he is authorized to edit an internship */
         def userInstance = authenticateService.userDomain()
         sessionFactory.currentSession.refresh(userInstance, LockMode.NONE)
@@ -349,9 +373,31 @@ class InternshipController {
 
         /* Get the internship with id parameter */
         def internshipInstance = Internship.get(params.id)
-        /* If the internship is not validated, it is editable */
-        if (internshipInstance?.isApproval == false) {
+
+
+        if(authenticateService.ifAnyGranted("ROLE_ADMIN")) {
             editable = true
+        }
+        else if(authenticateService.ifAnyGranted("ROLE_STUDENT")) {
+            if(internshipInstance?.student?.user ==  userInstance) {
+                editable = true
+            }
+        }
+        else if(authenticateService.ifAnyGranted("ROLE_FORMATIONMANAGER")) {
+            def manager = FormationManager.findByUser(userInstance)
+
+            def promotion = internshipInstance?.student?.promotions.find {
+                it.millesime?.id == internshipInstance?.millesime?.id
+            }
+
+            if(promotion?.formation?.id == manager?.formation?.id)
+                editable = true
+        }
+        
+
+        /* If the internship is not validated, it is editable */
+        if (internshipInstance?.isApproval == true) {
+            editable = false
         }
 
         /* If the offer is editable, we return our needed instance */
@@ -367,9 +413,35 @@ class InternshipController {
         }
     }
 
+    @Secured(['ROLE_ADMIN','ROLE_FORMATIONMANAGER', 'ROLE_STUDENT'])
     def update = {
         def internshipInstance = Internship.get(params.id)
-        if (internshipInstance) {
+
+        /* We get the user logged in to verify if he is authorized to edit an internship */
+        def userInstance = authenticateService.userDomain()
+        sessionFactory.currentSession.refresh(userInstance, LockMode.NONE)
+        Boolean editable = false
+
+        if(authenticateService.ifAnyGranted("ROLE_ADMIN")) {
+            editable = true
+        }
+        else if(authenticateService.ifAnyGranted("ROLE_STUDENT")) {
+            if(internshipInstance?.student?.user ==  userInstance) {
+                editable = true
+            }
+        }
+        else if(authenticateService.ifAnyGranted("ROLE_FORMATIONMANAGER")) {
+            def manager = FormationManager.findByUser(userInstance)
+
+            def promotion = internshipInstance?.student?.promotions.find {
+                it.millesime?.id == internshipInstance?.millesime?.id
+            }
+
+            if(promotion?.formation?.id == manager?.formation?.id)
+                editable = true
+        }
+
+        if (internshipInstance && editable) {
             if (params.version) {
                 def version = params.version.toLong()
                 if (internshipInstance.version > version) {
@@ -401,10 +473,31 @@ class InternshipController {
     }
 
     /* It is used when an internship is deny by the administrator */
+    @Secured(['ROLE_ADMIN','ROLE_FORMATIONMANAGER'])
     def deny = {
         /* Get the internship and set reason with params.reason before saving and redirect the user to list */
         def internshipInstance = Internship.get(params.id)
-        if (internshipInstance) {
+
+       /* We get the user logged in to verify if he is authorized to edit an internship */
+        def userInstance = authenticateService.userDomain()
+        sessionFactory.currentSession.refresh(userInstance, LockMode.NONE)
+        Boolean editable = false
+
+        if(authenticateService.ifAnyGranted("ROLE_ADMIN")) {
+            editable = true
+        }
+        else if(authenticateService.ifAnyGranted("ROLE_FORMATIONMANAGER")) {
+            def manager = FormationManager.findByUser(userInstance)
+
+            def promotion = internshipInstance?.student?.promotions.find {
+                it.millesime?.id == internshipInstance?.millesime?.id
+            }
+
+            if(promotion?.formation?.id == manager?.formation?.id)
+                editable = true
+        }
+
+        if (internshipInstance && editable) {
             internshipInstance.reason = params.reason
             internshipInstance.save()
             redirect(action: "list")
@@ -418,10 +511,43 @@ class InternshipController {
         }
     }
 
+    @Secured(['ROLE_ADMIN','ROLE_FORMATIONMANAGER', 'ROLE_STUDENT'])
     def delete = {
+        
         def internshipInstance = Internship.get(params.id)
-        if (internshipInstance) {
+
+        /* We get the user logged in to verify if he is authorized to edit an internship */
+        def userInstance = authenticateService.userDomain()
+        sessionFactory.currentSession.refresh(userInstance, LockMode.NONE)
+        Boolean editable = false
+
+        if(authenticateService.ifAnyGranted("ROLE_ADMIN")) {
+            editable = true
+        }
+        else if(authenticateService.ifAnyGranted("ROLE_STUDENT")) {
+            if(internshipInstance?.student?.user ==  userInstance) {
+                editable = true
+            }
+        }
+        else if(authenticateService.ifAnyGranted("ROLE_FORMATIONMANAGER")) {
+            def manager = FormationManager.findByUser(userInstance)
+
+            def promotion = internshipInstance?.student?.promotions.find {
+                it.millesime?.id == internshipInstance?.millesime?.id
+            }
+
+            if(promotion?.formation?.id == manager?.formation?.id)
+                editable = true
+        }
+
+        if (internshipInstance && editable) {
             try {
+                internshipInstance.academicTutor = null
+                internshipInstance.companyTutor = null
+                internshipInstance.student = null
+                internshipInstance.company = null
+                internshipInstance.millesime = null
+                
                 internshipInstance.delete()
                 flash.message = "internship.deleted"
                 flash.args = [params.id]
@@ -535,7 +661,15 @@ class InternshipController {
         else if(authenticateService.ifAnyGranted("ROLE_STUDENT")) {
             def student = Student.findByUser(userInstance)
             Internship.findAllByStudent(student).each {
-                list.add it.id
+                if(it.getStatus() == params.status)
+                    list.add it.id
+            }
+        }
+        else if(authenticateService.ifAnyGranted("ROLE_EXTERNAL")) {
+            def external = External.findByUser(userInstance)
+            external.internships.each {
+                if(it.getStatus() == params.status)
+                    list.add it.id
             }
         }
 

@@ -40,6 +40,7 @@
           </g:form>
           </g:ifAnyGranted>
            <g:set var="idMillesime" value="${params.idMillesime}"/>
+
            <gui:tabView id="myTabView">
 			<g:each var="status" in="${status}" status="i">
 			<g:set var="idStatus" value="${status}" />
