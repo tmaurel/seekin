@@ -9,6 +9,7 @@ import java.text.SimpleDateFormat
 import me.hcl.seekin.Formation.*
 import org.hibernate.LockMode
 import me.hcl.seekin.Auth.Role.FormationManager
+import org.codehaus.groovy.grails.plugins.springsecurity.Secured
 
 class ConvocationController {
 
@@ -23,6 +24,7 @@ class ConvocationController {
     // the delete, save and update actions only accept POST requests
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
+    @Secured(['ROLE_ADMIN','ROLE_FORMATIONMANAGER'])
     def list = {
 		def millesimes = Millesime.findAllByBeginDateLessThan(new Date())
 		def millesimeCurrent = millesimes.find {
@@ -55,6 +57,7 @@ class ConvocationController {
 		render(view: "list", model: [promotions: promotions, millesimes: millesimes])
     }
 
+    @Secured(['ROLE_ADMIN','ROLE_FORMATIONMANAGER'])
     def create = {
         def convocationInstance = new Convocation()
         def internships = []
@@ -100,6 +103,7 @@ class ConvocationController {
         }
     }
 
+    @Secured(['ROLE_ADMIN','ROLE_FORMATIONMANAGER'])
     def save = {
         def convocationInstance = new Convocation(params)
         def internships = []
@@ -144,8 +148,22 @@ class ConvocationController {
         }
     }
 
+
     def show = {
         def convocationInstance = Convocation.get(params.id)
+
+        def ok = true
+        def userInstance = authenticateService.userDomain()
+
+        if(authenticateService.ifAnyGranted("ROLE_FORMATIONMANAGER")) {
+            ok = false
+            def manager = FormationManager.findByUser(userInstance)
+            def student = convocationInstance?.internship?.student
+
+            if(Promotion.getCurrentForStudent(student)?.formation == manager?.formation)
+                ok = true
+        }
+
         if (!convocationInstance) {
             flash.message = "convocation.not.found"
             flash.args = [params.id]
@@ -153,14 +171,27 @@ class ConvocationController {
             redirect(action: "list")
         }
         else {
-            return [convocationInstance: convocationInstance]
+            return [convocationInstance: convocationInstance, ok: ok]
         }
     }
 
+    @Secured(['ROLE_ADMIN','ROLE_FORMATIONMANAGER'])
     def edit = {
-        def convocationInstance = Convocation.get(params.id)
 
-        if (!convocationInstance) {
+        def convocationInstance = Convocation.get(params.id)
+        def ok = true
+        def userInstance = authenticateService.userDomain()
+
+        if(authenticateService.ifAnyGranted("ROLE_FORMATIONMANAGER")) {
+            ok = false
+            def manager = FormationManager.findByUser(userInstance)
+            def student = convocationInstance?.internship?.student
+
+            if(Promotion.getCurrentForStudent(student)?.formation == manager?.formation)
+                ok = true
+        }
+
+        if (!convocationInstance || !ok) {
             flash.message = "convocation.not.found"
             flash.args = [params.id]
             flash.defaultMessage = "Convocation not found with id ${params.id}"
@@ -171,9 +202,23 @@ class ConvocationController {
         }
     }
 
+    @Secured(['ROLE_ADMIN','ROLE_FORMATIONMANAGER'])
     def update = {
         def convocationInstance = Convocation.get(params.id)
-        if (convocationInstance) {
+
+        def ok = true
+        def userInstance = authenticateService.userDomain()
+
+        if(authenticateService.ifAnyGranted("ROLE_FORMATIONMANAGER")) {
+            ok = false
+            def manager = FormationManager.findByUser(userInstance)
+            def student = convocationInstance?.internship?.student
+
+            if(Promotion.getCurrentForStudent(student)?.formation == manager?.formation)
+                ok = true
+        }
+
+        if (convocationInstance && ok) {
             if (params.version) {
                 def version = params.version.toLong()
                 if (convocationInstance.version > version) {
@@ -202,9 +247,24 @@ class ConvocationController {
         }
     }
 
+
+    @Secured(['ROLE_ADMIN','ROLE_FORMATIONMANAGER'])
     def delete = {
         def convocationInstance = Convocation.get(params.id)
-        if (convocationInstance) {
+
+        def ok = true
+        def userInstance = authenticateService.userDomain()
+
+        if(authenticateService.ifAnyGranted("ROLE_FORMATIONMANAGER")) {
+            ok = false
+            def manager = FormationManager.findByUser(userInstance)
+            def student = convocationInstance?.internship?.student
+
+            if(Promotion.getCurrentForStudent(student)?.formation == manager?.formation)
+                ok = true
+        }
+
+        if (convocationInstance && ok) {
             try {
                 convocationInstance.internship.convocation = null
                 convocationInstance.delete()
@@ -266,11 +326,23 @@ class ConvocationController {
         }
     }
 
-
+    @Secured(['ROLE_ADMIN','ROLE_FORMATIONMANAGER'])
     def exportPlanning = {
 
         def promotionInstance = Promotion.get(params.id)
-        if (!promotionInstance) {
+
+        def ok = true
+        def userInstance = authenticateService.userDomain()
+
+        if(authenticateService.ifAnyGranted("ROLE_FORMATIONMANAGER")) {
+            ok = false
+            def manager = FormationManager.findByUser(userInstance)
+            
+            if(promotionInstance?.formation == manager?.formation)
+                ok = true
+        }
+
+        if (!promotionInstance || !ok) {
             flash.message = "promotion.not.found"
             flash.args = [params.id]
             flash.defaultMessage = "Promotion not found with id ${params.id}"
@@ -326,6 +398,7 @@ class ConvocationController {
         }
     }
 
+    @Secured(['ROLE_ADMIN','ROLE_FORMATIONMANAGER'])
     def dataTableDataAsJSON = {
         def promotion = Promotion.get(params.promotion)
 

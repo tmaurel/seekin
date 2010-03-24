@@ -68,9 +68,18 @@
 						</span>
 					  </p>
                       
-                      <div class="actionpad yui-skin-sam">
-                        <g:buildShowButtons />
-                      </div>
+                       <div class="actionpad yui-skin-sam">
+                       <g:ifAnyGranted role="ROLE_ADMIN">
+                            <g:buildShowButtons />
+                        </g:ifAnyGranted>
+                        <g:ifAnyGranted role="ROLE_FORMATIONMANAGER">
+                            <g:listButton />
+                            <g:if test="${ok}">
+                            <g:YUISubmitbutton value="edit" action="edit" />
+                            <g:deleteButton />
+                            </g:if>
+                        </g:ifAnyGranted>
+                       </div>
             </g:form>
        </body>
 </html>

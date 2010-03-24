@@ -6,7 +6,8 @@ import jofc2.model.axis.YAxis
 import jofc2.model.axis.XAxis
 import jofc2.model.axis.Label
 import jofc2.model.elements.PieChart
-
+import org.codehaus.groovy.grails.plugins.springsecurity.Secured
+import me.hcl.seekin.Auth.Role.External
 
 class CompanyController {
 
@@ -15,6 +16,7 @@ class CompanyController {
     // the delete, save and update actions only accept POST requests
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
+    def authenticateService
 
     def getAddress = {
         def companyInstance = Company.get(params.id)
@@ -43,13 +45,23 @@ class CompanyController {
         }
     }
 
+    @Secured(['ROLE_ADMIN', 'ROLE_FORMATIONMANAGER', 'ROLE_STUDENT', 'ROLE_STAFF'])
     def list = {
     }
 
-
     def show = {
         def companyInstance = Company.get(params.id)
-        if (!companyInstance) {
+        def ok = true
+        if(authenticateService.ifAnyGranted("ROLE_EXTERNAL"))
+        {
+            ok = false
+            def userInstance = authenticateService.userDomain()
+            def external = External.findByUser(userInstance)
+            if(companyInstance.employees.id.contains(external.id))
+                ok = true
+        }
+
+        if (!companyInstance || !ok) {
             flash.message = "company.not.found"
             flash.args = [params.id]
             flash.defaultMessage = "Company not found with id ${params.id}"
@@ -63,40 +75,62 @@ class CompanyController {
                     addresses.add it?.address
             }
 
-            println addresses
-
             def phones = new HashSet()
             companyInstance.internships.each {
                 if(it?.phone)
                     phones.add it?.phone
             }
 
-            return [companyInstance: companyInstance, addresses: addresses, phones: phones]
+            return [companyInstance: companyInstance, addresses: addresses, phones: phones, ok:ok]
         }
     }
 
+    @Secured(['ROLE_ADMIN', 'ROLE_FORMATIONMANAGER', 'ROLE_EXTERNAL'])
     def edit = {
         def companyInstance = Company.get(params.id)
-        if (!companyInstance) {
+        def ok = true
+        if(authenticateService.ifAnyGranted("ROLE_EXTERNAL"))
+        {
+            ok = false
+            def userInstance = authenticateService.userDomain()
+            def external = External.findByUser(userInstance)
+            if(companyInstance.employees.id.contains(external.id))
+                ok = true
+        }
+
+
+        if (!companyInstance || !ok) {
             flash.message = "company.not.found"
             flash.args = [params.id]
             flash.defaultMessage = "Company not found with id ${params.id}"
             redirect(action: "list")
         }
         else {
-            return [companyInstance: companyInstance]
+            return [companyInstance: companyInstance, ok:ok]
         }
     }
 
+    @Secured(['ROLE_ADMIN', 'ROLE_FORMATIONMANAGER', 'ROLE_EXTERNAL'])
     def update = {
         def companyInstance = Company.get(params.id)
-        if (companyInstance) {
+
+        def ok = true
+        if(authenticateService.ifAnyGranted("ROLE_EXTERNAL"))
+        {
+            ok = false
+            def userInstance = authenticateService.userDomain()
+            def external = External.findByUser(userInstance)
+            if(companyInstance.employees.id.contains(external.id))
+                ok = true
+        }
+
+        if (companyInstance && ok) {
             if (params.version) {
                 def version = params.version.toLong()
                 if (companyInstance.version > version) {
 
                     companyInstance.errors.rejectValue("version", "company.optimistic.locking.failure", "Another user has updated this Company while you were editing")
-                    render(view: "edit", model: [companyInstance: companyInstance])
+                    render(view: "edit", model: [companyInstance: companyInstance, ok:ok])
                     return
                 }
             }
@@ -108,7 +142,7 @@ class CompanyController {
                 redirect(action: "show", id: companyInstance.id)
             }
             else {
-                render(view: "edit", model: [companyInstance: companyInstance])
+                render(view: "edit", model: [companyInstance: companyInstance, ok:ok])
             }
         }
         else {
@@ -119,6 +153,7 @@ class CompanyController {
         }
     }
 
+    @Secured(['ROLE_ADMIN', 'ROLE_FORMATIONMANAGER'])
     def delete = {
         def companyInstance = Company.get(params.id)
         if (companyInstance) {
@@ -144,6 +179,7 @@ class CompanyController {
         }
     }
 
+    @Secured(['ROLE_ADMIN', 'ROLE_FORMATIONMANAGER', 'ROLE_STUDENT', 'ROLE_STAFF'])
     def dataTableDataAsJSON = {
         def list = Company.list(params)
         def ret = []

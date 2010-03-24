@@ -14,7 +14,9 @@
       <div class="flash_message"><g:message code="${flash.message}" transparent="true" args="${flash.args}" default="${flash.defaultMessage}" /></div>
       </g:if>
       <div class="yui-skin-sam" id="crud_panel">
-          <g:buildListButtons />
+          <g:ifAnyGranted role="ROLE_ADMIN,ROLE_FORMATIONMANAGER">
+            <g:buildListButtons />
+          </g:ifAnyGranted>
 
 		  <br /><br />
           

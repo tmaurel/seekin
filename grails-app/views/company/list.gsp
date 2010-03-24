@@ -14,8 +14,7 @@
       <div class="flash_message"><g:message code="${flash.message}" transparent="true" args="${flash.args}" default="${flash.defaultMessage}" /></div>
       </g:if>
       <div class="yui-skin-sam" id="crud_panel">
-          <g:buildListButtons />
-                 
+                
                         <g:set var="nameInternationalized" value="${message(code:'company.name')}" />
                  
                         <g:set var="phoneInternationalized" value="${message(code:'company.phone')}" />
