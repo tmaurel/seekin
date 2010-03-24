@@ -162,9 +162,10 @@
 			  <g:if test="${totalInternshipsWaitingForValidation > 0}">
 			  <ul>
 				<g:each var="internship" in="${internshipsWaitingForValidation}">
-				  <li><g:link controller="internship" action="show" id="${internship?.id}">${internship}</g:link></li>
+				  <li>${internship?.student}</li>
 				</g:each>
 			  </ul>
+			  <g:link controller="internship" action="list"><g:message code="internship.validate" /></g:link>
 			  </g:if>
 			  <g:else>
 				<span><g:message code="internships.no" /></span>
@@ -177,9 +178,10 @@
 			  <g:if test="${totalOffersWaitingForValidation > 0}">
 			  <ul>
 				<g:each var="offer" in="${offersWaitingForValidation}">
-				  <li><g:link controller="offer" action="show" id="${offer?.id}">${offer?.subject}</g:link></li>
+				  <li>${offer}</li>
 				</g:each>
 			  </ul>
+			  <g:link controller="offer" action="list"><g:message code="offer.validate" /></g:link>
 			  </g:if>
 			  <g:else>
 				<span><g:message code="offers.no" /></span>

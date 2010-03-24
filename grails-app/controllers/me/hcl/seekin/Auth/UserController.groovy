@@ -176,12 +176,12 @@ class UserController {
 						}
 
 						// Get internships awayting validation
-						if(!currentInternship.getStatus() == "internship.waitForValidation") {
+						if(currentInternship.getStatus() == "internship.waitForValidation") {
 							internshipsWaitingForValidation << currentInternship
 						}
 					}
 				}
-				
+
 				model["studentsWithoutInternship"] = studentsWithoutInternship
 				model["studentsWithoutAcademicTutor"] = studentsWithoutAcademicTutor
 				model["internshipsWaitingForValidation"] = internshipsWaitingForValidation
