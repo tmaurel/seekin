@@ -172,7 +172,7 @@ class InternshipController {
             internshipInstance = new Internship()
             internshipInstance.properties = params
         }
-        return [internshipInstance: internshipInstance, staff: staff, student: student, offer: offer]
+        return [internshipInstance: internshipInstance, staff: staff, student: student, offer: offer, company: internshipInstance.company]
     }
 
     def save = {
@@ -257,7 +257,7 @@ class InternshipController {
 				company.save()
                 role.company = company
                 role.formerStudent = false
-                role.save(flush:true)
+                role = role.merge(flush:true)
                 companyTutor = new User()
                 companyTutor.properties = params
                 companyTutor.password = authenticateService.encodePassword(UserController.generatePwd(8))

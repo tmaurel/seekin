@@ -80,7 +80,7 @@ class Internship {
         length(nullable: false)
         millesime(nullable: false)
         reason(nullable:true)
-        description(nullable:true)
+        description(nullable:true, maxSize:1000)
         address(nullable:true)
         phone(nullable:true)
     }

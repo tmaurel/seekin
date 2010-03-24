@@ -453,7 +453,11 @@ style = {
 		'padding':'4px'
 	)
 
-        '.boxed_form .properties_list ul' (
+    '.boxed_form .textarea_field' (
+            'clear':'none'
+    )
+
+        '.boxed_form .properties_list ul, .textarea_field span' (
 		'width':'50%',
 		'float':'left',
                 'text-align':'left',

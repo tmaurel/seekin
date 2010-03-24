@@ -31,7 +31,7 @@
 
                   <p>
                         <label for="description"><g:message code="offer.description" default="Description" /></label>
-                        <g:textField name="description" class="field${hasErrors(bean:offerInstance ,field:'description','error')}" value="${offerInstance.description}" />
+                        <g:textArea name="description" class="field${hasErrors(bean:offerInstance ,field:'description','error')}" value="${offerInstance.description}" />
 
                   </p>
 
@@ -43,7 +43,7 @@
 
                   <p>
                         <label for="length"><g:message code="offer.length" default="Length" /></label>
-                        <g:select name="length" from="${1..52}" value="${offerInstance?.length}" />
+                        <g:select name="length" from="${1..12}" value="${offerInstance?.length}" />
 
                   </p>
 
