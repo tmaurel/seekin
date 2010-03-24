@@ -66,20 +66,20 @@
                       </div>
 
                       <p>
-                            <label for="street"><g:message code="address.street" /></label>
-                            <g:textField name="street" class="field${hasErrors(bean:internshipInstance?.address ,field:'street','error')}" value="${params.street}" />
+                            <label for="address.street"><g:message code="address.street" /></label>
+                            <g:textField name="address.street" class="field${hasErrors(bean:internshipInstance?.address ,field:'street','error')}" value="${params.street}" />
 
                       </p>
 
                       <p>
-                            <label for="town"><g:message code="address.town" /></label>
-                            <g:textField name="town" class="field${hasErrors(bean:internshipInstance?.address ,field:'town','error')}" value="${params.town}" />
+                            <label for="address.town"><g:message code="address.town" /></label>
+                            <g:textField name="address.town" class="field${hasErrors(bean:internshipInstance?.address ,field:'town','error')}" value="${params.town}" />
 
                       </p>
 
                       <p>
-                            <label for="zipCode"><g:message code="address.zipCode" /></label>
-                            <g:textField name="zipCode" class="field${hasErrors(bean:internshipInstance?.address ,field:'zipCode','error')}" value="${params.zipCode}" />
+                            <label for="address.zipCode"><g:message code="address.zipCode" /></label>
+                            <g:textField name="address.zipCode" class="field${hasErrors(bean:internshipInstance?.address ,field:'zipCode','error')}" value="${params.zipCode}" />
 
                       </p>
 

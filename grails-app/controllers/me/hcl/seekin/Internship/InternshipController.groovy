@@ -224,16 +224,6 @@ class InternshipController {
             internshipInstance.company = company
         }
 
-        def address = Address.find("from Address as a where a.street=? and a.town=? and a.zipCode=?", [params.street, params.town, params.zipCode])
-        if(address)
-        {
-            internshipInstance.address = address
-        }
-        else
-        {
-            internshipInstance.address = new Address(street: params.street, town: params.town, zipCode: params.zipCode)
-        }
-
         internshipInstance.validate()
 
         if (params.email == null || params.email == "") {
@@ -391,16 +381,6 @@ class InternshipController {
             }
             internshipInstance.properties = params
             internshipInstance.reason = null
-
-            def address = Address.find("from Address as a where a.street=? and a.town=? and a.zipCode=?", [params.street, params.town, params.zipCode])
-            if(address)
-            {
-                internshipInstance.address = address
-            }
-            else
-            {
-                internshipInstance.address = new Address(street: params.street, town: params.town, zipCode: params.zipCode)
-            }
 
             if (!internshipInstance.hasErrors() && internshipInstance.save()) {
                 flash.message = "internship.updated"
@@ -571,7 +551,6 @@ class InternshipController {
                subject:it.subject,
                beginAt:it?.beginAt.formatDate(),
                isApproval:it.isApproval,
-               report:[name:it.report?.uri, link:g.createLink(controller: 'report', action: 'show', id:it.report?.id)],
                student:[name:it.student?.user?.firstName + " " + it.student?.user?.lastName, link:g.createLink(controller: 'user', action: 'show', id:it.student?.id)],
                urlID: it.id
             ]

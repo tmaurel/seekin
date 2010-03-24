@@ -9,8 +9,6 @@ import me.hcl.seekin.Internship.Internship
  */
 class Address {
 	
-	/** Make addresses searchable */
-
     static belongsTo = [ User, Company, Internship ]
 
     /** Street of the address */

@@ -52,17 +52,11 @@
                             id="dt_${i}"
                             draggableColumns="true"
                             columnDefs="[
-                                          [key: 'subject', sortable: true, resizeable: true, label: subjectInternationalized],
-
-                                          [key: 'beginAt', sortable: true, resizeable: true, label: beginAtInternationalized],
-
-                                          [key: 'isApproval', sortable: true, resizeable: true, label: isApprovalInternationalized],
-                                          
-                                          [key: 'report', sortable: true, resizeable: true, label: reportInternationalized, formatter: 'customLinkFormatter'],
-
-                                          [key: 'student', sortable: true, resizeable: true, label: studentInternationalized, formatter: 'customLinkFormatter'],
-
-                                [key: 'urlID', sortable: false, resizeable: false, label:'Actions', formatter: 'validatePanelFormatter']
+							  [key: 'subject', sortable: true, resizeable: true, label: subjectInternationalized],
+							  [key: 'beginAt', sortable: true, resizeable: true, label: beginAtInternationalized],
+							  [key: 'isApproval', sortable: true, resizeable: true, label: isApprovalInternationalized],
+							  [key: 'student', sortable: true, resizeable: true, label: studentInternationalized, formatter: 'customLinkFormatter'],
+							  [key: 'urlID', sortable: false, resizeable: false, label:'Actions', formatter: 'validatePanelFormatter']
                             ]"
                             controller="internship"
                             action="dataTableDataAsJSON"
@@ -84,17 +78,11 @@
                             id="dt_${i}"
                             draggableColumns="true"
                             columnDefs="[
-                                          [key: 'subject', sortable: true, resizeable: true, label: subjectInternationalized],
-
-                                          [key: 'beginAt', sortable: true, resizeable: true, label: beginAtInternationalized],
-
-                                          [key: 'isApproval', sortable: true, resizeable: true, label: isApprovalInternationalized],
-
-                                          [key: 'report', sortable: true, resizeable: true, label: reportInternationalized, formatter: 'customLinkFormatter'],
-
-                                          [key: 'student', sortable: true, resizeable: true, label: studentInternationalized, formatter: 'customLinkFormatter'],
-
-                                [key: 'urlID', sortable: false, resizeable: false, label:'Actions', formatter: 'adminPanelFormatter']
+							  [key: 'subject', sortable: true, resizeable: true, label: subjectInternationalized],
+							  [key: 'beginAt', sortable: true, resizeable: true, label: beginAtInternationalized],
+							  [key: 'isApproval', sortable: true, resizeable: true, label: isApprovalInternationalized],
+							  [key: 'student', sortable: true, resizeable: true, label: studentInternationalized, formatter: 'customLinkFormatter'],
+							  [key: 'urlID', sortable: false, resizeable: false, label:'Actions', formatter: 'adminPanelFormatter']
                             ]"
                             controller="internship"
                             action="dataTableDataAsJSON"
@@ -114,17 +102,11 @@
                             id="dt_${i}"
                             draggableColumns="true"
                             columnDefs="[
-                                          [key: 'subject', sortable: true, resizeable: true, label: subjectInternationalized],
-
-                                          [key: 'beginAt', sortable: true, resizeable: true, label: beginAtInternationalized],
-
-                                          [key: 'isApproval', sortable: true, resizeable: true, label: isApprovalInternationalized],
-
-                                          [key: 'report', sortable: true, resizeable: true, label: reportInternationalized, formatter: 'customLinkFormatter'],
-
-                                          [key: 'student', sortable: true, resizeable: true, label: studentInternationalized, formatter: 'customLinkFormatter'],
-
-                                [key: 'urlID', sortable: false, resizeable: false, label:'Actions', formatter: 'adminPanelFormatter']
+							  [key: 'subject', sortable: true, resizeable: true, label: subjectInternationalized],
+							  [key: 'beginAt', sortable: true, resizeable: true, label: beginAtInternationalized],
+							  [key: 'isApproval', sortable: true, resizeable: true, label: isApprovalInternationalized],
+							  [key: 'student', sortable: true, resizeable: true, label: studentInternationalized, formatter: 'customLinkFormatter'],
+							  [key: 'urlID', sortable: false, resizeable: false, label:'Actions', formatter: 'adminPanelFormatter']
                             ]"
                             controller="internship"
                             action="dataTableDataAsJSON"
