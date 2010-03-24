@@ -38,6 +38,8 @@ security {
           '/**/css/**': ['IS_AUTHENTICATED_ANONYMOUSLY'],
           '/**/images/**': ['IS_AUTHENTICATED_ANONYMOUSLY'],
           '/**': ['IS_AUTHENTICATED_REMEMBERED'],
+          '/**/*.png' : ['IS_AUTHENTICATED_ANONYMOUSLY'],
+          '/**/*.jpg' : ['IS_AUTHENTICATED_ANONYMOUSLY'],
        ]
 
 	
