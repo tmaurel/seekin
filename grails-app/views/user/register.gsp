@@ -29,7 +29,7 @@
                                     </p>
                                     <p>
                                             <label for='password'><g:message code="user.repassword" /></label>
-                                            <g:passwordField name='repassword' />
+                                            <g:passwordField name='repassword' class="field${hasErrors(bean:userInstance,field:'password','error')}"/>
                                     </p>
                             </div>
                     </gui:expandablePanel>
@@ -78,7 +78,7 @@
                                     </p>
                                     <p>
                                       <label for="showEmail"><g:message code="user.showEmail" default="Show Email" /></label>
-                                      <g:checkBox name="showEmail" value="${user?.showEmail}" />
+                                      <g:checkBox name="showEmail" value="${userInstance?.showEmail}" />
                                     </p>
                                     <g:if test="${usertype == '3'}">
                                     <div>
@@ -95,7 +95,7 @@
                                     </div>
                                     <p>
                                       <label for="formerStudent"><g:message code="external.formerstudent" /></label>
-                                      <g:checkBox name="formerStudent" value="${profile?.formerStudent}" />
+                                      <g:checkBox name="formerStudent" value="${params?.formerStudent}" />
                                     </p>
                                     </g:if>
                                     <g:if test="${usertype == '1'}">
@@ -105,7 +105,7 @@
                                           </p>
                                           <p>
                                             <label for="visible"><g:message code="student.visible" /></label>
-                                            <g:checkBox name="visible" value="${profile?.visible}" />
+                                            <g:checkBox name="visible" value="${params?.visible}" />
                                           </p>
                                     </g:if>
                             </div>

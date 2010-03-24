@@ -10,7 +10,7 @@
         <gui:resources components="accordion, autoComplete, tabView"/>
         <yui:javascript dir="json" file="json-min.js" />
     </head>
-    <body>  
+    <body>
       <h2><g:message code="internship.create" /></h2>
       <g:if test="${flash.message}">
       <div class="flash_message"><g:message code="${flash.message}" transparent="true" args="${flash.args}" /></div>
@@ -35,7 +35,7 @@
 
                       <p>
                             <label for="description"><g:message code="internship.description" default="Description" /></label>
-                            <g:textField name="description" class="field${hasErrors(bean:internshipInstance ,field:'description','error')}" value="${internshipInstance?.description}" />
+                            <g:textArea name="description" class="field${hasErrors(bean:internshipInstance ,field:'description','error')}" value="${internshipInstance?.description}" />
 
                       </p>
 
@@ -47,7 +47,7 @@
 
                       <p>
                             <label for="length"><g:message code="internship.length" default="Length" /></label>
-                            <g:textField name="length" class="field${hasErrors(bean:internshipInstance ,field:'length','error')}" value="${internshipInstance.length}" />
+                            <g:select name="length" from="${1..12}" value="${internshipInstance?.length}" />
 
                       </p>
 
@@ -126,7 +126,7 @@
                                   <g:checkBox name="isApproval" value="${internshipInstance?.isApproval}" />
 
                             </p>
-                        
+
                       </g:ifAnyGranted>
 
                 <div class="actionpad yui-skin-sam">
@@ -165,11 +165,11 @@
                 if(input)
                   input.value = value;
           }
-          
+
         }
 
         var handleFailure = function(o){
-            
+
         }
 
         function companySelectHandler(sType, aArgs) {
@@ -193,7 +193,7 @@
         };
 
         YAHOO.util.Event.onDOMReady(initHandler);
-        
+
       </script>
     </body>
 </html>

@@ -45,7 +45,7 @@ class Offer {
 	/** Constraints used to check if an instance is correct */
     static constraints = {
 		subject(blank: false)
-		description(blank: false)
+		description(blank: false, maxSize:1000)
 		beginAt(nullable: false)
         validated(nullable: false)
         assignated(nullable: false)

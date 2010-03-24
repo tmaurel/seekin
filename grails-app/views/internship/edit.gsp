@@ -1,11 +1,10 @@
-
 <%@ page import="me.hcl.seekin.Internship.Internship" %>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="layout" content="main" />
         <title><g:message code="internship.edit"/></title>
-        
+
         <tm:resources />
     </head>
     <body>
@@ -20,7 +19,7 @@
           <g:hiddenField name="id" value="${internshipInstance?.id}" />
           <g:hiddenField name="version" value="${internshipInstance?.version}" />
           <g:hiddenField name="reason" value="${internshipInstance?.reason}" />
-          
+
                 <p>
 
                           <label for="subject"><g:message code="internship.subject" default="Subject" /></label>
@@ -31,10 +30,10 @@
                 <p>
 
                           <label for="description"><g:message code="internship.description" default="Description" /></label>
-                          <g:textField name="description" class="field${hasErrors(bean:internshipInstance ,field:'description','error')}" value="${internshipInstance?.description}" />
+                          <g:textArea name="description" class="field${hasErrors(bean:internshipInstance ,field:'description','error')}" value="${internshipInstance?.description}" />
 
                 </p>
-          
+
                 <p>
 
                           <label for="beginAt"><g:message code="internship.beginAt" default="Begin At" /></label>
@@ -43,12 +42,9 @@
                 </p>
 
                 <p>
-                    <label><g:message code="internship.length" default="Length" /></label>
-                    <span class="field_value">
+                      <label for="length"><g:message code="internship.length" default="Length" /></label>
+                      <g:select name="length" from="${1..12}" value="${internshipInstance?.length}" />
 
-                    ${fieldValue(bean: internshipInstance, field: "length")}
-
-                    </span>
                 </p>
 
                 <p>
@@ -61,7 +57,7 @@
                           </span>
 
                 </p>
-          
+
                 <p>
 
                           <label for="student"><g:message code="internship.student" default="Student" /></label>
@@ -72,7 +68,7 @@
                           </span>
 
                 </p>
-          
+
                 <p>
 
                           <label for="academicTutor"><g:message code="internship.academicTutor" default="Academic Tutor" /></label>
@@ -116,7 +112,7 @@
                       <g:textField name="phone" class="field${hasErrors(bean:internshipInstance ,field:'phone','error')}" value="${internshipInstance.phone}" />
 
                 </p>
-          
+
                 <p>
 
                           <label for="companyTutor"><g:message code="internship.companyTutor" default="Company Tutor" /></label>
@@ -149,8 +145,8 @@
                           </p>
 
                 </g:ifAnyGranted>
-          
-          
+
+
           <div class="actionpad yui-skin-sam">
 
              <g:ifAnyGranted role="ROLE_ADMIN">

@@ -38,14 +38,14 @@
                             </span>
                       </p>
                         
-                       <p>
+                       <div class="textarea_field">
                             <label><g:message code="offer.description" default="Description" /></label>
                             <span class="field_value">
                             
-                            ${fieldValue(bean: offerInstance, field: "description")}
+                            ${fieldValue(bean: offerInstance, field: "description").replaceAll('\n', '<br />')}
                             
                             </span>
-                      </p>
+                      </div>
                         
                        <p>
                             <label><g:message code="offer.beginAt" default="Begin At" /></label>
