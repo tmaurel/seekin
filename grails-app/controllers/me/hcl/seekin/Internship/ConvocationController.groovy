@@ -307,19 +307,19 @@ class ConvocationController {
             def dateFormat = DateFormat.getDateInstance(DateFormat.FULL, locale);
 
             def model = [:]
-            model.student = convocationInstance.internship.student.user
-            model.companyTutor = convocationInstance.internship.companyTutor.user
-            model.academicTutor = convocationInstance.internship.academicTutor.user
-            model.promotion = Promotion.getCurrentForStudent(convocationInstance.internship.student)
-            model.manager = model.promotion.formation.manager?.user
-            model.date = dateFormat.format(convocationInstance.date)
-            model.time = new SimpleDateFormat("HH:mm").format(convocationInstance.date)
+            model.student = convocationInstance?.internship?.student?.user
+            model.companyTutor = convocationInstance?.internship?.companyTutor?.user
+            model.academicTutor = convocationInstance?.internship?.academicTutor?.user
+            model.promotion = Promotion.getCurrentForStudent(convocationInstance?.internship?.student)
+            model.manager = model?.promotion?.formation?.manager?.user
+            model.date = dateFormat.format(convocationInstance?.date)
+            model.time = new SimpleDateFormat("HH:mm").format(convocationInstance?.date)
             model.convocation = convocationInstance
             
             response.setContentType "application/pdf"
             response.setHeader "Content-Disposition", "inline;filename=convocation-" +
-                                    pdfService.removeSpecialCharacters(model.student.firstName) + "-" +
-                                    pdfService.removeSpecialCharacters(model.student.lastName) + ".pdf"
+                                    pdfService.removeSpecialCharacters(model?.student?.firstName) + "-" +
+                                    pdfService.removeSpecialCharacters(model?.student?.lastName) + ".pdf"
                                     
             pdfService.buildPdf(gsp, model, response, url)
             return

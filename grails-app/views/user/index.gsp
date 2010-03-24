@@ -146,9 +146,10 @@
 			  <g:if test="${totalStudentsWithoutAcademicTutor > 0}">
 			  <ul>
 				<g:each var="student" in="${studentsWithoutAcademicTutor}">
-				  <li><g:link controller="user" action="show" id="${student?.user?.id}">${student}</g:link></li>
+				  <li>${student}</li>
 				</g:each>
 			  </ul>
+			  <g:link controller="internship" action="assignate"><g:message code="internship.assignate" /></g:link>
 			  </g:if>
 			  <g:else>
 				<span><g:message code="students.no" /></span>

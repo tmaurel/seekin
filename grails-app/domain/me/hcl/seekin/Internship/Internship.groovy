@@ -86,7 +86,7 @@ class Internship {
     }
 
     String toString() {
-            StringUtils.abbreviate(subject,32)
+            subject
     }
 
     String getStatus() {
