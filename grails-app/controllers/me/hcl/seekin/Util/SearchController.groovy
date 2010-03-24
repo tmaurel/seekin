@@ -110,7 +110,7 @@ class SearchController {
 			render(
 				view: 'search',
 				model: [
-					searchableDomain: ['all','student','staff','external','company','internship','offer','formation','link'],
+					searchableDomain: [message(code:"search.all"), message(code:"search.student"), message(code:"search.staff"), message(code:"search.external"), message(code:"search.company"), message(code:"search.internship"), message(code:"search.offer"), message(code:"search.formation"), message(code:"search.link")],
 					searchResult: searchResult,
 				]
 			)
