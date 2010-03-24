@@ -116,19 +116,19 @@
 
     <div class="content">
       <div class="header">
-          <strong>OBJET : STAGE ${promotion.formation.label}</strong><br/>
+          <strong>OBJET : STAGE ${promotion?.formation?.label}</strong><br/>
           <strong>${manager?.lastName} ${manager?.firstName}</strong><br/>
           <strong>Email : </strong><a href="${manager?.email}">${manager?.email}</a><br/>
           <br/><br/>
-          <strong>A l'attention de : </strong>${companyTutor.lastName} ${companyTutor.firstName}<br/>
+          <strong>A l'attention de : </strong>${companyTutor?.lastName} ${companyTutor?.firstName}<br/>
       </div>
       <div class="body">
-          Nous vous confirmons la date et l'heure de la soutenance du stagiaire étudiant(e) en ${promotion.formation.label} dont vous avez bien voulu être tuteur.
+          Nous vous confirmons la date et l'heure de la soutenance du stagiaire étudiant(e) en ${promotion?.formation?.label} dont vous avez bien voulu être tuteur.
           <div class="quote">
-            ETUDIANT(E) : ${student.lastName?.toUpperCase()} ${student.firstName?.toUpperCase()}<br />
+            ETUDIANT(E) : ${student?.lastName?.toUpperCase()} ${student?.firstName?.toUpperCase()}<br />
             Date de soutenance : ${date}<br />
             <span class="xtab">à ${time}</span>
-            Bâtiment : ${convocation.building}, ${convocation.room}.<br />
+            Bâtiment : ${convocation?.building}, ${convocation?.room}.<br />
           </div>
           Afin de faciliter l'évaluation de l'étudiant nous vous prions de bien vouloir remplir la fiche d'évaluation ci-jointe et de vous en munir pour cette soutenance. Si vous êtes dans l'impossibilité de vous déplacer, veuillez tout de même nous la retourner au secrétariat du département.
           <br/><br/>
@@ -156,19 +156,19 @@
 
     <div class="content">
       <div class="header">
-          <strong>OBJET : STAGE ${promotion.formation.label}</strong><br/>
+          <strong>OBJET : STAGE ${promotion?.formation?.label}</strong><br/>
           <strong>${manager?.lastName} ${manager?.firstName}</strong><br/>
           <strong>Email : </strong><a href="${manager?.email}">${manager?.email}</a><br/>
           <br/><br/>
-          <strong>A l'attention de : </strong>${student.lastName} ${student.firstName}<br/>
+          <strong>A l'attention de : </strong>${student?.lastName} ${student?.firstName}<br/>
       </div>
       <div class="body">
           Nous vous confirmons la date et l'heure de la soutenance de votre stage :
           <div class="quote">
             Le ${date}<br />
             <span class="tab">à ${time}</span>
-            Bâtiment : ${convocation.building}, ${convocation.room}.<br />
-            Sous la responsabilité de ${academicTutor.lastName} ${academicTutor.firstName}<br />
+            Bâtiment : ${convocation?.building}, ${convocation?.room}.<br />
+            Sous la responsabilité de ${academicTutor?.lastName} ${academicTutor?.firstName}<br />
           </div>
           <strong>Le rapport de stage est à renvoyer ou à remettre au secrétariat du Département de Mathématiques et d'Informatique, en double exemplaires, quatre jours ouvrables avant la date de soutenance.</strong>
           <br/><br/>
@@ -181,13 +181,13 @@
     </div>
     <h2>APPRECIATION DU STAGIAIRE<br/> PAR LE RESPONSABLE DE L'ETABLISSEMENT D'ACCUEIL</h2>
     <div class="body">
-      <p>Etablissement d'accueil : ${convocation.internship?.company?.name?.toUpperCase()}</p>
-      <p>Nom du responsable de l'établissement d'accueil : ${companyTutor.lastName} ${companyTutor.firstName}</p>
+      <p>Etablissement d'accueil : ${convocation?.internship?.company?.name?.toUpperCase()}</p>
+      <p>Nom du responsable de l'établissement d'accueil : ${companyTutor?.lastName} ${companyTutor?.firstName}</p>
       <p>Adresse de l'établissement d'accueil :
-        <span class="tab">${convocation.internship?.company?.address?.street}, ${convocation.internship?.company?.address?.zipCode} ${convocation.internship?.company?.address?.town}</span>
+        <span class="tab">${convocation?.internship?.company?.address?.street}, ${convocation?.internship?.company?.address?.zipCode} ${convocation?.internship?.company?.address?.town}</span>
       </p>
-      <p>Nom du stagiaire : ${student.lastName} ${student.firstName} </p>
-      <p>Sujet : ${convocation.internship.subject?.toUpperCase()}</p>
+      <p>Nom du stagiaire : ${student?.lastName} ${student?.firstName} </p>
+      <p>Sujet : ${convocation?.internship?.subject?.toUpperCase()}</p>
       <table>
         <thead>
           <td id="criteria">Critère</td>
