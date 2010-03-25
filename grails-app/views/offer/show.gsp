@@ -103,17 +103,32 @@
                         
                       
                       <div class="actionpad yui-skin-sam">
-                            <g:ifNotGranted role="ROLE_STUDENT">
+
+                          <g:listButton />
+
+                          <g:ifAnyGranted role="ROLE_ADMIN,ROLE_FORMATIONMANAGER,ROLE_EXTERNAL">
                               <g:if test="${offerInstance.validated == false}">
-                                <g:buildShowButtons />
+                                <g:YUISubmitbutton value="edit" action="edit" />
+                                <g:deleteButton />
                               </g:if>
                               <g:else>
-                                <g:buildShowWithoutEditButtons />
+                                <g:deleteButton />
                               </g:else>
-                            </g:ifNotGranted>
-                            <g:ifAnyGranted role="ROLE_STUDENT">
-                                <g:listButton />      
+                          </g:ifAnyGranted>
+                          <g:ifNotGranted role="ROLE_ADMIN,ROLE_FORMATIONMANAGER,ROLE_EXTERNAL">
+                            <g:ifAnyGranted role="ROLE_STAFF">
+                              <g:if test="${editable}">
+                                <g:if test="${offerInstance.validated == false}">
+                                  <g:YUISubmitbutton value="edit" action="edit" />
+                                  <g:deleteButton />
+                                </g:if>
+                                <g:else>
+                                  <g:deleteButton />
+                                </g:else>
+                              </g:if>
                             </g:ifAnyGranted>
+                          </g:ifNotGranted>
+
                       </div>
             </g:form>
        </body>

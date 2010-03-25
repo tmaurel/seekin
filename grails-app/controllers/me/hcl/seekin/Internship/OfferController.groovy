@@ -8,7 +8,7 @@ import org.hibernate.LockMode
 import me.hcl.seekin.Formation.Promotion
 import org.codehaus.groovy.grails.plugins.springsecurity.Secured
 import me.hcl.seekin.Formation.Millesime
-import me.hcl.seekin.Auth.Role.Student
+import me.hcl.seekin.Auth.Role.*
 import me.hcl.seekin.Ressource.Document
 
 class OfferController {
@@ -26,12 +26,17 @@ class OfferController {
 
         /* Controls if some offers which wait for Validation are validated by examinate params */
         def offer
-        params.each {
-            if(it.key.contains("validate_") && it.value == "on") {
-                /* Get the offer and do the mofification before saving */
-                offer = Offer.get(it.key.split("_")[1].toInteger())
-                offer.validated = true
-                offer.save(flush:true)
+
+        def userInstance = authenticateService.userDomain()
+
+        if(authenticateService.ifAnyGranted("ROLE_ADMIN,ROLE_FORMATIONMANAGER")) {
+            params.each {
+                if(it.key.contains("validate_") && it.value == "on") {
+                    /* Get the offer and do the mofification before saving */
+                    offer = Offer.get(it.key.split("_")[1].toInteger())
+                    offer.validated = true
+                    offer.save(flush:true)
+                }
             }
         }
 
@@ -43,7 +48,7 @@ class OfferController {
         /* Build a status list depending on roles */
         else {
             /* If the user is the admin or a formation manager, status we want to display are all the status affiliated to a current offer */
-            if(authenticateService.ifAnyGranted("ROLE_ADMIN,ROLE_FORMATIONMANAGER")) {
+            if(authenticateService.ifAnyGranted("ROLE_ADMIN")) {
                 status = new HashSet()
                 Promotion.getCurrents().offers.each() {
                     it.each() { it2 ->
@@ -51,10 +56,18 @@ class OfferController {
                     }
                 }
             }
+
+            else if(authenticateService.ifAnyGranted("ROLE_FORMATIONMANAGER")) {
+                status = new HashSet()
+                def manager = FormationManager.findByUser(userInstance)
+                Promotion.getCurrentForFormation(manager?.formation)?.offers.each() {
+                    it.each() { it2 ->
+                        status.add it2.getStatus()
+                    }
+                }
+            }
             /* If the user is an external or a member staff, status we want to display are all the status affiliated to the offers created by the current user */
             else if(authenticateService.ifAnyGranted("ROLE_EXTERNAL,ROLE_STAFF")) {
-                def userInstance = authenticateService.userDomain()
-                sessionFactory.currentSession.refresh(userInstance, LockMode.NONE)
                 status = new HashSet()
                 Promotion.getCurrents().offers.each() {
                     it.each() { it2 ->
@@ -90,6 +103,7 @@ class OfferController {
         return [offerInstance: offerInstance, promotionInstance: promotionInstance]
     }
 
+    @Secured(['ROLE_ADMIN','ROLE_FORMATIONMANAGER','ROLE_STAFF','ROLE_EXTERNAL'])
     def save = {
 
         /* Build the offer with correct parameter and save it*/
@@ -192,6 +206,7 @@ class OfferController {
         def userInstance = authenticateService.userDomain()
         sessionFactory.currentSession.refresh(userInstance, LockMode.NONE)
         Boolean showable = false
+        Boolean editable = false
         
         /* Get the offer with id parameter */
         def offerInstance = Offer.get(params.id)
@@ -202,12 +217,21 @@ class OfferController {
             }
         }
         /* If the user is the administrator, he can show all offers */
-        else if(authenticateService.ifAnyGranted("ROLE_ADMIN,ROLE_FORMATIONMANAGER")) {
+        else if(authenticateService.ifAnyGranted("ROLE_ADMIN")) {
             showable = true
+        }
+        else if(authenticateService.ifAnyGranted("ROLE_FORMATIONMANAGER")) {
+            def manager = FormationManager.findByUser(userInstance)
+            if(offerInstance?.promotions?.formation?.id?.contains(manager?.formation?.id))
+                showable = true
         }
         /* If the user is a staff's member, he is allowed to show offers which he had created and offers that are validated */
         else if(authenticateService.ifAnyGranted("ROLE_STAFF")) {
-            if(offerInstance?.author == userInstance || (offerInstance.validated == true && offerInstance.assignated == false)) {
+            if(offerInstance?.author == userInstance) {
+                showable = true
+                editable = true
+            }
+            else if(offerInstance.validated == true && offerInstance.assignated == false) {
                 showable = true
             }
         }
@@ -231,7 +255,7 @@ class OfferController {
         }
         /* Else we return our instance */
         else if(showable) {
-            return [offerInstance: offerInstance]
+            return [offerInstance: offerInstance, editable:editable]
         }
     }
 
@@ -247,26 +271,45 @@ class OfferController {
         def promotionInstance
         def selectedPromotions = offerInstance.promotions.collect { it.id }
         /* If the user is the author of the offer or the administrator */
-        if(offerInstance?.author == userInstance || authenticateService.ifAnyGranted("ROLE_ADMIN,ROLE_FORMATIONMANAGER")) {
-            /* Build a list of the current promotion */
-            promotionInstance = Promotion.getCurrents().collect {
-                [
-                        id: it.id,
-                        value: it.toString()
-                ]
+        if(authenticateService.ifAnyGranted("ROLE_ADMIN"))
+            editable = true
+        else if(authenticateService.ifAnyGranted("ROLE_FORMATIONMANAGER"))
+        {
+            def manager = FormationManager.findByUser(userInstance)
+            if(offerInstance?.promotions?.formation?.id?.contains(manager?.formation?.id))
+                editable = true
+        }
+        else if(offerInstance?.author == userInstance) {
+            editable = true
+        }
+
+        /* If the offer is not validated, we verify if the offer is associate to a current promotion */
+        if (offerInstance?.validated == false) {
+            def currentPromo = offerInstance.promotions.find {
+                it.millesime == Millesime.getCurrent()
             }
-            /* If the offer is not validated, we verify if the offer is associate to a current promotion */
-            if (offerInstance?.validated == false) {
-                def currentPromo = offerInstance.promotions.find {
-                    it.millesime == Millesime.getCurrent()
-                }
-                if(currentPromo != null) {
-                    editable = true
-                }
+            if(currentPromo == null) {
+                editable = false
             }
         }
+        else
+        {
+            editable = false
+        }
+
         /* If the offer is editable, we return our needed instances */
         if(editable) {
+
+
+
+                /* Build a list of the current promotion */
+                promotionInstance = Promotion.getCurrents().collect {
+                    [
+                            id: it.id,
+                            value: it.toString()
+                    ]
+                }
+
                 return [offerInstance: offerInstance, promotionInstance: promotionInstance, selectedPromotions:selectedPromotions]
         }
         /* Else we return a flash message */
@@ -279,25 +322,62 @@ class OfferController {
 
     }
 
+    @Secured(['ROLE_ADMIN','ROLE_FORMATIONMANAGER','ROLE_STAFF','ROLE_EXTERNAL'])
     def update = {
 
-        /* Build the list with all current promotions for the select markup */
-        def promotionInstance = Promotion.getCurrents().collect {
-            [
-                    id: it.id,
-                    value: it.toString()
-            ]
+
+     /* We get the user logged in to verify if he is authorized to edit an offer */
+        def userInstance = authenticateService.userDomain()
+        sessionFactory.currentSession.refresh(userInstance, LockMode.NONE)
+        Boolean editable = false
+
+        /* Get the offer with id parameter */
+        def offerInstance = Offer.get(params.id)
+        def promotionInstance
+        def selectedPromotions = offerInstance.promotions.collect { it.id }
+        /* If the user is the author of the offer or the administrator */
+        if(authenticateService.ifAnyGranted("ROLE_ADMIN"))
+            editable = true
+        else if(authenticateService.ifAnyGranted("ROLE_FORMATIONMANAGER"))
+        {
+            def manager = FormationManager.findByUser(userInstance)
+            if(offerInstance?.promotions?.formation?.id?.contains(manager?.formation?.id))
+                editable = true
+        }
+        else if(offerInstance?.author == userInstance) {
+            editable = true
         }
 
+        /* If the offer is not validated, we verify if the offer is associate to a current promotion */
+        if (offerInstance?.validated == false) {
+            def currentPromo = offerInstance.promotions.find {
+                it.millesime == Millesime.getCurrent()
+            }
+            if(currentPromo == null) {
+                editable = false
+            }
+        }
+        else
+        {
+            editable = false
+        }
 
-        def offerInstance = Offer.get(params.id)
-        if (offerInstance) {
+        if (offerInstance && editable) {
+            
+            /* Build a list of the current promotion */
+            promotionInstance = Promotion.getCurrents().collect {
+                [
+                        id: it.id,
+                        value: it.toString()
+                ]
+            }
+
             if (params.version) {
                 def version = params.version.toLong()
                 if (offerInstance.version > version) {
                     
                     offerInstance.errors.rejectValue("version", "offer.optimistic.locking.failure", "Another user has updated this Offer while you were editing")
-                    render(view: "edit", model: [offerInstance: offerInstance])
+                    render(view: "edit", model: [offerInstance: offerInstance, promotionInstance: promotionInstance])
                     return
                 }
             }
@@ -347,10 +427,55 @@ class OfferController {
         }
     }
 
+    @Secured(['ROLE_ADMIN','ROLE_FORMATIONMANAGER','ROLE_STAFF','ROLE_EXTERNAL'])
     def delete = {
+
+
+        /* We get the user logged in to verify if he is authorized to edit an offer */
+        def userInstance = authenticateService.userDomain()
+        Boolean editable = false
+
+        /* Get the offer with id parameter */
         def offerInstance = Offer.get(params.id)
-        if (offerInstance) {
+        def promotionInstance
+        def selectedPromotions = offerInstance.promotions.collect { it.id }
+        /* If the user is the author of the offer or the administrator */
+        if(authenticateService.ifAnyGranted("ROLE_ADMIN"))
+            editable = true
+        else if(authenticateService.ifAnyGranted("ROLE_FORMATIONMANAGER"))
+        {
+            def manager = FormationManager.findByUser(userInstance)
+            if(offerInstance?.promotions?.formation?.id?.contains(manager?.formation?.id))
+                editable = true
+        }
+        else if(offerInstance?.author == userInstance) {
+            editable = true
+        }
+
+        /* If the offer is not validated, we verify if the offer is associate to a current promotion */
+        if (offerInstance?.validated == false) {
+            def currentPromo = offerInstance.promotions.find {
+                it.millesime == Millesime.getCurrent()
+            }
+            if(currentPromo == null) {
+                editable = false
+            }
+        }
+        else
+        {
+            editable = false
+        }
+
+        if (offerInstance && editable) {
             try {
+                offerInstance.author = null
+                offerInstance.company = null
+
+                def promos = offerInstance.promotions.collect { it }
+
+                promos.each {
+                    it.removeFromOffers(offerInstance)
+                }
                 offerInstance.delete()
                 flash.message = "offer.deleted"
                 flash.args = [params.id]
@@ -372,11 +497,24 @@ class OfferController {
         }
     }
 
+
     /* It is used when an offer is deny by the administrator */
+    @Secured(['ROLE_ADMIN','ROLE_FORMATIONMANAGER'])
     def deny = {
         /* Get the offer and set reason with params.reason before saving and redirect the user to list */
         def offerInstance = Offer.get(params.id)
-        if (offerInstance) {
+        def editable = false
+
+        if(authenticateService.ifAnyGranted("ROLE_FORMATIONMANAGER"))
+        {
+            def manager = FormationManager.findByUser(userInstance)
+            if(offerInstance?.promotions?.formation?.id?.contains(manager?.formation?.id))
+                editable = true
+        }
+        else
+            editable = true
+
+        if (offerInstance && editable) {
             offerInstance.reason = params.reason
             offerInstance.save()
             redirect(action: "list")
@@ -394,9 +532,11 @@ class OfferController {
             def list = []
             def ret = []
             def status = new HashSet()
+            def userInstance = authenticateService.userDomain()
+
             response.setHeader("Cache-Control", "no-store")
             /* If the user is the admin or a formation manager, status we want to display currents offers */
-            if(authenticateService.ifAnyGranted("ROLE_ADMIN,ROLE_FORMATIONMANAGER")) {
+            if(authenticateService.ifAnyGranted("ROLE_ADMIN")) {
                 Promotion.getCurrents().offers.each() {
                     it.each() { it2 ->
                         if(it2.getStatus() == params.status) {
@@ -406,20 +546,24 @@ class OfferController {
                 }
                 list = status
             }
-            /* If the user is a staff's member we get all currents offers which were created by the current user and all currents offers which are validated*/
-            else if(authenticateService.ifAnyGranted("ROLE_STAFF")) {
-                def userInstance = authenticateService.userDomain()
-                sessionFactory.currentSession.refresh(userInstance, LockMode.NONE)
-                Promotion.getCurrents().offers.each() {
+
+            else if(authenticateService.ifAnyGranted("ROLE_FORMATIONMANAGER")) {
+                def manager = FormationManager.findByUser(userInstance)
+                Promotion.getCurrentForFormation(manager?.formation)?.offers.each() {
                     it.each() { it2 ->
-                        if(it2.author.id == userInstance.id && it2.getStatus() == params.status) {
+                        if(it2.getStatus() == params.status) {
                             status.add it2.id
                         }
                     }
                 }
+                list = status
+            }
+
+            /* If the user is a staff's member we get all currents offers which were created by the current user and all currents offers which are validated*/
+            else if(authenticateService.ifAnyGranted("ROLE_STAFF")) {
                 Promotion.getCurrents().offers.each() {
                     it.each() { it2 ->
-                        if(it2.getStatus() == 'offer.validated' && it2.getStatus() == params.status) {
+                        if((it2.author.id == userInstance.id && it2.getStatus() == params.status) || (it2.getStatus() == 'offer.validated' && it2.getStatus() == params.status)) {
                             status.add it2.id
                         }
                     }
@@ -428,8 +572,6 @@ class OfferController {
             }
             /* If the user is a student he will only see currents validated offers */
             else if(authenticateService.ifAnyGranted("ROLE_STUDENT")) {
-                def userInstance = authenticateService.userDomain()
-                sessionFactory.currentSession.refresh(userInstance, LockMode.NONE)
                 def student = Student.findByUser(userInstance)
                 def currentPromo = Promotion.getCurrentForStudent(student)
                 currentPromo.offers.each() { it2 ->
@@ -440,20 +582,14 @@ class OfferController {
             }
             /* If the user is an external he will only see currents offers he had created */
             else if(authenticateService.ifAnyGranted("ROLE_EXTERNAL")) {
-                def userInstance = authenticateService.userDomain()
-                sessionFactory.currentSession.refresh(userInstance, LockMode.NONE)
-                list = Offer.findAllByAuthor(userInstance)
-                Promotion.getCurrents().offers.each() {
-                    it.each() { it2 ->
-                        if(it2.author == userInstance && it2.getStatus() == params.status) {
-                            status.add it2.id
-                        }
+                Offer.findAllByAuthor(userInstance).each() {
+                    if(it.getStatus() == params.status) {
+                        status.add it.id
                     }
                 }
                 list = status
             }
 
-            //println list
             def list2
             if(list.size() > 0) {
                 list2 = Offer.createCriteria().list(params) {
