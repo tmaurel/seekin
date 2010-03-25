@@ -454,6 +454,7 @@ class UserController {
 	def delete = {
 
                 def userInstance = User.get(params.id)
+                def student = Student.findByUser(userInstance)
                 def ok = true
 
                 if(authenticateService.ifAnyGranted("ROLE_FORMATIONMANAGER"))
@@ -461,7 +462,6 @@ class UserController {
                     ok = false
                     def user = authenticateService.userDomain()
                     def formation = FormationManager.findByUser(user)?.formation
-                    def student = Student.findByUser(userInstance)
                     if(student && Promotion.getCurrentForStudent(student)?.formation == formation)
                     {
                         ok = true
@@ -477,6 +477,8 @@ class UserController {
                             redirect(action: "show", id: params.id)
 			}
 			else {
+                                def promos = student.promotions.collect { it }
+                                promos.each { it.removeFromStudents(student) }
 				userInstance.delete()
 				flash.message = "user.deleted"
 				flash.args = [params.id]

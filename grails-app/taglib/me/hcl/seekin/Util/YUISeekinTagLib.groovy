@@ -138,7 +138,7 @@ class YUISeekinTagLib {
 
                     """<ul>
                         <li><img src="${resource(dir:'images/icons',file:'assignate.png')}" alt="${message(code:"internship.assignate")}" /> <a href="${createLink(controller:"internship", action:"assignate")}">${message(code:"internship.assignate")}</a></li>
-                        <li><img src="${resource(dir:'images/icons',file:'convocations.png')}" alt="${message(code:"formationmanager.convocation.list")}" /> <a href="${createLink(controller:"convocation", action:"list")}">${message(code:"formationmanager.convocation.list")}</a></li>
+                        <li><img src="${resource(dir:'images/icons',file:'convocations.png')}" alt="${message(code:"formationManager.convocation.list")}" /> <a href="${createLink(controller:"convocation", action:"list")}">${message(code:"formationManager.convocation.list")}</a></li>
                         <li><img src="${resource(dir:'images/icons',file:'students.png')}" alt="${message(code:"students.my")}" /> <a href="${createLink(controller:"student", action:"list")}">${message(code:"students.my")}</a></li>
                         <li><img src="${resource(dir:'images/icons',file:'table.png')}" alt="${message(code:"student.table")}" /> <a href="${createLink(controller:"student", action:"table")}">${message(code:"student.table")}</a></li>
                     </ul>"""

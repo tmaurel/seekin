@@ -7,6 +7,7 @@
     </head>
     <body>
       <h2><g:message code="register.success" /></h2>
+          <br />
 	  <p>
 		<g:message code="register.success.content" />
 	  </p>
