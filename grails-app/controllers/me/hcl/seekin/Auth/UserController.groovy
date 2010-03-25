@@ -919,6 +919,11 @@ class UserController {
                                 it.removeFromStudents(catchedRole)
                             }
                         }
+                        else if(it == "FormationManager")
+                        {
+                            catchedRole?.formation?.manager = null
+                        }
+
                         userInstance.removeFromAuthorities(catchedRole)
                         catchedRole.delete()
                     }
