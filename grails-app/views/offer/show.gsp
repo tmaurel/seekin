@@ -113,8 +113,6 @@
                               <g:if test="${deletable}">
                                 <g:deleteButton />
                               </g:if>
-
-                              </g:else>
                           </g:ifAnyGranted>
                           
 

@@ -240,6 +240,20 @@ class OfferController {
             showable = true
             editable = true
             deletable = true
+
+            if (offerInstance?.validated == false) {
+                def currentPromo = offerInstance.promotions.find {
+                    it.millesime == Millesime.getCurrent()
+                }
+                if(currentPromo == null) {
+                    editable = false
+                }
+            }
+            else
+            {
+                editable = false
+            }
+
         }
         else if(authenticateService.ifAnyGranted("ROLE_FORMATIONMANAGER")) {
             def manager = FormationManager.findByUser(userInstance)
@@ -248,6 +262,19 @@ class OfferController {
                 showable = true
                 editable = true
                 deletable = true
+
+                if (offerInstance?.validated == false) {
+                    def currentPromo = offerInstance.promotions.find {
+                        it.millesime == Millesime.getCurrent()
+                    }
+                    if(currentPromo == null) {
+                        editable = false
+                    }
+                }
+                else
+                {
+                    editable = false
+                }
             }
         }
         /* If the user is a staff's member, he is allowed to show offers which he had created and offers that are validated */
