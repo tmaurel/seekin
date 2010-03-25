@@ -148,7 +148,7 @@ class YUISeekinTagLib {
                         <li><img src="${resource(dir:'images/icons',file:'users.png')}" alt="${message(code:"user.list")}" /> <a href="${createLink(controller:"user", action:"list")}">${message(code:"user.list")}</a></li>
                         <li><img src="${resource(dir:'images/icons',file:'internships.png')}" alt="${message(code:"internship.list")}" /> <a href="${createLink(controller:"internship", action:"list")}">${message(code:"internship.list")}</a></li>
                         <li><img src="${resource(dir:'images/icons',file:'reports.png')}" alt="${message(code:"report.list")}" /> <a href="${createLink(controller:"report", action:"list")}">${message(code:"report.list")}</a></li>
-                        <li><img src="${resource(dir:'images/icons',file:'offers.png')}" alt="${message(code:"offer.create")}" /> <a href="${createLink(controller:"offer", action:"create")}">${message(code:"offer.create")}</a></li>
+                        <li><img src="${resource(dir:'images/icons',file:'offer_new.png')}" alt="${message(code:"offer.create")}" /> <a href="${createLink(controller:"offer", action:"create")}">${message(code:"offer.create")}</a></li>
                         <li><img src="${resource(dir:'images/icons',file:'offers.png')}" alt="${message(code:"offer.list")}" /> <a href="${createLink(controller:"offer", action:"list")}">${message(code:"offer.list")}</a></li>
                         <li><img src="${resource(dir:'images/icons',file:'companies.png')}" alt="${message(code:"company.list")}" /> <a href="${createLink(controller:"company", action:"list")}">${message(code:"company.list")}</a></li>
                     </ul>"""
@@ -175,7 +175,7 @@ class YUISeekinTagLib {
                     """<ul>
                         <li><img src="${resource(dir:'images/icons',file:'internships.png')}" alt="${message(code:"student.internship.list")}" /> <a href="${createLink(controller:"internship", action:"list")}">${message(code:"student.internship.list")}</a></li>
                         <li><img src="${resource(dir:'images/icons',file:'offers.png')}" alt="${message(code:"offers.my")}" /> <a href="${createLink(controller:"offer", action:"list")}">${message(code:"offer.list")}</a></li>
-                        <li><img src="${resource(dir:'images/icons',file:'offers.png')}" alt="${message(code:"offer.create")}" /> <a href="${createLink(controller:"offer", action:"create")}">${message(code:"offer.create")}</a></li>
+                        <li><img src="${resource(dir:'images/icons',file:'offer_new.png')}" alt="${message(code:"offer.create")}" /> <a href="${createLink(controller:"offer", action:"create")}">${message(code:"offer.create")}</a></li>
                         <li><img src="${resource(dir:'images/icons',file:'users.png')}" alt="${message(code:"students.my")}" /> <a href="${createLink(controller:"user", action:"list")}">${message(code:"students.my")}</a></li>
                         <li><img src="${resource(dir:'images/icons',file:'companies.png')}" alt="${message(code:"company.edit")}" /> <a href="${createLink(controller:"company", action:"edit")}">${message(code:"company.edit")}</a></li>
                     </ul>"""

@@ -207,6 +207,7 @@ class OfferController {
         sessionFactory.currentSession.refresh(userInstance, LockMode.NONE)
         Boolean showable = false
         Boolean editable = false
+        Boolean deletable = false
         
         /* Get the offer with id parameter */
         def offerInstance = Offer.get(params.id)
@@ -214,26 +215,69 @@ class OfferController {
         if(authenticateService.ifAnyGranted("ROLE_EXTERNAL")) {
             if(offerInstance?.author == userInstance) {
                 showable = true
+                editable = true
+                deletable = true
+                
+                if (offerInstance?.validated == false) {
+                    def currentPromo = offerInstance.promotions.find {
+                        it.millesime == Millesime.getCurrent()
+                    }
+                    if(currentPromo == null) {
+                        deletable = false
+                        editable = false
+                    }
+                }
+                else
+                {
+                    deletable = false
+                    editable = false
+                }
+
             }
         }
         /* If the user is the administrator, he can show all offers */
         else if(authenticateService.ifAnyGranted("ROLE_ADMIN")) {
             showable = true
+            editable = true
+            deletable = true
         }
         else if(authenticateService.ifAnyGranted("ROLE_FORMATIONMANAGER")) {
             def manager = FormationManager.findByUser(userInstance)
             if(offerInstance?.promotions?.formation?.id?.contains(manager?.formation?.id))
+            {
                 showable = true
+                editable = true
+                deletable = true
+            }
         }
         /* If the user is a staff's member, he is allowed to show offers which he had created and offers that are validated */
         else if(authenticateService.ifAnyGranted("ROLE_STAFF")) {
             if(offerInstance?.author == userInstance) {
                 showable = true
                 editable = true
+                deletable = true
+
+                if (offerInstance?.validated == false) {
+                    def currentPromo = offerInstance.promotions.find {
+                        it.millesime == Millesime.getCurrent()
+                    }
+                    if(currentPromo == null) {
+                        deletable = false
+                        editable = false
+                    }
+                }
+                else
+                {
+                    deletable = false
+                    editable = false
+                }
             }
             else if(offerInstance.validated == true && offerInstance.assignated == false) {
                 showable = true
+                editable = false
+                deletable = false
             }
+
         }
         /* If the user is a student, he can show all offers which are validated and correspond to his promotion */
         else if(authenticateService.ifAnyGranted("ROLE_STUDENT")) {
@@ -246,6 +290,7 @@ class OfferController {
             }
         }
 
+
         /* If the offer doesn't exist or is not showable, we return a flash message */
         if (!offerInstance || !showable) {
             flash.message = "offer.not.found"
@@ -255,7 +300,7 @@ class OfferController {
         }
         /* Else we return our instance */
         else if(showable) {
-            return [offerInstance: offerInstance, editable:editable]
+            return [offerInstance: offerInstance, editable: editable, deletable: deletable]
         }
     }
 
@@ -450,20 +495,20 @@ class OfferController {
         }
         else if(offerInstance?.author == userInstance) {
             editable = true
-        }
 
-        /* If the offer is not validated, we verify if the offer is associate to a current promotion */
-        if (offerInstance?.validated == false) {
-            def currentPromo = offerInstance.promotions.find {
-                it.millesime == Millesime.getCurrent()
+            /* If the offer is not validated, we verify if the offer is associate to a current promotion */
+            if (offerInstance?.validated == false) {
+                def currentPromo = offerInstance.promotions.find {
+                    it.millesime == Millesime.getCurrent()
+                }
+                if(currentPromo == null) {
+                    editable = false
+                }
             }
-            if(currentPromo == null) {
+            else
+            {
                 editable = false
             }
-        }
-        else
-        {
-            editable = false
         }
 
         if (offerInstance && editable) {
@@ -583,7 +628,7 @@ class OfferController {
             /* If the user is an external he will only see currents offers he had created */
             else if(authenticateService.ifAnyGranted("ROLE_EXTERNAL")) {
                 Offer.findAllByAuthor(userInstance).each() {
-                    if(it.getStatus() == params.status) {
+                    if(it.getStatus() == params.status && it?.promotions?.millesime?.id?.contains(Millesime.getCurrent()?.id)) {
                         status.add it.id
                     }
                 }

@@ -106,28 +106,17 @@
 
                           <g:listButton />
 
-                          <g:ifAnyGranted role="ROLE_ADMIN,ROLE_FORMATIONMANAGER,ROLE_EXTERNAL">
-                              <g:if test="${offerInstance.validated == false}">
+                          <g:ifAnyGranted role="ROLE_ADMIN,ROLE_FORMATIONMANAGER,ROLE_EXTERNAL,ROLE_STAFF">
+                              <g:if test="${editable}">
                                 <g:YUISubmitbutton value="edit" action="edit" />
+                              </g:if>
+                              <g:if test="${deletable}">
                                 <g:deleteButton />
                               </g:if>
-                              <g:else>
-                                <g:deleteButton />
+
                               </g:else>
                           </g:ifAnyGranted>
-                          <g:ifNotGranted role="ROLE_ADMIN,ROLE_FORMATIONMANAGER,ROLE_EXTERNAL">
-                            <g:ifAnyGranted role="ROLE_STAFF">
-                              <g:if test="${editable}">
-                                <g:if test="${offerInstance.validated == false}">
-                                  <g:YUISubmitbutton value="edit" action="edit" />
-                                  <g:deleteButton />
-                                </g:if>
-                                <g:else>
-                                  <g:deleteButton />
-                                </g:else>
-                              </g:if>
-                            </g:ifAnyGranted>
-                          </g:ifNotGranted>
+                          
 
                       </div>
             </g:form>
