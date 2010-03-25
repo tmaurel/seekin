@@ -211,108 +211,110 @@ class OfferController {
         
         /* Get the offer with id parameter */
         def offerInstance = Offer.get(params.id)
-        /* If the user have an external role, he is allowed to show only offers which he had created */
-        if(authenticateService.ifAnyGranted("ROLE_EXTERNAL")) {
-            if(offerInstance?.author == userInstance) {
-                showable = true
-                editable = true
-                deletable = true
-                
-                if (offerInstance?.validated == false) {
-                    def currentPromo = offerInstance.promotions.find {
-                        it.millesime == Millesime.getCurrent()
-                    }
-                    if(currentPromo == null) {
-                        deletable = false
-                        editable = false
-                    }
-                }
-                else
-                {
-                    deletable = false
-                    editable = false
-                }
-
-            }
-        }
-        /* If the user is the administrator, he can show all offers */
-        else if(authenticateService.ifAnyGranted("ROLE_ADMIN")) {
-            showable = true
-            editable = true
-            deletable = true
-
-            if (offerInstance?.validated == false) {
-                def currentPromo = offerInstance.promotions.find {
-                    it.millesime == Millesime.getCurrent()
-                }
-                if(currentPromo == null) {
-                    editable = false
-                }
-            }
-            else
-            {
-                editable = false
-            }
-
-        }
-        else if(authenticateService.ifAnyGranted("ROLE_FORMATIONMANAGER")) {
-            def manager = FormationManager.findByUser(userInstance)
-            if(offerInstance?.promotions?.formation?.id?.contains(manager?.formation?.id))
-            {
-                showable = true
-                editable = true
-                deletable = true
-
-                if (offerInstance?.validated == false) {
-                    def currentPromo = offerInstance.promotions.find {
-                        it.millesime == Millesime.getCurrent()
-                    }
-                    if(currentPromo == null) {
-                        editable = false
-                    }
-                }
-                else
-                {
-                    editable = false
-                }
-            }
-        }
-        /* If the user is a staff's member, he is allowed to show offers which he had created and offers that are validated */
-        else if(authenticateService.ifAnyGranted("ROLE_STAFF")) {
-            if(offerInstance?.author == userInstance) {
-                showable = true
-                editable = true
-                deletable = true
-
-                if (offerInstance?.validated == false) {
-                    def currentPromo = offerInstance.promotions.find {
-                        it.millesime == Millesime.getCurrent()
-                    }
-                    if(currentPromo == null) {
-                        deletable = false
-                        editable = false
-                    }
-                }
-                else
-                {
-                    deletable = false
-                    editable = false
-                }
-            }
-            else if(offerInstance.validated == true && offerInstance.assignated == false) {
-                showable = true
-                editable = false
-                deletable = false
-            }
-
-        }
-        /* If the user is a student, he can show all offers which are validated and correspond to his promotion */
-        else if(authenticateService.ifAnyGranted("ROLE_STUDENT")) {
-            if(offerInstance?.validated == true && offerInstance?.assignated == false) {
-                def student = Student.findByUser(userInstance)
-                def currentPromo = Promotion.getCurrentForStudent(student)
-                if(offerInstance.promotions.contains(currentPromo)) {
+        if(offerInstance) {
+            /* If the user have an external role, he is allowed to show only offers which he had created */
+            if(authenticateService.ifAnyGranted("ROLE_EXTERNAL")) {
+                if(offerInstance?.author?.id == userInstance?.id) {
                     showable = true
+                    editable = true
+                    deletable = true
+
+                    if (offerInstance?.validated == false) {
+                        def currentPromo = offerInstance.promotions.find {
+                            it.millesime == Millesime.getCurrent()
+                        }
+                        if(currentPromo == null) {
+                            deletable = false
+                            editable = false
+                        }
+                    }
+                    else
+                    {
+                        deletable = false
+                        editable = false
+                    }
+
+                }
+            }
+            /* If the user is the administrator, he can show all offers */
+            else if(authenticateService.ifAnyGranted("ROLE_ADMIN")) {
+                showable = true
+                editable = true
+                deletable = true
+
+                if (offerInstance?.validated == false) {
+                    def currentPromo = offerInstance.promotions.find {
+                        it.millesime == Millesime.getCurrent()
+                    }
+                    if(currentPromo == null) {
+                        editable = false
+                    }
+                }
+                else
+                {
+                    editable = false
+                }
+
+            }
+            else if(authenticateService.ifAnyGranted("ROLE_FORMATIONMANAGER")) {
+                def manager = FormationManager.findByUser(userInstance)
+                if(offerInstance?.promotions?.formation?.id?.contains(manager?.formation?.id))
+                {
+                    showable = true
+                    editable = true
+                    deletable = true
+
+                    if (offerInstance?.validated == false) {
+                        def currentPromo = offerInstance.promotions.find {
+                            it.millesime == Millesime.getCurrent()
+                        }
+                        if(currentPromo == null) {
+                            editable = false
+                        }
+                    }
+                    else
+                    {
+                        editable = false
+                    }
+                }
+            }
+            /* If the user is a staff's member, he is allowed to show offers which he had created and offers that are validated */
+            else if(authenticateService.ifAnyGranted("ROLE_STAFF")) {
+                if(offerInstance?.author?.id == userInstance?.id) {
+                    showable = true
+                    editable = true
+                    deletable = true
+
+                    if (offerInstance?.validated == false) {
+                        def currentPromo = offerInstance.promotions.find {
+                            it.millesime == Millesime.getCurrent()
+                        }
+                        if(currentPromo == null) {
+                            deletable = false
+                            editable = false
+                        }
+                    }
+                    else
+                    {
+                        deletable = false
+                        editable = false
+                    }
+                }
+                else if(offerInstance.validated == true && offerInstance.assignated == false) {
+                    showable = true
+                    editable = false
+                    deletable = false
+                }
+
+            }
+            /* If the user is a student, he can show all offers which are validated and correspond to his promotion */
+            else if(authenticateService.ifAnyGranted("ROLE_STUDENT")) {
+                if(offerInstance?.validated == true && offerInstance?.assignated == false) {
+                    def student = Student.findByUser(userInstance)
+                    def currentPromo = Promotion.getCurrentForStudent(student)
+                    if(offerInstance.promotions.contains(currentPromo)) {
+                        showable = true
+                    }
                 }
             }
         }
@@ -341,32 +343,35 @@ class OfferController {
         /* Get the offer with id parameter */
         def offerInstance = Offer.get(params.id)
         def promotionInstance
-        def selectedPromotions = offerInstance.promotions.collect { it.id }
-        /* If the user is the author of the offer or the administrator */
-        if(authenticateService.ifAnyGranted("ROLE_ADMIN"))
-            editable = true
-        else if(authenticateService.ifAnyGranted("ROLE_FORMATIONMANAGER"))
-        {
-            def manager = FormationManager.findByUser(userInstance)
-            if(offerInstance?.promotions?.formation?.id?.contains(manager?.formation?.id))
+        def selectedPromotions
+        if(offerInstance) {
+            selectedPromotions = offerInstance.promotions.collect { it.id }
+            /* If the user is the author of the offer or the administrator */
+            if(authenticateService.ifAnyGranted("ROLE_ADMIN"))
                 editable = true
-        }
-        else if(offerInstance?.author == userInstance) {
-            editable = true
-        }
-
-        /* If the offer is not validated, we verify if the offer is associate to a current promotion */
-        if (offerInstance?.validated == false) {
-            def currentPromo = offerInstance.promotions.find {
-                it.millesime == Millesime.getCurrent()
+            else if(authenticateService.ifAnyGranted("ROLE_FORMATIONMANAGER"))
+            {
+                def manager = FormationManager.findByUser(userInstance)
+                if(offerInstance?.promotions?.formation?.id?.contains(manager?.formation?.id))
+                    editable = true
             }
-            if(currentPromo == null) {
+            else if(offerInstance?.author?.id == userInstance?.id) {
+                editable = true
+            }
+
+            /* If the offer is not validated, we verify if the offer is associate to a current promotion */
+            if (offerInstance?.validated == false) {
+                def currentPromo = offerInstance.promotions.find {
+                    it.millesime == Millesime.getCurrent()
+                }
+                if(currentPromo == null) {
+                    editable = false
+                }
+            }
+            else
+            {
                 editable = false
             }
-        }
-        else
-        {
-            editable = false
         }
 
         /* If the offer is editable, we return our needed instances */
@@ -416,7 +421,7 @@ class OfferController {
             if(offerInstance?.promotions?.formation?.id?.contains(manager?.formation?.id))
                 editable = true
         }
-        else if(offerInstance?.author == userInstance) {
+        else if(offerInstance?.author?.id == userInstance?.id) {
             editable = true
         }
 
@@ -520,7 +525,7 @@ class OfferController {
             if(offerInstance?.promotions?.formation?.id?.contains(manager?.formation?.id))
                 editable = true
         }
-        else if(offerInstance?.author == userInstance) {
+        else if(offerInstance?.author?.id == userInstance?.id) {
             editable = true
 
             /* If the offer is not validated, we verify if the offer is associate to a current promotion */
