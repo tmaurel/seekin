@@ -167,7 +167,9 @@ class UserController {
 
 					// Get students without internship
 					if(!currentInternship) {
-						studentsWithoutInternship << it
+						if(it?.user?.enabled && it?.user?.validated) {
+							studentsWithoutInternship << it
+						}
 					}
 					else {
 						// Get students with an internship who don't have yet an academic tutor
@@ -205,7 +207,12 @@ class UserController {
 				def staffStudents = internships?.student
 				
 				// Get the convocations for this internships
-				def staffConvocations = internships?.convocation
+				def staffConvocations = []
+				internships?.convocation?.each {
+					// If internship's convocation not null
+					if(it)
+						staffConvocations << it
+				}
 
 				model["staffStudents"] = staffStudents
 				model["staffConvocations"] = staffConvocations
