@@ -88,17 +88,33 @@ class CompanyController {
 
     @Secured(['ROLE_ADMIN', 'ROLE_FORMATIONMANAGER', 'ROLE_EXTERNAL'])
     def edit = {
-        def companyInstance = Company.get(params.id)
-        def ok = true
-        if(authenticateService.ifAnyGranted("ROLE_EXTERNAL"))
+
+        def userInstance = authenticateService.userDomain()
+        def external
+        def companyInstance
+
+        if(params.id)
+            companyInstance = Company.get(params.id)
+        else
         {
-            ok = false
-            def userInstance = authenticateService.userDomain()
-            def external = External.findByUser(userInstance)
-            if(companyInstance.employees.id.contains(external.id))
-                ok = true
+            if(authenticateService.ifAnyGranted("ROLE_EXTERNAL"))
+            {
+                external = External.findByUser(userInstance)
+                if(external?.company)
+                    companyInstance = external?.company
+            }
         }
 
+        def ok = true
+        if(companyInstance) {
+            if(authenticateService.ifAnyGranted("ROLE_EXTERNAL"))
+            {
+                ok = false
+                external = External.findByUser(userInstance)
+                if(companyInstance.employees.id.contains(external.id))
+                    ok = true
+            }
+        }
 
         if (!companyInstance || !ok) {
             flash.message = "company.not.found"

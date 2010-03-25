@@ -123,10 +123,12 @@ class YUISeekinTagLib {
                     """<ul>
                         <li><img src="${resource(dir:'images/icons',file:'settings.png')}" alt="${message(code:"settings")}" /> <a href="${createLink(controller:"settings", action:"index")}">${message(code:"settings")}</a></li>
                         <li><img src="${resource(dir:'images/icons',file:'users.png')}" alt="${message(code:"user.list")}" /> <a href="${createLink(controller:"user", action:"list")}">${message(code:"user.list")}</a></li>
+                        <li><img src="${resource(dir:'images/icons',file:'assignate.png')}" alt="${message(code:"internship.assignate")}" /> <a href="${createLink(controller:"internship", action:"assignate")}">${message(code:"internship.assignate")}</a></li>
                         <li><img src="${resource(dir:'images/icons',file:'formations.png')}" alt="${message(code:"formation.list")}" /> <a href="${createLink(controller:"formation", action:"list")}">${message(code:"formation.list")}</a></li>
                         <li><img src="${resource(dir:'images/icons',file:'millesimes.png')}" alt="${message(code:"millesime.list")}" /> <a href="${createLink(controller:"millesime", action:"list")}">${message(code:"millesime.list")}</a></li>
                         <li><img src="${resource(dir:'images/icons',file:'promotions.png')}" alt="${message(code:"promotion.list")}" /> <a href="${createLink(controller:"promotion", action:"list")}">${message(code:"promotion.list")}</a></li>
                         <li><img src="${resource(dir:'images/icons',file:'convocations.png')}" alt="${message(code:"convocation.list")}" /> <a href="${createLink(controller:"convocation", action:"list")}">${message(code:"convocation.list")}</a></li>
+                        <li><img src="${resource(dir:'images/icons',file:'table.png')}" alt="${message(code:"student.table")}" /> <a href="${createLink(controller:"student", action:"table")}">${message(code:"student.table")}</a></li>
 					</ul>"""
                 }
             }
@@ -135,8 +137,10 @@ class YUISeekinTagLib {
                 out << gui.accordionElement(title:message(code:"formationManager"), selected:"true") {
 
                     """<ul>
+                        <li><img src="${resource(dir:'images/icons',file:'assignate.png')}" alt="${message(code:"internship.assignate")}" /> <a href="${createLink(controller:"internship", action:"assignate")}">${message(code:"internship.assignate")}</a></li>
                         <li><img src="${resource(dir:'images/icons',file:'convocations.png')}" alt="${message(code:"formationmanager.convocation.list")}" /> <a href="${createLink(controller:"convocation", action:"list")}">${message(code:"formationmanager.convocation.list")}</a></li>
                         <li><img src="${resource(dir:'images/icons',file:'students.png')}" alt="${message(code:"students.my")}" /> <a href="${createLink(controller:"student", action:"list")}">${message(code:"students.my")}</a></li>
+                        <li><img src="${resource(dir:'images/icons',file:'table.png')}" alt="${message(code:"student.table")}" /> <a href="${createLink(controller:"student", action:"table")}">${message(code:"student.table")}</a></li>
                     </ul>"""
                 }
             }
@@ -145,7 +149,6 @@ class YUISeekinTagLib {
                 out << gui.accordionElement(title:message(code:"staff"), selected:"true") {
 
                     """<ul>
-                        <li><img src="${resource(dir:'images/icons',file:'users.png')}" alt="${message(code:"user.list")}" /> <a href="${createLink(controller:"user", action:"list")}">${message(code:"user.list")}</a></li>
                         <li><img src="${resource(dir:'images/icons',file:'internships.png')}" alt="${message(code:"internship.list")}" /> <a href="${createLink(controller:"internship", action:"list")}">${message(code:"internship.list")}</a></li>
                         <li><img src="${resource(dir:'images/icons',file:'reports.png')}" alt="${message(code:"report.list")}" /> <a href="${createLink(controller:"report", action:"list")}">${message(code:"report.list")}</a></li>
                         <li><img src="${resource(dir:'images/icons',file:'offer_new.png')}" alt="${message(code:"offer.create")}" /> <a href="${createLink(controller:"offer", action:"create")}">${message(code:"offer.create")}</a></li>
@@ -160,9 +163,9 @@ class YUISeekinTagLib {
                     
                     """<ul>
                         <li><img src="${resource(dir:'images/icons',file:'offers.png')}" alt="${message(code:"offer.list")}" /> <a href="${createLink(controller:"offer", action:"list")}">${message(code:"offer.list")}</a></li>
-                        <li><img src="${resource(dir:'images/icons',file:'internships.png')}" alt="${message(code:"student.internship.create")}" /> <a href="${createLink(controller:"internship", action:"create")}">${message(code:"student.internship.create")}</a></li>
+                        <li><img src="${resource(dir:'images/icons',file:'internship_new.png')}" alt="${message(code:"student.internship.create")}" /> <a href="${createLink(controller:"internship", action:"create")}">${message(code:"student.internship.create")}</a></li>
                         <li><img src="${resource(dir:'images/icons',file:'internships.png')}" alt="${message(code:"internships.list")}" /> <a href="${createLink(controller:"internship", action:"list")}">${message(code:"internships.my")}</a></li>
-                        <li><img src="${resource(dir:'images/icons',file:'reports.png')}" alt="${message(code:"student.report.create")}" /> <a href="${createLink(controller:"report", action:"create")}">${message(code:"student.report.create")}</a></li>
+                        <li><img src="${resource(dir:'images/icons',file:'report_new.png')}" alt="${message(code:"student.report.create")}" /> <a href="${createLink(controller:"report", action:"create")}">${message(code:"student.report.create")}</a></li>
                         <li><img src="${resource(dir:'images/icons',file:'reports.png')}" alt="${message(code:"report.list")}" /> <a href="${createLink(controller:"report", action:"list")}">${message(code:"report.list")}</a></li>
                         <li><img src="${resource(dir:'images/icons',file:'companies.png')}" alt="${message(code:"company.list")}" /> <a href="${createLink(controller:"company", action:"list")}">${message(code:"company.list")}</a></li>
                     </ul>"""
@@ -176,7 +179,6 @@ class YUISeekinTagLib {
                         <li><img src="${resource(dir:'images/icons',file:'internships.png')}" alt="${message(code:"student.internship.list")}" /> <a href="${createLink(controller:"internship", action:"list")}">${message(code:"student.internship.list")}</a></li>
                         <li><img src="${resource(dir:'images/icons',file:'offers.png')}" alt="${message(code:"offers.my")}" /> <a href="${createLink(controller:"offer", action:"list")}">${message(code:"offer.list")}</a></li>
                         <li><img src="${resource(dir:'images/icons',file:'offer_new.png')}" alt="${message(code:"offer.create")}" /> <a href="${createLink(controller:"offer", action:"create")}">${message(code:"offer.create")}</a></li>
-                        <li><img src="${resource(dir:'images/icons',file:'users.png')}" alt="${message(code:"students.my")}" /> <a href="${createLink(controller:"user", action:"list")}">${message(code:"students.my")}</a></li>
                         <li><img src="${resource(dir:'images/icons',file:'companies.png')}" alt="${message(code:"company.edit")}" /> <a href="${createLink(controller:"company", action:"edit")}">${message(code:"company.edit")}</a></li>
                     </ul>"""
                 }
