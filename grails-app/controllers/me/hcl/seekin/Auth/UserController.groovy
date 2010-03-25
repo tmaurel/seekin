@@ -176,12 +176,12 @@ class UserController {
 						}
 
 						// Get internships awayting validation
-						if(!currentInternship.getStatus() == "internship.waitForValidation") {
+						if(currentInternship.getStatus() == "internship.waitForValidation") {
 							internshipsWaitingForValidation << currentInternship
 						}
 					}
 				}
-				
+
 				model["studentsWithoutInternship"] = studentsWithoutInternship
 				model["studentsWithoutAcademicTutor"] = studentsWithoutAcademicTutor
 				model["internshipsWaitingForValidation"] = internshipsWaitingForValidation
@@ -1095,13 +1095,8 @@ class UserController {
 				sessionFactory.currentSession.refresh(userInstance, LockMode.NONE)
 				def formationManager = FormationManager.findByUser(userInstance)
 				def promotion = Promotion.getCurrentForFormation(formationManager.formation)
-                println promotion
 				promotion?.students?.each {
-                    println it?.user
-                    println it?.user?.enabled
-                    println it?.user?.validated
 					if(!it?.user?.enabled && !it?.user?.validated) {
-                        println "blabla"
 						list << it?.user
 					}
 				}

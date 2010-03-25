@@ -19,7 +19,7 @@
             </g:hasErrors>
             <p>
                     <label for="email"><g:message code="user.enteryourmail" /></label>
-                    <g:textField name="email" value="${userInstance?.email?.encodeAsHTML()}" class="field${hasErrors(bean:userInstance,field:'email','error')}"/>
+                    <g:textField name="email" value="${userInstance?.email}" class="field${hasErrors(bean:userInstance,field:'email','error')}"/>
             </p>
             <p>
                     <label for='password'><g:message code="user.password" /></label>
@@ -32,27 +32,27 @@
 
             <p>
                     <label for="firstName"><g:message code="user.firstName" /></label>
-                    <g:textField name="firstName" value="${userInstance?.firstName?.encodeAsHTML()}" class="field${hasErrors(bean:userInstance,field:'firstName','error')}"/>
+                    <g:textField name="firstName" value="${userInstance?.firstName}" class="field${hasErrors(bean:userInstance,field:'firstName','error')}"/>
             </p>
             <p>
                     <label for="lastName"><g:message code="user.lastName" /></label>
-                    <g:textField name="lastName" value="${userInstance?.lastName?.encodeAsHTML()}" class="field${hasErrors(bean:userInstance,field:'lastName','error')}"/>
+                    <g:textField name="lastName" value="${userInstance?.lastName}" class="field${hasErrors(bean:userInstance,field:'lastName','error')}"/>
             </p>
             <p>
                     <label for="address.street"><g:message code="address.street" /></label>
-                    <g:textField name="address.street" value="${userInstance?.address?.street?.encodeAsHTML()}" class="field${hasErrors(bean:userInstance,field:'address.street','error')}"/>
+                    <g:textField name="address.street" value="${userInstance?.address?.street}" class="field${hasErrors(bean:userInstance,field:'address.street','error')}"/>
             </p>
             <p>
                     <label for="address.zipCode"><g:message code="address.zipcode" /></label>
-                    <g:textField name="address.zipCode" value="${userInstance?.address?.zipCode?.encodeAsHTML()}" class="field${hasErrors(bean:userInstance,field:'address.zipCode','error')}"/>
+                    <g:textField name="address.zipCode" value="${userInstance?.address?.zipCode}" class="field${hasErrors(bean:userInstance,field:'address.zipCode','error')}"/>
             </p>
             <p>
                     <label for="address.town"><g:message code="address.city" /></label>
-                    <g:textField name="address.town" value="${userInstance?.address?.town?.encodeAsHTML()}" class="field${hasErrors(bean:userInstance,field:'address.town','error')}"/>
+                    <g:textField name="address.town" value="${userInstance?.address?.town}" class="field${hasErrors(bean:userInstance,field:'address.town','error')}"/>
             </p>
             <p>
                     <label for="phone"><g:message code="user.phone" /></label>
-                    <g:textField name="phone" value="${userInstance?.phone?.encodeAsHTML()}" class="field${hasErrors(bean:userInstance,field:'phone','error')}"/>
+                    <g:textField name="phone" value="${userInstance?.phone}" class="field${hasErrors(bean:userInstance,field:'phone','error')}"/>
             </p>
             <p>
               <label for="showEmail"><g:message code="user.showEmail" default="Show Email" /></label>
