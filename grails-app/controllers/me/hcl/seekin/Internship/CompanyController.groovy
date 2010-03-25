@@ -70,8 +70,9 @@ class CompanyController {
         else {
 
             def addresses = new HashSet()
+            def addressesAsString = new HashSet()
             companyInstance.internships.each {
-                if(it?.address)
+                if(it?.address && addressesAsString.add(it?.address?.toString()))
                     addresses.add it?.address
             }
 
