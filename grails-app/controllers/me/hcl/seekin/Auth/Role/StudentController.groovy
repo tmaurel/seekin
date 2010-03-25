@@ -126,7 +126,6 @@ class StudentController {
             def key = it.replaceAll(/\./, '_')
             [key: key, sortable: true, resizeable: true, label: "${message(code:it)}", formatter:'managerTableFormatter']
         }
-        println columnDefs
 
         return [projections: projections, columnDefs: columnDefs, millesimes: millesimes, millesimeCurrent: millesimeCurrent]
     }
