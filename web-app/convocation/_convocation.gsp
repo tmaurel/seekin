@@ -184,7 +184,7 @@
       <p>Etablissement d'accueil : ${convocation?.internship?.company?.name?.toUpperCase()}</p>
       <p>Nom du responsable de l'établissement d'accueil : ${companyTutor?.lastName} ${companyTutor?.firstName}</p>
       <p>Adresse de l'établissement d'accueil :
-        <span class="tab">${convocation?.internship?.company?.address?.street}, ${convocation?.internship?.company?.address?.zipCode} ${convocation?.internship?.company?.address?.town}</span>
+        <span class="tab">${convocation?.internship?.address?.street}, ${convocation?.internship?.address?.zipCode} ${convocation?.internship?.address?.town}</span>
       </p>
       <p>Nom du stagiaire : ${student?.lastName} ${student?.firstName} </p>
       <p>Sujet : ${convocation?.internship?.subject?.toUpperCase()}</p>

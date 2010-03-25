@@ -81,10 +81,12 @@
                             <g:YUISubmitbutton value="edit" action="edit" />
                           </g:if>
                         </g:ifAnyGranted>
+                        <g:ifNotGranted role="ROLE_ADMIN,ROLE_FORMATIONMANAGER">
                         <g:ifAnyGranted role="ROLE_STUDENT,ROLE_STAFF">
                           <g:listButton />
                         </g:ifAnyGranted>
-                       </div>
+                        </g:ifNotGranted>
+                        </div>
             </g:form>
        </body>
 </html>
