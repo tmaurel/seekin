@@ -25,6 +25,15 @@
                             </span>
                       </p>
 
+                       <p>
+                            <label><g:message code="message.author" default="Author" /></label>
+                            <span class="field_value">
+
+                            ${messageInstance?.author}
+
+                            </span>
+                      </p>
+
                       <p>
                             <label><g:message code="message.recipients" default="Recipients" /></label>
                             <span class="field_value">
