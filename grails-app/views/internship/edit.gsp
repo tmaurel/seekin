@@ -15,7 +15,7 @@
       <g:hasErrors bean="${internshipInstance}">
       <div class="flash_message"><g:renderErrors bean="${internshipInstance}" as="list" /></div>
       </g:hasErrors>
-      <g:form class="boxed_form" name="crud_panel" method="post" >
+      <g:form class="boxed_form" name="crud_panel" method="post"  enctype="multipart/form-data">
           <g:hiddenField name="id" value="${internshipInstance?.id}" />
           <g:hiddenField name="version" value="${internshipInstance?.version}" />
           <g:hiddenField name="reason" value="${internshipInstance?.reason}" />
@@ -32,6 +32,11 @@
                           <label for="description"><g:message code="internship.description" default="Description" /></label>
                           <g:textArea name="description" class="field${hasErrors(bean:internshipInstance ,field:'description','error')}" value="${internshipInstance?.description}" />
 
+                </p>
+
+                <p>
+                          <label for="data"><g:message code="offer.file" default="File" /></label>
+                          <input type="file" name="data"/>
                 </p>
 
                 <p>

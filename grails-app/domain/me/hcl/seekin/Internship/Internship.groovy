@@ -8,6 +8,7 @@ import me.hcl.seekin.Internship.Company
 import me.hcl.seekin.Formation.Millesime
 import org.apache.commons.lang.StringUtils
 import me.hcl.seekin.Util.Address
+import me.hcl.seekin.Ressource.Document
 
 class Internship {
 
@@ -65,6 +66,9 @@ class Internship {
 
     /** Phone number to contact the company **/
     String phone
+
+    /** File which details the internship **/
+    InternshipSubjectFile file
     
     /** Constraints used to check if an instance is correct */
     static constraints = {
@@ -83,6 +87,7 @@ class Internship {
         description(nullable:true, maxSize:1000)
         address(nullable:true)
         phone(nullable:true)
+        file(nullable: true)
     }
 
     String toString() {

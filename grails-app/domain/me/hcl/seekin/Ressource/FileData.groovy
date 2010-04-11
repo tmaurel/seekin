@@ -21,6 +21,7 @@ class FileData {
     static constraints = {
         data(nullable: false, minSize: 1, maxSize: TEN_MEG_IN_BYTES )
         size(nullable: false)
+        dateCreated(nullable: true)
         contentType(nullable: false, validator: { val, obj ->
             return val == "application/pdf" || val == "application/msword"
         })

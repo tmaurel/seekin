@@ -221,9 +221,26 @@ style = {
 		'background-position':'right'
 	)
 
+
+	'#menu .navigation' (
+		'float':'left',
+		'padding':'0',
+		'margin':'0 0 0 -3px',
+                'clear':'both',
+                'font-size':'12px',
+                'list-style-type':'none',
+                'overflow':'hidden'
+	)
+
+	'#menu .navigation ul' (
+		'list-style-position':'outside',
+        )
+
 	'#menu .navigation li' (
+                'float':'left',
 		'border':'0px none #000',
-		'background-color': 'transparent'
+		'background-color': 'transparent',
+                'height':'40px'
 	)
 
 	'#menu .navigation li a' (
@@ -235,42 +252,32 @@ style = {
 		'padding-right':'10px',
 		'background-color': 'transparent',
 		'color':'white',
-		'font-size':'1.5em'
-	)
-
-	'#menu .navigation li.navigation_active' (
-		'background-image':'url(../images/skin/bar_selected_bg.png)'
-	)
-
-	'#menu .navigation li.navigation_active a' ( 
-		'color':selectedColor
-	)
-
-	'#menu .navigation li.navigation_active a:hover' ( 
-		'color':selectedColor
+		'font-size':'1.5em',
+                'text-decoration':'none'
 	)
 
 	'#menu .navigation li a:hover' (
 		'color':secondColor,
 	)
 
+
+	'#menu .navigation li.navigation_active' (
+		'background-image':'url(../images/skin/bar_selected_bg.png)'
+	)
+
+	'#menu .navigation li.navigation_active a' ( 
+		'color':selectedColor,
+                'cursor':'default'
+
+	)
+
+	'#menu .navigation li.navigation_active a:hover' ( 
+		'color':selectedColor
+	)
+
 	'#menu .navigation li.navigation_active' (
 		'border-bottom':'0px none #fff',
 		'margin-top':'0px'
-	)
-
-	'#menu .navigation li' (
-		'height':'40px'
-	)
-
-	'#menu .navigation ul' (
-		'list-style-position':'outside',
-		)
-	
-	'#menu .navigation' (
-		'float':'left',
-		'padding':'0',
-		'margin':'0 0 0 -3px',
 	)
 
 	'#menu' (

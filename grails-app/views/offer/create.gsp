@@ -48,7 +48,7 @@
                   </p>
 
                   <p>
-                        <label for="data"><g:message code="offer.file" default="File" />:</label>
+                        <label for="data"><g:message code="offer.file" default="File" /></label>
                         <input type="file" name="data"/>
                   </p>
 

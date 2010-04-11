@@ -9,7 +9,7 @@ import me.hcl.seekin.Formation.Promotion
 import org.codehaus.groovy.grails.plugins.springsecurity.Secured
 import me.hcl.seekin.Formation.Millesime
 import me.hcl.seekin.Auth.Role.*
-import me.hcl.seekin.Ressource.Document
+
 
 class OfferController {
 
@@ -142,17 +142,25 @@ class OfferController {
         sessionFactory.currentSession.refresh(userInstance, LockMode.NONE)
         offerInstance.company = company
 
-		/* An offer is directly validated if the author is an admin or a formation manager */
-		if(authenticateService.ifAnyGranted("ROLE_ADMIN,ROLE_FORMATIONMANAGER")) {
-			offerInstance.validated = true
-		}
-		else {
-			offerInstance.validated = false
-		}
+        /* An offer is directly validated if the author is an admin or a formation manager */
+        if(authenticateService.ifAnyGranted("ROLE_ADMIN,ROLE_FORMATIONMANAGER")) {
+                offerInstance.validated = true
+        }
+        else {
+                offerInstance.validated = false
+        }
 
-		offerInstance.assignated = false
+        offerInstance.assignated = false
         
         offerInstance.author = userInstance
+
+        if(request.getFile( 'data' ).getSize() > 0)
+        {
+            def document = new InternshipSubjectFile()
+            document.title = params.subject
+            document.fileData = fileService.createFile(request.getFile( 'data' ))
+            offerInstance.file = document
+        }
 
         offerInstance.validate()
 
@@ -171,15 +179,6 @@ class OfferController {
                     def promo = Promotion.get(it)
                     if(promo)
                         promo.addToOffers(offerInstance)
-                }
-
-                if(request.getFile( 'data' ).getSize() > 0)
-                {
-                    def document = new Document()
-                    document.title = params.subject
-                    document.fileData = fileService.createFile(request.getFile( 'data' ))
-                    offerInstance.file = document
-                    document.save(flush: true)
                 }
 
                 flash.message = "offer.created"
@@ -466,6 +465,16 @@ class OfferController {
             offerInstance.validated = (params.validated)?true:false
             offerInstance.reason = null
 
+            def oldDoc = offerInstance.file
+
+            if(request.getFile( 'data' ).getSize() > 0)
+            {
+                def document = new InternshipSubjectFile()
+                document.title = params.subject
+                document.fileData = fileService.createFile(request.getFile( 'data' ))
+                offerInstance.file = document
+            }
+
             if (!offerInstance.hasErrors() && offerInstance.save()) {
 
                 def promos = offerInstance.promotions.collect {
@@ -474,18 +483,9 @@ class OfferController {
                 promos.each { Promotion.get(it)?.removeFromOffers(offerInstance) }
                 params.promotions.each { Promotion.get(it)?.addToOffers(offerInstance) }
 
-                if(request.getFile( 'data' ).getSize() > 0)
-                {
-                    if(offerInstance.file)
-                        offerInstance.file.delete()
-
-                    def document = new Document()
-                    document.title = params.subject
-                    document.fileData = fileService.createFile(request.getFile( 'data' ))
-                    document.save(flush: true)
-                    offerInstance.file = document
+                if(oldDoc) {
+                    oldDoc.delete()
                 }
-
 
                 flash.message = "offer.updated"
                 flash.args = [params.id]

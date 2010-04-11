@@ -65,14 +65,18 @@
                             </span>
                       </p>
 
+                      <g:if test ="${offerInstance?.file}">
                       <p>
                             <label><g:message code="offer.file" default="File" /></label>
                             <span class="field_value">
-                            
-                            <g:link controller="document" action="show" id="${offerInstance?.file?.id}">${offerInstance?.file?.encodeAsHTML()}</g:link>
+
+                            <g:link controller="file" action="download" id="${offerInstance?.file?.fileData?.id}">
+                                    <img src="${resource(dir:'images/icons',file:'dl.png')}" alt="Download" />
+                            </g:link>   
                             
                             </span>
                       </p>
+                      </g:if>
                         
                        <p>
                             <label><g:message code="offer.author" default="Author" /></label>

@@ -47,6 +47,19 @@
 
                             </span>
                       </div>
+
+                      <g:if test ="${internshipInstance?.file}">
+                      <p>
+                            <label><g:message code="offer.file" default="File" /></label>
+                            <span class="field_value">
+
+                            <g:link controller="file" action="download" id="${internshipInstance?.file?.fileData?.id}">
+                                    <img src="${resource(dir:'images/icons',file:'dl.png')}" alt="Download" />
+                            </g:link>
+
+                            </span>
+                      </p>
+                      </g:if>
                         
                        <p>
                             <label><g:message code="internship.beginAt" default="Begin At" /></label>
@@ -169,9 +182,7 @@
 
                      <div class="actionpad yui-skin-sam">
 
-                     <g:ifAnyGranted role="ROLE_STAFF,ROLE_EXTERNAL">
-                        <g:listButton />
-                     </g:ifAnyGranted>
+                      <g:listButton />
 
                       <g:ifAnyGranted role="ROLE_ADMIN">
                           <g:if test="${internshipInstance.isApproval == false}">
@@ -192,7 +203,6 @@
                       </g:ifNotGranted>
 
                        <g:ifAnyGranted role="ROLE_STUDENT">
-                          <g:listButton />
                           <g:if test="${internshipInstance.isApproval == false}">
                             <g:YUISubmitbutton value="edit" action="edit" />
                             <g:deleteButton />

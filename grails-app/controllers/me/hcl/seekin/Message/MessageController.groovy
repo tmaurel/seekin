@@ -243,58 +243,59 @@ ${g.renderOriginalMessageEnd()}"""
 
     def dataTableDataAsJSON = {
 
-        if (authenticateService.isLoggedIn())
+        if (authenticateService.isLoggedIn() && params.idBox != null)
         {
             // Get the user instance logged in
             def userInstance = authenticateService.userDomain()
 
-
-            def box = MessageBox.get(params.idBox)
-
-            def list = MessageCopy.createCriteria().list()
+            def box = MessageBox?.get(params.idBox)
+            if(box)
             {
+                def list = MessageCopy.createCriteria().list()
+                {
 
-                message {
+                    message {
 
-                    if(params.sort != "author")
-                        order(params.sort, params.order)
-                    else
-                    {
-                        author {
-                            order("firstName", params.order)
-                            order("lastName", params.order)
+                        if(params.sort != "author")
+                            order(params.sort, params.order)
+                        else
+                        {
+                            author {
+                                order("firstName", params.order)
+                                order("lastName", params.order)
+                            }
                         }
                     }
+
+                    eq('box', box)
+                    maxResults(params.max?.toInteger())
+                    firstResult(params.offset?.toInteger())
+
                 }
 
-                eq('box', box)
-                maxResults(params.max?.toInteger())
-                firstResult(params.offset?.toInteger())
-               
-            }
+                def count = MessageCopy.countByBox(box)
 
-            def count = MessageCopy.countByBox(box)
+                def ret = []
+                response.setHeader("Cache-Control", "no-store")
 
-            def ret = []
-            response.setHeader("Cache-Control", "no-store")
+                list.each {
+                    def unread = (it.status == MessageCopy.MESSAGE_UNREAD)?true:false
+                    ret << [
+                        delete: it.id,
+                        subject: [value: it.message?.subject, unread: unread],
+                        author: [value: it.message?.author?.firstName + " " + it.message?.author?.lastName, unread: unread],
+                        dateCreated: [value: it.message?.dateCreated.formatDateHour(), unread: unread],
+                        urlID: [id: it.id, unread: unread]
+                    ]
+                }
 
-            list.each {
-                def unread = (it.status == MessageCopy.MESSAGE_UNREAD)?true:false
-                ret << [
-                    delete: it.id,
-                    subject: [value: it.message?.subject, unread: unread],
-                    author: [value: it.message?.author?.firstName + " " + it.message?.author?.lastName, unread: unread],
-                    dateCreated: [value: it.message?.dateCreated.formatDateHour(), unread: unread],
-                    urlID: [id: it.id, unread: unread]
+                def data = [
+                        totalRecords: count,
+                        results: ret
                 ]
+
+                render data as JSON
             }
-
-            def data = [
-                    totalRecords: count,
-                    results: ret
-            ]
-
-            render data as JSON
         }
     }
 }

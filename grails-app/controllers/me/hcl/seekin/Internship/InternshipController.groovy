@@ -16,6 +16,7 @@ import me.hcl.seekin.Formation.Formation
 class InternshipController {
 
     def authenticateService
+    def fileService
     def sessionFactory
 
     def index = { redirect(action: "list", params: params) }
@@ -159,11 +160,16 @@ class InternshipController {
 
         def millesime = Millesime.getCurrent()
 
-        def offer = Offer.findAllByBeginAtGreaterThanEquals(millesime.beginDate).collect {
-            [
-                    id: it.id,
-                    value: it.subject
-            ]
+        def offer = []
+        Offer.findAllByBeginAtGreaterThanEquals(millesime.beginDate).each {
+            if(it.getStatus() == "offer.validated")
+            {
+                offer <<
+                    [
+                            id: it.id,
+                            value: it.subject
+                    ]
+            }
         }
         def internshipInstance
         if(params?.offer?.id != null) {
@@ -176,6 +182,7 @@ class InternshipController {
                 internshipInstance.company = offerFromSelection.company
                 internshipInstance.fromOffer = true
                 internshipInstance.description = offerFromSelection.description
+                internshipInstance.file = offerFromSelection.file
         }
         else {
             internshipInstance = new Internship()
@@ -201,11 +208,16 @@ class InternshipController {
         }
 
         def millesime = Millesime.getCurrent()
-        def offer = Offer.findAllByBeginAtGreaterThanEquals(millesime.beginDate).collect {
-            [
-                    id: it.id,
-                    value: it.subject
-            ]
+        def offer = []
+        Offer.findAllByBeginAtGreaterThanEquals(millesime.beginDate).each {
+            if(it.getStatus() == "offer.validated")
+            {
+                offer <<
+                    [
+                            id: it.id,
+                            value: it.subject
+                    ]
+            }
         }
 
         def internshipInstance = new Internship()
@@ -232,6 +244,19 @@ class InternshipController {
               company = Company.findByName(params.companyName)
             }
             internshipInstance.company = company
+        }
+
+
+        if(params?.file?.id)
+        {
+            internshipInstance.file = InternshipSubjectFile.get(params?.file?.id)
+        }
+        else if(request.getFile( 'data' )?.getSize() > 0)
+        {
+            def document = new InternshipSubjectFile()
+            document.title = params.subject
+            document.fileData = fileService.createFile(request.getFile( 'data' ))
+            internshipInstance.file = document
         }
 
         internshipInstance.validate()
@@ -282,6 +307,7 @@ class InternshipController {
             internshipInstance.companyTutor = role
 
             if ((internshipInstance = internshipInstance?.merge(flush: true))) {
+
                 flash.message = "internship.created"
                 flash.args = [internshipInstance.id]
                 flash.defaultMessage = "Internship ${internshipInstance.id} created"
@@ -451,10 +477,27 @@ class InternshipController {
                     return
                 }
             }
+
+            def oldDoc = internshipInstance.file
+
             internshipInstance.properties = params
+
+            if(request.getFile( 'data' ).getSize() > 0)
+            {
+                def document = new InternshipSubjectFile()
+                document.title = params.subject
+                document.fileData = fileService.createFile(request.getFile( 'data' ))
+                internshipInstance.file = document
+            }
+
             internshipInstance.reason = null
 
             if (!internshipInstance.hasErrors() && internshipInstance.save()) {
+
+                if(oldDoc) {
+                    oldDoc.delete()
+                }
+                
                 flash.message = "internship.updated"
                 flash.args = [params.id]
                 flash.defaultMessage = "Internship ${params.id} updated"

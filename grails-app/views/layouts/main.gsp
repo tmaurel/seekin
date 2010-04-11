@@ -17,7 +17,7 @@
         <g:javascript library="datatable" />
         <yui:javascript dir="json" file="json-min.js" />
         <g:YUIButtonRessource />
-        <nav:resources/>	
+        <nav:resources override="true"/>
     </head>
     <body>
         <div id="spinner" class="spinner" style="display:none;">
@@ -187,6 +187,7 @@
                 </div>
         </div>
         <div id="main">
+                <nav:renderSubItems group="menu" actionMatch="true"/>
                 <g:isLoggedIn>
                     <div id="content">
                         <div id="message_popup" class="yui-skin-sam">

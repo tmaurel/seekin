@@ -25,8 +25,8 @@
       <div class = "yui-skin-sam">
         <gui:tabView>
           <gui:tab label="${message(code: 'internship.createFromZero')}" active="true">
-            <g:form class="boxed_form" name="crud_panel" action="save" method="post" >
-
+            <g:form class="boxed_form" name="crud_panel" action="save" method="post"  enctype="multipart/form-data">
+                      <g:hiddenField name="fromOffer" value="${internshipInstance?.fromOffer}" />
                       <p>
                             <label for="subject"><g:message code="internship.subject" default="Subject" /></label>
                             <g:textField name="subject" class="field${hasErrors(bean:internshipInstance ,field:'subject','error')}" value="${internshipInstance?.subject}" />
@@ -37,6 +37,22 @@
                             <label for="description"><g:message code="internship.description" default="Description" /></label>
                             <g:textArea name="description" class="field${hasErrors(bean:internshipInstance ,field:'description','error')}" value="${internshipInstance?.description}" />
 
+                      </p>
+
+                      <p>
+                            <label for="data"><g:message code="offer.file" default="File" /></label>
+
+                            <g:if test="${internshipInstance?.fromOffer && internshipInstance?.file}">
+                                    <g:hiddenField name="file.id" value="${internshipInstance?.file?.id}" />
+                                    <span class="field_value">
+                                      <g:link controller="file" action="download" id="${internshipInstance?.file?.fileData?.id}">
+                                              ${internshipInstance?.file?.title}
+                                      </g:link>
+                                    </span>
+                            </g:if>
+                            <g:else>
+                                    <input type="file" name="data"/>
+                            </g:else>
                       </p>
 
                       <p>

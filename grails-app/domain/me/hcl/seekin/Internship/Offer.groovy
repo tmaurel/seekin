@@ -7,7 +7,7 @@ import me.hcl.seekin.Internship.Company
 
 class Offer {
 
-	static searchable = true
+    static searchable = true
 
     static hasMany = [promotions: Promotion]
     static belongsTo = [Promotion, Company]
@@ -35,7 +35,7 @@ class Offer {
     String reason
 
     /** File which details the offer */
-    Document file
+    InternshipSubjectFile file
 
     /** User who have created the offer */
     User author
@@ -44,20 +44,20 @@ class Offer {
 	
 	/** Constraints used to check if an instance is correct */
     static constraints = {
-		subject(blank: false)
-		description(blank: false, maxSize:1000)
-		beginAt(nullable: false)
+        subject(blank: false)
+        description(blank: false, maxSize:1000)
+        beginAt(nullable: false)
         validated(nullable: false)
         assignated(nullable: false)
-		length(range: 1..52)
-		reason(nullable:true, blank: true)
+        length(range: 1..52)
+        reason(nullable:true, blank: true)
         file(nullable: true)
         company(nullable: false)
     }
 
-	String toString() {
-		subject
-	}
+    String toString() {
+            subject
+    }
 
     String getStatus() {
         validated==false?(reason==null?'offer.waitForValidation':'offer.unvalidated'):(assignated==false?'offer.validated':'offer.assignated')
@@ -66,8 +66,8 @@ class Offer {
 	/** Return offers waiting for validation for a promotion */
     static getOffersWaitingForValidationForPromotion = {
         promotion ->
-			Offer.list().findAll {
-				it.getStatus() == "offer.waitForValidation"  && it.promotions?.contains(promotion)
-			}
+            Offer.list().findAll {
+                    it.getStatus() == "offer.waitForValidation"  && it.promotions?.contains(promotion)
+            }
     }
 }
