@@ -33,7 +33,7 @@ grails.converters.encoding="UTF-8"
 grails.enable.native2ascii = true
 
 tomcat.deploy.username="Neoseifer"
-tomcat.deploy.password="n3os3if3r"
+tomcat.deploy.password="toto"
 tomcat.deploy.url="http://localhost:8080/manager"
 
 
