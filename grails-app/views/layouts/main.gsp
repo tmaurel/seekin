@@ -179,9 +179,6 @@
                               </div>
                           </g:link>
                           </g:isLoggedIn>
-                          <g:form controller="search">
-                                        <g:textField name="q" value="${params?.q}"/>
-                          </g:form>
                         </div>
                     </div>
                 </div>

@@ -247,9 +247,9 @@ ${g.renderOriginalMessageEnd()}"""
         {
             // Get the user instance logged in
             def userInstance = authenticateService.userDomain()
-
-            def box = MessageBox?.get(params.idBox)
-            if(box)
+            println(params.idBox);
+            def box = MessageBox.findById(params.idBox)
+            if(box?.owner?.id == userInstance?.id)
             {
                 def list = MessageCopy.createCriteria().list()
                 {

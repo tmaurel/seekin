@@ -7,8 +7,6 @@ import me.hcl.seekin.Internship.Company
 
 class Offer {
 
-    static searchable = true
-
     static hasMany = [promotions: Promotion]
     static belongsTo = [Promotion, Company]
     static transients = ['status']

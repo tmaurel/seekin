@@ -12,12 +12,6 @@ import me.hcl.seekin.Message.*
  */
 class User {
 
-	/** Make User searchable */
-	static searchable = {
-		only = ['email','firstName','lastName','phone','showEmail']
-		spellCheck "include"
-	}
-
 	/** A user can have some Role */
 	static hasMany = [ authorities : Role, boxes: MessageBox ]
 

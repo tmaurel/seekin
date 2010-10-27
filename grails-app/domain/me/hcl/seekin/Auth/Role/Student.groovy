@@ -8,13 +8,6 @@ import me.hcl.seekin.Internship.Internship
  */
 class Student extends Role {
 
-    /** Make Students searchable */
-    static searchable = {
-            user(component:true)
-            spellCheck "include"
-
-    }
-
     static belongsTo = Promotion
     static hasMany = [ internships : Internship, promotions : Promotion ]
 

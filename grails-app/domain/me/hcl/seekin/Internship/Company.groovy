@@ -9,12 +9,8 @@ import me.hcl.seekin.Util.Address
  */
 class Company {
 
-        static belongsTo = [Internship, Offer]
+    static belongsTo = [Internship, Offer]
 
-	/** Make Companies searchable */
-	static searchable = {
-		spellCheck "include"
-	}
 
 	/** Name of the company */ 
 	String name

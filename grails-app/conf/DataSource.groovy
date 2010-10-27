@@ -7,6 +7,7 @@
 */
 dataSource {
 	pooled = false
+        driverClassName = "com.mysql.jdbc.Driver"
 }
 
 hibernate {
@@ -19,24 +20,25 @@ hibernate {
 environments {
 	development {
 		dataSource {
-			driverClassName = "org.hsqldb.jdbcDriver"
+                        driverClassName = "org.hsqldb.jdbcDriver"
 			dbCreate = "create-drop"
 			url = "jdbc:hsqldb:file:prodDb;shutdown=true"
 		}
 	}
 	test {
 		dataSource {
-			driverClassName = "com.mysql.jdbc.Driver"
-			username = "root"
-			password = ""
+                        username = "root"
+                        password = "root"
 			dbCreate = "update" // one of 'create', 'create-drop','update'
-			url = "jdbc:mysql://localhost/seekin_test"
+			url = "jdbc:mysql://localhost/seekin"
 		}
 	}
 	production {
 		dataSource {
-			dbCreate = "update"
-			url = "jdbc:hsqldb:file:prodDb;shutdown=true"
+                        username = "root"
+                        password = "root"
+			dbCreate = "update" // one of 'create', 'create-drop','update'
+			url = "jdbc:mysql://localhost/seekin"
 		}
 	}
 }

@@ -5,8 +5,6 @@ package me.hcl.seekin.Ressource
  */
 class Document {
 
-    static searchable = true
-
     /** Title of the document */
     String title
 

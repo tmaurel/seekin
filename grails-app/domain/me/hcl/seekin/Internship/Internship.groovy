@@ -12,11 +12,6 @@ import me.hcl.seekin.Ressource.Document
 
 class Internship {
 
-    static searchable = {
-            student(component:true)
-            company(component:true)
-    }
-
     static transients = ['status']
 
     /** Subject of the Internship */

@@ -47,7 +47,6 @@ class InternshipController {
         {
 
             def userInstance = authenticateService.userDomain()
-            sessionFactory.currentSession.merge(userInstance)
 
             if(authenticateService.ifAnyGranted("ROLE_ADMIN,ROLE_FORMATIONMANAGER,ROLE_STAFF"))
             {
@@ -292,7 +291,7 @@ class InternshipController {
 				company.save()
                 role.company = company
                 role.formerStudent = false
-                role = role.merge(flush:true)
+                role = role.save(flush:true)
                 companyTutor = new User()
                 companyTutor.properties = params
                 companyTutor.password = authenticateService.encodePassword(UserController.generatePwd(8))
@@ -306,7 +305,7 @@ class InternshipController {
 
             internshipInstance.companyTutor = role
 
-            if ((internshipInstance = internshipInstance?.merge(flush: true))) {
+            if ((internshipInstance = internshipInstance?.save(flush: true))) {
 
                 flash.message = "internship.created"
                 flash.args = [internshipInstance.id]
@@ -654,7 +653,6 @@ class InternshipController {
         response.setHeader("Cache-Control", "no-store")
 
         def userInstance = authenticateService.userDomain()
-        sessionFactory.currentSession.merge(userInstance)
 
         if(authenticateService.ifAnyGranted("ROLE_ADMIN,ROLE_FORMATIONMANAGER,ROLE_STAFF"))
         {

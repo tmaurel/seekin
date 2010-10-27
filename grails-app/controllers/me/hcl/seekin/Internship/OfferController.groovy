@@ -173,7 +173,7 @@ class OfferController {
 
         if (!offerInstance.hasErrors()) {
 
-            if ((offerInstance = offerInstance?.merge(flush: true))) 
+            if ((offerInstance = offerInstance?.save(flush: true))) 
             {
                 params.promotions.each {
                     def promo = Promotion.get(it)

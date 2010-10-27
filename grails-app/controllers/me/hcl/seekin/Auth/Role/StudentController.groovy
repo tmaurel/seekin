@@ -171,7 +171,6 @@ class StudentController {
         if(authenticateService.ifAnyGranted("ROLE_FORMATIONMANAGER"))
         {
             def userInstance = authenticateService.userDomain()
-            sessionFactory.currentSession.merge(userInstance)
             def manager = FormationManager.findByUser(userInstance)
             query += " AND formation.id = " + manager.formation.id
         }

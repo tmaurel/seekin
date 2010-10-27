@@ -19,18 +19,6 @@ class DocumentTests extends GrailsUnitTestCase {
 	 */
 	void testConstraints()
 	{		
-		
-		/** Add the dynamic method validate to our Document class */
-		mockForConstraintsTests(Document)
-		
-		/** Build a correct instance of Document and test that the validation is correct */
-		document = new Document(title: "Document", uri: "upload/document/document.pdf")
-		assertTrue document.validate()
-		
-		/** Testing blank attributes */
-		document = new Document(title: "", uri: "")
-		document.validate()
-		assertEquals 'title is blank.', 'blank', document.errors['title']
-		assertEquals 'uri is blank.', 'blank', document.errors['uri']
+
 	}
 }

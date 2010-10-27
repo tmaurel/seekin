@@ -10,8 +10,6 @@ import me.hcl.seekin.Ressource.EducationalDoc
  */
 class Formation {
 
-	static searchable = true
-
 	static hasMany = [promotions: Promotion, educationalDocs: EducationalDoc]
 
         /** The manager of this formation */

@@ -99,7 +99,7 @@ style = {
 	
 	'#menu_cont #search_bar' (
 		'float':'right',
-		'width':'210px',
+		'width':'35px',
 	)
 
         '#menu_cont #search_bar a' (
@@ -650,53 +650,6 @@ style = {
             'padding-left':'2.25em'
         )
 
-		'#search .title' (
-			'margin-bottom': '1em',
-			'padding': '.3em .5em',
-			'text-align': 'right',
-			'background-color': '#F3F3F3',
-		)
-
-		'#search .result' (
-			'margin-bottom': '1em'
-		)
-
-		'#search .result .displayLink' (
-			'color': secondColor
-		)
-
-		'#search .result .name' (
-			'font-size': 'larger'
-		)
-
-		'#search .paging a.step' (
-			'padding': '0 .3em'
-		)
-
-		'#search .paging span.currentStep' (
-			'font-weight': 'bold'
-		)
-
-		'#search ul' (
-			'margin': '1em 2em'
-		)
-
-		'#search li, #search p' (
-			'margin-bottom': '1em'
-		)
-
-		'#search .class_type' (
-			'font-size': 'x-small',
-			'color': secondColor,
-			'text-transform': 'uppercase'
-		)
-
-		'#search #q' (
-			'width':'300px',
-			'font-size':'1.2em',
-			'border':'solid 1px #D3D3D3',
-			'color':selectedColor,
-		)
 
 		'.humanMsg' (
 				'top':'auto',
