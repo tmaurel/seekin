@@ -48,12 +48,12 @@
 			<g:else>
 				<g:message code="student.nointernship" />
 			</g:else>
-			<h4>
+%{--			<h4>
 			  <g:message code="message.private" /> :
 			  <g:link controller="message" action="write" id="${studentInstance?.user?.id}">
 				  <img src="${resource(dir:'images/icons',file:'private_msg.png')}" alt="${message(code:'message.private')}"/>
 			  </g:link>
-			</h4>
+			</h4>--}%
 			</g:if>
 			<g:else>
 			<g:message code="student.show.notvisible" />

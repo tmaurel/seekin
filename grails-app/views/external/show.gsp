@@ -33,12 +33,12 @@
 			  <span class="field_value"><g:fieldValue bean="${externalInstance?.user}" field="email" /></span>
 			</p>
 			</g:if>
-			<h4>
+%{--			<h4>
 			  <g:message code="message.private" /> :
 			  <g:link controller="message" action="write" id="${externalInstance?.user?.id}">
 				  <img src="${resource(dir:'images/icons',file:'private_msg.png')}" alt="${message(code:'message.private')}"/>
 			  </g:link>
-			</h4>
+			</h4>--}%
          </div>
        </body>
 </html>

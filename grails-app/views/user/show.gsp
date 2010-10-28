@@ -35,7 +35,7 @@
                             </span>
                       </p>
 
-                       <p>
+%{--                       <p>
                             <label><g:message code="message.private" default="Private Message" /></label>
                             <span class="field_value">
 
@@ -44,7 +44,7 @@
                             </g:link>
 
                             </span>
-                      </p>
+                      </p>--}%
                         
                        <p>
                             <label><g:message code="user.enabled" default="Enabled" /></label>
