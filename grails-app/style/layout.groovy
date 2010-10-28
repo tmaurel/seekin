@@ -539,4 +539,13 @@ style = {
 				'bottom':'50px',
 				'background-color':selectedColor
 		)
+
+        '.filters .yui-panel' (
+            'width':'350px',
+            'padding':'0px'
+        )
+
+        '.filters .yui-panel p label, .filters .yui-panel p input' (
+            'width':'40%'
+        )
 }

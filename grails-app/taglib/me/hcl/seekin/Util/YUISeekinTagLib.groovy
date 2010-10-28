@@ -187,4 +187,62 @@ class YUISeekinTagLib {
         }
     }
 
+    def filterPanel = { attrs ->
+      def filters = attrs["filters"]
+      out << """<div class="filters yui-skin-sam">
+
+                    <script type="text/javascript">
+                      YAHOO.util.Event.onDOMReady(function () {
+
+                          updateFilter  = function () {
+
+                          GRAILSUI.dt_2.customQueryString ="""
+      filters.eachWithIndex { it, i ->
+        out << """"${it.field}="+YAHOO.util.Dom.get("filter_${it.field}").value"""
+        if(i == filters.size() - 1) {
+          out << ";"
+        }
+        else {
+          out << "+\"&\"+"
+        }
+      }
+
+      out << """
+                    var state = GRAILSUI.dt_2.getState();
+                    state.sorting = state.sortedBy;
+                    state.pagination.recordOffset = 0;
+                    query = GRAILSUI.dt_2.buildQueryString(state);
+
+                    GRAILSUI.dt_2.getDataSource().sendRequest(query,{
+                      success : GRAILSUI.dt_2.onDataReturnReplaceRows,
+                      failure : GRAILSUI.dt_2.onDataReturnReplaceRows,
+                      scope   : GRAILSUI.dt_2,
+                      argument: state
+                    });
+                  };
+      """
+
+      filters.each {
+        out << """YAHOO.util.Event.on("filter_${it.field}",'keyup',function (e) {
+          updateFilter();
+        });"""
+      }
+
+      out << """});
+              </script>
+       """
+
+
+	  out << gui.expandablePanel(title:message(code:'filters.title'), expanded:false) {
+        out << """<div class="boxed_form">"""
+        filters.each {
+          out << """<p><label for="filter_${it.field}">${it.name}</label> <input type="text" id="filter_${it.field}" value=""></p>"""
+        }
+        out << """</div>"""
+      } 
+
+      out << """<p class=""></p>
+            </div>"""
+    }
+
 }

@@ -1102,9 +1102,12 @@ class UserController {
 		]
 		
 		def resultFilter = {
-			or {
+			and {
 				if(params.lastName && params.lastName != ''){
 					ilike("lastName", "${params.lastName}%")
+				}
+                if(params.firstName && params.firstName != ''){
+					ilike("firstName", "${params.firstName}%")
 				}
 			}
 		}
