@@ -1094,7 +1094,21 @@ class UserController {
         @Secured(['ROLE_ADMIN','ROLE_FORMATIONMANAGER'])
 	def dataTableDataAsJSON = {
 		def list = []
-
+		def pagingConfig = [
+			max: params.max ?: 2,
+			offset: params.offset ?: 0,
+			sort: params.sort ?: 'lastName',
+			order: params.order ?: 'asc'
+		]
+		
+		def resultFilter = {
+			or {
+				if(params.lastName && params.lastName != ''){
+					ilike("lastName", "${params.lastName}%")
+				}
+			}
+		}
+		
 		if(params.enabled != null && params.validated != null)
 		{
 			if(authenticateService.ifAnyGranted("ROLE_ADMIN")) {
@@ -1118,7 +1132,8 @@ class UserController {
 		}
 		else
 		{
-			list = User.list(params)
+			def c = User.createCriteria();
+			list = c.list(params, resultFilter)
 		}
 
 		def ret = []
