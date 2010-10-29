@@ -1094,12 +1094,7 @@ class UserController {
         @Secured(['ROLE_ADMIN','ROLE_FORMATIONMANAGER'])
 	def dataTableDataAsJSON = {
 		def list = []
-		def pagingConfig = [
-			max: params.max ?: 2,
-			offset: params.offset ?: 0,
-			sort: params.sort ?: 'lastName',
-			order: params.order ?: 'asc'
-		]
+        def totalRecords = 0
 		
 		def resultFilter = {
 			and {
@@ -1132,11 +1127,13 @@ class UserController {
 					}
 				}
 			}
+            totalRecords = list.size()
 		}
 		else
 		{
 			def c = User.createCriteria();
 			list = c.list(params, resultFilter)
+            totalRecords = User.createCriteria().count(resultFilter)
 		}
 
 		def ret = []
@@ -1177,7 +1174,7 @@ class UserController {
 		}
 
 		def data = [
-				totalRecords: list.size(),
+				totalRecords: totalRecords,
 				results: ret
 		]
 

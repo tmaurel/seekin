@@ -198,7 +198,18 @@ class CompanyController {
 
     @Secured(['ROLE_ADMIN', 'ROLE_FORMATIONMANAGER', 'ROLE_STUDENT', 'ROLE_STAFF'])
     def dataTableDataAsJSON = {
-        def list = Company.list(params)
+
+        def resultFilter = {
+			and {
+                if(params.name && params.name != ''){
+					ilike("name", "${params.name}%")
+				}
+			}
+		}
+      
+        def c = Company.createCriteria();
+        def list = c.list(params, resultFilter)
+      
         def ret = []
         response.setHeader("Cache-Control", "no-store")
 
@@ -211,7 +222,7 @@ class CompanyController {
         }
 
         def data = [
-                totalRecords: Company.count(),
+                totalRecords: Company.createCriteria().count(resultFilter),
                 results: ret
         ]
 

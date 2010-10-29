@@ -18,7 +18,11 @@
                         <g:set var="nameInternationalized" value="${message(code:'company.name')}" />
                  
                         <g:set var="phoneInternationalized" value="${message(code:'company.phone')}" />
-                 
+        <br /><br />
+        <g:filterPanel id="dt_2" filters="[
+                [name: nameInternationalized, field: 'name']
+        ]" />
+        <br />
           <gui:dataTable
               id="dt_2"
               draggableColumns="true"

@@ -189,6 +189,7 @@ class YUISeekinTagLib {
 
     def filterPanel = { attrs ->
       def filters = attrs["filters"]
+      def id = attrs["id"]
       out << """<div class="filters yui-skin-sam">
 
                     <script type="text/javascript">
@@ -196,7 +197,7 @@ class YUISeekinTagLib {
 
                           updateFilter  = function () {
 
-                          GRAILSUI.dt_2.customQueryString ="""
+                          GRAILSUI.${id}.customQueryString ="""
       filters.eachWithIndex { it, i ->
         out << """"${it.field}="+YAHOO.util.Dom.get("filter_${it.field}").value"""
         if(i == filters.size() - 1) {
@@ -208,18 +209,26 @@ class YUISeekinTagLib {
       }
 
       out << """
-                    var state = GRAILSUI.dt_2.getState();
+                    var state = GRAILSUI.${id}.getState();
                     state.sorting = state.sortedBy;
                     state.pagination.recordOffset = 0;
-                    query = GRAILSUI.dt_2.buildQueryString(state);
+                    query = GRAILSUI.${id}.buildQueryString(state);
 
-                    GRAILSUI.dt_2.getDataSource().sendRequest(query,{
-                      success : GRAILSUI.dt_2.onDataReturnReplaceRows,
-                      failure : GRAILSUI.dt_2.onDataReturnReplaceRows,
-                      scope   : GRAILSUI.dt_2,
+                    GRAILSUI.${id}.getDataSource().sendRequest(query,{
+                      success : updateDataTable,
+                      failure : updateDataTable,
+                      scope   : GRAILSUI.${id},
                       argument: state
                     });
                   };
+
+
+                  updateDataTable = function(oRequest, oResponse, oPayload) {
+                    GRAILSUI.${id}.onDataReturnReplaceRows( oRequest , oResponse , oPayload )
+          	        GRAILSUI.${id}.get("paginator").setPage(GRAILSUI.${id}.get("paginator").getCurrentPage());
+                    GRAILSUI.${id}.get("paginator").set("totalRecords", oResponse.meta.totalRecords);
+          	      }
+
       """
 
       filters.each {

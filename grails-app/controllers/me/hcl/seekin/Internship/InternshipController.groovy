@@ -287,16 +287,23 @@ class InternshipController {
             def companyTutor
 
             if(User.countByEmail(params.email) == 0) {
-                role = new External()
-				company.save()
-                role.company = company
-                role.formerStudent = false
-                role = role.save(flush:true)
-                companyTutor = new User()
-                companyTutor.properties = params
-                companyTutor.password = authenticateService.encodePassword(UserController.generatePwd(8))
-                companyTutor.addToAuthorities(role)
-                companyTutor.save(flush:true)
+                if(User.countByFirstNameAndLastName(params.firstName, params.lastName) == 0)
+                {
+                  role = new External()
+                  company.save()
+                  role.company = company
+                  role.formerStudent = false
+                  role = role.save(flush:true)
+                  companyTutor = new User()
+                  companyTutor.properties = params
+                  companyTutor.password = authenticateService.encodePassword(UserController.generatePwd(8))
+                  companyTutor.addToAuthorities(role)
+                  companyTutor.save(flush:true)
+                }
+                else {
+                  companyTutor = User.findByFirstNameAndLastName(params.firstName, params.lastName)
+                  role = External.findByUser(companyTutor)
+                }
             }
             else {
                 companyTutor = User.findByEmail(params.email)

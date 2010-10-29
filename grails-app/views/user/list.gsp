@@ -23,7 +23,7 @@
                         <g:set var="firstNameInternationalized" value="${message(code:'user.firstName')}" />
                         <g:set var="lastNameInternationalized" value="${message(code:'user.lastName')}" />
         <br /><br />         
-        <g:filterPanel filters="[
+        <g:filterPanel id="dt_2" filters="[
                 [name: firstNameInternationalized, field: 'firstName'],
                 [name: lastNameInternationalized, field: 'lastName'],
         ]" />
@@ -46,7 +46,7 @@
                   pageReportTemplate:'{totalRecords} ' + message(code:'list.total.records')
               ]"
               rowExpansion="false"
-              rowsPerPage="10"
+              rowsPerPage="3"
           />
 
         </div>
