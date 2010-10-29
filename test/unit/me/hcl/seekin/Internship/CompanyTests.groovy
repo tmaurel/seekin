@@ -25,16 +25,25 @@ class CompanyTests extends GrailsUnitTestCase {
 		mockForConstraintsTests(Company)
 		
 		/** Build a correct instance of Company and test that the validation is correct */
-		company = new Company(name: "Mohammed", address: new Address(), phone: "0612345678")
+		company = new Company(name: "Mohammed", phone: "0612345678")
 		assertTrue company.validate()
 
 		/** Build an instance of Company with a bad phone number format and test that the validation is false */
-		company = new Company(name: "Mohammed", address: new Address(), phone: "061234567")
+		company = new Company(name: "Mohammed", phone: "061234567")
 		assertFalse company.validate()
+        assertEquals 'bad phone number format.', 'size', company.errors['phone']
 		
 		/** Testing blank attributes */
 		company = new Company(name: "", address: new Address())
 		assertFalse company.validate()
 		assertEquals 'name is blank.', 'blank', company.errors['name']
+    }
+
+    void testMethods() {
+        mockDomain(Company)
+        company = new Company(name: "Mohammed", phone: "0612345678")
+
+        // Test toString Method
+        assertEquals company.toString(), "Mohammed"
     }
 }

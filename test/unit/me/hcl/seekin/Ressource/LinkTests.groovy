@@ -37,5 +37,18 @@ class LinkTests extends GrailsUnitTestCase {
 		/** Testing URL syntax */
 		link = new Link(title: "Google", url: "google", description: "Search Engine")
 		assertFalse link.validate()
+
+        link = new Link()
+        assertFalse link.validate()
+        assertEquals 'title is null.', 'nullable', link.errors['title']
+		assertEquals 'url is null.', 'nullable', link.errors['url']
+		assertEquals 'descripiton is null', 'nullable', link.errors['description']
 	}
+
+    void testMethods() {
+        mockDomain(Link)
+
+        link = new Link(title: "Google", url: "http://google.fr", description: "Search Engine")
+        assertEquals link.toString(), "Google"
+    }
 }

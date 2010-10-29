@@ -128,7 +128,17 @@ class LinkController {
     }
 
     def dataTableDataAsJSON = {
-        def list = Link.list(params)
+        def c = Link.createCriteria()
+
+        def resultFilter = {
+			and {
+                if(params.title && params.title != ''){
+					ilike("title", "${params.title}%")
+				}
+			}
+		}
+
+        def list = c.list(params, resultFilter)
         def ret = []
         response.setHeader("Cache-Control", "no-store")
 
@@ -141,7 +151,7 @@ class LinkController {
         }
 
         def data = [
-                totalRecords: Link.count(),
+                totalRecords: Link.createCriteria().count(resultFilter),
                 results: ret
         ]
        

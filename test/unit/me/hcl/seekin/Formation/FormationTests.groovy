@@ -25,7 +25,7 @@ class FormationTests extends GrailsUnitTestCase {
 		mockForConstraintsTests(Formation)
 		
 		/** Build a correct instance of Formation and test that the validation is correct */
-		formation = new Formation(label: "Mohammed", description: "this is a short descrition", file: new Document())
+		formation = new Formation(label: "Mohammed", description: "this is a short descrition")
 		assertTrue formation.validate()
 
 		/** Testing blank attributes */
@@ -35,4 +35,13 @@ class FormationTests extends GrailsUnitTestCase {
 		assertEquals 'description is blank.', 'blank', formation.errors['description']
 		
 	}
+
+    void testMethods() {
+        mockDomain(Formation)
+
+        // Test toString Method
+        formation = new Formation(label: "Mohammed", description: "this is a short descrition")
+        assertEquals formation.toString(), 'Mohammed'
+
+    }
 }

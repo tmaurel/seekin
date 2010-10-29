@@ -16,15 +16,7 @@
             <div class="flash_message"><g:message code="${flash.message}" transparent="true" args="${flash.args}" /></div>
             </g:if>
             <g:hiddenField name="id" value="${educationalDocInstance?.id}" />
-                    
-                       <p>
-                            <label><g:message code="educationalDoc.id" default="Id" /></label>
-                            <span class="field_value">
-                            
-                            ${fieldValue(bean: educationalDocInstance, field: "id")}
-                            
-                            </span>
-                      </p>
+
                         
                        <p>
                             <label><g:message code="educationalDoc.title" default="Title" /></label>

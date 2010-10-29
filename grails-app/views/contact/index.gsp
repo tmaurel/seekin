@@ -3,12 +3,12 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="layout" content="main" />
-        <title><g:message code="contact" /></title>
+        <title><g:message code="navigation.menu.contact" /></title>
         
         <tm:resources />
     </head>
     <body>
-      <h2><g:message code="contact" /></h2>
+      <h2><g:message code="navigation.menu.contact" /></h2>
       <g:if test="${flash.message}">
       <div class="flash_message"><g:message code="${flash.message}" transparent="true" args="${flash.args}" /></div>
       </g:if>

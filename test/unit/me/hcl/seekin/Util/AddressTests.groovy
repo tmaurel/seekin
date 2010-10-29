@@ -27,9 +27,8 @@ class AddressTests extends GrailsUnitTestCase {
 		mockForConstraintsTests(Address)
 
 		/** Build a correct instance of Address and test that the validation is correct */
-		address = new Address(street: "12 rue des riveaux", zipCode: "63320", town: "chidrac")
-
-		assertTrue address.validate()
+		address = new Address(street : "1 Infinite Loop", zipCode : "95014", town : "Cupertino")
+        assertTrue address.validate()
 
         address = new Address(street: "", zipCode: "", town:"")
         assertFalse address.validate()
@@ -38,10 +37,23 @@ class AddressTests extends GrailsUnitTestCase {
 		assertEquals 'zipCode is blank.', 'blank', address.errors['zipCode']
 		assertEquals 'town is blank.', 'blank', address.errors['town']
 
+        address = new Address()
+        assertFalse address.validate()
+        assertEquals 'street is null.', 'nullable', address.errors['street']
+		assertEquals 'zipCode is null.', 'nullable', address.errors['zipCode']
+		assertEquals 'town is null.', 'nullable', address.errors['town']
+
         address = new Address(street: "12 rue des riveaux", zipCode: "6332a", town: "chidrac")
         assertFalse address.validate()
+        assertEquals "doesn't have a zip code syntax", 'matches', address.errors['zipCode']
 
-        assertEquals "doesn't have a zip code syntax", 'matches', address.errors['zipCode'] 
+    }
+
+    void testMethods() {
+        mockDomain(Address)
+        
+        address = new Address(street : "1 Infinite Loop", zipCode : "95014", town : "Cupertino")
+        assertEquals address.toString(), '1 Infinite Loop 95014 Cupertino'
 
     }
 }

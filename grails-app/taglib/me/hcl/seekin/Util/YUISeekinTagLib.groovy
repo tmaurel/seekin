@@ -190,17 +190,22 @@ class YUISeekinTagLib {
     def filterPanel = { attrs ->
       def filters = attrs["filters"]
       def id = attrs["id"]
+      def add = attrs["additionalString"]
+
       out << """<div class="filters yui-skin-sam">
 
                     <script type="text/javascript">
                       YAHOO.util.Event.onDOMReady(function () {
 
-                          updateFilter  = function () {
+                          updateFilter${id}  = function () {
 
                           GRAILSUI.${id}.customQueryString ="""
       filters.eachWithIndex { it, i ->
-        out << """"${it.field}="+YAHOO.util.Dom.get("filter_${it.field}").value"""
+        out << """"${it.field}="+YAHOO.util.Dom.get("${id}_filter_${it.field}").value"""
         if(i == filters.size() - 1) {
+          if(add && add != '') {
+            out << "+\"&" + add + "\""
+          }
           out << ";"
         }
         else {
@@ -208,22 +213,22 @@ class YUISeekinTagLib {
         }
       }
 
-      out << """
+      out << """      
                     var state = GRAILSUI.${id}.getState();
                     state.sorting = state.sortedBy;
                     state.pagination.recordOffset = 0;
                     query = GRAILSUI.${id}.buildQueryString(state);
 
                     GRAILSUI.${id}.getDataSource().sendRequest(query,{
-                      success : updateDataTable,
-                      failure : updateDataTable,
+                      success : updateDataTable${id},
+                      failure : updateDataTable${id},
                       scope   : GRAILSUI.${id},
                       argument: state
                     });
                   };
 
 
-                  updateDataTable = function(oRequest, oResponse, oPayload) {
+                  updateDataTable${id} = function(oRequest, oResponse, oPayload) {
                     GRAILSUI.${id}.onDataReturnReplaceRows( oRequest , oResponse , oPayload )
           	        GRAILSUI.${id}.get("paginator").setPage(GRAILSUI.${id}.get("paginator").getCurrentPage());
                     GRAILSUI.${id}.get("paginator").set("totalRecords", oResponse.meta.totalRecords);
@@ -232,8 +237,8 @@ class YUISeekinTagLib {
       """
 
       filters.each {
-        out << """YAHOO.util.Event.on("filter_${it.field}",'keyup',function (e) {
-          updateFilter();
+        out << """YAHOO.util.Event.on("${id}_filter_${it.field}",'keyup',function (e) {
+          updateFilter${id}();
         });"""
       }
 
@@ -245,7 +250,7 @@ class YUISeekinTagLib {
 	  out << gui.expandablePanel(title:message(code:'filters.title'), expanded:false) {
         out << """<div class="boxed_form">"""
         filters.each {
-          out << """<p><label for="filter_${it.field}">${it.name}</label> <input type="text" id="filter_${it.field}" value=""></p>"""
+          out << """<p><label for="${id}_filter_${it.field}">${it.name}</label> <input type="text" id="${id}_filter_${it.field}" value=""></p>"""
         }
         out << """</div>"""
       } 

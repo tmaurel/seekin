@@ -312,6 +312,11 @@ class EducationalDocController {
         if(list.size() > 0) {
             list2 = EducationalDoc.createCriteria().list(params) {
                 'in'('id', list)
+                and {
+                  if(params.title && params.title != ''){
+					ilike("title", "${params.title}%")
+				  }
+                }
             }
         }
 

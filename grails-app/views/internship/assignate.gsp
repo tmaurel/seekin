@@ -10,7 +10,7 @@
         <tm:resources />
     </head>
     <body>
-      <h2><g:message code="intership.assignate" /></h2>
+      <h2><g:message code="internship.assignate" /></h2>
 
       <script type = "text/javascript">
 

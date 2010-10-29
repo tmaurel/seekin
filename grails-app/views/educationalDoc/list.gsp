@@ -17,8 +17,6 @@
           <g:ifAnyGranted role="ROLE_ADMIN,ROLE_FORMATIONMANAGER">
             <g:buildListButtons />
           </g:ifAnyGranted>
-          
-          <g:set var="idInternationalized" value="${message(code:'educationalDoc.id')}" />
 
           <g:set var="titleInternationalized" value="${message(code:'educationalDoc.title')}" />
 
@@ -27,8 +25,16 @@
           <gui:tabView id="myTabView">
             <g:each var="formation" in="${formations}" status="i">
             <g:set var="idFormation" value="${formation?.id}" />
+
             <gui:tab id="${formation.id}" label="${formation.label}" active="${(i==0)? 1:0}">
               <h2>${formation?.label}</h2>
+
+              <br /><br />
+              <g:filterPanel id="dt${formation.id}" additionalString="formation=${formation.id}" filters="[
+                      [name: titleInternationalized, field: 'title']
+              ]" />
+              <br />
+
               <gui:dataTable
                   id="dt${formation.id}"
                   draggableColumns="true"

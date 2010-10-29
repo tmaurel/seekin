@@ -16,15 +16,6 @@
             <div class="flash_message"><g:message code="${flash.message}" transparent="true" args="${flash.args}" default="${flash.defaultMessage}" /></div>
             </g:if>
             <g:hiddenField name="id" value="${linkInstance?.id}" />
-                    
-                       <p>
-                            <label><g:message code="link.id" default="Id" /></label>
-                            <span class="field_value">
-                            
-                            ${fieldValue(bean: linkInstance, field: "id")}
-                            
-                            </span>
-                      </p>
                         
                        <p>
                             <label><g:message code="link.title" default="Title" /></label>

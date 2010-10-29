@@ -25,7 +25,12 @@
                         <g:set var="urlInternationalized" value="${message(code:'link.url')}" />
                  
                         <g:set var="descriptionInternationalized" value="${message(code:'link.description')}" />
-                 
+
+          <br /><br />
+          <g:filterPanel id="dt_2" filters="[
+                  [name: titleInternationalized, field: 'title']
+          ]" />
+          <br />
           <gui:dataTable
               id="dt_2"
               draggableColumns="true"

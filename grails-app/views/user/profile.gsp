@@ -43,11 +43,11 @@
                     <g:textField name="address.street" value="${userInstance?.address?.street}" class="field${hasErrors(bean:userInstance,field:'address.street','error')}"/>
             </p>
             <p>
-                    <label for="address.zipCode"><g:message code="address.zipcode" /></label>
+                    <label for="address.zipCode"><g:message code="address.zipCode" /></label>
                     <g:textField name="address.zipCode" value="${userInstance?.address?.zipCode}" class="field${hasErrors(bean:userInstance,field:'address.zipCode','error')}"/>
             </p>
             <p>
-                    <label for="address.town"><g:message code="address.city" /></label>
+                    <label for="address.town"><g:message code="address.town" /></label>
                     <g:textField name="address.town" value="${userInstance?.address?.town}" class="field${hasErrors(bean:userInstance,field:'address.town','error')}"/>
             </p>
             <p>

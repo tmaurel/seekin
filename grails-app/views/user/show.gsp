@@ -16,13 +16,13 @@
             <div class="flash_message"><g:message code="${flash.message}" transparent="true" args="${flash.args}" default="${flash.defaultMessage}" /></div>
             </g:if>
             <g:hiddenField name="id" value="${userInstance?.id}" />
-                    
+
                        <p>
                             <label><g:message code="user.id" default="Id" /></label>
                             <span class="field_value">
-                            
+
                             ${fieldValue(bean: userInstance, field: "id")}
-                            
+
                             </span>
                       </p>
                         

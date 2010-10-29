@@ -1,6 +1,7 @@
 package me.hcl.seekin.Internship
 
 import grails.test.*
+import org.springframework.context.i18n.LocaleContextHolder as LCH
 
 class ConvocationTests extends GrailsUnitTestCase {
 	
@@ -9,6 +10,19 @@ class ConvocationTests extends GrailsUnitTestCase {
 	
 	protected void setUp() {
 		super.setUp()
+        Date.metaClass.formatDate = { ->
+
+			def locale = LCH.getLocale()
+			def pattern
+			if(locale.toString() == "fr") {
+				pattern = "dd/MM/yyyy"
+			}
+			else {
+				pattern = "MM/dd/yyyy"
+			}
+
+			return delegate.format(pattern)
+		}
 	}
 	
 	protected void tearDown() {
@@ -33,4 +47,11 @@ class ConvocationTests extends GrailsUnitTestCase {
 		assertFalse convocation.validate()
 		assertEquals 'date is null.', 'nullable', convocation.errors['date']
 	}
+
+    void testMethods() {
+        mockDomain(Convocation)
+
+        convocation = new Convocation(date: "2010/09/26", building: "D", room: "A113", internship: new Internship(subject: "Good internship"))
+        assertEquals convocation.toString(), "09/26/2010 - Good internship - D A113"
+    }
 }

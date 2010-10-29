@@ -3,12 +3,12 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="layout" content="main" />
-        <title><g:message code="home" /></title>
+        <title><g:message code="navigation.menu.home" /></title>
         <ofchart:resources/>
         <tm:resources/>
     </head>
     <body>
-      <h2><g:message code="home" /></h2>
+      <h2><g:message code="navigation.menu.home" /></h2>
       <br />
       <g:if test="${flash.message}">
       <div class="flash_message"><g:message code="${flash.message}" transparent="true" args="${flash.args}" default="${flash.defaultMessage}" /></div>

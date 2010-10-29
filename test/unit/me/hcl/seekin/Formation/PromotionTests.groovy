@@ -3,6 +3,9 @@ package me.hcl.seekin.Formation
 import grails.test.*
 
 class PromotionTests extends GrailsUnitTestCase {
+
+    def promotion
+
     protected void setUp() {
         super.setUp()
     }
@@ -11,7 +14,9 @@ class PromotionTests extends GrailsUnitTestCase {
         super.tearDown()
     }
 
-    void testSomething() {
+    void testMethods() {
+        mockDomain(Promotion)
 
+        
     }
 }
