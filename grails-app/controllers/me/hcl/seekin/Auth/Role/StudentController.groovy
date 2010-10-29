@@ -90,11 +90,21 @@ class StudentController {
             it.id
         }
 
+        def filter = {
+          'in'('id', list)
+          and {
+            if(params.lastName && params.lastName != ''){
+                ilike("lastName", "${params.lastName}%")
+            }
+            if(params.firstName && params.firstName != ''){
+                ilike("firstName", "${params.firstName}%")
+            }
+          }
+        }
+
         def students = []
         if(list.size() > 0) {
-            students = User.createCriteria().list(params) {
-                'in'('id', list)
-            }
+            students = User.createCriteria().list(params, filter)
         }
 
         def ret = []
@@ -110,7 +120,7 @@ class StudentController {
         }
 
         def data = [
-            totalRecords: list.size(),
+            totalRecords: list.size()>0?User.createCriteria().count(filter):0,
             results: ret
         ]
        

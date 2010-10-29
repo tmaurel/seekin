@@ -175,14 +175,10 @@ ${messageSource.resolveCode("user.email", locale)?.format(args)}: ${user.email}"
             /* Number of milliseconds per day */
             long mills_per_day = 1000 * 60 * 60 * 24;
 
-            println "Encoded Url: " + encodedUrl
+
 
             /* Decode the base64 code */
             def decodedUrl = new String(Base64.decodeBase64(encodedUrl.getBytes()))
-
-            println "Date: " + decodedUrl.substring(0, 14)
-            println "Password MD5: " + decodedUrl.substring(14, 54)
-            println "Email: " + decodedUrl.substring(54, decodedUrl.length())
 
 
             /* Split the code to get the date, the password, and the email */

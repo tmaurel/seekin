@@ -308,16 +308,18 @@ class EducationalDocController {
             it.id
         }
 
+        def filter = {
+          and {
+            'in'('id', list)
+            if(params.title && params.title != ''){
+              ilike("title", "${params.title}%")
+            }
+          }
+        }
+
         def list2
         if(list.size() > 0) {
-            list2 = EducationalDoc.createCriteria().list(params) {
-                'in'('id', list)
-                and {
-                  if(params.title && params.title != ''){
-					ilike("title", "${params.title}%")
-				  }
-                }
-            }
+            list2 = EducationalDoc.createCriteria().list(params, filter) 
         }
 
         def ret = []
@@ -331,7 +333,7 @@ class EducationalDocController {
         }
 
         def data = [
-                totalRecords: list.size(),
+                totalRecords: list.size()>0?EducationalDoc.createCriteria().count(filter):0,
                 results: ret
         ]
        

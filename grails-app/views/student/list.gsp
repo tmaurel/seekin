@@ -35,6 +35,15 @@
 			<g:set var="idPromotion" value="${promotion?.id}" />
 			<gui:tab id="${promotion.id}" label="${promotion.formation.label}" active="${(i==0)? 1:0}">
 			  <h3>${promotion?.formation?.label} (${promotion?.millesime})</h3>
+
+
+                <br /><br />
+                <g:filterPanel id="dt${promotion.id}" additionalString="promotion=${promotion.id}" filters="[
+                        [name: firstNameInternationalized, field: 'firstName'],
+                        [name: lastNameInternationalized, field: 'lastName'],
+                ]" />
+                <br />
+
 				<gui:dataTable
 				  id="dt${promotion.id}"
 				  draggableColumns="true"
