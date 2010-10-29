@@ -610,7 +610,7 @@ class OfferController {
             def ret = []
             def status = new HashSet()
             def userInstance = authenticateService.userDomain()
-
+			
             response.setHeader("Cache-Control", "no-store")
             /* If the user is the admin or a formation manager, status we want to display currents offers */
             if(authenticateService.ifAnyGranted("ROLE_ADMIN")) {
@@ -667,13 +667,23 @@ class OfferController {
                 list = status
             }
 
+			def filter = {
+				and {
+				  'in'('id', list)
+				  if(params.subject && params.subject != ''){
+					ilike("subject", "${params.subject}%")
+				  }
+				}
+			}
+			
+			println("erreur")
+			println(params.subject)
+			
             def list2
             if(list.size() > 0) {
-                list2 = Offer.createCriteria().list(params) {
-                    'in'('id', list)
-                }
+                list2 = Offer.createCriteria().list(params,filter)
             }
-        
+						
             list2.each {
                 ret << [
                    subject:it.subject,
@@ -686,7 +696,7 @@ class OfferController {
             }
 
             def data = [
-                    totalRecords: list.size(),
+                    totalRecords: list.size()>0?Offer.createCriteria().count(filter):0,
                     results: ret
             ]
 
