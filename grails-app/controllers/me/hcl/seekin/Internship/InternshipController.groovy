@@ -721,13 +721,20 @@ class InternshipController {
             }
         }
 
-        def list2
-        if(list.size() > 0) {
-            list2 = Internship.createCriteria().list(params) {
-                'in'('id', list)
-            }
-        }
-
+		def filter = {
+			and {
+			  'in'('id', list)
+			  if(params.subject && params.subject != ''){
+				ilike("subject", "${params.subject}%")
+			  }
+			}
+		}
+		
+		def list2
+		if(list.size() > 0) {
+			list2 = Internship.createCriteria().list(params,filter)
+		}
+	
         list2.each {
             ret << [
                subject:it.subject,
@@ -739,7 +746,7 @@ class InternshipController {
         }
 
         def data = [
-                totalRecords: list.size(),
+                totalRecords: list.size()>0?Internship.createCriteria().count(filter):0,
                 results: ret
         ]
 

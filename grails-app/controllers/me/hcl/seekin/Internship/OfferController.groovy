@@ -676,9 +676,6 @@ class OfferController {
 				}
 			}
 			
-			println("erreur")
-			println(params.subject)
-			
             def list2
             if(list.size() > 0) {
                 list2 = Offer.createCriteria().list(params,filter)

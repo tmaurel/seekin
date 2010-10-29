@@ -45,7 +45,10 @@
 			<g:each var="status" in="${status}" status="i">
 			<g:set var="idStatus" value="${status}" />
 			<gui:tab id="${idStatus}" label="${message(code:idStatus)}" active="${(i==0)? 1:0}">
-			  <h3><g:message code="${idStatus}" /></h3>
+			<h3><g:message code="${idStatus}" /></h3>
+			<g:filterPanel id="dt_${i}" additionalString="status=${status}" filters="[
+				[name: subjectInternationalized, field: 'subject']
+       		]" />
                 <g:ifAnyGranted role="ROLE_ADMIN,ROLE_FORMATIONMANAGER">
                   <g:if test="${idStatus=='internship.waitForValidation'}">
                     <g:form action="list">
@@ -66,7 +69,7 @@
                                 pageReportTemplate:'{totalRecords} ' + message(code:'list.total.records')
                             ]"
                             rowExpansion="false"
-                            rowsPerPage="10"
+                            rowsPerPage="3"
                             params="[status: idStatus, idMillesime:idMillesime]"
                             sortedBy="beginAt"
                         />
@@ -92,7 +95,7 @@
                                 pageReportTemplate:'{totalRecords} ' + message(code:'list.total.records')
                             ]"
                             rowExpansion="false"
-                            rowsPerPage="10"
+                            rowsPerPage="3"
                             params="[status: idStatus, idMillesime:idMillesime]"
                             sortedBy="beginAt"
                         />
@@ -116,7 +119,7 @@
                                 pageReportTemplate:'{totalRecords} ' + message(code:'list.total.records')
                             ]"
                             rowExpansion="false"
-                            rowsPerPage="10"
+                            rowsPerPage="3"
                             params="[status: idStatus, idMillesime:idMillesime]"
                             sortedBy="beginAt"
                         />
