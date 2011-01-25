@@ -740,7 +740,7 @@ class InternshipController {
                subject:it.subject,
                beginAt:it?.beginAt.formatDate(),
                isApproval:it.isApproval,
-               student:[name:it.student?.user?.firstName + " " + it.student?.user?.lastName, link:g.createLink(controller: 'user', action: 'show', id:it.student?.id)],
+               student:[name:it.student?.user?.firstName + " " + it.student?.user?.lastName, link:g.createLink(controller: 'user', action: 'show', id:it.student?.user?.id)],
                urlID: it.id
             ]
         }
