@@ -154,14 +154,6 @@ class OfferController {
         
         offerInstance.author = userInstance
 
-        if(request.getFile( 'data' ).getSize() > 0)
-        {
-            def document = new InternshipSubjectFile()
-            document.title = params.subject
-            document.fileData = fileService.createFile(request.getFile( 'data' ))
-            offerInstance.file = document
-        }
-
         offerInstance.validate()
 
         if (params.promotions == null || params.promotions == "") {
@@ -172,7 +164,13 @@ class OfferController {
         }
 
         if (!offerInstance.hasErrors()) {
-
+            if(request.getFile( 'data' ).getSize() > 0)
+            {
+                def document = new InternshipSubjectFile()
+                document.title = params.subject
+                document.fileData = fileService.createFile(request.getFile( 'data' ))
+                offerInstance.file = document
+            }
             if ((offerInstance = offerInstance?.save(flush: true))) 
             {
                 params.promotions.each {
