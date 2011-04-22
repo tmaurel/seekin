@@ -37,7 +37,7 @@
 
     private renderStringEditor(domainClass, property) {
         if (!cp) {
-            return "<g:textField name=\"${property.name}\" value=\"\${fieldValue(bean: ${domainInstance}, field: '${property.name}')}\" class=\"field\${hasErrors(bean:${domainInstance} ,field:'${property.name}','error')}\"/>"
+            return "<g:textField name=\"${property.name}\" value=\"\${fieldValue(bean: ${domainInstance}, field: '${property.name}')}\" />"
         }
         else {
             if ("textarea" == cp.widget || (cp.maxSize > 250 && !cp.password && !cp.inList)) {
@@ -49,7 +49,7 @@
                 }
                 else {
 
-                    def sb = new StringBuffer("<g:${cp.password ? 'passwordField' : 'textField'} name=\"${property.name}\" class=\"field\${hasErrors(bean:${domainInstance} ,field:'${property.name}','error')}\" ")
+                    def sb = new StringBuffer("<g:${cp.password ? 'passwordField' : 'textField'} name=\"${property.name}\" ")
                     if (cp.maxSize) sb << "maxlength=\"${cp.maxSize}\" "
                     if (!cp.editable) sb << "readonly=\"readonly\" "
                     sb << "value=\"\${fieldValue(bean: ${domainInstance}, field: '${property.name}')}\" />"
@@ -85,10 +85,12 @@
         def sw = new StringWriter()
         def pw = new PrintWriter(sw)
         pw.println()
-        pw.println "<g:link controller=\"${property.referencedDomainClass.propertyName}\" params=\"['${domainClass.propertyName}.id': ${domainInstance}?.id]\" action=\"create\"><g:message code=\"${property.referencedDomainClass.propertyName}.new\" default=\"New ${property.referencedDomainClass.shortName}\" /></g:link>"
-        pw.println "<br /><g:each in=\"\${${domainInstance}?.${property.name}}\" var=\"${property.referencedDomainClass.propertyName}Instance\">"
-        pw.println "    - <g:link controller=\"${property.referencedDomainClass.propertyName}\" action=\"show\" id=\"\${${property.referencedDomainClass.propertyName}Instance.id}\">\${${property.referencedDomainClass.propertyName}Instance?.encodeAsHTML()}</g:link><br />"
+        pw.println "<ul>"
+        pw.println "<g:each in=\"\${${domainInstance}?.${property.name}}\" var=\"${property.referencedDomainClass.propertyName}Instance\">"
+        pw.println "    <li><g:link controller=\"${property.referencedDomainClass.propertyName}\" action=\"show\" id=\"\${${property.referencedDomainClass.propertyName}Instance.id}\">\${${property.referencedDomainClass.propertyName}Instance?.encodeAsHTML()}</g:link></li>"
         pw.println "</g:each>"
+        pw.println "</ul>"
+        pw.println "<g:link controller=\"${property.referencedDomainClass.propertyName}\" params=\"['${domainClass.propertyName}.id': ${domainInstance}?.id]\" action=\"create\"><g:message code=\"${property.referencedDomainClass.propertyName}.new\" default=\"New ${property.referencedDomainClass.shortName}\" /></g:link>"
         return sw.toString()
     }
 
@@ -98,7 +100,7 @@
                 return "<g:select name=\"${property.name}\" from=\"\${-128..127}\" value=\"\${${domainInstance}?.${property.name}}\" />"
             }
             else {
-                return "<g:textField name=\"${property.name}\" value=\"\${fieldValue(bean: ${domainInstance}, field: '${property.name}')}\" class=\"field\${hasErrors(bean:${domainInstance} ,field:'${property.name}','error')}\" />"
+                return "<g:textField name=\"${property.name}\" value=\"\${fieldValue(bean: ${domainInstance}, field: '${property.name}')}\" />"
             }
         }
         else {
@@ -112,7 +114,7 @@
                 return "<g:select name=\"${property.name}\" from=\"\${-128..127}\" value=\"\${${domainInstance}?.${property.name}}\" ${renderNoSelection(property)} />"
             }
             else {
-                return "<g:textField name=\"${property.name}\" value=\"\${fieldValue(bean: ${domainInstance}, field: '${property.name}')}\" class=\"field\${hasErrors(bean:${domainInstance} ,field:'${property.name}','error')}\"/>"
+                return "<g:textField name=\"${property.name}\" value=\"\${fieldValue(bean: ${domainInstance}, field: '${property.name}')}\" />"
             }
         }
      }
