@@ -58,6 +58,7 @@ class UserController {
 	/**
 	 * Default closure
 	 */
+    @Secured(['IS_AUTHENTICATED_ANONYMOUSLY'])
 	def index = {
 
         // If the user isnt logged in, redirect to auth closure

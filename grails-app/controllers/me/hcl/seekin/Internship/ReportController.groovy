@@ -353,11 +353,24 @@ class ReportController {
 
     @Secured(['ROLE_ADMIN','ROLE_FORMATIONMANAGER', 'ROLE_STUDENT', 'ROLE_STAFF'])
     def dataTableDataAsJSON = {
-        def list = Report.list(params)
+        def list = Report.list().collect{ it.id }
+
         def ret = []
         response.setHeader("Cache-Control", "no-store")
 
-        list.each {
+
+        def list2
+        if(list.size() > 0) {
+            // TODO : SORTING DISABLED / TO FIX
+            list2 = Report.createCriteria().list() {
+                'in'('id', list)
+                if(params.title && params.title != ''){
+                  ilike("title", "${params.title}%")
+                }
+            }
+        }
+
+        list2.each {
             ret << [
                 title:it.title,
                 internship:[name:it.internship?.subject, link:g.createLink(controller: 'internship', action: 'show', id:it.internship?.id)],
@@ -366,7 +379,7 @@ class ReportController {
         }
 
         def data = [
-                totalRecords: Report.count(),
+                totalRecords: list2!=null?list2.size():0,
                 results: ret
         ]
        

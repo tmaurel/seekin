@@ -25,7 +25,12 @@
                         <g:set var="isPrivateInternationalized" value="${message(code:'report.isPrivate')}" />
                  
                         <g:set var="internshipInternationalized" value="${message(code:'report.internship')}" />
-                 
+
+          <br /><br />
+          <g:filterPanel id="dt_2" filters="[
+                  [name: titleInternationalized, field: 'title']
+          ]" />
+          <br />
           <gui:dataTable
               id="dt_2"
               draggableColumns="true"
