@@ -562,7 +562,6 @@ class UserController {
         @Secured(['ROLE_ADMIN'])
 	def save = {
 		def userInstance = new User()
-                userInstance.address = new Address()
 		userInstance.properties = params
 
                 def formations = getFormations()

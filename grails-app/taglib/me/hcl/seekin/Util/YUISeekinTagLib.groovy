@@ -112,7 +112,7 @@ class YUISeekinTagLib {
         def value = attrs["value"]
         def action = attrs["action"]
         out << YUISubmitbutton(value:value, action:action)
-    }
+    }    
 
     def renderSubMenu = {
         out << gui.accordion(multiple:"true", bounce:"true", fade:"true") {
@@ -123,17 +123,14 @@ class YUISeekinTagLib {
                     """<ul>
                         <li><img src="${resource(dir:'images/icons',file:'settings.png')}" alt="${message(code:"settings")}" /> <a href="${createLink(controller:"settings", action:"index")}">${message(code:"settings")}</a></li>
                         <li><img src="${resource(dir:'images/icons',file:'users.png')}" alt="${message(code:"user.list")}" /> <a href="${createLink(controller:"user", action:"list")}">${message(code:"user.list")}</a></li>
-                        <li><img src="${resource(dir:'images/icons',file:'assignate.png')}" alt="${message(code:"internship.assignate")}" /> <a href="${createLink(controller:"internship", action:"assignate")}">${message(code:"internship.assignate")}</a></li>
                         <li><img src="${resource(dir:'images/icons',file:'formations.png')}" alt="${message(code:"formation.list")}" /> <a href="${createLink(controller:"formation", action:"list")}">${message(code:"formation.list")}</a></li>
                         <li><img src="${resource(dir:'images/icons',file:'millesimes.png')}" alt="${message(code:"millesime.list")}" /> <a href="${createLink(controller:"millesime", action:"list")}">${message(code:"millesime.list")}</a></li>
                         <li><img src="${resource(dir:'images/icons',file:'promotions.png')}" alt="${message(code:"promotion.list")}" /> <a href="${createLink(controller:"promotion", action:"list")}">${message(code:"promotion.list")}</a></li>
-                        <li><img src="${resource(dir:'images/icons',file:'convocations.png')}" alt="${message(code:"convocation.list")}" /> <a href="${createLink(controller:"convocation", action:"list")}">${message(code:"convocation.list")}</a></li>
-                        <li><img src="${resource(dir:'images/icons',file:'table.png')}" alt="${message(code:"student.table")}" /> <a href="${createLink(controller:"student", action:"table")}">${message(code:"student.table")}</a></li>
 					</ul>"""
                 }
             }
 
-            if(AuthorizeTools.ifAllGranted("ROLE_FORMATIONMANAGER") && AuthorizeTools.ifNotGranted("ROLE_ADMIN")) {
+            if(AuthorizeTools.ifAllGranted("ROLE_FORMATIONMANAGER")) {
                 out << gui.accordionElement(title:message(code:"formationManager"), selected:"true") {
 
                     """<ul>

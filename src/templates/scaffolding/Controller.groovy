@@ -1,7 +1,4 @@
-<%=packageName ? "package ${packageName}\n\n" : ""%>
-<% import org.codehaus.groovy.grails.orm.hibernate.support.ClosureEventTriggeringInterceptor as Events %>
-import grails.converters.JSON
-class ${className}Controller {
+<%=packageName ? "package ${packageName}\n\n" : ""%>class ${className}Controller {
 
     def index = { redirect(action: "list", params: params) }
 
@@ -9,6 +6,8 @@ class ${className}Controller {
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
     def list = {
+        params.max = Math.min(params.max ? params.max.toInteger() : 10,  100)
+        [${propertyName}List: ${className}.list(params), ${propertyName}Total: ${className}.count()]
     }
 
     def create = {
@@ -111,53 +110,4 @@ class ${className}Controller {
             redirect(action: "list")
         }
     }
-
-    def dataTableDataAsJSON = {
-        def list = ${className}.list(params)
-        def ret = []
-        response.setHeader("Cache-Control", "no-store")
-
-        list.each {
-            ret << [
-            <%  excludedProps = ["version",
-                                 Events.ONLOAD_EVENT,
-                                 Events.BEFORE_INSERT_EVENT,
-                                 Events.BEFORE_UPDATE_EVENT,
-                                 Events.BEFORE_DELETE_EVENT]
-                def props = domainClass.properties.findAll { !excludedProps.contains(it.name) && it.type != Set.class }
-                Collections.sort(props, comparator.constructors[0].newInstance([domainClass] as Object[]))
-                props.eachWithIndex
-                {
-                    p, i ->
-                    if (i < 6)
-                    {
-                        def propertyClassName = p.type.name
-                        if(propertyClassName =~ "me.hcl.seekin")
-                        {   
-                            def controller = propertyClassName.substring(propertyClassName.lastIndexOf(".") + 1).toLowerCase()
-                            println "   ${p.name}:[name:it.${p.name}?.id, link:g.createLink(controller: '${controller}', action: 'show', id:it.${p.name}?.id)],"
-                        }
-                        else if(propertyClassName =~ "Date")
-                        {
-                            println "   ${p.name}:it.${p.name}?.toString(),"
-                        }
-                        else
-                        {
-                            println "   ${p.name}:it.${p.name},"
-                        } 
-                    }
-                }
-            %>
-                urlID: it.id
-            ]
-        }
-
-        def data = [
-                totalRecords: ${className}.count(),
-                results: ret
-        ]
-       
-        render data as JSON
-    }
-
 }
