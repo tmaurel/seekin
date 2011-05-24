@@ -52,17 +52,17 @@
           
                 <p>
                           <label for="address.street"><g:message code="address.street" default="Street" /></label>
-                          <g:textField name="address.street" value="${userInstance?.address.street}" class="field${hasErrors(bean:userInstance,field:'address.street','error')}"/>
+                          <g:textField name="address.street" value="${userInstance?.address?.street}" class="field${hasErrors(bean:userInstance,field:'address?.street','error')}"/>
                 </p>
 
                 <p>
                           <label for="address.town"><g:message code="address.town" default="Town" /></label>
-                          <g:textField name="address.town" value="${userInstance?.address.town}" class="field${hasErrors(bean:userInstance,field:'address.town','error')}"/>
+                          <g:textField name="address.town" value="${userInstance?.address?.town}" class="field${hasErrors(bean:userInstance,field:'address?.town','error')}"/>
                 </p>
 
                 <p>
                           <label for="address.zipCode"><g:message code="address.zipCode" default="Zip Code" /></label>
-                          <g:textField name="address.zipCode" value="${userInstance?.address.zipCode}" class="field${hasErrors(bean:userInstance,field:'address.zipCode','error')}"/>
+                          <g:textField name="address.zipCode" value="${userInstance?.address?.zipCode}" class="field${hasErrors(bean:userInstance,field:'address?.zipCode','error')}"/>
                 </p>
 
                 <p>
