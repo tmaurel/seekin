@@ -11,7 +11,7 @@ class YUISeekinTagLib {
         out << yui.stylesheet(dir:'button/assets/skins/sam', file:'button.css')
     }
 
-    def YUISubmitbutton = { attrs ->
+    /* def YUISubmitbutton = { attrs ->
         def value = attrs["value"]
         def action = attrs["action"]
 
@@ -112,7 +112,7 @@ class YUISeekinTagLib {
         def value = attrs["value"]
         def action = attrs["action"]
         out << YUISubmitbutton(value:value, action:action)
-    }    
+    }   */
 
     def renderSubMenu = {
         out << gui.accordion(multiple:"true", bounce:"true", fade:"true") {
