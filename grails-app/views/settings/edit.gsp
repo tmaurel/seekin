@@ -33,10 +33,7 @@
                           <input type="file" id="logo" name="logo" class="field${hasErrors(bean:settingsInstance,field:'logo','error')}"/>
 
                 </p>
-          
-          <div class="actionpad yui-skin-sam">
-            <g:YUISubmitbutton value="update" action="update" />
-          </div>
+                <g:buildSubmitButton value="update" action="update" />
       </g:form>
     </body>
 </html>

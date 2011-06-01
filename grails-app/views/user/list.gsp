@@ -14,15 +14,14 @@
       <div class="flash_message"><g:message code="${flash.message}" transparent="true" args="${flash.args}" default="${flash.defaultMessage}" /></div>
       </g:if>
       <div class="yui-skin-sam" id="crud_panel">
-          <g:buildListButtons />
-          <g:YUILinkbutton action="validate" value="validate" />
-                        <g:set var="idInternationalized" value="${message(code:'user.id')}" />
-                        <g:set var="emailInternationalized" value="${message(code:'user.email')}" />
-                        <g:set var="roleInternationalized" value="${message(code:'user.role')}" />
-                        <g:set var="enabledInternationalized" value="${message(code:'user.enabled')}" />
-                        <g:set var="firstNameInternationalized" value="${message(code:'user.firstName')}" />
-                        <g:set var="lastNameInternationalized" value="${message(code:'user.lastName')}" />
-        <br /><br />         
+      <g:buildListButtons />
+      <g:JQueryLinkbutton action="validate" value="validate" />
+      <g:set var="idInternationalized" value="${message(code:'user.id')}" />
+      <g:set var="emailInternationalized" value="${message(code:'user.email')}" />
+      <g:set var="roleInternationalized" value="${message(code:'user.role')}" />
+      <g:set var="enabledInternationalized" value="${message(code:'user.enabled')}" />
+      <g:set var="firstNameInternationalized" value="${message(code:'user.firstName')}" />
+      <g:set var="lastNameInternationalized" value="${message(code:'user.lastName')}" />
         <g:filterPanel id="dt_2" filters="[
                 [name: firstNameInternationalized, field: 'firstName'],
                 [name: lastNameInternationalized, field: 'lastName'],

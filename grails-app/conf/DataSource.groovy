@@ -22,15 +22,14 @@ environments {
 		dataSource {
                         driverClassName = "org.hsqldb.jdbcDriver"
 			dbCreate = "create-drop"
-			url = "jdbc:hsqldb:file:prodDb;shutdown=true"
+			url = "jdbc:hsqldb:file:proDb;shutdown=true"
 		}
 	}
 	test {
 		dataSource {
-                        username = "root"
-                        password = "root"
-			dbCreate = "update" // one of 'create', 'create-drop','update'
-			url = "jdbc:mysql://localhost/seekin"
+                        driverClassName = "org.hsqldb.jdbcDriver"
+			dbCreate = "create-drop"
+			url = "jdbc:hsqldb:file:proDb;shutdown=true"
 		}
 	}
 	production {

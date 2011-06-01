@@ -9,6 +9,16 @@
     <head>
         <title>${settingsName} - <g:layoutTitle /></title>
         <g:layoutHead />
+		
+		<g:javascript library="jquery" />
+		<jqui:resources themeCss="${resource(dir:'css',file:'jquery-ui-1.8.13.custom.css')}" />
+		
+		<script type="text/javascript">
+			$(function() {
+				jQuery(".button", "body").button();
+			});
+		</script>
+		
         <gui:resources components="accordion, dataTable, tabView"/>
         <link rel="stylesheet" href="${resource(dir:'css',file:'layout.css')}" type="text/css" />
         <link rel="shortcut icon" href="${resource(dir:'images',file:'favicon.ico')}" type="image/x-icon" />
@@ -16,7 +26,6 @@
         <g:javascript library="prototype" />
         <g:javascript library="datatable" />
         <yui:javascript dir="json" file="json-min.js" />
-        <g:YUIButtonRessource />
         <nav:resources override="true"/>
     </head>
     <body>

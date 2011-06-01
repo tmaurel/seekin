@@ -548,4 +548,8 @@ style = {
         '.filters .yui-panel p label, .filters .yui-panel p input' (
             'width':'40%'
         )
+
+		'.button' (
+			'font-size':'0.9em'
+		)
 }
